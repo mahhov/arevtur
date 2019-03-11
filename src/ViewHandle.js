@@ -23,7 +23,7 @@ class ViewHandle {
 		ipc.on('window-request', (_, request) => {
 			switch (request.name) {
 				case 'close':
-					this.window.minimize();
+					this.hide();
 					if (request.selected && selectListener)
 						selectListener(request.selected);
 					break;
@@ -45,8 +45,14 @@ class ViewHandle {
 
 		clearInterval(this.timedHide);
 		this.window.show();
+		this.window.restore();
 		if (duration)
-			this.timedHide = setTimeout(() => this.window.hide(), duration);
+			this.timedHide = setTimeout(this.hide.bind(this), duration);
+	}
+
+	hide() {
+		this.window.minimize();
+		this.window.hide();
 	}
 
 	get visible() {

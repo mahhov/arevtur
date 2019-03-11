@@ -17,4 +17,3 @@ viewHandle.init(Clipboard.write);
 
 // on ctrl shift v, send open
 ShortcutListener.add('Control+Shift+V', viewHandle.show.bind(viewHandle));
-
