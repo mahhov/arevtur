@@ -1,10 +1,12 @@
+const path = require('path');
 const {app} = require('electron');
 const TrayHelper = require('./TrayHelper');
 const Clipboard = require('./Clipboard');
 const ViewHandle = require('./ViewHandle');
 const ShortcutListener = require('./ShortcutListener');
 
-TrayHelper.createExitTray('resources/fa-copy-regular.png', 'Clipboard');
+let trayIcon = path.join(__dirname, '../resources/fa-copy-regular.png');
+TrayHelper.createExitTray(trayIcon, 'Clipboard');
 
 let viewHandle = new ViewHandle();
 

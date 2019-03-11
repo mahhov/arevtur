@@ -1,16 +1,46 @@
 {
-  "name": "clipboard",
+  "name": "clipboard-manager-js",
   "version": "1.0.0",
-  "description": "",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "rm -rf package; mkdir package; cp -r src resources package.json package-lock.json package; cd package; npm i; electron-packager .",
+    "build": "rm -rf dist; electron-builder ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "clipboard",
+    "manager",
+    "electron"
+  ],
+  "author": "mahhov1",
   "license": "ISC",
   "dependencies": {
-    "electron": "^5.0.0-beta.5",
     "node-key-sender": "^1.0.11"
+  },
+  "devDependencies": {
+    "electron": "^5.0.0-beta.5",
+    "electron-builder": "^20.39.0",
+    "electron-packager": "^13.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahhov/clipboard-manager-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mahhov/clipboard-manager-js/issues"
+  },
+  "homepage": "https://github.com/mahhov/clipboard-manager-js#readme",
+  "description": "",
+  "build": {
+    "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+    "files": ["resources", "src"],
+    "icon": "./resources/fa-copy-regular.png",
+    "linux": {
+      "target": "AppImage",
+      "desktop": {
+        "type": "Application",
+        "name": "clipboard-manager-js"
+      }
+    }
   }
 }
