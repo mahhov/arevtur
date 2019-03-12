@@ -33,7 +33,10 @@
   "description": "",
   "build": {
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
-    "files": ["resources", "src"],
+    "files": [
+      "resources",
+      "src"
+    ],
     "icon": "./resources/fa-copy-regular.png",
     "linux": {
       "target": "AppImage",
