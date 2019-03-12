@@ -4,7 +4,6 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "package": "rm -rf package; mkdir package; cp -r src resources package.json package-lock.json package; cd package; npm i; electron-packager .",
     "build": "rm -rf dist; electron-builder ."
   },
   "keywords": [
@@ -20,7 +19,6 @@
   "devDependencies": {
     "electron": "^5.0.0-beta.5",
     "electron-builder": "^20.39.0",
-    "electron-packager": "^13.1.1"
   },
   "repository": {
     "type": "git",
