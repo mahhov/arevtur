@@ -10,7 +10,7 @@ TrayHelper.createExitTray(trayIcon, 'Clipboard');
 
 let viewHandle = new ViewHandle();
 
-// on clipboard change, send text
+// on clipboard change, send new clipboard to view
 let clipboard = new Clipboard();
 clipboard.addListener(viewHandle.sendText.bind(viewHandle));
 
