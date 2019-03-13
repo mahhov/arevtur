@@ -12,7 +12,7 @@ ipc.on('window-command', (_, command) => {
 		case 'addText':
 			texts.addFront(command.text);
 			break;
-		case 'open':
+		case 'show':
 			texts.selectFirst();
 			updateView();
 			break;

@@ -1,7 +1,7 @@
 {
   "name": "clipboard-manager-js",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "src/clipboard-manager/clipboardManager.js",
   "scripts": {
     "start": "electron .",
     "build": "rm -rf dist; electron-builder .",
