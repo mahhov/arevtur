@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "electron": "^5.0.0-beta.5",
-    "electron-builder": "^20.39.0",
+    "electron-builder": "^20.39.0"
   },
   "repository": {
     "type": "git",
@@ -37,11 +37,7 @@
     ],
     "icon": "./resources/fa-copy-regular.png",
     "linux": {
-      "target": "AppImage",
-      "desktop": {
-        "type": "Application",
-        "name": "clipboard-manager-js"
-      }
+      "target": "AppImage"
     }
   }
 }
