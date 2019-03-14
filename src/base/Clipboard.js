@@ -3,27 +3,36 @@ const KeySender = require('node-key-sender');
 const XPromise = require('./XPromise');
 
 class ClipboardListener {
-	nextProimses = [];
+	listeners = [];
+	nextPromises = [];
 
-	addListener(listener) {
-		this.listener = listener;
-
+	constructor() {
 		let lastRead = null;
 		setInterval(() => {
 			let read = clipboard.readText();
 			if (read === lastRead)
 				return;
-			this.nextProimses.forEach(promise => promise.resolve(read));
-			this.nextProimses = [];
-			listener(read);
 			lastRead = read;
+			this.listeners.forEach(listener => listener(read));
+			this.nextPromises.forEach(promise => promise.resolve(read));
+			this.nextPromises = [];
 		}, 100);
+	}
+
+	addListener(listener) {
+		this.listeners.push(listener);
 	}
 
 	getNext() {
 		let promise = new XPromise();
-		this.nextProimses.push(promise);
+		this.nextPromises.push(promise);
 		return promise;
+	}
+
+	copy() {
+		let next = this.getNext();
+		KeySender.sendCombination(['control', 'c']);
+		return next;
 	}
 
 	static write(value) {
