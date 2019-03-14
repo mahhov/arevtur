@@ -27,10 +27,12 @@ let updateView = () => {
 		container.firstChild.remove();
 
 	texts.getLinesForDisplay().forEach(({text, textColor = '#000', backColor = '#fff'}) => {
+		let lineTextEl = $c('span');
+		lineTextEl.textContent = text;
+		lineTextEl.style.color = textColor;
+		lineTextEl.style.backgroundColor = backColor;
 		let lineEl = $c('div');
-		lineEl.textContent = text;
-		lineEl.style.color = textColor;
-		lineEl.style.backgroundColor = backColor;
+		lineEl.appendChild(lineTextEl);
 		container.appendChild(lineEl);
 	})
 };
