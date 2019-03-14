@@ -14,7 +14,6 @@ class ClipboardManagerViewHandle extends ViewHandle {
 			show: false,
 			webPreferences: {nodeIntegration: true}
 		}, path.join(__dirname, './view/View.html'));
-		this.selectListener = selectListener;
 	}
 
 	addSelectListener(selectListener) {
