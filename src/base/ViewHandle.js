@@ -7,14 +7,14 @@ class ViewHandle {
 	constructor(windowOptions, windowHtml) {
 		this.windowOptions = windowOptions;
 		this.windowHtml = windowHtml;
-		this.init();
+		this.initPromise = this.init();
 	}
 
 	async init() {
 		await appReadyPromise;
 
 		this.window = new BrowserWindow(this.windowOptions);
-		this.window.loadFile(this.windowHtml)
+		let initPromise = this.window.loadFile(this.windowHtml)
 			.catch(e => console.log('error loading window html:', e));
 		ipc.on('window-request', (_, request) => {
 			switch (request.name) {
@@ -28,6 +28,8 @@ class ViewHandle {
 		});
 
 		app.on('browser-window-blur', () => this.window.hide());
+
+		return initPromise;
 	}
 
 	onClose(request) {
@@ -54,7 +56,8 @@ class ViewHandle {
 		return this.window.isVisible();
 	}
 
-	send(message) {
+	async send(message) {
+		await this.initPromise;
 		this.window.webContents.send('window-command', message);
 	}
 }
