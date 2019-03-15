@@ -32,6 +32,10 @@ class ViewHandle {
 		return initPromise;
 	}
 
+	resize(width, height) {
+		this.window.setSize(width, height);
+	}
+
 	onClose(request) {
 		/* override */
 	}
