@@ -15,7 +15,7 @@ let clipboard = new Clipboard();
 clipboard.addListener(viewHandle.sendText.bind(viewHandle));
 
 // on text select, set clipboard
-viewHandle.addSelectListener(Clipboard.write);
+viewHandle.addSelectListener(Clipboard.paste);
 
 // on ctrl shift v, send open
 ShortcutListener.add('Control+Shift+V', viewHandle.show.bind(viewHandle));

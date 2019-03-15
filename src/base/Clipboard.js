@@ -35,7 +35,7 @@ class ClipboardListener {
 		return next;
 	}
 
-	static write(value) {
+	static paste(value) {
 		clipboard.writeText(value);
 		KeySender.sendCombination(['control', 'v']);
 	}
