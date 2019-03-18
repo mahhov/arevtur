@@ -9,6 +9,7 @@ class ClipboardManagerViewHandle extends ViewHandle {
 			width: 500,
 			height: 450,
 			frame: false,
+			thickFrame: false,
 			skipTaskbar: true,
 			alwaysOnTop: true,
 			show: false,

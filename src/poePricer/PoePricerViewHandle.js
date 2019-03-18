@@ -10,6 +10,7 @@ class PoePricerViewHandle extends ViewHandle {
 	constructor() {
 		super({
 			frame: false,
+			thickFrame: false,
 			skipTaskbar: true,
 			alwaysOnTop: true,
 			show: false,
