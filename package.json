@@ -1,7 +1,7 @@
 {
   "name": "clipboard-manager-js",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "src/poePricer/poePricer.js",
   "scripts": {
     "start": "electron .",
     "build": "rm -rf dist; electron-builder .",
@@ -17,6 +17,7 @@
   "author": "mahhov1",
   "license": "ISC",
   "dependencies": {
+    "bs-better-stream": "^1.9.0",
     "node-key-sender": "^1.0.11"
   },
   "devDependencies": {

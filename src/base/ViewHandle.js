@@ -1,5 +1,5 @@
 const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
-const appReadyPromise = require('../base/appReadyPromise');
+const appReadyPromise = require('./appReadyPromise');
 
 class ViewHandle {
 	timedHide;

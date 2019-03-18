@@ -7,12 +7,12 @@ class ClipboardListener {
 	nextPromises = [];
 
 	constructor() {
-		let lastRead = null;
+		this.lastRead = null;
 		setInterval(() => {
 			let read = clipboard.readText();
-			if (read === lastRead)
+			if (read === this.lastRead)
 				return;
-			lastRead = read;
+			this.lastRead = read;
 			this.listeners.forEach(listener => listener(read));
 			this.nextPromises.forEach(promise => promise.resolve(read));
 			this.nextPromises = [];
@@ -24,6 +24,8 @@ class ClipboardListener {
 	}
 
 	getNext() {
+		clipboard.clear();
+		this.lastRead = '';
 		let promise = new XPromise();
 		this.nextPromises.push(promise);
 		return promise;
