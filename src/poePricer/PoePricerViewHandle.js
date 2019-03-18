@@ -13,6 +13,7 @@ class PoePricerViewHandle extends ViewHandle {
 			thickFrame: false,
 			skipTaskbar: true,
 			alwaysOnTop: true,
+			focusable: false,
 			show: false,
 			webPreferences: {nodeIntegration: true}
 		}, path.join(__dirname, './view/View.html'));

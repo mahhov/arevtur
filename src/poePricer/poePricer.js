@@ -25,8 +25,7 @@ let startPricer = async () => {
 
 ShortcutListener.add('Control+Shift+X', startPricer);
 
-// todo non focusable
 // todo close after 3 seconds, close  on re-shortcut with same input
 // todo only apply when in appropriate window title
-// /h for hideout
-// unlock macro
+// todo /h for hideout
+// todo unlock macro
