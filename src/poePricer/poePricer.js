@@ -11,6 +11,8 @@ TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
 let clipboard = new Clipboard();
 let viewHandle = new ViewHandle();
 
+let lastClipboardInput;
+
 let startPricer = async () => {
 	KeySender
 		.startBatch()
@@ -19,13 +21,18 @@ let startPricer = async () => {
 		.batchTypeKey('x', 0, KeySender.BATCH_EVENT_KEY_UP)
 		.sendBatch();
 	let clipboardInput = await clipboard.copy();
-	let priceLines = await Pricer.getPrice(clipboardInput);
-	viewHandle.showTexts(priceLines.map(a => ({text: a})));
+	if (viewHandle.visible && clipboardInput === lastClipboardInput)
+		viewHandle.hide();
+	else {
+		lastClipboardInput = clipboardInput;
+		viewHandle.showTexts([{text: 'fetching'}], 6000);
+		let priceLines = await Pricer.getPrice(clipboardInput);
+		viewHandle.showTexts(priceLines.map(a => ({text: a})), 3000);
+	}
 };
 
 ShortcutListener.add('Control+Shift+X', startPricer);
 
-// todo close after 3 seconds, close  on re-shortcut with same input
 // todo only apply when in appropriate window title
 // todo /h for hideout
 // todo unlock macro
