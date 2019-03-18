@@ -41,7 +41,7 @@ let getData = endpoint => {
 	return cache.data = httpRequest(endpoint)
 		.catch(e => {
 			cache.data = null;
-			console.log(`Unable to connect to '${endpoint}': ${e}`)
+			console.error(`Unable to connect to '${endpoint}': ${e}`)
 		});
 };
 

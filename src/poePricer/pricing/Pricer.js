@@ -39,10 +39,7 @@ class Pricer {
 	refreshData() {
 		this.dataStream = stream()
 			.write(...this.dataEndpoints)
-			.map(DataFetcher.getData)
-			.wait()
-			.pluck('lines')
-			.flatten();
+			.map(DataFetcher.getData);
 	}
 
 	price(inputItem) {
@@ -53,6 +50,9 @@ class Pricer {
 
 		return this.dataStream.promise.then(() =>
 			this.dataStream
+				.wait()
+				.pluck('lines')
+				.flatten()
 				.filter(item => this.nameFilter(item, inputItem))
 				.map(this.priceString)
 				.outValues);
