@@ -6,8 +6,9 @@
     "start": "electron .",
     "build": "rm -rf dist; electron-builder .",
     "linux-desktop-icon-workaround": "mv ~/.local/share/icons/hicolor/0x0/apps/appimagekit-clipboard-manager-js.png ~/.local/share/icons/hicolor/256x256/apps/ && update-icon-caches /usr/share/icons/*",
-    "create-icon": "f() { cd resources; inkscape -z -e $1.png -h 256 $1.svg; convert $1.png -gravity center -background '#0000' -extent 256x256 $1-256.png; }; f",
-    "create-icons": "npm run create-icon fa-copy-regular; npm run create-icon fa-dollar-sign-solid"
+    "create-icon": "f() { cd resources/icons; inkscape -z -e $1.png -h 256 $1.svg; convert $1.png -gravity center -background '#0000' -extent 256x256 $1-256.png; }; f",
+    "create-icons": "npm run create-icon fa-copy-regular; npm run create-icon fa-dollar-sign-solid",
+    "refresh-gmail-tokenn": "node src/poePricer/unlocker/refreshGmailToken"
   },
   "keywords": [
     "clipboard",
@@ -18,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "bs-better-stream": "^1.9.0",
+    "googleapis": "^38.0.0",
     "node-key-sender": "^1.0.11"
   },
   "devDependencies": {
@@ -40,7 +42,7 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/fa-copy-regular.png",
+    "icon": "./resources/icons/fa-copy-regular.png",
     "linux": {
       "target": "AppImage"
     }

@@ -5,17 +5,26 @@ const ViewHandle = require('./PoePricerViewHandle');
 const KeySender = require('node-key-sender');
 const ShortcutListener = require('../base/ShortcutListener');
 const Pricer = require('./pricing/Pricer');
+const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
 
-let trayIcon = path.join(__dirname, '../../resources/fa-dollar-sign-solid.png');
+let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid.png');
 TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
 let clipboard = new Clipboard();
 let viewHandle = new ViewHandle();
+
+// todo extract key stuff
 
 let releaseKeys = keys => {
 	KeySender.startBatch();
 	keys.forEach(key => KeySender.batchTypeKey(key, 0, KeySender.BATCH_EVENT_KEY_UP));
 	KeySender.sendBatch();
 };
+
+let typeString = string =>
+	KeySender
+		.startBatch()
+		.batchTypeText(string)
+		.sendBatch();
 
 let lastClipboardInput;
 
@@ -35,13 +44,25 @@ let startPricer = async () => {
 let hideout = () => {
 	releaseKeys(['control', 'shift', 'h']);
 	KeySender.sendKeys(['enter']);
-	KeySender.startBatch().batchTypeText('/hideout').sendBatch();
+	typeString('/hideout');
 	KeySender.sendKey('enter');
+};
+
+let unlock = async () => {
+	viewHandle.showTexts([{text: 'fetching'}], 6000);
+	let code = await unlockCodeFetcher.fetch();
+	viewHandle.hide();
+	let uCode = code.toUpperCase();
+	releaseKeys(['control', 'shift', 'u']);
+	typeString(uCode);
 };
 
 ShortcutListener.add('Control+Shift+X', startPricer);
 ShortcutListener.add('Control+Shift+H', hideout);
+ShortcutListener.add('Control+Shift+U', unlock);
 
+// todo must lift ctrl+shift to repress ctrl+shift+x
+// todo tooltip position at mouse position
 // todo only apply when in appropriate window title
 // todo unlock macro
 // todo sizing

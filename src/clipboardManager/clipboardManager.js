@@ -5,7 +5,7 @@ const Clipboard = require('../base/Clipboard');
 const ViewHandle = require('./ClipboardManagerViewHandle.js');
 const ShortcutListener = require('../base/ShortcutListener');
 
-let trayIcon = path.join(__dirname, '../../resources/fa-copy-regular.png');
+let trayIcon = path.join(__dirname, '../../resources/icons/fa-copy-regular.png');
 TrayHelper.createExitTray(trayIcon, 'Clipboard');
 
 let viewHandle = new ViewHandle();
