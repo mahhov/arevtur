@@ -3,6 +3,7 @@ const TrayHelper = require('../base/TrayHelper');
 const Clipboard = require('../base/Clipboard');
 const ViewHandle = require('./PoePricerViewHandle');
 const KeySender = require('node-key-sender');
+const KeySender2 = require('../base/keySender/keySender');
 const ShortcutListener = require('../base/ShortcutListener');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
@@ -43,9 +44,7 @@ let startPricer = async () => {
 
 let hideout = () => {
 	releaseKeys(['control', 'shift', 'h']);
-	KeySender.sendKeys(['enter']);
-	typeString('/hideout');
-	KeySender.sendKey('enter');
+	KeySender2('{enter}/hideout{enter}');
 };
 
 let unlock = async () => {
