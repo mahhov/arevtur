@@ -4,7 +4,7 @@ const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
 const appReadyPromise = require('../base/appReadyPromise');
 const ScreenMouse = require('../base/ScreenMouse');
 
-const WIDTH = 300, HEIGHT_PER_LINE = 20;
+const WIDTH = 300, HEIGHT_BASE = 20, HEIGHT_PER_LINE = 20;
 
 class PoePricerViewHandle extends ViewHandle {
 	constructor() {
@@ -26,7 +26,7 @@ class PoePricerViewHandle extends ViewHandle {
 
 	async showTexts(texts, duration) {
 		this.send({name: 'setTexts', texts});
-		this.resize(WIDTH, HEIGHT_PER_LINE * texts.length);
+		this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * texts.length);
 		await this.validateOnScreen();
 		this.show(duration);
 	}
