@@ -36,6 +36,10 @@ class ViewHandle {
 		this.window.setSize(width, height);
 	}
 
+	move(x, y) {
+		this.window.setPosition(x, y);
+	}
+
 	onClose(request) {
 		/* override */
 	}

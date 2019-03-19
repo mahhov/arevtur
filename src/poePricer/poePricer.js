@@ -62,8 +62,8 @@ ShortcutListener.add('Control+Shift+H', hideout);
 ShortcutListener.add('Control+Shift+U', unlock);
 
 // todo must lift ctrl+shift to repress ctrl+shift+x
-// todo tooltip position at mouse position
 // todo only apply when in appropriate window title
 // todo unlock macro
 // todo sizing
 // todo uniques showing shaper/elder base prices
+// todo keep tooltip in window bounds
