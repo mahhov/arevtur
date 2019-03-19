@@ -229,7 +229,7 @@ class BaseItemPricer extends Pricer {
 	}
 
 	typeFilter(inputItem) {
-		return true;
+		return inputItem.type !== 'Unique';
 	}
 
 	nameFilter(item, inputItem) {
@@ -266,8 +266,6 @@ let pricers = stream().write(
 	new ScarabPricer(),
 	new BaseItemPricer(),
 );
-
-let a = new BaseItemPricer();
 
 let getPrice = async (text) => {
 	let textItem = new TextItem(text);

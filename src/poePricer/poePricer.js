@@ -66,4 +66,3 @@ ShortcutListener.add('Control+Shift+U', unlock);
 // todo only apply when in appropriate window title
 // todo unlock macro
 // todo sizing
-// todo uniques showing shaper/elder base prices
