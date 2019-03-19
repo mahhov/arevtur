@@ -19,11 +19,15 @@ class PoePricerViewHandle extends ViewHandle {
 		}, path.join(__dirname, './view/View.html'));
 	}
 
+	async moveToMouse() {
+		let mouse = await ScreenMouse.getMouse();
+		this.move(mouse.x, mouse.y);
+	}
+
 	async showTexts(texts, duration) {
 		this.send({name: 'setTexts', texts});
 		this.resize(WIDTH, HEIGHT_PER_LINE * texts.length);
-		let mouse = await ScreenMouse.getMouse();
-		this.move(mouse.x, mouse.y);
+		await this.validateOnScreen();
 		this.show(duration);
 	}
 }

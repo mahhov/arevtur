@@ -36,6 +36,7 @@ let startPricer = async () => {
 		viewHandle.hide();
 	else {
 		lastClipboardInput = clipboardInput;
+		viewHandle.moveToMouse();
 		viewHandle.showTexts([{text: 'fetching'}], 6000);
 		let priceLines = await Pricer.getPrice(clipboardInput);
 		viewHandle.showTexts(priceLines.map(a => ({text: a})), 3000);
@@ -48,6 +49,7 @@ let hideout = () => {
 };
 
 let unlock = async () => {
+	viewHandle.moveToMouse();
 	viewHandle.showTexts([{text: 'fetching'}], 6000);
 	let code = await unlockCodeFetcher.fetch();
 	viewHandle.hide();
@@ -65,4 +67,3 @@ ShortcutListener.add('Control+Shift+U', unlock);
 // todo unlock macro
 // todo sizing
 // todo uniques showing shaper/elder base prices
-// todo keep tooltip in window bounds

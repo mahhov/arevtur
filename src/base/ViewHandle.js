@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
 const appReadyPromise = require('./appReadyPromise');
+const ScreenMouse = require('../base/ScreenMouse');
 
 class ViewHandle {
 	timedHide;
@@ -33,11 +34,24 @@ class ViewHandle {
 	}
 
 	resize(width, height) {
+		this.width = width;
+		this.height = height;
 		this.window.setSize(width, height);
 	}
 
 	move(x, y) {
+		this.x = x;
+		this.y = y;
 		this.window.setPosition(x, y);
+	}
+
+	async validateOnScreen() {
+		let screenBounds = await ScreenMouse.getScreenBounds();
+
+		let x = Math.min(this.x, screenBounds.x + screenBounds.width - this.width);
+		let y = Math.min(this.y, screenBounds.y + screenBounds.height - this.height);
+
+		this.move(x, y);
 	}
 
 	onClose(request) {
