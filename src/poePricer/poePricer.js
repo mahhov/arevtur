@@ -45,7 +45,7 @@ let startPricer = async () => {
 
 let hideout = () => {
 	releaseKeys(['control', 'shift', 'h']);
-	KeySender2('{enter}/hideout{enter}');
+	KeySender2.string(KeySender2.TYPE, '{ENTER}/hideout{ENTER}');
 };
 
 let unlock = async () => {
