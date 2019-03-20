@@ -3,11 +3,12 @@
 const path = require('path');
 const {exec} = require("child_process");
 
+// todo add support for more symbols: =,_
 let createKeyMap = () => {
 	let map = {};
 
 	for (let i = 0; i <= 9; i++)
-		map[String.fromCharCode(i)] = i;
+		map[i] = i.toString().charCodeAt();
 
 	let a = 'A'.charCodeAt(), z = 'Z'.charCodeAt();
 	for (let i = a; i <= z; i++)
@@ -98,3 +99,4 @@ let psKeySender = args =>
 module.exports = KeySender;
 
 // todo extract duplicate code with frontWindowTitle to powerShellExecutor
+// todo linux compatibility

@@ -19,8 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "bs-better-stream": "^1.9.0",
-    "googleapis": "^38.0.0",
-    "node-key-sender": "^1.0.11"
+    "googleapis": "^38.0.0"
   },
   "devDependencies": {
     "electron": "^5.0.0-beta.5",

@@ -1,5 +1,5 @@
 const {clipboard} = require('electron');
-const KeySender = require('node-key-sender');
+// const KeySender = require('node-key-sender'); todo
 const XPromise = require('./XPromise');
 
 class ClipboardListener {
