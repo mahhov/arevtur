@@ -1,9 +1,10 @@
 // WINDOWS ONLY
 
+const fs = require('fs').promises;
 const path = require('path');
-const {exec} = require("child_process");
+const {spawn} = require("child_process");
 
-// todo add support for more symbols: =,_
+// todo add support for more symbols, e.g. =,_
 let createKeyMap = () => {
 	let map = {};
 
@@ -83,30 +84,46 @@ class KeySender {
 			.filter(a => a);
 	}
 
-	static string(action, string) {
-		KeySender.raw(action, KeySender.stringToKeys(string));
+	constructor() {
+		this.initPromise = this.init();
+		this.RELEASE = KeySender.RELEASE;
+		this.PRESS = KeySender.PRESS;
+		this.TYPE = KeySender.TYPE;
+		this.COMBO = KeySender.COMBO;
+	}
+
+	async init() {
+		let script = fs.readFile(path.join(__dirname, './keySender.ps1'))
+			.catch(e => console.log('unable to read key sender powershell script:', e));
+		this.process = spawn((await script).toString(), [], {shell: "powershell"});
+		this.process.stdout.on('data', data => console.log('keySender process output:', data.toString()));
+		this.process.stderr.on('data', data => console.error('keySender process error:', data.toString()));
+	}
+
+	async send(arg) {
+		await this.initPromise;
+		this.process.stdin.write(arg + '\n');
+	}
+
+	string(action, string) {
+		this.raw(action, KeySender.stringToKeys(string));
 	}
 
 	// KeySender.strings(
 	// 	 [KeySender.RELEASE, '{control}{shift}x'],
 	// 	 [KeySender.COMBO, '{control}c']);
-	static strings(...actionStringPairs) {
-		psKeySender(actionStringPairs
+	strings(...actionStringPairs) {
+		this.send(actionStringPairs
 			.reduce((prev, [action, string]) =>
 				[...prev, action, ...KeySender.stringToKeys(string)], []));
 	}
 
-	static raw(action, keys) {
-		psKeySender([action, ...keys])
+	raw(action, keys) {
+		this.send([action, ...keys])
 	}
 }
 
-let psKeySender = args =>
-	new Promise((resolve, reject) =>
-		exec(`powershell.exe ${path.join(__dirname, './keySender.ps1')} ${args.join(' ')}`, {},
-			(err, out, errOut) => err ? reject(`${err} : ${errOut}`) : resolve(out)));
-
-module.exports = KeySender;
+module.exports = new KeySender();
 
 // todo extract duplicate code with frontWindowTitle to powerShellExecutor
 // todo linux compatibility

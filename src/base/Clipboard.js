@@ -1,5 +1,5 @@
 const {clipboard} = require('electron');
-const KeySender = require('./keySender/keySender');
+const keySender = require('./keySender/keySender');
 const XPromise = require('./XPromise');
 
 class ClipboardListener {
@@ -33,13 +33,13 @@ class ClipboardListener {
 
 	copy() {
 		let next = this.getNext();
-		KeySender.string(KeySender.COMBO, '{ctrl}c');
+		keySender.string(keySender.COMBO, '{control}c');
 		return next;
 	}
 
 	static paste(value) {
 		clipboard.writeText(value);
-		KeySender.string(KeySender.COMBO, '{ctrl}v');
+		keySender.string(keySender.COMBO, '{control}v');
 	}
 }
 

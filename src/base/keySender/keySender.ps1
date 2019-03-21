@@ -45,4 +45,7 @@ Add-Type @"
     }
 "@
 
-[UserWindows]::keys($Args)
+foreach ($i in $input) {
+    #[array]$b = $i.split(",");
+    [UserWindows]::keys($i.split(","))
+}

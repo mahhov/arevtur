@@ -2,7 +2,7 @@ const path = require('path');
 const TrayHelper = require('../base/TrayHelper');
 const Clipboard = require('../base/Clipboard');
 const ViewHandle = require('./PoePricerViewHandle');
-const KeySender = require('../base/keySender/keySender');
+const keySender = require('../base/keySender/keySender');
 const ShortcutListener = require('../base/ShortcutListener');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
@@ -15,7 +15,7 @@ let viewHandle = new ViewHandle();
 let lastClipboardInput;
 
 let startPricer = async () => {
-	KeySender.string(KeySender.RELEASE, '{control}{shift}x');
+	keySender.string(keySender.RELEASE, '{control}{shift}x');
 	let clipboardInput = await clipboard.copy();
 	if (viewHandle.visible && clipboardInput === lastClipboardInput)
 		viewHandle.hide();
@@ -29,10 +29,10 @@ let startPricer = async () => {
 };
 
 let hideout = () => {
-	KeySender.strings(
-		[KeySender.RELEASE, '{control}{shift}h'],
-		[KeySender.TYPE, '{enter}/hideout{enter}'],
-		[KeySender.PRESS, '{control}{shift}']);
+	keySender.strings(
+		[keySender.RELEASE, '{control}{shift}h'],
+		[keySender.TYPE, '{enter}/hideout{enter}'],
+		[keySender.PRESS, '{control}{shift}']);
 };
 
 let unlock = async () => {
@@ -41,8 +41,8 @@ let unlock = async () => {
 	let code = await unlockCodeFetcher.fetch();
 	viewHandle.hide();
 	let uCode = code.toUpperCase();
-	KeySender.string(KeySender.RELEASE, '{control}{shift}u');
-	KeySender.string(KeySender.TYPE, uCode);
+	keySender.string(keySender.RELEASE, '{control}{shift}u');
+	keySender.string(keySender.TYPE, uCode);
 };
 
 ShortcutListener.add('Control+Shift+X', startPricer);
