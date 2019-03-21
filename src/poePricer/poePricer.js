@@ -29,8 +29,10 @@ let startPricer = async () => {
 };
 
 let hideout = () => {
-	KeySender.string(KeySender.RELEASE, '{control}{shift}h');
-	KeySender.string(KeySender.TYPE, '{enter}/hideout{enter}1235-=.,./+-_');
+	KeySender.strings(
+		[KeySender.RELEASE, '{control}{shift}h'],
+		[KeySender.TYPE, '{enter}/hideout{enter}'],
+		[KeySender.PRESS, '{control}{shift}']);
 };
 
 let unlock = async () => {
@@ -47,7 +49,6 @@ ShortcutListener.add('Control+Shift+X', startPricer);
 ShortcutListener.add('Control+Shift+H', hideout);
 ShortcutListener.add('Control+Shift+U', unlock);
 
-// todo must lift ctrl+shift to repress ctrl+shift+x
 // todo only apply when in appropriate window title
 // todo unlock macro
 // todo sizing

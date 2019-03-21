@@ -69,9 +69,10 @@ let createKeyMap = () => {
 };
 
 class KeySender {
-	static RELEASE = 0;
-	static PRESS = 1;
-	static TYPE = 2;
+	static RELEASE = -1;
+	static PRESS = -2;
+	static TYPE = -3;
+	static COMBO = -4;
 	static KEY_MAP = createKeyMap();
 
 	static stringToKeys(string) {
@@ -84,6 +85,15 @@ class KeySender {
 
 	static string(action, string) {
 		KeySender.raw(action, KeySender.stringToKeys(string));
+	}
+
+	// KeySender.strings(
+	// 	 [KeySender.RELEASE, '{control}{shift}x'],
+	// 	 [KeySender.COMBO, '{control}c']);
+	static strings(...actionStringPairs) {
+		psKeySender(actionStringPairs
+			.reduce((prev, [action, string]) =>
+				[...prev, action, ...KeySender.stringToKeys(string)], []));
 	}
 
 	static raw(action, keys) {

@@ -4,35 +4,40 @@ Add-Type @"
     public static class UserWindows {
         [DllImport("user32.dll")] static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
-        public static void keys(int action, byte[] vks) {
-            if (action == 1)
-                press(vks);
-            else if (action == 0)
-                release(vks);
-            else
-                type(vks);
-        }
+        public static void keys(int[] keys) {
+            int action = 0;
+            int i = 0;
+            int lastActionI = 0;
 
-        public static void press(byte[] vks) {
-            foreach (byte vk in vks) {
-                keybd_event(vk, 0, 0, UIntPtr.Zero);
-            }
-        }
-
-        public static void release(byte[] vks) {
-            foreach (byte vk in vks) {
-                keybd_event(vk, 0, 0x2, UIntPtr.Zero);
-            }
-        }
-
-        public static void type(byte[] vks) {
-            foreach (byte vk in vks) {
-                keybd_event(vk, 0, 0, UIntPtr.Zero);
-                keybd_event(vk, 0, 0x2, UIntPtr.Zero);
+            while (i < keys.Length) {
+                int key = keys[i];
+                if (key < 0) {
+                    if (action == -4) {
+                        i = lastActionI;
+                        action = -1;
+                    } else
+                        action = key;
+                    lastActionI = i;
+                } else {
+                    byte vk = (byte) key;
+                    switch (action) {
+                        case -1: // release
+                            keybd_event(vk, 0, 0x2, UIntPtr.Zero);
+                            break;
+                        case -2: // press
+                        case -4: // combo
+                            keybd_event(vk, 0, 0x0, UIntPtr.Zero);
+                            break;
+                        case -3: // type
+                            keybd_event(vk, 0, 0x0, UIntPtr.Zero);
+                            keybd_event(vk, 0, 0x2, UIntPtr.Zero);
+                            break;
+                    }
+                }
+                i++;
             }
         }
     }
 "@
 
-$action, $vks = $Args
-[UserWindows]::keys($action, $vks)
+[UserWindows]::keys($Args)
