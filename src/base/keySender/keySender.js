@@ -1,7 +1,9 @@
 const os = require('os');
 
 let osKeySenderName = os.platform() === 'linux' ?
-	'./keySenderLinux' :
-	'./keySenderWindows';
+	'./KeySenderLinux' :
+	'./KeySenderWindows';
 
-module.exports = require(osKeySenderName);
+let KeySender = require(osKeySenderName);
+
+module.exports = new KeySender();
