@@ -1,8 +1,10 @@
 Add-Type @"
-    using System;
-    using System.Runtime.InteropServices;
-    public static class UserWindows {
-        [DllImport("user32.dll")] static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+	using System;
+	using System.Runtime.InteropServices;
+	using System.Collections.Generic;
+
+	public static class UserWindows {
+		[DllImport("user32.dll")] static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
         private const int ACTION_RELEASE = -1;
         private const int ACTION_PRESS = -2;
@@ -46,6 +48,5 @@ Add-Type @"
 "@
 
 foreach ($i in $input) {
-    #[array]$b = $i.split(",");
-    [UserWindows]::keys($i.split(","))
+	[UserWindows]::keys($i.split(","))
 }

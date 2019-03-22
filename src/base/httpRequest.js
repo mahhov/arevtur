@@ -4,9 +4,9 @@ const XPromise = require('./XPromise');
 
 let get = async endpoint => {
 	await appReadyPromise;
-  let promise = new XPromise();
+	let promise = new XPromise();
 	let request = net.request(endpoint);
-  let responseChunks = [];
+	let responseChunks = [];
 	request.on('response', response => {
 		response.setEncoding('utf8');
 		response.on('data', chunk => responseChunks.push(chunk));
@@ -18,10 +18,10 @@ let get = async endpoint => {
 				promise.reject(e);
 			}
 		});
-	  response.on('error', e => promise.reject(e));
-	})
+		response.on('error', e => promise.reject(e));
+	});
 	request.end();
-  return promise;
+	return promise;
 };
 
 module.exports = get;
