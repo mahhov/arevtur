@@ -35,6 +35,7 @@
   "homepage": "https://github.com/mahhov/clipboard-manager-js#readme",
   "description": "",
   "build": {
+    "asar": false,
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "files": [
       "resources",
