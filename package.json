@@ -1,7 +1,7 @@
 {
   "name": "clipboard-manager-js",
   "version": "1.0.0",
-  "main": "src/poePricer/poePricer",
+  "main": "src/clipboardManager/clipboardManager.js",
   "scripts": {
     "start": "electron .",
     "build": "rm -rf dist; electron-builder .",
@@ -40,7 +40,7 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/icons/fa-copy-regular.png",
+    "icon": "./resources/icons/fa-copy-regular-256.png",
     "linux": {
       "target": "AppImage"
     }

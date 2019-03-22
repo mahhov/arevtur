@@ -7,7 +7,7 @@ const ShortcutListener = require('../base/ShortcutListener');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
 
-let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid.png');
+let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
 TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
 let clipboard = new Clipboard();
 let viewHandle = new ViewHandle();
