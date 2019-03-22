@@ -17,6 +17,7 @@ let lastClipboardInput;
 let startPricer = async () => {
 	keySender.string(keySender.RELEASE, '{control}{shift}x');
 	let clipboardInput = await clipboard.copy();
+	keySender.string(keySender.PRESS, '{control}{shift}');
 	if (viewHandle.visible && clipboardInput === lastClipboardInput)
 		viewHandle.hide();
 	else {
@@ -41,8 +42,10 @@ let unlock = async () => {
 	let code = await unlockCodeFetcher.fetch();
 	viewHandle.hide();
 	let uCode = code.toUpperCase();
-	keySender.string(keySender.RELEASE, '{control}{shift}u');
-	keySender.string(keySender.TYPE, uCode);
+	keySender.strings(
+		[keySender.RELEASE, '{control}{shift}u'],
+		[keySender.TYPE, uCode],
+		[keySender.PRESS, '{control}{shift}']);
 };
 
 ShortcutListener.add('Control+Shift+X', startPricer);
