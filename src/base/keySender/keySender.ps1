@@ -10,13 +10,16 @@ Add-Type @"
 		private const int ACTION_PRESS = -2;
 		private const int ACTION_TYPE = -3;
 		private const int ACTION_COMBO = -4;
+		private const int ACTION_END = -5;
 
-        public static void keys(int[] keys) {
+		public static void keys(List<int> keys) {
+			keys.Add(ACTION_END);
+
 			int action = 0;
 			int i = 0;
 			int lastActionI = 0;
 
-			while (i < keys.Length) {
+			while (i < keys.Count) {
 				int key = keys[i];
 				if (key < 0) {
 					if (action == ACTION_COMBO) {
