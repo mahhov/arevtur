@@ -142,3 +142,5 @@ let decode64 = encoded64 =>
 	Buffer.from(encoded64, 'base64').toString();
 
 module.exports = {refreshToken, fetch};
+
+// todo return to stable electron version to avoid crash when making http request

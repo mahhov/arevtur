@@ -22,7 +22,7 @@
     "googleapis": "^38.0.0"
   },
   "devDependencies": {
-    "electron": "^5.0.0-beta.5",
+    "electron": "^5.0.0-beta.6",
     "electron-builder": "^20.39.0"
   },
   "repository": {

@@ -4,8 +4,6 @@ const path = require('path');
 const {spawn} = require("child_process");
 
 class KeySender extends KeySenderBase {
-	static KEY_MAP = createKeyMap();
-
 	spawnProcess() {
 		return spawn(path.join(__dirname, './keySender.sh'));
 	}
