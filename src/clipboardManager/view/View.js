@@ -55,6 +55,11 @@ document.body.addEventListener('keydown', ({code}) => {
 			texts.selectNext();
 			updateView();
 			break;
+		case 'Delete':
+		case 'Backspace':
+			texts.removeSelected();
+			updateView();
+			break;
 		case 'Enter':
 			ipcSend({name: 'close', selected: texts.getSelected()});
 			break;

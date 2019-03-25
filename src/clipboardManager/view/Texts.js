@@ -22,6 +22,11 @@ class Texts {
 		this.texts.splice(index, 1);
 	}
 
+	removeSelected() {
+		this.remove(this.selected);
+		this.selected = Math.max(Math.min(this.selected, this.texts.length - 1), 0);
+	}
+
 	selectPrev() {
 		this.selected = (--this.selected + this.texts.length) % this.texts.length;
 	}
