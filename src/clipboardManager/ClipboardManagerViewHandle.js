@@ -1,6 +1,5 @@
 const path = require('path');
 const {ViewHandle} = require('js-desktop-base');
-const {app} = require('electron');
 
 class ClipboardManagerViewHandle extends ViewHandle {
 	constructor() {
