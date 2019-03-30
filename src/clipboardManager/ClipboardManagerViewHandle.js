@@ -19,13 +19,13 @@ class ClipboardManagerViewHandle extends ViewHandle {
 	}
 
 	onMessage(message) {
-		switch (request.name) {
+		switch (message.name) {
 			case 'close':
 				this.hide();
-				this.onClose(request);
+				this.onClose(message);
 				break;
 			default:
-				console.error('Unknown window request:', request);
+				console.error('Unknown window request:', message);
 		}
 	}
 
