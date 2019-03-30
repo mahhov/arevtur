@@ -1,15 +1,12 @@
 const path = require('path');
-const TrayHelper = require('../base/TrayHelper');
-const Clipboard = require('../base/Clipboard');
+const {TrayHelper, ClipboardListener, keySender, ShortcutListener} = require('js-desktop-base');
 const ViewHandle = require('./PoePricerViewHandle');
-const keySender = require('../base/keySender/keySender');
-const ShortcutListener = require('../base/ShortcutListener');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
 
 let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
 TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
-let clipboard = new Clipboard();
+let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
 
 let lastClipboardInput;

@@ -1,7 +1,6 @@
 const path = require('path');
-const ViewHandle = require('../base/ViewHandle');
-const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
-const appReadyPromise = require('../base/appReadyPromise');
+const {ViewHandle} = require('js-desktop-base');
+const {app} = require('electron');
 
 class ClipboardManagerViewHandle extends ViewHandle {
 	constructor() {
@@ -15,6 +14,19 @@ class ClipboardManagerViewHandle extends ViewHandle {
 			show: false,
 			webPreferences: {nodeIntegration: true}
 		}, path.join(__dirname, './view/View.html'));
+
+		this.addWindowListener('blur', () => this.hide());
+	}
+
+	onMessage(message) {
+		switch (request.name) {
+			case 'close':
+				this.hide();
+				this.onClose(request);
+				break;
+			default:
+				console.error('Unknown window request:', request);
+		}
 	}
 
 	addSelectListener(selectListener) {
