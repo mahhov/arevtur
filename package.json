@@ -1,20 +1,12 @@
 {
-  "name": "clipboard-manager-js",
+  "name": "poe-pricer",
   "version": "1.0.0",
-  "main": "src/clipboardManager/clipboardManager.js",
+  "main": "src/poePricer/poePricer.js",
   "scripts": {
     "start": "electron .",
     "build": "rm -rf dist; electron-builder .",
-    "linux-desktop-icon-workaround": "mv ~/.local/share/icons/hicolor/0x0/apps/appimagekit-clipboard-manager-js.png ~/.local/share/icons/hicolor/256x256/apps/ && update-icon-caches /usr/share/icons/*",
-    "create-icon": "f() { cd resources/icons; inkscape -z -e $1.png -h 256 $1.svg; convert $1.png -gravity center -background '#0000' -extent 256x256 $1-256.png; }; f",
-    "create-icons": "npm run create-icon fa-copy-regular; npm run create-icon fa-dollar-sign-solid",
     "refresh-gmail-tokenn": "node src/poePricer/unlocker/refreshGmailToken"
   },
-  "keywords": [
-    "clipboard",
-    "manager",
-    "electron"
-  ],
   "author": "mahhov1",
   "license": "ISC",
   "dependencies": {
@@ -28,12 +20,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mahhov/clipboard-manager-js.git"
+    "url": "git+https://github.com/mahhov/poe-pricer.git"
   },
   "bugs": {
-    "url": "https://github.com/mahhov/clipboard-manager-js/issues"
+    "url": "https://github.com/mahhov/poe-pricer/issues"
   },
-  "homepage": "https://github.com/mahhov/clipboard-manager-js#readme",
+  "homepage": "https://github.com/mahhov/poe-pricer#readme",
   "description": "",
   "build": {
     "asar": false,
@@ -42,7 +34,7 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/icons/fa-copy-regular-256.png",
+    "icon": "./resources/icons/fa-dollar-sign-256.png",
     "linux": {
       "target": "AppImage"
     }
