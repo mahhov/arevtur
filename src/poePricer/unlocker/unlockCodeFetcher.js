@@ -3,8 +3,8 @@ const readline = require('readline');
 const {google} = require('googleapis');
 
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
-const CREDENTIAL_PATH = './resources/gmail/gmailCredentials.json';
-const TOKEN_PATH = './resources/gmail/gmailToken.json';
+const CREDENTIAL_PATH = './resources/config/gmailCredentials.json';
+const TOKEN_PATH = './resources/config/gmailToken.json';
 
 // orchestrating functions
 
