@@ -1,7 +1,8 @@
+const config = require('../../../resources/config/config');
 const stream = require('bs-better-stream');
 const DataFetcher = require('./DataFetcher');
 
-const endpoints = DataFetcher.getEndpoints('Synthesis');
+const endpoints = DataFetcher.getEndpoints(config.legue);
 
 const round = (number, decimals = 2) => {
 	let factor = Math.pow(10, decimals);
