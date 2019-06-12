@@ -41,8 +41,7 @@ let unlock = async () => {
 	let uCode = code.toUpperCase();
 	keySender.strings(
 		[keySender.RELEASE, '{control}{shift}u'],
-		[keySender.TYPE, uCode],
-		[keySender.PRESS, '{control}{shift}']);
+		[keySender.TYPE, uCode]);
 };
 
 ShortcutListener.add('Control+Shift+X', startPricer);
