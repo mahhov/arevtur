@@ -15,7 +15,7 @@ let startPricer = async () => {
 	keySender.string(keySender.RELEASE, '{control}{shift}x');
 	let clipboardInput = await clipboard.copy();
 	keySender.string(keySender.PRESS, '{control}{shift}');
-	if (viewHandle.visible && clipboardInput === lastClipboardInput)
+	if (await viewHandle.visible && clipboardInput === lastClipboardInput)
 		viewHandle.hide();
 	else {
 		lastClipboardInput = clipboardInput;
