@@ -25,6 +25,7 @@ let getEndpoints = league => {
 		MAP: endpoint(ITEM, 'Map'),
 		SCARAB: endpoint(ITEM, 'Scarab'),
 		BASE_ITEM: endpoint(ITEM, 'BaseType'),
+		INCUBATOR: endpoint(ITEM, 'Incubator'),
 	};
 };
 
@@ -39,7 +40,7 @@ let getData = endpoint => {
 	if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_S)
 		return cache.data;
 
-	cache.timestampS = timestampS
+	cache.timestampS = timestampS;
 	return cache.data = httpRequest(endpoint)
 		.catch(e => {
 			cache.data = null;

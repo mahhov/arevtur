@@ -13,6 +13,16 @@ const price = (number, unit = 'c') => `${round(number)}${unit}`;
 
 class TextItem {
 	constructor(text) {
+		// {
+		// 	 text: string,
+		//	 lines: [], like lastLine,
+		//   lastLine: {line: string, words: string[], line split on space},
+		//   type: string, first line without first word
+		//   name: string, 2nd line,
+		//   shaper: boolean,
+		//   elder: boolean,
+		// }
+
 		if (!text)
 			return {error: 'blank input'};
 
@@ -226,7 +236,7 @@ class ScarabPricer extends Pricer {
 
 class BaseItemPricer extends Pricer {
 	constructor() {
-		super('Normal', [endpoints.BASE_ITEM]);
+		super('', [endpoints.BASE_ITEM]);
 	}
 
 	typeFilter(inputItem) {
@@ -253,6 +263,12 @@ class BaseItemPricer extends Pricer {
 	}
 }
 
+class IncubatorPricer extends Pricer {
+	constructor() {
+		super('Normal', [endpoints.INCUBATOR]);
+	}
+}
+
 let pricers = stream().write(
 	new UniquePricer(),
 	new CurrencyPricer(),
@@ -266,6 +282,7 @@ let pricers = stream().write(
 	new MapPricer(),
 	new ScarabPricer(),
 	new BaseItemPricer(),
+	new IncubatorPricer(),
 );
 
 let getPrice = async (text) => {
