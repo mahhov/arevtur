@@ -5,26 +5,26 @@ let getEndpoints = league => {
 	const ITEM = `${BASE}/itemoverview?league=${league}`;
 	const CURRENCY = `${BASE}/currencyoverview?league=${league}`;
 
-	let endpoint = (path, type) => `${prefix}&type=${type}`;
+	let endpoint = (prefix, type) => `${prefix}&type=${type}`;
 
 	return {
-		GEM: endpoint(ITEM, SkillGem),
-		DIVINATION_CARD: endpoint(ITEM, DivinationCard),
-		ESSENCE: endpoint(ITEM, Essence),
-		CURRENCY: endpoint(CURRENCY, Currency),
-		UNIQUE_JEWEL: endpoint(ITEM, UniqueJewel),
-		UNIQUE_FLASK: endpoint(ITEM, UniqueFlask),
-		UNIQUE_WEAPON: endpoint(ITEM, UniqueWeapon),
-		UNIQUE_ARMOUR: endpoint(ITEM, UniqueArmour),
-		UNIQUE_ACCESSORY: endpoint(ITEM, UniqueAccessory),
-		UNIQUE_MAP: endpoint(ITEM, UniqueMap),
-		FOSSIL: endpoint(ITEM, Fossil),
-		RESONATOR: endpoint(ITEM, Resonator),
-		FRAGMENT: endpoint(CURRENCY, Fragment),
-		PROPHECY: endpoint(ITEM, Prophecy),
-		MAP: endpoint(ITEM, Map),
-		SCARAB: endpoint(ITEM, Scarab),
-		BASE_ITEM: endpoint(ITEM, BaseType),
+		GEM: endpoint(ITEM, 'SkillGem'),
+		DIVINATION_CARD: endpoint(ITEM, 'DivinationCard'),
+		ESSENCE: endpoint(ITEM, 'Essence'),
+		CURRENCY: endpoint(CURRENCY, 'Currency'),
+		UNIQUE_JEWEL: endpoint(ITEM, 'UniqueJewel'),
+		UNIQUE_FLASK: endpoint(ITEM, 'UniqueFlask'),
+		UNIQUE_WEAPON: endpoint(ITEM, 'UniqueWeapon'),
+		UNIQUE_ARMOUR: endpoint(ITEM, 'UniqueArmour'),
+		UNIQUE_ACCESSORY: endpoint(ITEM, 'UniqueAccessory'),
+		UNIQUE_MAP: endpoint(ITEM, 'UniqueMap'),
+		FOSSIL: endpoint(ITEM, 'Fossil'),
+		RESONATOR: endpoint(ITEM, 'Resonator'),
+		FRAGMENT: endpoint(CURRENCY, 'Fragment'),
+		PROPHECY: endpoint(ITEM, 'Prophecy'),
+		MAP: endpoint(ITEM, 'Map'),
+		SCARAB: endpoint(ITEM, 'Scarab'),
+		BASE_ITEM: endpoint(ITEM, 'BaseType'),
 	};
 };
 
