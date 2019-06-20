@@ -20,8 +20,8 @@ let startPricer = async () => {
 		viewHandle.hide();
 	else {
 		lastClipboardInput = clipboardInput;
+		await viewHandle.showTexts([{text: 'fetching'}], 6000);
 		viewHandle.moveToMouse();
-		viewHandle.showTexts([{text: 'fetching'}], 6000);
 		let priceLines = await Pricer.getPrice(clipboardInput);
 		viewHandle.showTexts(priceLines.map(a => ({text: a})), 3000);
 	}
@@ -35,8 +35,8 @@ let hideout = () => {
 };
 
 let unlock = async () => {
+	await viewHandle.showTexts([{text: 'fetching'}], 6000);
 	viewHandle.moveToMouse();
-	viewHandle.showTexts([{text: 'fetching'}], 6000);
 	let code = await unlockCodeFetcher.fetch();
 	viewHandle.hide();
 	let uCode = code.toUpperCase();
@@ -49,9 +49,9 @@ let battery = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
 	else {
-		viewHandle.moveToMouse();
 		let battery = await getBattery();
-		viewHandle.showTexts([{text: `${battery.percent}% [${battery.charging ? 'charging' : `${battery.minutes} minutes`}]`}], 3000);
+		await viewHandle.showTexts([{text: `${battery.percent}% [${battery.charging ? 'charging' : `${battery.minutes} minutes`}]`}], 3000);
+		viewHandle.moveToMouse();
 	}
 };
 

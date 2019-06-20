@@ -26,7 +26,7 @@ class PoePricerViewHandle extends ViewHandle {
 		this.send({name: 'setTexts', texts});
 		this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * texts.length);
 		await this.validateOnScreen();
-		this.show(duration);
+		await this.show(duration);
 	}
 }
 
