@@ -171,7 +171,13 @@ class FossilPricer extends Pricer {
 
 class FragmentPricer extends Pricer {
 	constructor() {
-		super('Normal', [endpoints.FRAGMENT]);
+		super('', [endpoints.FRAGMENT]);
+	}
+
+	typeFilter(inputItem) {
+		// sacrifice fragments are type 'Normal'
+		// timeless splinters are type 'Currency'
+		return true;
 	}
 
 	nameFilter(item, inputItem) {
