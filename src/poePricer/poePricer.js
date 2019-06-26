@@ -3,7 +3,7 @@ const {TrayHelper, ClipboardListener, keySender, ShortcutListener} = require('js
 const ViewHandle = require('./PoePricerViewHandle');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
-const {getBattery} = require('./battery/battery');
+const cmdUtil = require('./cmdUtil/cmdUtil');
 
 let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
 TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
@@ -49,16 +49,28 @@ let battery = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
 	else {
-		let battery = await getBattery();
-		await viewHandle.showTexts([{text: `${battery.percent}% [${battery.charging ? 'charging' : `${battery.minutes} minutes`}]`}], 3000);
+		let out = await cmdUtil.battery();
+		await viewHandle.showTexts([{text: `${out.percent}% [${out.charging ? 'charging' : `${out.minutes} minutes`}]`}], 3000);
 		viewHandle.moveToMouse();
 	}
+};
+
+let networkFlush = async () => {
+	if (await viewHandle.visible)
+		viewHandle.hide();
+	else
+		cmdUtil.networkFlush(async out => {
+			console.log(out);
+			await viewHandle.showTexts(out.map(text => ({text})), 3000);
+			viewHandle.moveToMouse();
+		});
 };
 
 ShortcutListener.add('Control+Shift+X', startPricer);
 ShortcutListener.add('Control+Shift+H', hideout);
 ShortcutListener.add('Control+Shift+U', unlock);
 ShortcutListener.add('Control+Shift+B', battery);
+ShortcutListener.add('Control+Shift+N', networkFlush);
 
 // todo only apply when in appropriate window title
 // todo unlock macro
