@@ -12,7 +12,7 @@
   "dependencies": {
     "bs-better-stream": "^1.9.0",
     "googleapis": "^38.0.0",
-    "js-desktop-base": "^1.0.0"
+    "js-desktop-base": "^3.0.1"
   },
   "devDependencies": {
     "electron": "^5.0.3",
