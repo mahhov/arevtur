@@ -34,7 +34,7 @@ networkFlush = async callback => {
 			outObj = e;
 		}
 		callback([
-			`${i + 1} of ${cmds.length}`,
+			`${parseInt(i) + 1} of ${cmds.length}`,
 			cmds[i],
 			success ? '--SUCCEEDED' : '--FAILED--',
 			...outObj.stdout.split(/([\r\n])+/),
