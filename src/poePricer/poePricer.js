@@ -1,5 +1,5 @@
 const path = require('path');
-const {TrayHelper, ClipboardListener, keySender, ShortcutListener} = require('js-desktop-base');
+const {TrayHelper, ClipboardListener, keySender, ShortcutListener, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./PoePricerViewHandle');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
@@ -66,11 +66,18 @@ let networkFlush = async () => {
 		});
 };
 
-ShortcutListener.add('Control+Shift+X', startPricer);
-ShortcutListener.add('Control+Shift+H', hideout);
-ShortcutListener.add('Control+Shift+U', unlock);
-ShortcutListener.add('Control+Shift+B', battery);
-ShortcutListener.add('Control+Shift+N', networkFlush);
+let addPoeShortcutListener = (shortcut, handler) =>
+	ShortcutListener.add(shortcut, async () => {
+		let title = (await frontWindowTitle.get()).out.trim();
+		if (title === 'Path of Exile')
+			handler();
+	});
+
+addPoeShortcutListener('Control+Shift+X', startPricer);
+addPoeShortcutListener('Control+Shift+H', hideout);
+addPoeShortcutListener('Control+Shift+U', unlock);
+addPoeShortcutListener('Control+Shift+B', battery);
+addPoeShortcutListener('Control+Shift+N', networkFlush);
 
 // todo only apply when in appropriate window title
 // todo unlock macro
