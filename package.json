@@ -1,9 +1,10 @@
 {
   "name": "poe-pricer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/poePricer/poePricer.js",
   "scripts": {
     "start": "electron .",
+    "build": "electron-builder .",
     "clean-build": "rm -rf dist; electron-builder .",
     "refresh-gmail-tokenn": "node src/poePricer/unlocker/refreshGmailToken"
   },
