@@ -79,6 +79,4 @@ addPoeShortcutListener('Control+Shift+U', unlock);
 addPoeShortcutListener('Control+Shift+B', battery);
 addPoeShortcutListener('Control+Shift+N', networkFlush);
 
-// todo only apply when in appropriate window title
-// todo unlock macro
 // todo sizing
