@@ -26,6 +26,7 @@ let getEndpoints = league => {
 		SCARAB: endpoint(ITEM, 'Scarab'),
 		BASE_ITEM: endpoint(ITEM, 'BaseType'),
 		INCUBATOR: endpoint(ITEM, 'Incubator'),
+		OIL: endpoint(ITEM, 'Oil'),
 	};
 };
 

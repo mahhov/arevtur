@@ -275,6 +275,12 @@ class IncubatorPricer extends Pricer {
 	}
 }
 
+class OilPricer extends Pricer {
+	constructor() {
+		super('Currency', [endpoints.OIL]);
+	}
+}
+
 let pricers = stream().write(
 	new UniquePricer(),
 	new CurrencyPricer(),
@@ -289,6 +295,7 @@ let pricers = stream().write(
 	new ScarabPricer(),
 	new BaseItemPricer(),
 	new IncubatorPricer(),
+	new OilPricer(),
 );
 
 let getPrice = async (text) => {
