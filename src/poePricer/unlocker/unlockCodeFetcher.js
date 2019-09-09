@@ -1,4 +1,7 @@
+const path = require('path');
+const fs = require('fs');
 const http = require('http');
+const envPaths = require('env-paths')('poe-pricer');
 const GoogleAuth = require('google-oauth2-x');
 const {shell} = require('electron');
 const axios = require('axios');
@@ -45,9 +48,11 @@ class GmailAuth extends GoogleAuth {
 	}
 }
 
+fs.mkdirSync(envPaths.data, {recursive: true});
+
 let gmailAuth = new GmailAuth(
-	'./resources/config/gmailCredentials.json',
-	'./resources/config/gmailToken.json',
+	path.resolve(__dirname, '../../../resources/config/gmailCredentials.json'),
+	path.resolve(envPaths.data, 'gmailToken.json'),
 	'https://www.googleapis.com/auth/gmail.readonly');
 
 let fetch = async () => {

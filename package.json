@@ -1,6 +1,6 @@
 {
   "name": "poe-pricer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "src/poePricer/poePricer.js",
   "scripts": {
     "start": "electron .",
@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "bs-better-stream": "^1.9.0",
+    "env-paths": "^2.2.0",
     "google-oauth2-x": "^1.0.0",
     "js-desktop-base": "^3.0.1"
   },
