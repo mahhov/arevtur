@@ -55,10 +55,19 @@ let gmailAuth = new GmailAuth(
 	path.resolve(envPaths.data, 'gmailToken.json'),
 	'https://www.googleapis.com/auth/gmail.readonly');
 
-let fetch = async () => {
+let fetchHelper = async () => {
 	let emailId = (await gmailAuth.queryEmailIds('path of exile'))[0];
 	let emailBody = await gmailAuth.getEmailBody(emailId);
 	return emailBody.match(/after logging in:\n\n(.*)/)[1];
+};
+
+let fetch = async () => {
+	try {
+		return await fetchHelper();
+	} catch (e) {
+		gmailAuth.getRefreshedToken();
+		return fetchHelper();
+	}
 };
 
 module.exports = {fetch};
