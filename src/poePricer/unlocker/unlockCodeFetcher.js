@@ -61,13 +61,11 @@ let fetchHelper = async () => {
 	return emailBody.match(/after logging in:\n\n(.*)/)[1];
 };
 
-let fetch = async () => {
-	try {
-		return await fetchHelper();
-	} catch (e) {
-		gmailAuth.getRefreshedToken();
-		return fetchHelper();
-	}
-};
+let fetch = () =>
+	fetchHelper()
+		.catch(() => {
+			gmailAuth.getRefreshedToken();
+			return fetchHelper();
+		}).catch(({response: {data: {error: {code, message}}}}) => `${code}, ${message}`);
 
 module.exports = {fetch};
