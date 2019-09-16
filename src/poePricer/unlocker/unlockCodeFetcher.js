@@ -41,7 +41,7 @@ class GmailAuth extends GoogleAuth {
 	}
 
 	async getHeaders_() {
-		return this.headers_ = this.headers_ || {
+		return {
 			Authorization: `Bearer ${await this.getToken()}`,
 			'Content-Type': 'application/json',
 		};
@@ -63,8 +63,8 @@ let fetchHelper = async () => {
 
 let fetch = () =>
 	fetchHelper()
-		.catch(() => {
-			gmailAuth.getRefreshedToken();
+		.catch(async () => {
+			await gmailAuth.getRefreshedToken();
 			return fetchHelper();
 		}).catch(({response: {data: {error: {code, message}}}}) => `${code}, ${message}`);
 
