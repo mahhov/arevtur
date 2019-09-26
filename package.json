@@ -1,12 +1,12 @@
 {
   "name": "poe-pricer",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "main": "src/poePricer/poePricer.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder .",
     "clean-build": "rm -rf dist; electron-builder .",
-    "refresh-gmail-tokenn": "node src/poePricer/unlocker/refreshGmailToken"
+    "ship": "git push && build --win -p always"
   },
   "author": "mahhov1",
   "license": "ISC",
