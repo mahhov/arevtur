@@ -1,5 +1,5 @@
 const path = require('path');
-const {TrayHelper, ClipboardListener, keySender, ShortcutListener, frontWindowTitle} = require('js-desktop-base');
+const {TrayHelper, ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./PoePricerViewHandle');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
@@ -10,17 +10,17 @@ TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
 
-let lastClipboardInput;
-
 let startPricer = async () => {
-	keySender.string(keySender.RELEASE, '{control}{shift}x');
+	keySender.string(keySender.RELEASE, '{control}{shift}xc');
 	let clipboardInput = await clipboard.copy();
 	keySender.string(keySender.PRESS, '{control}{shift}');
-	if (await viewHandle.visible && clipboardInput === lastClipboardInput)
+	if (await viewHandle.visible && clipboardInput === startPricer.lastClipboardInput)
 		viewHandle.hide();
 	else {
-		lastClipboardInput = clipboardInput;
+		startPricer.lastClipboardInput = clipboardInput;
 		await viewHandle.showTexts([{text: 'fetching'}], 6000);
+		// for whatever reason, when electron tries to resize a window, it releases the shift key.
+		keySender.string(keySender.PRESS, '{shift}');
 		viewHandle.moveToMouse();
 		let priceLines = await Pricer.getPrice(clipboardInput);
 		viewHandle.showTexts(priceLines.map(a => ({text: a})), 3000);
@@ -66,17 +66,18 @@ let networkFlush = async () => {
 		});
 };
 
-let addPoeShortcutListener = (shortcut, handler) =>
-	ShortcutListener.add(shortcut, async () => {
+let addPoeShortcutListener = (key, handler) =>
+	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
 		let title = (await frontWindowTitle.get()).out.trim();
 		if (title === 'Path of Exile')
 			handler();
 	});
 
-addPoeShortcutListener('Control+Shift+X', startPricer);
-addPoeShortcutListener('Control+Shift+H', hideout);
-addPoeShortcutListener('Control+Shift+U', unlock);
-addPoeShortcutListener('Control+Shift+B', battery);
-addPoeShortcutListener('Control+Shift+N', networkFlush);
+addPoeShortcutListener('x', startPricer);
+addPoeShortcutListener('c', startPricer);
+addPoeShortcutListener('h', hideout);
+addPoeShortcutListener('u', unlock);
+addPoeShortcutListener('b', battery);
+addPoeShortcutListener('n', networkFlush);
 
 // todo sizing
