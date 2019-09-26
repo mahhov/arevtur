@@ -30,7 +30,7 @@ let getEndpoints = league => {
 	};
 };
 
-const CACHE_DURATION_S = 4 * 60; // 4 minutes
+const CACHE_DURATION_S = 12 * 60; // 12 minutes
 
 let priceCache = {};
 
