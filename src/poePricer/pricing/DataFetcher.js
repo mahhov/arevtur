@@ -1,5 +1,6 @@
 const {httpRequest} = require('js-desktop-base');
 
+// todo read league from config instead of param
 let getEndpoints = league => {
 	const BASE = 'https://poe.ninja/api/data';
 	const ITEM = `${BASE}/itemoverview?league=${league}`;

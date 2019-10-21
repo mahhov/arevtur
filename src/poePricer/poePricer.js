@@ -3,7 +3,8 @@ const {TrayHelper, ClipboardListener, keyHook, keySender, frontWindowTitle} = re
 const ViewHandle = require('./PoePricerViewHandle');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
-const cmdUtil = require('./cmdUtil/cmdUtil');
+const cmdUtil = require('./misc/cmdUtil');
+const gemQualityArbitrage = require('../scratch/gemQualityArbitrage');
 
 let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
 TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
@@ -23,7 +24,7 @@ let startPricer = async () => {
 		keySender.string(keySender.PRESS, '{shift}');
 		viewHandle.moveToMouse();
 		let priceLines = await Pricer.getPrice(clipboardInput);
-		viewHandle.showTexts(priceLines.map(a => ({text: a})), 3000);
+		viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
 	}
 };
 
@@ -66,6 +67,16 @@ let networkFlush = async () => {
 		});
 };
 
+let displayGemQualityArbitrage = async () => {
+	if (await viewHandle.visible)
+		viewHandle.hide();
+	else {
+		let lines = await gemQualityArbitrage();
+		await viewHandle.showTexts(lines.map(text => ({text})), 6000);
+		viewHandle.moveToMouse();
+	}
+};
+
 let addPoeShortcutListener = (key, handler) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
 		let title = (await frontWindowTitle.get()).out.trim();
@@ -79,5 +90,6 @@ addPoeShortcutListener('h', hideout);
 addPoeShortcutListener('u', unlock);
 addPoeShortcutListener('b', battery);
 addPoeShortcutListener('n', networkFlush);
+addPoeShortcutListener('g', displayGemQualityArbitrage);
 
 // todo sizing
