@@ -1,6 +1,6 @@
+const config = require('../../../resources/config/config');
 const {httpRequest} = require('js-desktop-base');
 
-// todo read league from config instead of param
 let getEndpoints = league => {
 	const BASE = 'https://poe.ninja/api/data';
 	const ITEM = `${BASE}/itemoverview?league=${league}`;
@@ -31,6 +31,8 @@ let getEndpoints = league => {
 	};
 };
 
+let endpoints = getEndpoints(config.league);
+
 const CACHE_DURATION_S = 12 * 60; // 12 minutes
 
 let priceCache = {};
@@ -50,7 +52,7 @@ let getData = endpoint => {
 		});
 };
 
-module.exports = {getEndpoints, getData};
+module.exports = {endpoints, getData};
 
 // axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() * 10000)}});
 // df = require('./DataFetcher');
