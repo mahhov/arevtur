@@ -4,7 +4,7 @@ const ViewHandle = require('./PoePricerViewHandle');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
 const cmdUtil = require('./misc/cmdUtil');
-const gemQualityArbitrage = require('../scratch/gemQualityArbitrage');
+const gemQualityArbitrage = require('./misc/gemQualityArbitrage');
 
 let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
 TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
