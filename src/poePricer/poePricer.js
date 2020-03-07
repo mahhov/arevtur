@@ -35,6 +35,13 @@ let hideout = () => {
 		[keySender.PRESS, '{control}{shift}']);
 };
 
+let oos = () => {
+	keySender.strings(
+		[keySender.RELEASE, '{control}{shift}o'],
+		[keySender.TYPE, '{enter}/oos{enter}'],
+		[keySender.PRESS, '{control}{shift}']);
+};
+
 let unlock = async () => {
 	await viewHandle.showTexts([{text: 'fetching'}], 6000);
 	viewHandle.moveToMouse();
@@ -82,11 +89,14 @@ let addPoeShortcutListener = (key, handler) =>
 		let title = (await frontWindowTitle.get()).out.trim();
 		if (title === 'Path of Exile')
 			handler();
+		else
+			console.log('not path of exile')
 	});
 
 addPoeShortcutListener('x', startPricer);
 addPoeShortcutListener('c', startPricer);
 addPoeShortcutListener('h', hideout);
+addPoeShortcutListener('o', oos);
 addPoeShortcutListener('u', unlock);
 addPoeShortcutListener('b', battery);
 addPoeShortcutListener('n', networkFlush);
