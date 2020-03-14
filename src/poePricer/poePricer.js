@@ -23,9 +23,9 @@ let startPricer = async () => {
 		await viewHandle.showTexts([{text: 'fetching'}], 6000);
 		// for whatever reason, when electron tries to resize a window, it releases the shift key.
 		keySender.string(keySender.PRESS, '{shift}');
-		viewHandle.moveToMouse();
+		await viewHandle.moveToMouse();
 		let priceLines = await Pricer.getPrice(clipboardInput);
-		viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
+		await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
 	}
 };
 
@@ -89,14 +89,13 @@ let displayPreferences = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
 	else {
+		await viewHandle.moveToMouse();
 		await viewHandle.showPreferences();
-		viewHandle.moveToMouse();
 	}
 };
 
 let addPoeShortcutListener = (key, handler, skipPoeWindowCheck = false) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
-		console.log(appData.config);
 		if (skipPoeWindowCheck || !appData.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
 			handler();
 		else

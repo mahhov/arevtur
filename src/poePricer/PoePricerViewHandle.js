@@ -33,21 +33,21 @@ class PoePricerViewHandle extends ViewHandle {
 
 	async moveToMouse() {
 		let mouse = await ScreenMouse.getMouse();
-		this.move(mouse.x, mouse.y);
+		await this.move(mouse.x, mouse.y);
 	}
 
 	async showTexts(texts, duration) {
 		this.send({name: 'setTexts', texts});
-		this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * texts.length);
-		await this.validateOnScreen();
 		await this.show(duration);
+		await this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * texts.length);
+		await this.validateOnScreen();
 	}
 
 	async showPreferences() {
 		this.send({name: 'showPreferences'});
-		this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * 5);
-		await this.validateOnScreen();
 		await this.show();
+		await this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * 5);
+		await this.validateOnScreen();
 	}
 }
 
