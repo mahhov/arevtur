@@ -23,7 +23,6 @@ let startPricer = async () => {
 		await viewHandle.showTexts([{text: 'fetching'}], 6000);
 		// for whatever reason, when electron tries to resize a window, it releases the shift key.
 		keySender.string(keySender.PRESS, '{shift}');
-		await viewHandle.moveToMouse();
 		let priceLines = await Pricer.getPrice(clipboardInput);
 		await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
 	}
@@ -45,7 +44,6 @@ let oos = () => {
 
 let unlock = async () => {
 	await viewHandle.showTexts([{text: 'fetching'}], 6000);
-	viewHandle.moveToMouse();
 	let code = await unlockCodeFetcher.fetch();
 	viewHandle.hide();
 	let uCode = code.toUpperCase();
@@ -60,7 +58,6 @@ let battery = async () => {
 	else {
 		let out = await cmdUtil.battery();
 		await viewHandle.showTexts([{text: `${out.percent}% [${out.charging ? 'charging' : `${out.minutes} minutes`}]`}], 3000);
-		viewHandle.moveToMouse();
 	}
 };
 
@@ -71,7 +68,6 @@ let networkFlush = async () => {
 		cmdUtil.networkFlush(async out => {
 			console.log(out);
 			await viewHandle.showTexts(out.map(text => ({text})), 3000);
-			viewHandle.moveToMouse();
 		});
 };
 
@@ -81,17 +77,14 @@ let displayGemQualityArbitrage = async () => {
 	else {
 		let lines = await gemQualityArbitrage();
 		await viewHandle.showTexts(lines.map(text => ({text})), 6000);
-		viewHandle.moveToMouse();
 	}
 };
 
 let displayPreferences = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
-	else {
-		await viewHandle.moveToMouse();
+	else
 		await viewHandle.showPreferences();
-	}
 };
 
 let addPoeShortcutListener = (key, handler, skipPoeWindowCheck = false) =>
