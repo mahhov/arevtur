@@ -24,8 +24,17 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
+
+	#container.hidden, .hidden {
+		display: none;
+	}
 </style>
 
 <div id="container"></div>
+<div id="preferences">
+	<input id="preferences-league">
+	<label><input id="preferences-restrict-window" type="checkbox">Restrict POE Window</label>
+	<button id="preferences-open">O</button>
+</div>
 
 <script src="View.js"></script>

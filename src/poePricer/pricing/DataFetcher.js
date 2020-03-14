@@ -1,5 +1,5 @@
-const config = require('../../../resources/config/config');
 const {httpRequest} = require('js-desktop-base');
+const appData = require('../misc/appData');
 
 let getEndpoints = league => {
 	const BASE = 'https://poe.ninja/api/data';
@@ -31,7 +31,7 @@ let getEndpoints = league => {
 	};
 };
 
-let endpoints = getEndpoints(config.league);
+let endpoints = getEndpoints(appData.config.league);
 
 const CACHE_DURATION_S = 12 * 60; // 12 minutes
 

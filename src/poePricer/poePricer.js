@@ -1,6 +1,7 @@
 const path = require('path');
 const {TrayHelper, ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./PoePricerViewHandle');
+const appData = require('./misc/appData');
 const Pricer = require('./pricing/Pricer');
 const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
 const cmdUtil = require('./misc/cmdUtil');
@@ -84,13 +85,22 @@ let displayGemQualityArbitrage = async () => {
 	}
 };
 
-let addPoeShortcutListener = (key, handler) =>
+let displayPreferences = async () => {
+	if (await viewHandle.visible)
+		viewHandle.hide();
+	else {
+		await viewHandle.showPreferences();
+		viewHandle.moveToMouse();
+	}
+};
+
+let addPoeShortcutListener = (key, handler, skipPoeWindowCheck = false) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
-		let title = (await frontWindowTitle.get()).out.trim();
-		if (title === 'Path of Exile')
+		console.log(appData.config);
+		if (skipPoeWindowCheck || !appData.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
 			handler();
 		else
-			console.log('not path of exile')
+			console.log('POE window not focused.');
 	});
 
 addPoeShortcutListener('x', startPricer);
@@ -99,7 +109,8 @@ addPoeShortcutListener('h', hideout);
 addPoeShortcutListener('o', oos);
 addPoeShortcutListener('u', unlock);
 addPoeShortcutListener('b', battery);
-addPoeShortcutListener('n', networkFlush);
+// addPoeShortcutListener('n', networkFlush);
 addPoeShortcutListener('g', displayGemQualityArbitrage);
+addPoeShortcutListener('p', displayPreferences, true);
 
 // todo sizing

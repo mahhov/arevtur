@@ -2,5 +2,3 @@
 node_modules
 dist
 *.iml
-resources/config/gmailCredentials.json
-resources/config/gmailToken.json

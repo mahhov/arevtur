@@ -1,6 +1,7 @@
 const path = require('path');
 const {ViewHandle, ScreenMouse} = require('js-desktop-base');
 const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
+const appData = require('./misc/appData');
 
 const WIDTH = 300, HEIGHT_BASE = 20, HEIGHT_PER_LINE = 20;
 
@@ -11,10 +12,23 @@ class PoePricerViewHandle extends ViewHandle {
 			thickFrame: false,
 			skipTaskbar: true,
 			alwaysOnTop: true,
-			focusable: false,
+			focusable: true,
 			show: false,
 			webPreferences: {nodeIntegration: true}
 		}, path.join(__dirname, './view/View.html'));
+	}
+
+	onMessage(message) {
+		switch (message.name) {
+			case 'close':
+				this.hide();
+				break;
+			case 'saveConfig':
+				appData.saveConfig(message.config);
+				break;
+			default:
+				console.error('Unknown window message:', message);
+		}
 	}
 
 	async moveToMouse() {
@@ -27,6 +41,13 @@ class PoePricerViewHandle extends ViewHandle {
 		this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * texts.length);
 		await this.validateOnScreen();
 		await this.show(duration);
+	}
+
+	async showPreferences() {
+		this.send({name: 'showPreferences'});
+		this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * 5);
+		await this.validateOnScreen();
+		await this.show();
 	}
 }
 
