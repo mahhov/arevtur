@@ -7,11 +7,6 @@ const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
 const cmdUtil = require('./misc/cmdUtil');
 const gemQualityArbitrage = require('./misc/gemQualityArbitrage');
 
-let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
-TrayHelper.createExitTray(trayIcon, 'Poe Pricer');
-let clipboard = new ClipboardListener();
-let viewHandle = new ViewHandle();
-
 let startPricer = async () => {
 	keySender.string(keySender.RELEASE, '{control}{shift}xc');
 	let clipboardInput = await clipboard.copy();
@@ -87,9 +82,9 @@ let displayPreferences = async () => {
 		await viewHandle.showPreferences();
 };
 
-let addPoeShortcutListener = (key, handler, skipPoeWindowCheck = false) =>
+let addPoeShortcutListener = (key, handler) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
-		if (skipPoeWindowCheck || !appData.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
+		if (!appData.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
 			handler();
 		else
 			console.log('POE window not focused.');
@@ -103,6 +98,9 @@ addPoeShortcutListener('u', unlock);
 addPoeShortcutListener('b', battery);
 // addPoeShortcutListener('n', networkFlush);
 addPoeShortcutListener('g', displayGemQualityArbitrage);
-addPoeShortcutListener('p', displayPreferences, true);
+addPoeShortcutListener('p', displayPreferences);
 
-// todo sizing
+let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
+TrayHelper.createExitTray(trayIcon, 'Poe Pricer', [{label: 'Preferences', click: displayPreferences}]);
+let clipboard = new ClipboardListener();
+let viewHandle = new ViewHandle();
