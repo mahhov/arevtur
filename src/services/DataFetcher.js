@@ -1,5 +1,5 @@
 const {httpRequest} = require('js-desktop-base');
-const appData = require('../misc/appData');
+const appData = require('./appData');
 
 let getEndpoints = league => {
 	const BASE = 'https://poe.ninja/api/data';

@@ -1,5 +1,5 @@
 const stream = require('bs-better-stream');
-const DataFetcher = require('./DataFetcher');
+const DataFetcher = require('../services/DataFetcher');
 
 const round = (number, decimals = 2) => {
 	let factor = Math.pow(10, decimals);

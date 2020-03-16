@@ -1,7 +1,7 @@
 const path = require('path');
 const {ViewHandle, ScreenMouse} = require('js-desktop-base');
 const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
-const appData = require('./misc/appData');
+const appData = require('../../services/appData');
 
 const WIDTH = 300, HEIGHT_BASE = 20, HEIGHT_PER_LINE = 20;
 

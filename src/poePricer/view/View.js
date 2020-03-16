@@ -1,5 +1,6 @@
 const {ipcRenderer: ipc, shell} = require('electron');
-const appData = require('../misc/appData');
+const appData = require('../../services/appData');
+
 const ipcSend = message => ipc.send('window-request', message);
 
 const $ = document.querySelector.bind(document);

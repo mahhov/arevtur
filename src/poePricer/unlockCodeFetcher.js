@@ -1,10 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
-const appData = require('../misc/appData');
 const GoogleAuth = require('google-oauth2-x');
 const {shell} = require('electron');
 const axios = require('axios');
+const appData = require('../services/appData');
 
 class GmailAuth extends GoogleAuth {
 	openConsentScreen_() {

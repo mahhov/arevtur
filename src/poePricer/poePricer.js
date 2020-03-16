@@ -1,11 +1,11 @@
 const path = require('path');
 const {TrayHelper, ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
-const ViewHandle = require('./PoePricerViewHandle');
-const appData = require('./misc/appData');
-const Pricer = require('./pricing/Pricer');
-const unlockCodeFetcher = require('./unlocker/unlockCodeFetcher');
-const cmdUtil = require('./misc/cmdUtil');
-const gemQualityArbitrage = require('./misc/gemQualityArbitrage');
+const ViewHandle = require('./view/PoePricerViewHandle');
+const appData = require('../services/appData');
+const Pricer = require('./Pricer');
+const unlockCodeFetcher = require('./unlockCodeFetcher');
+const cmdUtil = require('./cmdUtil');
+const gemQualityArbitrage = require('./gemQualityArbitrage');
 
 let startPricer = async () => {
 	keySender.string(keySender.RELEASE, '{control}{shift}xc');

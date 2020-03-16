@@ -1,4 +1,4 @@
-const DataFetcher = require('../pricing/DataFetcher');
+const DataFetcher = require('../services/DataFetcher');
 
 let alignColumns = rows => {
 	let columns = rows[0].map((_, i) => rows.map(row => row[i]));
