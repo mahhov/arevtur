@@ -1,11 +1,11 @@
 const path = require('path');
-const {ViewHandle, ScreenMouse} = require('js-desktop-base');
+const {ViewHandle: ViewHandleBase, ScreenMouse} = require('js-desktop-base');
 const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
 const appData = require('../../services/appData');
 
 const WIDTH = 300, HEIGHT_BASE = 20, HEIGHT_PER_LINE = 20;
 
-class PoePricerViewHandle extends ViewHandle {
+class ViewHandle extends ViewHandleBase {
 	constructor() {
 		super({
 			frame: false,
@@ -15,7 +15,7 @@ class PoePricerViewHandle extends ViewHandle {
 			focusable: true,
 			show: false,
 			webPreferences: {nodeIntegration: true}
-		}, path.join(__dirname, './view/View.html'));
+		}, path.join(__dirname, './View.html'));
 	}
 
 	onMessage(message) {
@@ -53,4 +53,4 @@ class PoePricerViewHandle extends ViewHandle {
 	}
 }
 
-module.exports = PoePricerViewHandle;
+module.exports = ViewHandle;

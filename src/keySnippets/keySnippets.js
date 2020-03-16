@@ -1,11 +1,13 @@
-const path = require('path');
-const {TrayHelper, ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
-const ViewHandle = require('./view/PoePricerViewHandle');
+const {ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
+const ViewHandle = require('./view/ViewHandle');
 const appData = require('../services/appData');
 const Pricer = require('./Pricer');
 const unlockCodeFetcher = require('./unlockCodeFetcher');
 const cmdUtil = require('./cmdUtil');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
+
+let clipboard = new ClipboardListener();
+let viewHandle = new ViewHandle();
 
 let startPricer = async () => {
 	keySender.string(keySender.RELEASE, '{control}{shift}xc');
@@ -90,17 +92,19 @@ let addPoeShortcutListener = (key, handler) =>
 			console.log('POE window not focused.');
 	});
 
-addPoeShortcutListener('x', startPricer);
-addPoeShortcutListener('c', startPricer);
-addPoeShortcutListener('h', hideout);
-addPoeShortcutListener('o', oos);
-addPoeShortcutListener('u', unlock);
-addPoeShortcutListener('b', battery);
-// addPoeShortcutListener('n', networkFlush);
-addPoeShortcutListener('g', displayGemQualityArbitrage);
-addPoeShortcutListener('p', displayPreferences);
+let init = () => {
+	addPoeShortcutListener('x', startPricer);
+	addPoeShortcutListener('c', startPricer);
+	addPoeShortcutListener('h', hideout);
+	addPoeShortcutListener('o', oos);
+	addPoeShortcutListener('u', unlock);
+	addPoeShortcutListener('b', battery);
+	// addPoeShortcutListener('n', networkFlush);
+	addPoeShortcutListener('g', displayGemQualityArbitrage);
+	addPoeShortcutListener('p', displayPreferences);
+};
 
-let trayIcon = path.join(__dirname, '../../resources/icons/fa-dollar-sign-solid-256.png');
-TrayHelper.createExitTray(trayIcon, 'Poe Pricer', [{label: 'Preferences', click: displayPreferences}]);
-let clipboard = new ClipboardListener();
-let viewHandle = new ViewHandle();
+module.exports = {
+	trayOptions: [{label: 'Preferences', click: displayPreferences}],
+	init,
+};

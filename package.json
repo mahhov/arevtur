@@ -1,7 +1,7 @@
 {
   "name": "poe-pricer",
   "version": "1.5.0",
-  "main": "src/poePricer/poePricer.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder .",
