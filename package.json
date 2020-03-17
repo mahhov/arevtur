@@ -38,7 +38,7 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/icons/fa-dollar-sign-256.png",
+    "icon": "./resources/icons/fa-dollar-sign-solid-256.png",
     "linux": {
       "target": "AppImage"
     }
