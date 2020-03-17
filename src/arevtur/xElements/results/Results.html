@@ -1,0 +1,63 @@
+<style>
+	:host {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	#top-row {
+		display: flex;
+	}
+
+	#results-count {
+		margin-left: 5px;
+	}
+
+	#search-input {
+		flex: 1;
+		margin-left: 15px;
+	}
+
+	#center {
+		display: flex;
+		overflow: hidden;
+		margin-top: 15px;
+	}
+
+	progress[value="1"] {
+		display: none;
+	}
+
+	#left {
+		flex: 1;
+		padding-right: 5px;
+		overflow: auto;
+	}
+
+	#results-list x-item-listing:not(:first-child) {
+		margin-top: 15px;
+	}
+
+	#results-list x-item-listing.search-hidden {
+		display: none;
+	}
+
+	#results-chart {
+		margin-left: 15px;
+	}
+</style>
+
+
+<div>
+	<div id="top-row">
+		Count: <span id="results-count"></span>
+		<input id="search-input" placeholder="search">
+	</div>
+</div>
+<div id="center">
+	<div id="left">
+		<progress id="results-progress-bar" max="1" value="1"></progress>
+		<div id="results-list"></div>
+	</div>
+	<x-chart id="results-chart" width="600" height="600"></x-chart>
+</div>

@@ -1,0 +1,29 @@
+<style>
+	#container {
+		background: #f8f8f8;
+		padding: 10px;
+	}
+
+	#input-params, #submit-button {
+		margin-top: 30px;
+	}
+
+	#input-set-list x-input-set.dragging {
+		outline: 1px solid black;
+	}
+</style>
+
+<div id="container">
+	<input id="league-input" placeholder="league">
+
+	<div id="input-set-container">
+		<x-arrangable-list id="input-set-list"></x-arrangable-list>
+		<button id="add-input-set-button">add</button>
+	</div>
+
+	<x-input-params id="input-params"></x-input-params>
+
+	<div>
+		<button id="submit-button">submit</button>
+	</div>
+</div>

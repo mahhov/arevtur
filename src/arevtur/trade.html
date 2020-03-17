@@ -1,0 +1,64 @@
+<style>
+	body {
+		display: flex;
+		flex-direction: column;
+	}
+
+	x-results {
+		margin-top: 15px;
+		flex: 1;
+		flex-basis: 0;
+	}
+</style>
+
+<script>
+	require('./xElements/import');
+</script>
+
+<x-inputs></x-inputs>
+<x-results></x-results>
+
+<script>
+	const {XElement} = require('xx-element');
+
+	const $ = document.querySelector.bind(document);
+	const $$ = document.querySelectorAll.bind(document);
+	const $c = (tag, classList = [], text = '', parent = null) => {
+		let el = document.createElement(tag);
+		el.classList.add(...classList);
+		el.textContent = text;
+		if (parent)
+			parent.appendChild(el);
+		return el;
+	};
+
+	let submitQueries = async queryParams => {
+		let progressRatios = queryParams.map(_ => 0);
+		queryParams.forEach((queryParam, i) =>
+			queryParam.getItemsStream((text, ratio) => {
+				progressRatios[i] = ratio;
+				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) / progressRatios.length;
+				$('x-results').updateItemsProgress(avgProgressRatio);
+			}).forEach(items => {
+				$('x-results').joinItems(items);
+				$('x-results').renderItemsData();
+			}));
+	};
+
+	$('x-inputs').addEventListener('submit', async e => {
+		if (!e.detail.add)
+			$('x-results').clearItems();
+		submitQueries(await Promise.all($('x-inputs').getQueries()));
+	});
+
+	$('x-results').addEventListener('submit', async e =>
+		submitQueries(await Promise.all($('x-inputs').getQueries(e.detail.overridePrice))));
+
+	// todo
+	// progress bar for multi-queries
+	// assume quality 0%
+	// compare with current gear and its computed value
+	// submit query on load
+	// items sometimes coming back without pseudo mod 'Sum: '
+	// query by name
+</script>

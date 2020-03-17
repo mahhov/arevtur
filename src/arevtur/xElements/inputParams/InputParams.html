@@ -1,0 +1,63 @@
+<style>
+	:host {
+		display: block;
+	}
+
+	#type-input {
+		width: 200px;
+	}
+
+	.short-input {
+		width: 60px;
+	}
+
+	#query-properties-list x-query-property.dragging {
+		outline: 1px solid black;
+	}
+
+	label:not(:first-child) {
+		margin-left: 15px;
+	}
+</style>
+
+<div>
+	<x-autocomplete-input id="type-input" placeholder="type"></x-autocomplete-input>
+	<label>
+		value
+		<input id="min-value-input" class="short-input" type="number">
+		<!--todo trim leading 0's from number inputs-->
+	</label>
+	<label>
+		price
+		<input id="price-input" class="short-input" type="number">
+	</label>
+</div>
+<div>
+	<label>
+		armour
+		<input id="armour-input" class="short-input" type="number">
+	</label>
+	<label>
+		evasion
+		<input id="evasion-input" class="short-input" type="number">
+	</label>
+	<label>
+		energy shield
+		<input id="energy-shield-input" class="short-input" type="number">
+	</label>
+</div>
+<div>
+	<label>
+		prefix
+		<input id="prefix-input" class="short-input" type="number">
+	</label>
+	<label>
+		suffix
+		<input id="suffix-input" class="short-input" type="number">
+	</label>
+	<label>6-link<input type="checkbox" id="linked-check"></label>
+</div>
+<x-arrangable-list id="query-properties-list"></x-arrangable-list>
+<div>
+	<button id="add-property-button">add</button>
+</div>

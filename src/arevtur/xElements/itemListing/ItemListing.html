@@ -1,0 +1,83 @@
+<style>
+	:host {
+		display: block;
+		padding: 5px;
+		border: 1px solid #666;
+	}
+
+	:host(.selected) {
+		background: #ffffd3;
+	}
+
+	:host(.hovered) {
+		background: #fff0d3;
+	}
+
+	:host > div:not(:first-of-type) {
+		margin-top: 10px;
+	}
+
+	#corrupted-text {
+		color: #f55;
+		font-weight: bold;
+	}
+
+	#defense-container {
+		color: #a86d00;
+	}
+
+	#implicit-list {
+		color: #5a0;
+	}
+
+	#crafted-list {
+		color: #05a;
+	}
+
+	#pseudo-container {
+		color: #a60071;
+	}
+
+	.value, .price {
+		font-weight: bold;
+	}
+
+	.hidden {
+		display: none;
+	}
+</style>
+
+<div>
+	<div id="name-text"></div>
+	<div id="type-text"></div>
+</div>
+<div id="corrupted-text">corrupted</div>
+<div id="sockets-list"></div>
+<div>
+	<div>P <span id="prefixes-text"></span></div>
+	<div>S <span id="suffixes-text"></span></div>
+	<div class="value">Affix value: <span id="affix-value-text"></span></div>
+</div>
+<div id="defense-container">
+	<div id="defense-list"></div>
+	<div class="value">Defense value: <span id="defense-value-text"></span></div>
+</div>
+<div id="enchant-list"></div>
+<div id="implicit-list"></div>
+<div id="explicit-list"></div>
+<div id="crafted-list"></div>
+<div id="pseudo-container">
+	<div id="pseudo-list"></div>
+	<div class="value">Weight value: <span id="weight-value-text"></span></div>
+</div>
+<div>
+	<div class="value">Value: <span id="value-text"></span></div>
+	<div class="price">
+		Price:
+		<span id="price-text"></span> =
+		<span id="price-expanded-text"></span>
+	</div>
+	<div>
+		<button id="whisper-button"></button>
+	</div>
+</div>

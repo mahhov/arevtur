@@ -1,0 +1,40 @@
+<style>
+	:host {
+		display: inline-block;
+	}
+
+	input {
+		width: 100%;
+	}
+
+	input.invalid {
+		color: red;
+		border-color: red;
+	}
+
+	#select-container {
+		position: relative;
+		display: none;
+	}
+
+	#container:focus-within #select-container {
+		display: block;
+	}
+
+	select {
+		display: block;
+		position: absolute;
+		width: 100%;
+		border-top: 0;
+		overflow: hidden; /* todo some way to view; e.g. scrolling */
+	}
+
+	option:hover {
+		background: #eee;
+	}
+</style>
+
+<span id="container">
+	<span><input></span>
+	<div id="select-container"><select></select></div>
+</span>
