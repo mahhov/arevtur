@@ -126,7 +126,7 @@ customElements.define(name, class Inputs extends XElement {
 				size: 8,
 				points: ItemsData.itemsToPoints(this.itemsData.selectedItems),
 			}, {
-				color: 'rgb(100,70,20)',
+				color: 'rgb(20,70,100)',
 				size: 8,
 				points: ItemsData.itemsToPoints(this.itemsData.hoveredItems),
 			},

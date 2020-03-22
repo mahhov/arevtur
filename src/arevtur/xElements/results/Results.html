@@ -24,18 +24,28 @@
 		margin-top: 15px;
 	}
 
+	#left {
+		flex: 1;
+		padding-right: 5px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
 	progress[value="1"] {
 		display: none;
 	}
 
-	#left {
-		flex: 1;
-		padding-right: 5px;
-		overflow: auto;
+	#results-progress-bar {
+		margin-bottom: 15px;
 	}
 
-	#results-list x-item-listing:not(:first-child) {
-		margin-top: 15px;
+	#results-list {
+		overflow: auto;
+		flex-grow: 1;
+		flex-basis: 0;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	#results-list x-item-listing.search-hidden {
