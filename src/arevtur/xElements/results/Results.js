@@ -136,9 +136,17 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	applySearch() {
-		let searcher = new Searcher(this.$('#search-input').value, false);
+		let searchers = this.$('#search-input').value
+			.split(',')
+			.map(str => {
+				let not = /^\s*!/.test(str);
+				if (not)
+					str = str.match(/!(.*)/)[1];
+				return new Searcher(str, false, not);
+			});
 
 		[...this.$('#results-list').children].forEach(itemListing =>
-			itemListing.classList.toggle('search-hidden', !searcher.test(itemListing.searchText)));
+			itemListing.classList.toggle('search-hidden',
+				!searchers.every(searcher => searcher.test(itemListing.searchText))));
 	}
 });

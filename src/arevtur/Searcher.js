@@ -1,8 +1,9 @@
 class Searcher {
-	constructor(searchText, preserveOrder = true) {
+	constructor(searchText, preserveOrder = true, not = false) {
 		this.searchRegexes = preserveOrder ?
 			Searcher.createSearchRegexesWithOrder(searchText) :
 			Searcher.createSearchRegexesWithoutOrder(searchText);
+		this.not = not;
 	}
 
 	static escapeRegexSymbols(str) {
@@ -23,7 +24,7 @@ class Searcher {
 	}
 
 	test(string) {
-		return this.searchRegexes.every(regex => regex.test(string));
+		return this.searchRegexes.every(regex => regex.test(string)) ^ this.not;
 	}
 }
 
