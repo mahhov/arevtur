@@ -21,6 +21,7 @@ customElements.define(name, class extends XElement {
 			type: {},
 			minValue: {},
 			price: {},
+			offline: {boolean: true},
 			armour: {},
 			evasion: {},
 			energyShield: {},
@@ -46,6 +47,10 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#price-input').addEventListener('change', () => {
 			this.price = this.$('#price-input').value;
+			this.updateQueryParams();
+		});
+		this.$('#offline-check').addEventListener('change', () => {
+			this.offline = this.$('#offline-check').value;
 			this.updateQueryParams();
 		});
 		[...defensePropertyTuples, ...affixPropertyTuples]
@@ -79,6 +84,10 @@ customElements.define(name, class extends XElement {
 		this.$('#price-input').value = value;
 	}
 
+	set offline(value) {
+		this.$('#offline-check').value = value;
+	}
+
 	set armour(value) {
 		this.$('#armour-input').value = value;
 	}
@@ -107,6 +116,7 @@ customElements.define(name, class extends XElement {
 		this.type = ApiConstants.TYPES_ID_TO_TEXT[queryParams.type] || '';
 		this.minValue = queryParams.minValue || 0;
 		this.price = queryParams.maxPrice || 0;
+		this.offline = queryParams.offline || false;
 		let defenseProperties = queryParams.defenseProperties || {};
 		defensePropertyTuples.forEach(([property]) => {
 			let defenseProperty = defenseProperties[property];
@@ -248,6 +258,7 @@ customElements.define(name, class extends XElement {
 			type,
 			minValue: this.minValue,
 			maxPrice: this.price,
+			offline: this.offline,
 			defenseProperties,
 			affixProperties,
 			linked: this.linked,

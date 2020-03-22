@@ -111,7 +111,7 @@ customElements.define(name, class Inputs extends XElement {
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet => {
 				let {
-					type, maxPrice,
+					type, maxPrice, offline,
 					defenseProperties, affixProperties, linked,
 					weightEntries, andEntries, notEntries
 				} = inputSet.queryParams;
@@ -126,6 +126,7 @@ customElements.define(name, class Inputs extends XElement {
 				query.league = this.$('#league-input').value;
 				query.type = type;
 				query.maxPrice = maxPrice;
+				query.online = !offline;
 				query.defenseProperties = defenseProperties;
 				query.linked = linked;
 				query.weights = weights;
