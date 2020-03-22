@@ -65,7 +65,7 @@ class QueryParams {
 	constructor(clone = {}) {
 		clone = deepCopy(clone);
 		this.league = clone.league || 'Standard';
-		this.type = '';
+		this.type = clone.type || '';
 		this.minValue = clone.minValue || 0;
 		this.maxPrice = clone.maxPrice || 0;
 		this.defenseProperties = clone.defenseProperties || {
