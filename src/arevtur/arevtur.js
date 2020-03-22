@@ -23,6 +23,12 @@ let window = appReadyPromise.then(() => {
 let showView = async () =>
 	(await window).show();
 
+let showDevTools = async () =>
+	(await window).webContents.openDevTools();
+
 module.exports = {
-	trayOptions: [{label: 'Arevtur', click: showView}],
+	trayOptions: [
+		{label: 'Arevtur', click: showView},
+		{label: 'Arevtur - dev', click: showDevTools},
+	],
 };
