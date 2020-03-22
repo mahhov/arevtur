@@ -115,7 +115,7 @@ customElements.define(name, class extends XElement {
 	loadQueryParams(queryParams = {}, sharedWeightEntries) {
 		this.type = ApiConstants.TYPES_ID_TO_TEXT[queryParams.type] || '';
 		this.minValue = queryParams.minValue || 0;
-		this.price = queryParams.maxPrice || 0;
+		this.price = queryParams.maxPrice || 1;
 		this.offline = queryParams.offline || false;
 		let defenseProperties = queryParams.defenseProperties || {};
 		defensePropertyTuples.forEach(([property]) => {
