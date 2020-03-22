@@ -1,4 +1,4 @@
-const {httpRequest} = require('js-desktop-base');
+const {httpRequest: {get}} = require('js-desktop-base');
 const appData = require('./appData');
 
 let getEndpoints = league => {
@@ -45,7 +45,7 @@ let getData = endpoint => {
 		return cache.data;
 
 	cache.timestampS = timestampS;
-	return cache.data = httpRequest(endpoint)
+	return cache.data = get(endpoint)
 		.catch(e => {
 			cache.data = null;
 			console.error(`Unable to connect to '${endpoint}': ${e}`)

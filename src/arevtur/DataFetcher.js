@@ -1,56 +1,10 @@
-const https = require('https');
-const querystring = require('querystring');
+const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
 
-let get = (endpoint, queryParams = {}) =>
-	new Promise((resolve, reject) => {
-		https.get(`${endpoint}?${querystring.stringify(queryParams)}`, res => {
-			if (res.statusCode < 200 || res.statusCode >= 300)
-				reject(res);
-			let body = [];
-			res.on('data', chunk => body.push(chunk));
-			res.on('end', () => {
-				try {
-					body = JSON.parse(Buffer.concat(body).toString());
-				} catch (e) {
-					reject(e);
-				}
-				resolve(body);
-			});
-		}).on('error', reject);
-	});
-
 let getQueue = new RateLimitedRetryQueue();
 let rlrGet = (endpoint, queryParams = {}) => getQueue.add(() => get(endpoint, queryParams));
-
-let post = (endpoint, data) =>
-	new Promise((resolve, reject) => {
-		let req = https.request(endpoint, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Content-Length': JSON.stringify(data).length,
-			},
-		}, res => {
-			if (res.statusCode < 200 || res.statusCode >= 300)
-				reject(res.statusCode);
-			let body = [];
-			res.on('data', chunk => body.push(chunk));
-			res.on('end', () => {
-				try {
-					body = JSON.parse(Buffer.concat(body).toString());
-				} catch (e) {
-					reject('failed to parse', e);
-				}
-				resolve(body);
-			});
-		});
-		req.on('error', reject);
-		req.write(JSON.stringify(data));
-		req.end();
-	});
 
 let deepCopy = obj => {
 	if (typeof obj !== 'object' || obj === null)
