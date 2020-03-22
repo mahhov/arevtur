@@ -146,8 +146,8 @@ customElements.define(name, class Chart extends XElement {
 		for (let i = 2; i < n; i += 2) {
 			let x = i * step;
 			let y = (n - i) * step;
-			let xText = (this.minX + i / n * this.deltaX).toFixed(0);
-			let yText = (this.minY + i / n * this.deltaY).toFixed(0);
+			let xText = Chart.numToPrint(this.minX + i / n * this.deltaX);
+			let yText = Chart.numToPrint(this.minY + i / n * this.deltaY);
 			this.ctx.fillText(xText, x - 9, step * (n - 1) + 17); // x axis text
 			this.ctx.fillText(yText, step - 28, y + 4, 30); // y axis text
 			this.ctx.fillRect(x - sizeSmall / 2, step * (n - 1) - size / 2, sizeSmall, size); // x axis dots
@@ -174,7 +174,11 @@ customElements.define(name, class Chart extends XElement {
 	static getRange(values, zeroMin = false, buffer = .1) {
 		let min = values.length && !zeroMin ? Math.min(...values) : 0;
 		let max = values.length ? Math.max(...values) : 10;
-		let delta = max - min;
+		let delta = max - min + .001;
 		return [min - delta * buffer, delta + delta * buffer * 2]
+	}
+
+	static numToPrint(n) {
+		return Math.round(n * 10) / 10;
 	}
 });
