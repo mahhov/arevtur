@@ -114,7 +114,8 @@ customElements.define(name, class Inputs extends XElement {
 			.flatMap(inputSet => {
 				let {
 					type, maxPrice, offline,
-					defenseProperties, affixProperties, linked,
+					defenseProperties,
+					affixProperties, linked, uncorrupted,
 					weightEntries, andEntries, notEntries
 				} = inputSet.queryParams;
 				maxPrice = overridePrice !== null ? overridePrice : maxPrice;
@@ -131,6 +132,7 @@ customElements.define(name, class Inputs extends XElement {
 				query.online = !offline;
 				query.defenseProperties = defenseProperties;
 				query.linked = linked;
+				query.uncorrupted = uncorrupted;
 				query.weights = weights;
 				query.ands = ands;
 				query.nots = nots;
@@ -146,7 +148,7 @@ customElements.define(name, class Inputs extends XElement {
 							.forEach(ao => {
 								let queryO = new QueryParams(query);
 								if (lo) {
-									queryO.linked = true;
+									queryO.linked = false;
 									queryO.uncorrupted = true;
 									queryO.maxPrice -= currencies.fatedConnectionsProphecy;
 									queryO.priceShift += currencies.fatedConnectionsProphecy;

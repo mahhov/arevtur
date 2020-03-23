@@ -28,6 +28,7 @@ customElements.define(name, class extends XElement {
 			prefix: {},
 			suffix: {},
 			linked: {boolean: true},
+			uncorrupted: {boolean: true},
 		};
 	}
 
@@ -62,6 +63,10 @@ customElements.define(name, class extends XElement {
 			});
 		this.$('#linked-check').addEventListener('change', () => {
 			this.linked = this.$('#linked-check').checked;
+			this.updateQueryParams();
+		});
+		this.$('#uncorrupted-check').addEventListener('change', () => {
+			this.uncorrupted = this.$('#uncorrupted-check').checked;
 			this.updateQueryParams();
 		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
@@ -104,6 +109,10 @@ customElements.define(name, class extends XElement {
 		this.$('#linked-check').checked = value;
 	}
 
+	set uncorrupted(value) {
+		this.$('#uncorrupted-check').checked = value;
+	}
+
 	set prefix(value) {
 		this.$('#prefix-input').value = value;
 	}
@@ -126,6 +135,7 @@ customElements.define(name, class extends XElement {
 		affixPropertyTuples.forEach(([property]) =>
 			this[property] = affixProperties[property] || 0);
 		this.linked = queryParams.linked || false;
+		this.uncorrupted = queryParams.uncorrupted || false;
 		XElement.clearChildren(this.$('#query-properties-list'));
 		sharedWeightEntries
 			.forEach(([property, weight, locked]) => {
@@ -262,6 +272,7 @@ customElements.define(name, class extends XElement {
 			defenseProperties,
 			affixProperties,
 			linked: this.linked,
+			uncorrupted: this.uncorrupted,
 			weightEntries,
 			andEntries,
 			notEntries
