@@ -115,7 +115,8 @@ customElements.define(name, class Inputs extends XElement {
 				let {
 					type, maxPrice, offline,
 					defenseProperties,
-					affixProperties, linked, uncorrupted,
+					affixProperties, linked,
+					uncorrupted, nonUnique,
 					weightEntries, andEntries, notEntries
 				} = inputSet.queryParams;
 				maxPrice = overridePrice !== null ? overridePrice : maxPrice;
@@ -133,6 +134,7 @@ customElements.define(name, class Inputs extends XElement {
 				query.defenseProperties = defenseProperties;
 				query.linked = linked;
 				query.uncorrupted = uncorrupted;
+				query.nonUnique = nonUnique;
 				query.weights = weights;
 				query.ands = ands;
 				query.nots = nots;

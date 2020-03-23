@@ -29,6 +29,7 @@ customElements.define(name, class extends XElement {
 			suffix: {},
 			linked: {boolean: true},
 			uncorrupted: {boolean: true},
+			nonUnique: {boolean: true},
 		};
 	}
 
@@ -67,6 +68,10 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#uncorrupted-check').addEventListener('change', () => {
 			this.uncorrupted = this.$('#uncorrupted-check').checked;
+			this.updateQueryParams();
+		});
+		this.$('#non-unique-check').addEventListener('change', () => {
+			this.nonUnique = this.$('#non-unique-check').checked;
 			this.updateQueryParams();
 		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
@@ -113,6 +118,10 @@ customElements.define(name, class extends XElement {
 		this.$('#uncorrupted-check').checked = value;
 	}
 
+	set nonUnique(value) {
+		this.$('#non-unique-check').checked = value;
+	}
+
 	set prefix(value) {
 		this.$('#prefix-input').value = value;
 	}
@@ -136,6 +145,7 @@ customElements.define(name, class extends XElement {
 			this[property] = affixProperties[property] || 0);
 		this.linked = queryParams.linked || false;
 		this.uncorrupted = queryParams.uncorrupted || false;
+		this.nonUnique = queryParams.nonUnique || false;
 		XElement.clearChildren(this.$('#query-properties-list'));
 		sharedWeightEntries
 			.forEach(([property, weight, locked]) => {
@@ -273,6 +283,7 @@ customElements.define(name, class extends XElement {
 			affixProperties,
 			linked: this.linked,
 			uncorrupted: this.uncorrupted,
+			nonUnique: this.nonUnique,
 			weightEntries,
 			andEntries,
 			notEntries

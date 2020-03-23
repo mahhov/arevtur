@@ -33,6 +33,7 @@ class QueryParams {
 		};
 		this.linked = clone.linked || false;
 		this.uncorrupted = clone.uncorrupted || false;
+		this.nonUnique = clone.nonUnique || false;
 		this.uncrafted = clone.uncrafted || false;
 		// {property: weight, ...}
 		this.weights = clone.weights || {};
@@ -47,7 +48,8 @@ class QueryParams {
 	}
 
 	getQuery(overrides = {}) {
-		let overridden = {...this, ...overrides};
+		let overridden = {...this, ...overrides}; // why are we using this instead of overidden below
+
 		let weightFilters = Object.entries(overridden.weights).map(([property, weight]) => ({
 			id: property,
 			value: {weight},
@@ -59,16 +61,25 @@ class QueryParams {
 		let notFilters = Object.entries(overridden.nots).map(([property]) => ({
 			id: property,
 		}));
+
 		if (this.affixProperties.prefix)
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_prefix_mods'});
 		if (this.affixProperties.suffix)
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_suffix_mods'});
+
+		let typeFilters = {};
+		typeFilters.category = {option: overridden.type};
+		if (overridden.nonUnique)
+			typeFilters.rarity = {option: 'nonunique'};
+
 		let miscFilters = {};
 		if (this.uncorrupted)
 			miscFilters.corrupted = {option: false};
 		if (this.uncrafted)
 			miscFilters.crafted = {option: false};
+
 		let sort = weightFilters.length ? overridden.sort : ApiConstants.SORT.price;
+
 		return {
 			query: {
 				status: {option: overridden.online ? 'online' : 'any'},
@@ -86,11 +97,7 @@ class QueryParams {
 					},
 				],
 				filters: {
-					type_filters: {
-						filters: {
-							category: {option: overridden.type}
-						}
-					},
+					type_filters: {filters: typeFilters},
 					trade_filters: {
 						filters: {
 							price: {max: overridden.maxPrice}
@@ -201,7 +208,7 @@ class QueryParams {
 			a[v.group].push(v.sColour);
 			return a;
 		}, []);
-		let extendedExplicitMods = itemData.item.extended.mods.explicit;
+		let extendedExplicitMods = itemData.item.extended.mods.explicit || [];
 		let affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
 			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
 		let defenseProperties =
