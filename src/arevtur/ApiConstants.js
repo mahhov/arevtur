@@ -1,3 +1,5 @@
+const ServicesDataFetcher = require('../services/DataFetcher');
+
 const TYPES = [
 	{
 		id: 'weapon',
@@ -29624,29 +29626,45 @@ const SORT = {
 	price: {price: 'asc'},
 };
 
-// todo update per poe.ninja (last updated 3/16)
-const CURRENCIES = {
-	mirror: {id: 'mir', chaos: 8375.31},
-	exalted: {id: 'exa', chaos: 102.52},
-	divine: {id: 'divine', chaos: 6.25},
-	vaal: {id: 'vaal', chaos: 0.31},
-	regal: {id: 'regal', chaos: 0.54},
-	chaos: {id: 'chaos', chaos: 1.0},
-	gemcuttersPrism: {id: 'gcp', chaos: 1.17},
-	regret: {id: 'regret', chaos: 0.98},
-	fusing: {id: 'fuse', chaos: 0.38},
-	alchemy: {id: 'alch', chaos: 0.48},
-	scouring: {id: 'scour', chaos: 0.45},
-	cartographersChisel: {id: 'chisel', chaos: 0.22},
-	blessed: {id: 'blessed', chaos: 0.13},
-	silver: {id: 'silver', chaos: 0.14},
-	jewellers: {id: 'jew', chaos: 0.09},
-	chromatic: {id: 'chrom', chaos: 0.13},
-	alteration: {id: 'alt', chaos: 0.11},
-	chance: {id: 'chance', chaos: 0.12},
-	perandus: {id: 'p', chaos: 0.01},
-	fatedConnectionsProphecy: {chaos: 564},
+let getCurrencies = async () => {
+	let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.CURRENCY);
+	let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY);
+	currencyPrices = await currencyPrices;
+	prophecyPrices = await prophecyPrices;
+	let tuples = [
+		['mir', 'Mirror of Kalandra'],
+		['exa', 'Exalted Orb'],
+		['divine', 'Divine Orb'],
+		['vaal', 'Vaal Orb'],
+		['regal', 'Regal Orb'],
+		['gcp', "Gemcutter's Prism"],
+		['regret', 'Orb of Regret'],
+		['fuse', 'Orb of Fusing'],
+		['alch', 'Orb of Alchemy'],
+		['scour', 'Orb of Scouring'],
+		['chisel', "Cartographer's Chisel"],
+		['blessed', 'Blessed Orb'],
+		['silver', 'Silver Coin'],
+		['jew', "Jeweller's Orb"],
+		['chrom', 'Chromatic Orb'],
+		['alt', 'Orb of Alteration'],
+		['chance', 'Orb of Chance'],
+		['p', 'Perandus Coin'],
+	].map(([poeId, ninjaId]) => {
+		let price = currencyPrices.lines
+			.find(line => line.currencyTypeName === ninjaId)
+			.chaosEquivalent;
+		return [poeId, price];
+	});
+	let fatedConnectionsPrice = prophecyPrices.lines
+		.find(line => line.name === 'Fated Connections')
+		.chaosValue;
+	tuples.push(['fatedConnectionsProphecy', fatedConnectionsPrice]);
+	tuples.push(['chaos', 1]);
+	return Object.fromEntries(tuples);
 };
+
+const CURRENCIES = getCurrencies();
 
 module.exports = {
 	TYPES, TYPES_TEXT_TO_ID, TYPES_ID_TO_TEXT,

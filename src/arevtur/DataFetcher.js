@@ -184,7 +184,7 @@ class QueryParams {
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
 				let data2 = await rlrGet(endpoint2, queryParams);
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
-				return data2.result.map(itemData => this.parseItem(itemData));
+				return Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));
 			});
 			let items = (await Promise.all(promises)).flat();
 			progressCallback('All grouped item queries completed.', 1);
@@ -195,7 +195,7 @@ class QueryParams {
 		}
 	}
 
-	parseItem(itemData, parsingOptions) {
+	async parseItem(itemData, parsingOptions) {
 		let sockets = (itemData.item.sockets || []).reduce((a, v) => {
 			a[v.group] = a[v.group] || [];
 			a[v.group].push(v.sColour);
@@ -239,7 +239,7 @@ class QueryParams {
 			valueDetails,
 			// todo change text to: 3 fus + fated links (#c)
 			priceText: `${itemData.listing.price.amount} ${itemData.listing.price.currency}${this.priceShift ? ` + price shift ${this.priceShift}` : ''}`,
-			evalPrice: evalPrice(itemData.listing.price) + this.priceShift,
+			evalPrice: await evalPrice(itemData.listing.price) + this.priceShift,
 			debug: itemData,
 		};
 	};
@@ -258,10 +258,10 @@ let evalValue = pseudoMods => {
 	return Number(pseudoSum.substring(5));
 };
 
-let evalPrice = ({currency: currencyId, amount}) => {
-	let currency = Object.values(ApiConstants.CURRENCIES).find(({id}) => id === currencyId);
+let evalPrice = async ({currency: currencyId, amount}) => {
+	let currency = (await ApiConstants.CURRENCIES)[currencyId];
 	if (currency)
-		return currency.chaos * amount;
+		return currency * amount;
 	console.warn('Missing currency', currencyId);
 	return -1;
 };

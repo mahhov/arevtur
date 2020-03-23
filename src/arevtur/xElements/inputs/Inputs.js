@@ -106,7 +106,8 @@ customElements.define(name, class Inputs extends XElement {
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
 	}
 
-	getQueries(overridePrice = null) {
+	async getQueries(overridePrice = null) {
+		let currencies = await ApiConstants.CURRENCIES;
 		return this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet => {
@@ -133,7 +134,7 @@ customElements.define(name, class Inputs extends XElement {
 				query.ands = ands;
 				query.nots = nots;
 
-				let linkedOptions = [false, linked && maxPrice > ApiConstants.CURRENCIES.fatedConnectionsProphecy.chaos ? true : null];
+				let linkedOptions = [false, linked && maxPrice > currencies.fatedConnectionsProphecy ? true : null];
 				let affixOptions = [false, affixProperties.prefix ? 'prefix' : null, affixProperties.suffix ? 'suffix' : null];
 
 				linkedOptions
@@ -146,8 +147,8 @@ customElements.define(name, class Inputs extends XElement {
 								if (lo) {
 									queryO.linked = true;
 									queryO.uncorrupted = true;
-									queryO.maxPrice -= ApiConstants.CURRENCIES.fatedConnectionsProphecy.chaos;
-									queryO.priceShift += ApiConstants.CURRENCIES.fatedConnectionsProphecy.chaos;
+									queryO.maxPrice -= currencies.fatedConnectionsProphecy;
+									queryO.priceShift += currencies.fatedConnectionsProphecy;
 								}
 								if (ao === 'prefix') {
 									queryO.affixProperties.prefix = true;

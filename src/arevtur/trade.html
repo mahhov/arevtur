@@ -48,11 +48,11 @@
 	$('x-inputs').addEventListener('submit', async e => {
 		if (!e.detail.add)
 			$('x-results').clearItems();
-		submitQueries(await Promise.all($('x-inputs').getQueries()));
+		submitQueries(await $('x-inputs').getQueries());
 	});
 
 	$('x-results').addEventListener('submit', async e =>
-		submitQueries(await Promise.all($('x-inputs').getQueries(e.detail.overridePrice))));
+		submitQueries(await $('x-inputs').getQueries(e.detail.overridePrice)));
 
 	// todo
 	// progress bar for multi-queries
