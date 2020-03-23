@@ -48,7 +48,7 @@ class QueryParams {
 	}
 
 	getQuery(overrides = {}) {
-		let overridden = {...this, ...overrides}; // why are we using this instead of overidden below
+		let overridden = {...this, ...overrides};
 
 		let weightFilters = Object.entries(overridden.weights).map(([property, weight]) => ({
 			id: property,
@@ -62,9 +62,9 @@ class QueryParams {
 			id: property,
 		}));
 
-		if (this.affixProperties.prefix)
+		if (overridden.affixProperties.prefix)
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_prefix_mods'});
-		if (this.affixProperties.suffix)
+		if (overridden.affixProperties.suffix)
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_suffix_mods'});
 
 		let typeFilters = {};
@@ -73,9 +73,9 @@ class QueryParams {
 			typeFilters.rarity = {option: 'nonunique'};
 
 		let miscFilters = {};
-		if (this.uncorrupted)
+		if (overridden.uncorrupted)
 			miscFilters.corrupted = {option: false};
-		if (this.uncrafted)
+		if (overridden.uncrafted)
 			miscFilters.crafted = {option: false};
 
 		let sort = weightFilters.length ? overridden.sort : ApiConstants.SORT.price;
