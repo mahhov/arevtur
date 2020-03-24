@@ -19,6 +19,8 @@ class ItemsData {
 					return false;
 				v.evalValue = Math.max(...copies.map(vv => vv.evalValue));
 				v.evalPrice = Math.min(...copies.map(vv => vv.evalPrice));
+				// todo is it ok to take the max of each, or should the values of the max-sum be taken?
+				v.valueDetails = Object.fromEntries(Object.keys(v.valueDetails).map(valueKey => [valueKey, Math.max(...copies.map(copy => copy.valueDetails[valueKey]))]));
 				return true;
 			})
 			// high to low values, low to high prices
