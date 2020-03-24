@@ -15,6 +15,15 @@ const affixPropertyTuples = [
 	['suffix', '#suffix-input'],
 ];
 
+const queryPropertyFilters = [
+	// queryParamsKey, queryPropertyFilter, hasWeight
+	['weightEntries', 'weight', true],
+	['andEntries', 'and', true],
+	['notEntries', 'not'],
+	['conditionalPrefixEntries', 'conditional prefix', true],
+	['conditionalSuffixEntries', 'conditional suffix', true],
+]
+
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {
@@ -160,31 +169,21 @@ customElements.define(name, class extends XElement {
 				queryProperty.locked = locked;
 				queryProperty.shared = true;
 			});
-		if (queryParams.weightEntries)
-			queryParams.weightEntries
-				.forEach(([property, weight, locked]) => {
-					let queryProperty = this.addQueryProperty();
-					queryProperty.property = ApiConstants.PROPERTIES_ID_TO_TEXT[property];
-					queryProperty.weight = weight;
-					queryProperty.filter = 'weight';
-					queryProperty.locked = locked;
-				});
-		if (queryParams.andEntries)
-			queryParams.andEntries
-				.forEach(([property, weight, locked]) => {
-					let queryProperty = this.addQueryProperty();
-					queryProperty.property = ApiConstants.PROPERTIES_ID_TO_TEXT[property];
-					queryProperty.weight = weight;
-					queryProperty.filter = 'and';
-					queryProperty.locked = locked;
-				});
-		if (queryParams.notEntries)
-			queryParams.notEntries
-				.forEach(([property]) => {
-					let queryProperty = this.addQueryProperty();
-					queryProperty.property = ApiConstants.PROPERTIES_ID_TO_TEXT[property];
-					queryProperty.filter = 'not';
-				});
+
+		queryPropertyFilters.forEach(([key, filter, hasWeight]) => {
+			if (queryParams[key])
+				queryParams[key]
+					.forEach(([property, weight, locked]) => {
+						let queryProperty = this.addQueryProperty();
+						queryProperty.property = ApiConstants.PROPERTIES_ID_TO_TEXT[property];
+						queryProperty.filter = filter;
+						if (hasWeight) {
+							queryProperty.weight = weight;
+							queryProperty.locked = locked;
+						}
+					});
+		});
+
 		this.addQueryProperty();
 		this.updateQueryParams();
 	}
@@ -265,18 +264,17 @@ customElements.define(name, class extends XElement {
 				shared: queryProperty.shared,
 			})).filter(({propertyId}) => propertyId);
 
+		// todo make shared entries more similar to unshared entries so that they can be processed similarly
 		let sharedWeightEntries = propertyEntries
 			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
 			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
-		let weightEntries = propertyEntries
-			.filter(entry => entry.filter === 'weight' && entry.weight && !entry.shared)
-			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
-		let andEntries = propertyEntries
-			.filter(entry => entry.filter === 'and' && entry.weight)
-			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
-		let notEntries = propertyEntries
-			.filter(entry => entry.filter === 'not')
-			.map(entry => [entry.propertyId]);
+		let unsharedEntries = Object.fromEntries(
+			queryPropertyFilters.map(([key, filter, hasWeight]) => {
+				let entries = propertyEntries
+					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
+					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] : [entry.propertyId]);
+				return [key, entries];
+			}));
 
 		this.queryParams = {
 			type,
@@ -288,9 +286,7 @@ customElements.define(name, class extends XElement {
 			linked: this.linked,
 			uncorrupted: this.uncorrupted,
 			nonUnique: this.nonUnique,
-			weightEntries,
-			andEntries,
-			notEntries
+			...unsharedEntries,
 		};
 		this.sharedWeightEntries = sharedWeightEntries;
 

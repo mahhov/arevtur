@@ -25,7 +25,7 @@ customElements.define(name, class extends XElement {
 			this.weight = this.$('#weight').value;
 			this.emit('change');
 		});
-		this.$('#filter').autocompletes = ['weight', 'and', 'not'];
+		this.$('#filter').autocompletes = ['weight', 'and', 'not', 'conditional prefix', 'conditional suffix'];
 		this.$('#filter').addEventListener('change', () => {
 			this.filter = this.$('#filter').value;
 			this.emit('change');

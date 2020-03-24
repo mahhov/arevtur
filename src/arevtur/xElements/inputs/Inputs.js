@@ -117,7 +117,8 @@ customElements.define(name, class Inputs extends XElement {
 					defenseProperties,
 					affixProperties, linked,
 					uncorrupted, nonUnique,
-					weightEntries, andEntries, notEntries
+					weightEntries, andEntries, notEntries,
+					conditionalPrefixEntries, conditionalSuffixEntries,
 				} = inputSet.queryParams;
 				maxPrice = overridePrice !== null ? overridePrice : maxPrice;
 				let weights = Object.fromEntries([...weightEntries, ...this.sharedWeightEntries]);
@@ -140,7 +141,13 @@ customElements.define(name, class Inputs extends XElement {
 				query.nots = nots;
 
 				let linkedOptions = [false, linked && maxPrice > currencies.fatedConnectionsProphecy ? true : null];
-				let affixOptions = [false, affixProperties.prefix ? 'prefix' : null, affixProperties.suffix ? 'suffix' : null];
+				let affixOptions = [
+					false,
+					affixProperties.prefix ? ['prefix'] : null,
+					affixProperties.suffix ? ['suffix'] : null,
+					...conditionalPrefixEntries.map(([propertyId, weight]) => ['prefix', propertyId, weight]),
+					...conditionalSuffixEntries.map((propertyId, weight) => ['suffix', propertyId, weight]),
+				];
 
 				linkedOptions
 					.filter(lo => lo !== null)
@@ -155,16 +162,18 @@ customElements.define(name, class Inputs extends XElement {
 									queryO.maxPrice -= currencies.fatedConnectionsProphecy;
 									queryO.priceShift += currencies.fatedConnectionsProphecy;
 								}
-								if (ao === 'prefix') {
-									queryO.affixProperties.prefix = true;
+								if (ao) {
+									queryO.affixProperties[ao[0]] = true;
 									queryO.uncorrupted = true;
 									queryO.uncrafted = true;
-									queryO.affixValueShift += affixProperties.prefix;
-								} else if (ao === 'suffix') {
-									queryO.affixProperties.suffix = true;
-									queryO.uncorrupted = true;
-									queryO.uncrafted = true;
-									queryO.affixValueShift += affixProperties.suffix;
+									if (ao.length === 1) {
+										console.log('case 1', affixProperties, ao, affixProperties[ao[0]])
+										queryO.affixValueShift += affixProperties[ao[0]];
+									} else {
+										console.log('case 2', ao)
+										queryO.nots[ao[1]] = undefined;
+										queryO.affixValueShift += ao[2];
+									}
 								}
 								queries.push(queryO);
 							}));
