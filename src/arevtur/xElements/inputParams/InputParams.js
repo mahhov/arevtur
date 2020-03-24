@@ -78,6 +78,10 @@ customElements.define(name, class extends XElement {
 			this.checkProperties();
 			this.updateQueryParams();
 		});
+		this.$('#query-properties-list').addEventListener('keydown', e => {
+			if (e.key === 'Enter' && e.shiftKey)
+				this.$('#query-properties-list > :focus-within + x-query-property').focus();
+		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
 		this.queryParams = {};
 	}

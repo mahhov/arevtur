@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const focusUtil = require('../focusUtil');
 const Searcher = require('../../Searcher');
 
 customElements.define(name, class AutocompleteInput extends XElement {
@@ -12,6 +13,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	connectedCallback() {
+		focusUtil.redirectFocus(this, this.$('input'));
 		this.$('input').addEventListener('change', () => this.internalSetValue(this.$('input').value));
 		this.$('input').addEventListener('input', () => {
 			this.updateAutocompletes();
