@@ -1,6 +1,6 @@
 {
   "name": "poe-pricer",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
