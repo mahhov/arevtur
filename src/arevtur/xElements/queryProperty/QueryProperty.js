@@ -1,6 +1,5 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const focusUtil = require('../focusUtil');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -12,7 +11,6 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		focusUtil.redirectFocus(this, this.$('#property'));
 		this.$('#container').addEventListener('keyup', e => {
 			if (e.key === 'Enter' && !e.shiftKey)
 				this.$('#container > :focus-within + *').focus();
@@ -65,5 +63,9 @@ customElements.define(name, class extends XElement {
 
 	set shared(value) {
 		this.$('#shared').checked = value;
+	}
+
+	focus() {
+		this.$('#property').focus();
 	}
 });
