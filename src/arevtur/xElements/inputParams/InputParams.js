@@ -2,8 +2,6 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
 
-const QUERY_PROPERTY_TEXTS = ApiConstants.PROPERTIES_FLAT.map(property => property.text);
-
 const defensePropertyTuples = [
 	['armour', '#armour-input'],
 	['evasion', '#evasion-input'],
@@ -162,9 +160,9 @@ customElements.define(name, class extends XElement {
 		this.nonUnique = queryParams.nonUnique || false;
 		XElement.clearChildren(this.$('#query-properties-list'));
 		sharedWeightEntries
-			.forEach(([property, weight, locked]) => {
+			.forEach(async ([property, weight, locked]) => {
 				let queryProperty = this.addQueryProperty();
-				queryProperty.property = ApiConstants.PROPERTIES_ID_TO_TEXT[property];
+				queryProperty.property = await ApiConstants.constanns.propertyIdToText(property);
 				queryProperty.weight = weight;
 				queryProperty.filter = 'weight';
 				queryProperty.locked = locked;
@@ -174,9 +172,9 @@ customElements.define(name, class extends XElement {
 		queryPropertyFilters.forEach(([key, filter, hasWeight]) => {
 			if (queryParams[key])
 				queryParams[key]
-					.forEach(([property, weight, locked]) => {
+					.forEach(async ([property, weight, locked]) => {
 						let queryProperty = this.addQueryProperty();
-						queryProperty.property = ApiConstants.PROPERTIES_ID_TO_TEXT[property];
+						queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
 						queryProperty.filter = filter;
 						if (hasWeight) {
 							queryProperty.weight = weight;
@@ -218,7 +216,8 @@ customElements.define(name, class extends XElement {
 
 	addQueryProperty() {
 		let queryProperty = document.createElement('x-query-property');
-		queryProperty.properties = QUERY_PROPERTY_TEXTS;
+		ApiConstants.constants.propertyTexts().then(propertyTexts =>
+			queryProperty.properties = propertyTexts);
 		queryProperty.slot = 'list';
 		this.$('#query-properties-list').appendChild(queryProperty);
 		queryProperty.addEventListener('change', () => {
@@ -259,14 +258,14 @@ customElements.define(name, class extends XElement {
 		let affixProperties = Object.fromEntries(affixPropertyTuples
 			.map(([property]) => [property, Number(this[property])]));
 
-		let propertyEntries = [...this.$$('#query-properties-list x-query-property')]
-			.map(queryProperty => ({
-				propertyId: ApiConstants.PROPERTIES_TEXT_TO_ID[queryProperty.property],
+		let propertyEntries = (await Promise.all([...this.$$('#query-properties-list x-query-property')]
+			.map(async queryProperty => ({
+				propertyId: await ApiConstants.constants.propertyTextToId(queryProperty.property),
 				weight: queryProperty.weight,
 				filter: queryProperty.filter,
 				locked: queryProperty.locked,
 				shared: queryProperty.shared,
-			})).filter(({propertyId}) => propertyId);
+			})))).filter(({propertyId}) => propertyId);
 
 		// todo make shared entries more similar to unshared entries so that they can be processed similarly
 		let sharedWeightEntries = propertyEntries
