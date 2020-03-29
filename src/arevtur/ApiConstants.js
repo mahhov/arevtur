@@ -6,6 +6,7 @@ class Constants {
 		this.initPromise = Promise.all([
 			this.initTypes(),
 			this.initProperties(),
+			this.initCurrencies(),
 		]);
 	}
 
@@ -26,7 +27,7 @@ class Constants {
 		/*
 			[{
 				id: 'weapon.claw',
-				text: 'claw'
+				text: 'claw',
 			}, ...]
 		*/
 	}
@@ -48,12 +49,12 @@ class Constants {
 
 	async initProperties() {
 		this.properties = JSON.parse(await get('https://www.pathofexile.com/api/trade/data/stats')).result
-			.flatMap(({entries})=> entries);
+			.flatMap(({entries}) => entries);
 		/*
 		[{
-      "id": "pseudo.pseudo_total_cold_resistance",
-      "text": "+#% total to Cold Resistance",
-      "type": "pseudo"
+      id: 'pseudo.pseudo_total_cold_resistance',
+      text: '+#% total to Cold Resistance',
+      type: 'pseudo',
     }, ...]
 		*/
 	}
@@ -72,6 +73,45 @@ class Constants {
 		await this.initPromise;
 		return this.properties.find(property => property.id === id)?.text;
 	}
+
+	async initCurrencies() {
+		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.CURRENCY);
+		let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY);
+		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
+		currencyPrices = await currencyPrices;
+		prophecyPrices = await prophecyPrices;
+		staticDataStr = await staticDataStr;
+
+		let tuples = JSON.parse(staticDataStr).result
+			.find(({id}) => id === 'Currency').entries
+			.map(({id, text}) => {
+				let price = currencyPrices.lines
+					.find(line => line.currencyTypeName === text)
+					?.chaosEquivalent;
+				return [id, price];
+			});
+
+		let fatedConnectionsPrice = prophecyPrices.lines
+			.find(line => line.name === 'Fated Connections')
+			.chaosValue;
+		tuples.push(['fatedConnectionsProphecy', fatedConnectionsPrice]);
+		tuples.push(['chaos', 1]);
+		this.currencies = Object.fromEntries(tuples);
+
+		/*
+		{
+      alt: .125,
+      ...
+    }
+		*/
+	}
+
+	async currencyPrice(currency) {
+		await this.initPromise;
+		return this.currencies[currency];
+	}
+
+	// also of interest, https://www.pathofexile.com/api/trade/data/items
 }
 
 const SHORT_PROPERTIES = {
@@ -84,52 +124,8 @@ const SORT = {
 	price: {price: 'asc'},
 };
 
-let getCurrencies = async () => {
-	let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.CURRENCY);
-	let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY);
-	currencyPrices = await currencyPrices;
-	prophecyPrices = await prophecyPrices;
-	// https://www.pathofexile.com/api/trade/data/items
-	// https://web.poecdn.com/js/PoE/Trade/Data/Static.js
-	// https://www.pathofexile.com/api/trade/data/static
-	let tuples = [
-		['mir', 'Mirror of Kalandra'],
-		['exa', 'Exalted Orb'],
-		['divine', 'Divine Orb'],
-		['vaal', 'Vaal Orb'],
-		['regal', 'Regal Orb'],
-		['gcp', "Gemcutter's Prism"],
-		['regret', 'Orb of Regret'],
-		['fuse', 'Orb of Fusing'],
-		['alch', 'Orb of Alchemy'],
-		['scour', 'Orb of Scouring'],
-		['chisel', "Cartographer's Chisel"],
-		['blessed', 'Blessed Orb'],
-		['silver', 'Silver Coin'],
-		['jew', "Jeweller's Orb"],
-		['chrom', 'Chromatic Orb'],
-		['alt', 'Orb of Alteration'],
-		['chance', 'Orb of Chance'],
-		['p', 'Perandus Coin'],
-	].map(([poeId, ninjaId]) => {
-		let price = currencyPrices.lines
-			.find(line => line.currencyTypeName === ninjaId)
-			.chaosEquivalent;
-		return [poeId, price];
-	});
-	let fatedConnectionsPrice = prophecyPrices.lines
-		.find(line => line.name === 'Fated Connections')
-		.chaosValue;
-	tuples.push(['fatedConnectionsProphecy', fatedConnectionsPrice]);
-	tuples.push(['chaos', 1]);
-	return Object.fromEntries(tuples);
-};
-
-const CURRENCIES = getCurrencies();
-
 module.exports = {
 	SHORT_PROPERTIES,
 	SORT,
-	CURRENCIES,
 	constants: new Constants(),
 };

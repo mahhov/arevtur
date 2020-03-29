@@ -266,7 +266,7 @@ let evalValue = pseudoMods => {
 };
 
 let evalPrice = async ({currency: currencyId, amount}) => {
-	let currency = (await ApiConstants.CURRENCIES)[currencyId];
+	let currency = await ApiConstants.constants.currencyPrice(currencyId);
 	if (currency)
 		return currency * amount;
 	console.warn('Missing currency', currencyId);

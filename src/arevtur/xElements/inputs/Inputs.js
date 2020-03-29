@@ -108,7 +108,7 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	async getQueries(overridePrice = null) {
-		let currencies = await ApiConstants.CURRENCIES;
+		let fatedConnectionsProphecyPrice = await ApiConstants.constants.currencyPrice('fatedConnectionsProphecy');
 		return this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet => {
@@ -140,7 +140,7 @@ customElements.define(name, class Inputs extends XElement {
 				query.ands = ands;
 				query.nots = nots;
 
-				let linkedOptions = [false, linked && maxPrice > currencies.fatedConnectionsProphecy ? true : null];
+				let linkedOptions = [false, linked && maxPrice > fatedConnectionsProphecyPrice ? true : null];
 				let affixOptions = [
 					false,
 					affixProperties.prefix ? ['prefix'] : null,
@@ -159,18 +159,16 @@ customElements.define(name, class Inputs extends XElement {
 								if (lo) {
 									queryO.linked = false;
 									queryO.uncorrupted = true;
-									queryO.maxPrice -= currencies.fatedConnectionsProphecy;
-									queryO.priceShift += currencies.fatedConnectionsProphecy;
+									queryO.maxPrice -= fatedConnectionsProphecyPrice;
+									queryO.priceShift += fatedConnectionsProphecyPrice;
 								}
 								if (ao) {
 									queryO.affixProperties[ao[0]] = true;
 									queryO.uncorrupted = true;
 									queryO.uncrafted = true;
-									if (ao.length === 1) {
-										console.log('case 1', affixProperties, ao, affixProperties[ao[0]])
+									if (ao.length === 1)
 										queryO.affixValueShift += affixProperties[ao[0]];
-									} else {
-										console.log('case 2', ao)
+									else {
 										queryO.nots[ao[1]] = undefined;
 										queryO.affixValueShift += ao[2];
 									}

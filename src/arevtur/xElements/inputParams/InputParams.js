@@ -162,7 +162,7 @@ customElements.define(name, class extends XElement {
 		sharedWeightEntries
 			.forEach(async ([property, weight, locked]) => {
 				let queryProperty = this.addQueryProperty();
-				queryProperty.property = await ApiConstants.constanns.propertyIdToText(property);
+				queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
 				queryProperty.weight = weight;
 				queryProperty.filter = 'weight';
 				queryProperty.locked = locked;
