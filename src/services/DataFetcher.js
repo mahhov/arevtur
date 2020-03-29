@@ -46,6 +46,7 @@ let getData = endpoint => {
 
 	cache.timestampS = timestampS;
 	return cache.data = get(endpoint)
+		.then(string => JSON.parse(string))
 		.catch(e => {
 			cache.data = null;
 			console.error(`Unable to connect to '${endpoint}': ${e}`)

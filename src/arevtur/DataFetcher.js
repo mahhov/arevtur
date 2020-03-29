@@ -174,7 +174,7 @@ class QueryParams {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			progressCallback('Initial query.', 0);
-			let data = await post(`${api}/search/${this.league}`, query);
+			let data = JSON.parse(await post(`${api}/search/${this.league}`, query));
 			progressCallback(`Received ${data.result.length} items.`, 0);
 
 			let requestGroups = [];
@@ -189,7 +189,7 @@ class QueryParams {
 					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes, ApiConstants.SHORT_PROPERTIES.flatLife],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let data2 = await rlrGet(endpoint2, queryParams);
+				let data2 = JSON.parse(await rlrGet(endpoint2, queryParams));
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
 				return Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));
 			});
