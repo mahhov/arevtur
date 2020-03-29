@@ -18,8 +18,16 @@ customElements.define(name, class Inputs extends XElement {
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
-		this.$('#league-input').addEventListener('input', () => this.store());
+		ApiConstants.constants.initTypesPromise.then(() =>
+			this.$('#loaded-types-status').classList.add('loaded'));
+		ApiConstants.constants.initPropertiesPromise.then(() =>
+			this.$('#loaded-properties-status').classList.add('loaded'));
+		ApiConstants.constants.initCurrenciesPromise.then(() =>
+			this.$('#loaded-currencies-status').classList.add('loaded'));
+		ApiConstants.constants.initItemsPromise.then(() =>
+			this.$('#loaded-items-status').classList.add('loaded'));
 
+		this.$('#league-input').addEventListener('input', () => this.store());
 		this.$('#input-set-list').addEventListener('arrange', e => {
 			let [removed] = this.inputSets.splice(e.detail.from, 1);
 			this.inputSets.splice(e.detail.to, 0, removed);
