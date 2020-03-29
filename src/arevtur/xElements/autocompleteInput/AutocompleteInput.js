@@ -4,7 +4,7 @@ const Searcher = require('../../Searcher');
 
 customElements.define(name, class AutocompleteInput extends XElement {
 	static get attributeTypes() {
-		return {size: {}, value: {}, placeholder: {}};
+		return {size: {}, value: {}, placeholder: {}, freeForm: {boolean: true}};
 	}
 
 	static get htmlTemplate() {
@@ -67,7 +67,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	set value(value) {
-		if (value && !this.autocompletes.includes(value)) {
+		if (value && !this.freeForm && !this.autocompletes.includes(value)) {
 			this.value = '';
 			this.$('input').classList.add('invalid');
 		} else
@@ -79,6 +79,11 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.$('input').placeholder = value;
 	}
 
+	set freeForm(value) {
+		this.value = this.$('input').value;
+		this.updateAutocompletes();
+	}
+
 	internalSetValue(value) {
 		this.value = value;
 		this.emit('change');
@@ -86,6 +91,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 
 	updateAutocompletes() {
 		let optionValues = AutocompleteInput.smartFilter(this.$('input').value, this.autocompletes, 500);
+		if (this.freeForm && optionValues[0] !== this.$('input').value)
+			optionValues.unshift(this.$('input').value);
 		XElement.clearChildren(this.$('select'));
 		optionValues.forEach(v => {
 			let optionEl = document.createElement('option');
