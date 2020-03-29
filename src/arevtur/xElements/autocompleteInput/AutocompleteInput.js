@@ -53,6 +53,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		if (value === this.autocompletes_)
 			return;
 		this.autocompletes_ = value;
+		this.value = this.$('input').value;
 		this.updateAutocompletes();
 	}
 
@@ -104,7 +105,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		return array.filter(v =>
 			size < maxSize && searcher.test(v.match(/[a-z]+|[A-Z][a-z]*|\d+|./g).join(' ')) && ++size);
 	}
-	
+
 	focus() {
 		this.$('input').focus();
 	}
