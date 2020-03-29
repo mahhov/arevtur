@@ -3,12 +3,10 @@ const ServicesDataFetcher = require('../services/DataFetcher');
 
 class Constants {
 	constructor() {
-		this.initPromise = Promise.all([
-			this.initTypes(),
-			this.initProperties(),
-			this.initCurrencies(),
-			this.initItems(),
-		]);
+		this.initTypesPromise = this.initTypes();
+		this.initPropertiesPromise = this.initProperties();
+		this.initCurrenciesPromise = this.initCurrencies();
+		this.initItemsPromise = this.initItems();
 	}
 
 	async initTypes() {
@@ -20,10 +18,7 @@ class Constants {
 		this.types = data.propertyFilters
 			.find(({id}) => id === 'type_filters').filters
 			.find(({id}) => id === 'category').option.options
-			.map(type => {
-				type.text = type.text.match(/"(.*)"/)[1];
-				return type;
-			});
+			.map(({id, text}) => ({id, text: text.match(/"(.*)"/)[1]}));
 		this.types.find(({id}) => id === 'armour.chest').text += ' chest';
 		/*
 			[{
@@ -34,17 +29,17 @@ class Constants {
 	}
 
 	async typeTexts() {
-		await this.initPromise;
+		await this.initTypesPromise;
 		return this.types.map(({text}) => text);
 	}
 
 	async typeTextToId(text) {
-		await this.initPromise;
+		await this.initTypesPromise;
 		return this.types.find(type => type.text === text)?.id;
 	}
 
 	async typeIdToText(id) {
-		await this.initPromise;
+		await this.initTypesPromise;
 		return this.types.find(type => type.id === id)?.text;
 	}
 
@@ -61,17 +56,17 @@ class Constants {
 	}
 
 	async propertyTexts() {
-		await this.initPromise;
+		await this.initPropertiesPromise;
 		return this.properties.map(({text}) => text);
 	}
 
 	async propertyTextToId(text) {
-		await this.initPromise;
+		await this.initPropertiesPromise;
 		return this.properties.find(property => property.text === text)?.id;
 	}
 
 	async propertyIdToText(id) {
-		await this.initPromise;
+		await this.initPropertiesPromise;
 		return this.properties.find(property => property.id === id)?.text;
 	}
 
@@ -103,7 +98,7 @@ class Constants {
 	}
 
 	async currencyPrice(currency) {
-		await this.initPromise;
+		await this.initCurrenciesPromise;
 		return this.currencies[currency];
 	}
 
@@ -115,7 +110,7 @@ class Constants {
 	}
 
 	async itemTexts() {
-		await this.initPromise;
+		await this.initItemsPromise;
 		return this.items;
 	}
 }
