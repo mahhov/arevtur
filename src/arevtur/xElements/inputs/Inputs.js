@@ -113,6 +113,7 @@ customElements.define(name, class Inputs extends XElement {
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet => {
 				let {
+					name,
 					type, maxPrice, offline,
 					defenseProperties,
 					affixProperties, linked,
@@ -129,6 +130,7 @@ customElements.define(name, class Inputs extends XElement {
 
 				let query = new QueryParams();
 				query.league = this.$('#league-input').value;
+				query.name = name;
 				query.type = type;
 				query.maxPrice = maxPrice;
 				query.online = !offline;

@@ -19,6 +19,7 @@ class QueryParams {
 	constructor(clone = {}) {
 		clone = deepCopy(clone);
 		this.league = clone.league || 'Standard';
+		this.name = clone.name || '';
 		this.type = clone.type || '';
 		this.minValue = clone.minValue || 0;
 		this.maxPrice = clone.maxPrice || 0;
@@ -83,6 +84,7 @@ class QueryParams {
 		return {
 			query: {
 				status: {option: overridden.online ? 'online' : 'any'},
+				term: this.name,
 				stats: [
 					{
 						type: 'weight',

@@ -25,6 +25,7 @@ const queryPropertyFilters = [
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {
+			name: {},
 			type: {},
 			minValue: {},
 			price: {},
@@ -45,6 +46,13 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
+		ApiConstants.constants.itemTexts().then(itemTexts =>
+			this.$('#name-input').autocompletes = itemTexts);
+		this.$('#name-input').freeForm = true;
+		this.$('#name-input').addEventListener('change', () => {
+			this.name = this.$('#name-input').value;
+			this.updateQueryParams();
+		});
 		ApiConstants.constants.typeTexts().then(typeTexts =>
 			this.$('#type-input').autocompletes = typeTexts);
 		this.$('#type-input').addEventListener('change', () => {
@@ -92,6 +100,10 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
 		this.queryParams = {};
+	}
+
+	set name(value) {
+		this.$('#name-input').value = value;
 	}
 
 	set type(value) {
@@ -143,6 +155,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	async loadQueryParams(queryParams = {}, sharedWeightEntries) {
+		this.name = queryParams.name || '';
 		this.type = await ApiConstants.constants.typeIdToText(queryParams.type) || '';
 		this.minValue = queryParams.minValue || 0;
 		this.price = queryParams.maxPrice || 1;
@@ -280,6 +293,7 @@ customElements.define(name, class extends XElement {
 			}));
 
 		this.queryParams = {
+			name: this.name,
 			type,
 			minValue: this.minValue,
 			maxPrice: this.price,

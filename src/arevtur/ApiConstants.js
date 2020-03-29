@@ -7,6 +7,7 @@ class Constants {
 			this.initTypes(),
 			this.initProperties(),
 			this.initCurrencies(),
+			this.initItems(),
 		]);
 	}
 
@@ -98,12 +99,7 @@ class Constants {
 		tuples.push(['chaos', 1]);
 		this.currencies = Object.fromEntries(tuples);
 
-		/*
-		{
-      alt: .125,
-      ...
-    }
-		*/
+		/* {alt: .125, ...} */
 	}
 
 	async currencyPrice(currency) {
@@ -111,7 +107,17 @@ class Constants {
 		return this.currencies[currency];
 	}
 
-	// also of interest, https://www.pathofexile.com/api/trade/data/items
+	async initItems() {
+		this.items = JSON.parse(await get('https://www.pathofexile.com/api/trade/data/items')).result
+			.flatMap(({entries}) => entries)
+			.map(({name, text}) => name || text);
+		/* ['Pledge of Hands', ...] */
+	}
+
+	async itemTexts() {
+		await this.initPromise;
+		return this.items;
+	}
 }
 
 const SHORT_PROPERTIES = {
