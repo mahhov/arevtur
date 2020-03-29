@@ -49,12 +49,12 @@ class Constants {
 
 	async initProperties() {
 		this.properties = JSON.parse(await get('https://www.pathofexile.com/api/trade/data/stats')).result
-			.flatMap(({entries}) => entries);
+			.flatMap(({entries}) => entries)
+			.map(({id, text, type}) => ({id, text: `${text} (${type})`}));
 		/*
 		[{
       id: 'pseudo.pseudo_total_cold_resistance',
-      text: '+#% total to Cold Resistance',
-      type: 'pseudo',
+      text: '+#% total to Cold Resistance (pseudo)',
     }, ...]
 		*/
 	}
