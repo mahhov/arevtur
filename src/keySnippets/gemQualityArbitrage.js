@@ -18,6 +18,7 @@ let main = async () => {
 		}, {});
 	let outLines = Object.entries(data)
 		.map(([key, value]) => ({name: key, ...value}))
+		.filter(gem => gem.quality && gem.level)
 		.map(gem => ({...gem, valueRatio: gem.quality / (gem.level + 1), valueAbsolute: gem.quality - gem.level - 1}))
 		.sort((gem1, gem2) => gem2.valueAbsolute - gem1.valueAbsolute)
 		.filter((_, i) => i < 15)
