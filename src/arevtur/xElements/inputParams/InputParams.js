@@ -197,7 +197,8 @@ customElements.define(name, class extends XElement {
 		});
 
 		this.addQueryProperty();
-		this.updateQueryParams();
+		this.queryParams = queryParams;
+		this.sharedWeightEntries = sharedWeightEntries;
 	}
 
 	checkProperties() {
