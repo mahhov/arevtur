@@ -1,135 +1,44 @@
+const {httpRequest: {get}} = require('js-desktop-base');
 const ServicesDataFetcher = require('../services/DataFetcher');
 
-const TYPES = [
-	{
-		id: 'weapon',
-		text: 'any weapon'
-	},
-	{
-		id: 'weapon.one',
-		text: 'one handed weapon'
-	},
-	{
-		id: 'weapon.onemelee',
-		text: 'one handed melee weapon'
-	},
-	{
-		id: 'weapon.twomelee',
-		text: 'two handed melee weapon'
-	},
-	{
-		id: 'weapon.bow',
-		text: 'bow'
-	},
-	{
-		id: 'weapon.claw',
-		text: 'claw'
-	},
-	{
-		id: 'weapon.dagger',
-		text: 'any dagger'
-	},
-	{
-		id: 'weapon.runedagger',
-		text: 'rune dagger'
-	},
-	{
-		id: 'weapon.oneaxe',
-		text: 'one handed axe'
-	},
-	{
-		id: 'weapon.onemace',
-		text: 'one handed mace'
-	},
-	{
-		id: 'weapon.onesword',
-		text: 'one handed sword'
-	},
-	{
-		id: 'weapon.sceptre',
-		text: 'sceptre'
-	},
-	{
-		id: 'weapon.staff',
-		text: 'any staff'
-	},
-	{
-		id: 'weapon.warstaff',
-		text: 'warstaff'
-	},
-	{
-		id: 'weapon.twoaxe',
-		text: 'two handed axe'
-	},
-	{
-		id: 'weapon.twomace',
-		text: 'two handed mace'
-	},
-	{
-		id: 'weapon.twosword',
-		text: 'two handed sword'
-	},
-	{
-		id: 'weapon.wand',
-		text: 'wand'
-	},
-	{
-		id: 'armour',
-		text: 'any armour'
-	},
-	{
-		id: 'armour.chest',
-		text: 'body armour chest'
-	},
-	{
-		id: 'armour.boots',
-		text: 'boots'
-	},
-	{
-		id: 'armour.gloves',
-		text: 'gloves'
-	},
-	{
-		id: 'armour.helmet',
-		text: 'helmet'
-	},
-	{
-		id: 'armour.shield',
-		text: 'shield'
-	},
-	{
-		id: 'armour.quiver',
-		text: 'quiver'
-	},
-	{
-		id: 'accessory',
-		text: 'any accessory'
-	},
-	{
-		id: 'accessory.amulet',
-		text: 'amulet'
-	},
-	{
-		id: 'accessory.belt',
-		text: 'belt'
-	},
-	{
-		id: 'accessory.ring',
-		text: 'ring'
-	},
-	{
-		id: 'jewel',
-		text: 'any jewel'
-	},
-	{
-		id: 'jewel.abyss',
-		text: 'abyss jewel'
-	},
-];
+class Constants {
+	constructor() {
+		this.initPromise = this.init();
+	}
 
-const TYPES_TEXT_TO_ID = Object.fromEntries(TYPES.map(({id, text}) => [text, id]));
-const TYPES_ID_TO_TEXT = Object.fromEntries(TYPES.map(({id, text}) => [id, text]));
+	async init() {
+		let str = (await get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js'))
+			.match(/return(.*)\}\);/)[1];
+		let cleanStr = str.replace(/[^:,{}[\]]+/g, field =>
+			field[0] === '"' ? field : `"${field.replace(/"/g, '\\"')}"`)
+		let data = JSON.parse(cleanStr);
+		this.types = data.propertyFilters
+			.find(({id}) => id === 'type_filters').filters
+			.find(({id}) => id === 'category').option.options
+			.map(type => {
+				type.text = type.text.match(/"(.*)"/)[1];
+				return type;
+			});
+		this.types.find(({id}) => id === 'armour.chest').text += ' chest';
+	}
 
+	async typeTexts() {
+		await this.initPromise;
+		return this.types.map(({text}) => text);
+	}
+
+	async typeTextToId(text) {
+		await this.initPromise;
+		return this.types.find(type => type.text === text)?.id;
+	}
+
+	async typeIdToText(id) {
+		await this.initPromise;
+		return this.types.find(type => type.id === id)?.text;
+	}
+}
+
+// https://www.pathofexile.com/api/trade/data/stats
 const PROPERTIES = {
 	pseudo: [
 		{
@@ -29612,7 +29521,10 @@ const PROPERTIES = {
 	],
 };
 
-const PROPERTIES_FLAT = Object.values(PROPERTIES).flat().map((({id, text, type}) => ({id, text: `${text} (${type})`}))); // todo sort
+const PROPERTIES_FLAT = Object.values(PROPERTIES).flat().map((({id, text, type}) => ({
+	id,
+	text: `${text} (${type})`
+}))); // todo sort
 const PROPERTIES_TEXT_TO_ID = Object.fromEntries(PROPERTIES_FLAT.map(({id, text}) => [text, id]));
 const PROPERTIES_ID_TO_TEXT = Object.fromEntries(PROPERTIES_FLAT.map(({id, text}) => [id, text]));
 
@@ -29631,6 +29543,9 @@ let getCurrencies = async () => {
 	let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY);
 	currencyPrices = await currencyPrices;
 	prophecyPrices = await prophecyPrices;
+	// https://www.pathofexile.com/api/trade/data/items
+	// https://web.poecdn.com/js/PoE/Trade/Data/Static.js
+	// https://www.pathofexile.com/api/trade/data/static
 	let tuples = [
 		['mir', 'Mirror of Kalandra'],
 		['exa', 'Exalted Orb'],
@@ -29667,7 +29582,15 @@ let getCurrencies = async () => {
 const CURRENCIES = getCurrencies();
 
 module.exports = {
-	TYPES, TYPES_TEXT_TO_ID, TYPES_ID_TO_TEXT,
-	PROPERTIES, PROPERTIES_FLAT, PROPERTIES_TEXT_TO_ID, PROPERTIES_ID_TO_TEXT, SHORT_PROPERTIES,
-	SORT, CURRENCIES,
+	TYPES,
+	TYPES_TEXT_TO_ID,
+	TYPES_ID_TO_TEXT,
+	PROPERTIES,
+	PROPERTIES_FLAT,
+	PROPERTIES_TEXT_TO_ID,
+	PROPERTIES_ID_TO_TEXT,
+	SHORT_PROPERTIES,
+	SORT,
+	CURRENCIES,
+	constants: new Constants(),
 };

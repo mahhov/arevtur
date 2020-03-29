@@ -47,7 +47,8 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#type-input').autocompletes = ApiConstants.TYPES.map(({text}) => text);
+		ApiConstants.constants.typeTexts().then(typeTexts =>
+			this.$('#type-input').autocompletes = typeTexts);
 		this.$('#type-input').addEventListener('change', () => {
 			this.type = this.$('#type-input').value;
 			this.updateQueryParams();
@@ -143,8 +144,8 @@ customElements.define(name, class extends XElement {
 		this.$('#suffix-input').value = value;
 	}
 
-	loadQueryParams(queryParams = {}, sharedWeightEntries) {
-		this.type = ApiConstants.TYPES_ID_TO_TEXT[queryParams.type] || '';
+	async loadQueryParams(queryParams = {}, sharedWeightEntries) {
+		this.type = await ApiConstants.constants.typeIdToText(queryParams.type) || '';
 		this.minValue = queryParams.minValue || 0;
 		this.price = queryParams.maxPrice || 1;
 		this.offline = queryParams.offline || false;
@@ -246,11 +247,14 @@ customElements.define(name, class extends XElement {
 		return queryProperty;
 	};
 
-	updateQueryParams() {
-		let type = ApiConstants.TYPES_TEXT_TO_ID[this.type];
+	async updateQueryParams() {
+		let type = await ApiConstants.constants.typeTextToId(this.type);
 
 		let defenseProperties = Object.fromEntries(defensePropertyTuples
-			.map(([property]) => [property, {weight: Number(this[property]), min: 0}]));
+			.map(([property]) => [property, {
+				weight: Number(this[property]),
+				min: 0,
+			}]));
 
 		let affixProperties = Object.fromEntries(affixPropertyTuples
 			.map(([property]) => [property, Number(this[property])]));
