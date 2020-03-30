@@ -28,6 +28,7 @@ let getEndpoints = league => {
 		BASE_ITEM: endpoint(ITEM, 'BaseType'),
 		INCUBATOR: endpoint(ITEM, 'Incubator'),
 		OIL: endpoint(ITEM, 'Oil'),
+		BEAST: endpoint(ITEM, 'Beast'),
 	};
 };
 
