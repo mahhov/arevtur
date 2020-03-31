@@ -14,6 +14,7 @@ customElements.define(name, class Inputs extends XElement {
 
 	connectedCallback() {
 		this.$('#league-input').value = localStorage.getItem('input-league');
+		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
@@ -28,6 +29,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-items-status').classList.add('loaded'));
 
 		this.$('#league-input').addEventListener('input', () => this.store());
+		this.$('#session-id-input').addEventListener('input', () => this.store());
 		this.$('#input-set-list').addEventListener('arrange', e => {
 			let [removed] = this.inputSets.splice(e.detail.from, 1);
 			this.inputSets.splice(e.detail.to, 0, removed);
@@ -110,6 +112,7 @@ customElements.define(name, class Inputs extends XElement {
 
 	store() {
 		localStorage.setItem('input-league', this.$('#league-input').value);
+		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
@@ -138,6 +141,7 @@ customElements.define(name, class Inputs extends XElement {
 
 				let query = new QueryParams();
 				query.league = this.$('#league-input').value;
+				query.sessionId = this.$('#session-id-input').value;
 				query.name = name;
 				query.type = type;
 				query.maxPrice = maxPrice;

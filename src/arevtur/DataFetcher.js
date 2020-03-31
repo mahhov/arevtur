@@ -3,8 +3,9 @@ const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
 
-let getQueue = new RateLimitedRetryQueue();
-let rlrGet = (endpoint, queryParams = {}) => getQueue.add(() => get(endpoint, queryParams));
+let rlrQueue = new RateLimitedRetryQueue();
+let rlrGet = (endpoint, queryParams, headers) => rlrQueue.add(() => get(endpoint, queryParams, headers));
+let rlrPost = (endpoint, query, headers) => rlrQueue.add(() => post(endpoint, query, headers));
 
 let deepCopy = obj => {
 	if (typeof obj !== 'object' || obj === null)
@@ -19,6 +20,7 @@ class QueryParams {
 	constructor(clone = {}) {
 		clone = deepCopy(clone);
 		this.league = clone.league || 'Standard';
+		this.sessionId = clone.sessionId || '';
 		this.name = clone.name || '';
 		this.type = clone.type || '';
 		this.minValue = clone.minValue || 0;
@@ -175,8 +177,11 @@ class QueryParams {
 	async queryAndParseItems(query, progressCallback) {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
+			let endpoint = `${api}/search/${this.league}`;
+			let headers = this.sessionId ? {Cookie: `POESESSID=${this.sessionId}`} : {};
 			progressCallback('Initial query.', 0);
-			let data = JSON.parse(await post(`${api}/search/${this.league}`, query));
+			let response = await rlrPost(endpoint, query, headers);
+			let data = JSON.parse(response.string);
 			progressCallback(`Received ${data.result.length} items.`, 0);
 
 			let requestGroups = [];
@@ -191,7 +196,8 @@ class QueryParams {
 					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes, ApiConstants.SHORT_PROPERTIES.flatLife],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let data2 = JSON.parse(await rlrGet(endpoint2, queryParams));
+				let response2 = await rlrGet(endpoint2, queryParams, headers);
+				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
 				return Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));
 			});

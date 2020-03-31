@@ -10,7 +10,7 @@ class Constants {
 	}
 
 	async initTypes() {
-		let str = (await get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js'))
+		let str = (await get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js')).string
 			.match(/return(.*)\}\);/)[1];
 		let cleanStr = str.replace(/[^:,{}[\]]+/g, field =>
 			field[0] === '"' ? field : `"${field.replace(/"/g, '\\"')}"`)
@@ -44,7 +44,7 @@ class Constants {
 	}
 
 	async initProperties() {
-		this.properties = JSON.parse(await get('https://www.pathofexile.com/api/trade/data/stats')).result
+		this.properties = JSON.parse((await get('https://www.pathofexile.com/api/trade/data/stats')).string).result
 			.flatMap(({entries}) => entries)
 			.map(({id, text, type}) => ({id, text: `${text} (${type})`}));
 		/*
@@ -78,7 +78,7 @@ class Constants {
 		prophecyPrices = await prophecyPrices;
 		staticDataStr = await staticDataStr;
 
-		let tuples = JSON.parse(staticDataStr).result
+		let tuples = JSON.parse(staticDataStr.string).result
 			.find(({id}) => id === 'Currency').entries
 			.map(({id, text}) => {
 				let price = currencyPrices.lines
@@ -103,7 +103,7 @@ class Constants {
 	}
 
 	async initItems() {
-		this.items = JSON.parse(await get('https://www.pathofexile.com/api/trade/data/items')).result
+		this.items = JSON.parse((await get('https://www.pathofexile.com/api/trade/data/items')).string).result
 			.flatMap(({entries}) => entries)
 			.map(({name, text}) => name || text);
 		/* ['Pledge of Hands', ...] */

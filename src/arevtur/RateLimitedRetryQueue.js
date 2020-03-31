@@ -23,16 +23,17 @@ class RateLimitedRetryQueue {
 
 	async next() {
 		await sleep(this.delay - Date.now() + this.lastTime);
-		this.lastTime = Date.now();
 		let [handler, resolve, reject] = this.queue.shift();
 		for (let retry of this.retries)
 			try {
-				return resolve(handler());
+				this.lastTime = Date.now();
+				return resolve(await handler());
 			} catch (e) {
 				await sleep(retry);
 			}
 		try {
-			return resolve(handler());
+			this.lastTime = Date.now();
+			return resolve(await handler());
 		} catch (e) {
 			reject(e);
 		}
