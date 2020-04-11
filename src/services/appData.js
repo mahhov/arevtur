@@ -15,6 +15,6 @@ module.exports = {
 	basePath: envPaths.data,
 	config,
 	saveConfig,
-	gmailCredentialsPath: getPath('gmailCredentials.json'),
+	gmailCredentialsPath: path.join(__dirname, '../../resources/gmailCredentials.json'),
 	gmailTokenPath: getPath('gmailToken.json'),
 };
