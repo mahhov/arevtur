@@ -6,27 +6,42 @@
 		font-family: sans-serif;
 	}
 
-	#container {
+	#text-container.hidden,
+	#table-container.hidden,
+	#preferences-container.hidden {
+		display: none;
+	}
+
+	#text-container {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 	}
 
-	#container div {
+	#text-container div {
 		flex-basis: 0;
 		flex-grow: 1;
 		display: flex;
 		align-items: center;
 	}
 
-	#container div span {
+	#text-container div span {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
 
-	#container.hidden, .hidden {
-		display: none;
+	#table-container {
+		display: flex;
+	}
+
+	#table-container .column {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#table-container .column:not(:first-child) {
+		margin-left: 20px;
 	}
 
 	#preferences > * {
@@ -34,11 +49,12 @@
 	}
 </style>
 
-<div id="container"></div>
-<div id="preferences">
+<div id="text-container"></div>
+<div id="table-container"></div>
+<div id="preferences-container">
 	<input id="preferences-league">
 	<label><input id="preferences-restrict-window" type="checkbox">Restrict POE Window</label>
-	<button id="preferences-open">O</button>
+	<button id="preferences-open">Open</button>
 </div>
 
 <script src="View.js"></script>

@@ -1,11 +1,5 @@
 const DataFetcher = require('../services/DataFetcher');
 
-let alignColumns = rows => {
-	let columns = rows[0].map((_, i) => rows.map(row => row[i]));
-	let colWidths = columns.map(column => Math.max(...column.map(text => text.length)));
-	return rows.map(row => row.map((text, colI) => text.toString().padEnd(colWidths[colI])));
-};
-
 let str = num => (parseInt(num * 100) / 100).toString();
 
 let main = async () => {
@@ -23,7 +17,7 @@ let main = async () => {
 		.sort((gem1, gem2) => gem2.valueAbsolute - gem1.valueAbsolute)
 		.filter((_, i) => i < 15)
 		.map(gem => [gem.name, str(gem.valueAbsolute), str(gem.level), str(gem.quality)]);
-	return alignColumns([['GEM', 'PROFIT', 'LEVEL 20', 'QUALITY 20'], ...outLines]).map(line => line.join('   '));
+	return [['GEM', 'PROFIT', 'LEVEL 20', 'QUALITY 20'], ...outLines];
 };
 
 module.exports = main;

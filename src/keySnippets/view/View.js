@@ -11,10 +11,14 @@ ipc.on('window-command', (_, command) => {
 	switch (command.name) {
 		case 'setTexts':
 			updateTexts(command.texts);
-			preferencesVisibility(false);
+			setVisibleContainer($('#text-container'));
+			break;
+		case 'setTable':
+			updateTable(command.rows);
+			setVisibleContainer($('#table-container'));
 			break;
 		case 'showPreferences':
-			preferencesVisibility(true);
+			setVisibleContainer($('#preferences-container'));
 			break;
 		default:
 			console.error('Unknown window command:', command);
@@ -22,7 +26,7 @@ ipc.on('window-command', (_, command) => {
 });
 
 let updateTexts = texts => {
-	let container = $('#container');
+	let container = $('#text-container');
 	while (container.firstChild)
 		container.firstChild.remove();
 
@@ -37,11 +41,32 @@ let updateTexts = texts => {
 	});
 };
 
-let preferencesVisibility = visible => {
-	let container = $('#container');
-	container.classList.toggle('hidden', visible);
-	let preferences = $('#preferences');
-	preferences.classList.toggle('hidden', !visible)
+let updateTable = rows => {
+	let container = $('#table-container');
+	while (container.firstChild)
+		container.firstChild.remove();
+
+	let columns = rows[0].map((col, i) => rows.map(row => row[i]));
+	columns.forEach(column => {
+		let columnEl = $c('div');
+		columnEl.classList.add('column');
+		container.appendChild(columnEl);
+			column.forEach(cellText => {
+			let cellTextEl = $c('span');
+			cellTextEl.classList.add('cell');
+			cellTextEl.textContent = cellText;
+			columnEl.appendChild(cellTextEl);
+		});
+		container.appendChild(columnEl);
+	});
+};
+
+let setVisibleContainer = container => {
+	[
+		$('#text-container'),
+		$('#table-container'),
+		$('#preferences-container'),
+	].forEach(c => c.classList.toggle('hidden', c !== container));
 };
 
 document.body.addEventListener('keydown', ({code}) => {

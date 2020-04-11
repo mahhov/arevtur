@@ -72,8 +72,8 @@ let displayGemQualityArbitrage = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
 	else {
-		let lines = await gemQualityArbitrage();
-		await viewHandle.showTexts(lines.map(text => ({text})), 6000);
+		let rows = await gemQualityArbitrage();
+		await viewHandle.showTable(rows, 6000);
 	}
 };
 

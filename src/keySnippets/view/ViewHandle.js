@@ -3,8 +3,6 @@ const {ViewHandle: ViewHandleBase, ScreenMouse} = require('js-desktop-base');
 const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
 const appData = require('../../services/appData');
 
-const WIDTH = 300, HEIGHT_BASE = 20, HEIGHT_PER_LINE = 20;
-
 class ViewHandle extends ViewHandleBase {
 	constructor() {
 		super({
@@ -36,20 +34,24 @@ class ViewHandle extends ViewHandleBase {
 		await this.move(mouse.x, mouse.y);
 	}
 
-	async showTexts(texts, duration) {
-		this.send({name: 'setTexts', texts});
+	async showCommand(commandName, commandData, duration, widthPx, heightLines) {
+		this.send({name: commandName, ...commandData});
 		await this.show(duration);
-		await this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * texts.length);
+		await this.resize(widthPx, 20 + 20 * heightLines);
 		await this.moveToMouse();
 		await this.validateOnScreen();
 	}
 
+	async showTexts(texts, duration) {
+		this.showCommand('setTexts', {texts}, duration, 300, texts.length);
+	}
+
+	async showTable(rows, duration) {
+		this.showCommand('setTable', {rows}, duration, 600, rows.length);
+	}
+
 	async showPreferences() {
-		this.send({name: 'showPreferences'});
-		await this.show();
-		await this.resize(WIDTH, HEIGHT_BASE + HEIGHT_PER_LINE * 5);
-		await this.moveToMouse();
-		await this.validateOnScreen();
+		this.showCommand('showPreferences', {}, undefined, 300, 5);
 	}
 }
 
