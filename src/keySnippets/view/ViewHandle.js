@@ -21,6 +21,9 @@ class ViewHandle extends ViewHandleBase {
 			case 'close':
 				this.hide();
 				break;
+			case 'prevent-close':
+				clearInterval(this.timedHide);
+				break;
 			case 'saveConfig':
 				appData.saveConfig(message.config);
 				break;

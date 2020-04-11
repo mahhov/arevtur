@@ -51,7 +51,7 @@ let updateTable = rows => {
 		let columnEl = $c('div');
 		columnEl.classList.add('column');
 		container.appendChild(columnEl);
-			column.forEach(cellText => {
+		column.forEach(cellText => {
 			let cellTextEl = $c('span');
 			cellTextEl.classList.add('cell');
 			cellTextEl.textContent = cellText;
@@ -77,6 +77,12 @@ document.body.addEventListener('keydown', ({code}) => {
 			break;
 	}
 });
+
+window.addEventListener('blur', () =>
+	ipcSend({name: 'close'}));
+
+document.body.addEventListener('mousedown', () =>
+	ipcSend({name: 'prevent-close'}));
 
 let saveConfig = () => ipcSend({name: 'saveConfig', config: appData.config});
 
