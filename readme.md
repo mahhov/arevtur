@@ -54,7 +54,7 @@ Find the most value / price item upgrades, sourced directly from the official tr
 #### Starting the app
 
 When you run POE Pricer, a `$` icon will appear in your system tray (typically at the bottom right of your screen).
-Right click the icon to open the context menu, and select `Arevtur` to open the app.
+Right click the icon to open the context menu and select `Arevtur` to open the app.
 
 #### Setting up the session ID
 
@@ -71,30 +71,33 @@ Without it, GGG would not know who is using their trade site,
 and if someone were to use their trade site irresponsibly, they would have to rely on crude alternatives (i.e. IP address) to stop that user.
 Hence, GGG puts strict limits on what you are allowed to do without a session ID; including what trade queries you're allowed to submit and how often.
 
-Because `arevtur` is open source, a diligent user can verify that session ID is only stored locally.
+Because `arevtur` is open source, a user can verify that the session ID is only stored locally.
 In fact, no user information, not even anonymous usage statistics, are sent remotely.
 I.e., other than yourself and GGG, no one will have access to your session ID.
-This is very important, as sharing your session ID with someone else might allow them to effectively impersonate you with some restrictions.
+This is very important, as sharing your session ID with someone might allow them to impersonate you to a certain extent.
 
 #### Why is it so slow
 
-When querying GGG's trade API, it responds with up to 100 item IDs.
-However, it allows you to fetch at most 10 of those 100 items per request, meaning you must make a total of 11 requests (1 initial for the 100 IDs + 10 to fetch 10 items each) per query.
+tldr; GGG's trade API returns 10 items per request, and limits requests to 1.3 per second per user. So retrieving 100 items will take at least 7.7 seconds.
+
+The initial request to the trade API returns with 100 item IDs.
+At most 10 of these items can fetched per subsequent request, meaning a total of 11 requests are made per query.
 Factoring in that many searches actually perform multiple queries, each time you press the 'submit' button, 11 to 33 requests are typically made.
 
 In addition, GGG recently updated their API rate-limit restrictions.
-It had previously been possible to make some of those requests in parallel.
-But with the new restrictions, GGG limits requests to about 1.3 per second.
-To be on the safe side, `arevtur` limits its requests to 1 per second; this is why even a simple query will take 11 seconds.
+It had previously been possible to make most of those requests in parallel.
+But with the new restrictions, we can make at most 1.3 requests per second.
+To be on the safe side and avoid timeouts, `arevtur` limits its requests to 1 per second; this is why even a simple query will take 11 seconds.
 
 Luckily, the app will display partial results while the complete query is still in progress.
-This allows showing the some item results within 2 seconds of submitting a search.
 But for expensive items with complicated queries, waiting for the complete response before purchasing is ideal, as later items may be better or cheaper than earlier items. 
 
 ### Visual guide to the features
 
 ### Simple search
 ![simple-boots.gif](./screenshots/simple-boots.gif)
+### Interactive graph
+![graph.gif](./screenshots/graph.gif)
 ### Locking weights amongst properties
 ![locking.gif](./screenshots/locking.gif)
 ### Sharing properties amongst queries
