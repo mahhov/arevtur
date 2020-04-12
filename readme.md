@@ -49,6 +49,49 @@ List gems' lvl 20 price, q 20 price, and potential profit.
 
 ![arevtur.png](./screenshots/arevtur.png)
 
+Find the most value / price item upgrades, sourced directly from the official trade site `pathofexile.com/trade` .
+
+#### Starting the app
+
+When you run POE Pricer, a `$` icon will appear in your system tray (typically at the bottom right of your screen).
+Right click the icon to open the context menu, and select `Arevtur` to open the app.
+
+#### Setting up the session ID
+
+In your browser, navigate to `pathofexile.com` and login. 
+Open the developer console (`f12`) and select the `Application` panel in the top strip.
+Expand the `Cookies` tree under the `Storage` label in the left strip, and select the `pathofexile.com` cookie.
+In the main view, copy the value associated with the `POESESSID` key. This should be a 32 alphanumeric ID.
+In the `arevtur` app, paste the value in the `Session ID` input at the top.
+
+#### What is the purpose of session ID and is it safe to copy
+
+The session ID allows GGG to identify users. 
+Without it, GGG would not know who is using their trade site, 
+and if someone were to use their trade site irresponsibly, they would have to rely on crude alternatives (i.e. IP address) to stop that user.
+Hence, GGG puts strict limits on what you are allowed to do without a session ID; including what trade queries you're allowed to submit and how often.
+
+Because `arevtur` is open source, a diligent user can verify that session ID is only stored locally.
+In fact, no user information, not even anonymous usage statistics, are sent remotely.
+I.e., other than yourself and GGG, no one will have access to your session ID.
+This is very important, as sharing your session ID with someone else might allow them to effectively impersonate you with some restrictions.
+
+#### Why is it so slow
+
+When querying GGG's trade API, it responds with up to 100 item IDs.
+However, it allows you to fetch at most 5 of those 100 items per request, meaning you must make a total of 21 requests (1 initial for the 100 IDs + 20 to fetch 5 items each) per query.
+Factoring in that many searches actually perform multiple queries, each time you press the 'submit' button, 21 to ~60 requests are typically made.
+
+In addition, GGG recently updated their API rate-limit restrictions.
+It had previously been possible to make some of those requests in parallel.
+But with the new restrictions, GGG limits requests to about 1.3 per second.
+To be on the safe side, `arevtur` limits its requests to 1 per second; this is why even a simple query will take ~20 seconds.
+
+I'll be working on displaying partial results while the query is still in progress.
+This will allow showing the top item results within 2 seconds of submitting a search. 
+
+### Visual guide to the features
+
 ### Simple search
 ![simple-boots.gif](./screenshots/simple-boots.gif)
 ### Locking weights amongst properties
@@ -67,12 +110,6 @@ List gems' lvl 20 price, q 20 price, and potential profit.
 ![defense.gif](./screenshots/defense.gif)
 ### Filtering results
 ![sockets.gif](./screenshots/sockets.gif)
-
-
-Find the most value / price item upgrades.
-Access from the tray icon context menu.
-Sourced from official trade site `pathofexile.com/trade` .
-This can be complicated; contact me if you'd like help or screenshot guides.
 
 Features:
 - Interactive graph
