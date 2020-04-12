@@ -50,16 +50,20 @@ customElements.define(name, class extends XElement {
 			});
 		});
 
-
 		this.$('#prefixes-text').textContent = value.affixes.prefix;
 		this.$('#suffixes-text').textContent = value.affixes.suffix;
 		this.$('#affix-value-text').textContent = value.valueDetails.affixValueShift;
-
 		this.$('#defense-value-text').textContent = value.valueDetails.defensePropertiesValue;
-
-		this.$('#weight-value-text').textContent = value.valueDetails.weightValue;
+		this.$('#weight-value-text').textContent = value.valueDetails.modValue;
 
 		this.$('#value-text').textContent = value.evalValue;
+		let expandedValues = [
+			['affixes', value.valueDetails.affixValueShift],
+			['defenses', value.valueDetails.defensePropertiesValue],
+			['mods', value.valueDetails.modValue]
+		].filter(([_, value]) => value);
+		this.$('#value-expanded-text').textContent = expandedValues.length > 1 ?
+			expandedValues.map(([name, value]) => `${value} ${name}`).join(' + ') : '';
 		this.$('#price-text').textContent = value.evalPrice;
 		this.$('#price-expanded-text').textContent = value.priceText;
 		this.$('#whisper-button').textContent = value.accountText;

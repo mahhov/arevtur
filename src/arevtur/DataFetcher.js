@@ -156,8 +156,8 @@ class QueryParams {
 			do {
 				let newItemsMinValue = Math.min(...newItems.map(({evalValue}) => evalValue));
 				let maxValue = Math.max(...items.map(({evalValue}) => evalValue));
-				let minWeightValue = Math.min(...items.map(item => item.valueDetails.weightValue));
-				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minWeightValue) / defenseProperty[1].weight;
+				let minModValue = Math.min(...items.map(item => item.valueDetails.modValue));
+				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
 
 				minDefensePropertyValue = Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
 				lastMinDefensePropertyValue = minDefensePropertyValue;
@@ -230,7 +230,7 @@ class QueryParams {
 		let valueDetails = {
 			affixValueShift: Math.round(this.affixValueShift * 100) / 100,
 			defensePropertiesValue: Math.round(evalDefensePropertiesValue(defenseProperties, this.defenseProperties) * 100) / 100,
-			weightValue: Math.round(evalValue(pseudoMods) * 100) / 100,
+			modValue: Math.round(evalValue(pseudoMods) * 100) / 100,
 		};
 
 		return {
