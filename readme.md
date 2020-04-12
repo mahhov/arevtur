@@ -49,7 +49,7 @@ List gems' lvl 20 price, q 20 price, and potential profit.
 
 ![arevtur.png](./screenshots/arevtur.png)
 
-![simple-boots.gif](./screenshots/simpleb-boots.gif)
+![simple-boots.gif](./screenshots/simple-boots.gif)
 
 Find the most value / price item upgrades.
 Access from the tray icon context menu.
