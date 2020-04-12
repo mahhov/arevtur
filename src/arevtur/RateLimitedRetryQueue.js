@@ -1,7 +1,7 @@
 let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 class RateLimitedRetryQueue {
-	constructor(delay = 100, retries = [300, 600, 2000]) {
+	constructor(delay = 1000, retries = [1000, 2000, 6000]) {
 		this.delay = delay;
 		this.retries = retries;
 		this.lastTime = Date.now();
