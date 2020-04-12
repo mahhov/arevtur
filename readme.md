@@ -79,16 +79,17 @@ This is very important, as sharing your session ID with someone else might allow
 #### Why is it so slow
 
 When querying GGG's trade API, it responds with up to 100 item IDs.
-However, it allows you to fetch at most 5 of those 100 items per request, meaning you must make a total of 21 requests (1 initial for the 100 IDs + 20 to fetch 5 items each) per query.
-Factoring in that many searches actually perform multiple queries, each time you press the 'submit' button, 21 to ~60 requests are typically made.
+However, it allows you to fetch at most 10 of those 100 items per request, meaning you must make a total of 11 requests (1 initial for the 100 IDs + 10 to fetch 10 items each) per query.
+Factoring in that many searches actually perform multiple queries, each time you press the 'submit' button, 11 to 33 requests are typically made.
 
 In addition, GGG recently updated their API rate-limit restrictions.
 It had previously been possible to make some of those requests in parallel.
 But with the new restrictions, GGG limits requests to about 1.3 per second.
-To be on the safe side, `arevtur` limits its requests to 1 per second; this is why even a simple query will take ~20 seconds.
+To be on the safe side, `arevtur` limits its requests to 1 per second; this is why even a simple query will take 11 seconds.
 
-I'll be working on displaying partial results while the query is still in progress.
-This will allow showing the top item results within 2 seconds of submitting a search. 
+Luckily, the app will display partial results while the complete query is still in progress.
+This allows showing the some item results within 2 seconds of submitting a search.
+But for expensive items with complicated queries, waiting for the complete response before purchasing is ideal, as later items may be better or cheaper than earlier items. 
 
 ### Visual guide to the features
 

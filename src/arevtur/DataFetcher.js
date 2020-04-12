@@ -147,8 +147,7 @@ class QueryParams {
 	}
 
 	async writeItemsToStream(stream, progressCallback) {
-		let items = await this.queryAndParseItems(this.getQuery(), progressCallback);
-		stream.write(items);
+		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback);
 
 		let defenseProperty = Object.entries(this.defenseProperties).find(([_, {weight}]) => weight);
 		if (defenseProperty) {
@@ -165,16 +164,15 @@ class QueryParams {
 
 				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
 				let query = this.getQuery(overrides);
-				newItems = await this.queryAndParseItems(query, progressCallback);
+				newItems = await this.queryAndParseItems(query, stream, progressCallback);
 				items = items.concat(newItems);
-				stream.write(items);
 			} while (newItems.length > 0);
 		}
 
 		return items;
 	}
 
-	async queryAndParseItems(query, progressCallback) {
+	async queryAndParseItems(query, stream, progressCallback) {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
@@ -199,7 +197,9 @@ class QueryParams {
 				let response2 = await rlrGet(endpoint2, queryParams, headers);
 				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
-				return Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));
+				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));
+				stream.write(items);
+				return items;
 			});
 			let items = (await Promise.all(promises)).flat();
 			progressCallback('All grouped item queries completed.', 1);
