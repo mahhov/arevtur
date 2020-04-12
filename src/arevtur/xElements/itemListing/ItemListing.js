@@ -1,6 +1,8 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 
+const round = n => Math.round(n * 10) / 10;
+
 const listTuples = [
 	['#sockets-list', 'sockets'],
 	['#defense-list', 'defenseProperties'],
@@ -52,20 +54,18 @@ customElements.define(name, class extends XElement {
 
 		this.$('#prefixes-text').textContent = value.affixes.prefix;
 		this.$('#suffixes-text').textContent = value.affixes.suffix;
-		this.$('#affix-value-text').textContent = value.valueDetails.affixValueShift;
-		this.$('#defense-value-text').textContent = value.valueDetails.defensePropertiesValue;
-		this.$('#weight-value-text').textContent = value.valueDetails.modValue;
+		this.$('#affix-value-text').textContent = value.valueDetails.affixes;
+		this.$('#defense-value-text').textContent = value.valueDetails.defenses;
+		this.$('#weight-value-text').textContent = value.valueDetails.mods;
 
-		this.$('#value-text').textContent = value.evalValue;
-		let expandedValues = [
-			['affixes', value.valueDetails.affixValueShift],
-			['defenses', value.valueDetails.defensePropertiesValue],
-			['mods', value.valueDetails.modValue]
-		].filter(([_, value]) => value);
+		this.$('#value-text').textContent = round(value.evalValue);
+		let expandedValues = Object.entries(value.valueDetails).filter(([_, value]) => value);
 		this.$('#value-expanded-text').textContent = expandedValues.length > 1 ?
-			expandedValues.map(([name, value]) => `${value} ${name}`).join(' + ') : '';
-		this.$('#price-text').textContent = value.evalPrice;
-		this.$('#price-expanded-text').textContent = value.priceText;
+			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
+		this.$('#price-text').textContent = round(value.evalPrice);
+		let expandedPriceShifts = Object.entries(value.priceDetails.shifts).map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
+		this.$('#price-expanded-text').textContent = value.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
+			`${value.priceDetails.count} ${value.priceDetails.currency}${expandedPriceShifts.join('')}` : '';
 		this.$('#whisper-button').textContent = value.accountText;
 
 		this.selected = value.selected;

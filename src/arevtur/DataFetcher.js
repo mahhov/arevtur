@@ -47,7 +47,7 @@ class QueryParams {
 		this.sort = clone.sort || ApiConstants.SORT.value;
 		this.online = clone.online || false;
 		this.affixValueShift = clone.affixValueShift || 0;
-		this.priceShift = clone.priceShift || 0;
+		this.priceShifts = clone.priceShifts || {};
 	}
 
 	getQuery(overrides = {}) {
@@ -156,7 +156,7 @@ class QueryParams {
 			do {
 				let newItemsMinValue = Math.min(...newItems.map(({evalValue}) => evalValue));
 				let maxValue = Math.max(...items.map(({evalValue}) => evalValue));
-				let minModValue = Math.min(...items.map(item => item.valueDetails.modValue));
+				let minModValue = Math.min(...items.map(item => item.valueDetails.mods));
 				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
 
 				minDefensePropertyValue = Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
@@ -216,7 +216,7 @@ class QueryParams {
 			a[v.group].push(v.sColour);
 			return a;
 		}, []);
-		let extendedExplicitMods = itemData.item.extended.mods.explicit || [];
+		let extendedExplicitMods = itemData.item.extended.mods?.explicit || [];
 		let affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
 			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
 		let defenseProperties =
@@ -228,9 +228,14 @@ class QueryParams {
 				.filter(([_, value]) => value);
 		let pseudoMods = itemData.item.pseudoMods || [];
 		let valueDetails = {
-			affixValueShift: Math.round(this.affixValueShift * 100) / 100,
-			defensePropertiesValue: Math.round(evalDefensePropertiesValue(defenseProperties, this.defenseProperties) * 100) / 100,
-			modValue: Math.round(evalValue(pseudoMods) * 100) / 100,
+			affixes: this.affixValueShift,
+			defenses: evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
+			mods: evalValue(pseudoMods),
+		};
+		let priceDetails = {
+			count: itemData.listing.price.amount,
+			currency: itemData.listing.price.currency,
+			shifts: this.priceShifts,
 		};
 
 		return {
@@ -252,9 +257,8 @@ class QueryParams {
 			note: itemData.item.note,
 			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
 			valueDetails,
-			// todo change text to: 3 fus + fated links (#c)
-			priceText: `${itemData.listing.price.amount} ${itemData.listing.price.currency}${this.priceShift ? ` + price shift ${this.priceShift}` : ''}`,
-			evalPrice: await evalPrice(itemData.listing.price) + this.priceShift,
+			evalPrice: await evalPrice(priceDetails),
+			priceDetails,
 			debug: itemData,
 		};
 	};
@@ -273,10 +277,10 @@ let evalValue = pseudoMods => {
 	return Number(pseudoSum.substring(5));
 };
 
-let evalPrice = async ({currency: currencyId, amount}) => {
-	let currency = await ApiConstants.constants.currencyPrice(currencyId);
-	if (currency)
-		return currency * amount;
+let evalPrice = async ({currency: currencyId, count, shifts}) => {
+	let currencyPrice = await ApiConstants.constants.currencyPrice(currencyId);
+	if (currencyPrice)
+		return currencyPrice * count + Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
 	console.warn('Missing currency', currencyId);
 	return -1;
 };

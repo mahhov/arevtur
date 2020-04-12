@@ -174,7 +174,7 @@ customElements.define(name, class Inputs extends XElement {
 									queryO.linked = false;
 									queryO.uncorrupted = true;
 									queryO.maxPrice -= fatedConnectionsProphecyPrice;
-									queryO.priceShift += fatedConnectionsProphecyPrice;
+									queryO.priceShifts.fatedConnections = fatedConnectionsProphecyPrice;
 								}
 								if (ao) {
 									queryO.affixProperties[ao[0]] = true;
