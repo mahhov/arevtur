@@ -4,8 +4,8 @@ const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
 
 let rlrQueue = new RateLimitedRetryQueue();
-let rlrGet = (endpoint, queryParams, headers) => rlrQueue.add(() => get(endpoint, queryParams, headers));
-let rlrPost = (endpoint, query, headers) => rlrQueue.add(() => post(endpoint, query, headers));
+let rlrGet = (endpoint, queryParams, headers, stopObj) => rlrQueue.add(() => !stopObj.stop && get(endpoint, queryParams, headers));
+let rlrPost = (endpoint, query, headers, stopObj) => rlrQueue.add(() => !stopObj.stop && post(endpoint, query, headers));
 
 let deepCopy = obj => {
 	if (typeof obj !== 'object' || obj === null)
@@ -140,10 +140,15 @@ class QueryParams {
 	}
 
 	getItemsStream(progressCallback) {
+		this.stopObj = {};
 		let stream = new Stream();
 		this.writeItemsToStream(stream, progressCallback)
 			.then(() => stream.done());
 		return stream;
+	}
+
+	stop() {
+		this.stopObj.stop = true;
 	}
 
 	async writeItemsToStream(stream, progressCallback) {
@@ -178,7 +183,7 @@ class QueryParams {
 			let endpoint = `${api}/search/${this.league}`;
 			let headers = this.sessionId ? {Cookie: `POESESSID=${this.sessionId}`} : {};
 			progressCallback('Initial query.', 0);
-			let response = await rlrPost(endpoint, query, headers);
+			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
 			progressCallback(`Received ${data.result.length} items.`, 0);
 
@@ -194,7 +199,7 @@ class QueryParams {
 					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes, ApiConstants.SHORT_PROPERTIES.flatLife],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let response2 = await rlrGet(endpoint2, queryParams, headers);
+				let response2 = await rlrGet(endpoint2, queryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
 				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));

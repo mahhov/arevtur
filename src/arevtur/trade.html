@@ -32,7 +32,12 @@
 		return el;
 	};
 
+	let lastQueryParams;
+
 	let submitQueries = async queryParams => {
+		if (lastQueryParams)
+			cancelQueries();
+		lastQueryParams = queryParams;
 		let progressRatios = queryParams.map(_ => 0);
 		queryParams.forEach((queryParam, i) =>
 			queryParam.getItemsStream((text, ratio) => {
@@ -45,11 +50,18 @@
 			}));
 	};
 
+	let cancelQueries = async () => {
+		lastQueryParams?.forEach(queryParam => queryParam.stop());
+		lastQueryParams = null;
+	};
+
 	$('x-inputs').addEventListener('submit', async e => {
 		if (!e.detail.add)
 			$('x-results').clearItems();
 		submitQueries(await $('x-inputs').getQueries());
 	});
+
+	$('x-inputs').addEventListener('cancel', cancelQueries);
 
 	$('x-results').addEventListener('submit', async e =>
 		submitQueries(await $('x-inputs').getQueries(e.detail.overridePrice)));
