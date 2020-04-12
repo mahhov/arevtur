@@ -5,7 +5,16 @@ const envPaths = require('env-paths')('poe-pricer');
 let getPath = fileName => path.resolve(envPaths.data, fileName);
 
 let configPath = getPath('config.json');
-let config = require(configPath);
+let config;
+try {
+	config = require(configPath);
+} catch (e) {
+	// For the first run, config.json won't exist. This is expected and ok.
+	config = {
+		league: 'Delirium',
+		restrictToPoeWindow: true,
+	};
+}
 let saveConfig = newConfig => {
 	Object.assign(config, newConfig);
 	fs.writeFile(configPath, JSON.stringify(config, '', 2));
