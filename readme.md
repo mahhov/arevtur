@@ -49,7 +49,25 @@ List gems' lvl 20 price, q 20 price, and potential profit.
 
 ![arevtur.png](./screenshots/arevtur.png)
 
+### Simple search
 ![simple-boots.gif](./screenshots/simple-boots.gif)
+### Locking weights amongst properties
+![locking.gif](./screenshots/locking.gif)
+### Sharing properties amongst queries
+![sharing.gif](./screenshots/sharing.gif)
+### Search for a specific item
+![specific-item.gif](./screenshots/specific-item.gif)
+### Searching for 6-link, including the potential of the Fated Connections prophecy
+![6-link.gif](./screenshots/6-link.gif)
+### Searching for affixes
+![affix.gif](./screenshots/affix.gif)
+### Searching for Defenses
+![defense-2.gif](./screenshots/defense-2.gif)
+### Searching for Defenses (2)
+![defense.gif](./screenshots/defense.gif)
+### Filtering results
+![sockets.gif](./screenshots/sockets.gif)
+
 
 Find the most value / price item upgrades.
 Access from the tray icon context menu.
