@@ -95,7 +95,7 @@ But for expensive items with complicated queries, waiting for the complete respo
 ### Visual guide to the features
 
 ### Simple search
-![simple-boots.gif](./screenshots/simple-boots.gif)
+![simple.gif](./screenshots/simple.gif)
 ### Interactive graph
 ![graph.gif](./screenshots/graph.gif)
 ### Locking weights amongst properties
@@ -109,8 +109,6 @@ But for expensive items with complicated queries, waiting for the complete respo
 ### Searching for affixes
 ![affix.gif](./screenshots/affix.gif)
 ### Searching for Defenses
-![defense-2.gif](./screenshots/defense-2.gif)
-### Searching for Defenses (2)
 ![defense.gif](./screenshots/defense.gif)
 ### Filtering results
 ![sockets.gif](./screenshots/sockets.gif)
