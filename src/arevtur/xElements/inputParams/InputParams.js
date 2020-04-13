@@ -275,7 +275,7 @@ customElements.define(name, class extends XElement {
 		let propertyEntries = (await Promise.all([...this.$$('#query-properties-list x-query-property')]
 			.map(async queryProperty => ({
 				propertyId: await ApiConstants.constants.propertyTextToId(queryProperty.property),
-				weight: queryProperty.weight,
+				weight: Number(queryProperty.weight),
 				filter: queryProperty.filter,
 				locked: queryProperty.locked,
 				shared: queryProperty.shared,
@@ -296,8 +296,8 @@ customElements.define(name, class extends XElement {
 		this.queryParams = {
 			name: this.name,
 			type,
-			minValue: this.minValue,
-			maxPrice: this.price,
+			minValue: Number(this.minValue),
+			maxPrice: Number(this.price),
 			offline: this.offline,
 			defenseProperties,
 			affixProperties,
