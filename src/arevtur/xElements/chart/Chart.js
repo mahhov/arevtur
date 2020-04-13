@@ -13,10 +13,12 @@ customElements.define(name, class Chart extends XElement {
 	connectedCallback() {
 		this.ctx = this.$('canvas').getContext('2d');
 		this.ctx.font = '14px serif';
+
 		this.$('canvas').addEventListener('mousedown', e => {
 			this.dragged = false;
 			if (!e.ctrlKey)
 				this.mouseDown = {x: e.offsetX, y: e.offsetY};
+			e.preventDefault();
 		});
 		this.$('canvas').addEventListener('mousemove', e => {
 			this.emit('hover', this.pixelToCoord(e.offsetX, e.offsetY));
@@ -41,6 +43,11 @@ customElements.define(name, class Chart extends XElement {
 				return;
 			this.resetRange(e.shiftKey);
 		});
+
+		this.$('#always-refocus-check').checked = localStorage.getItem('chart-always-refocus');
+		this.$('#refocus-button').addEventListener('click', () => this.resetRange());
+		this.$('#always-refocus-check').addEventListener('input', () => this.saveAutoRefocus());
+
 		this.background = this.background || 'white';
 		this.pointSets = [];
 		this.resetRange();
@@ -60,7 +67,10 @@ customElements.define(name, class Chart extends XElement {
 
 	set pointSets(value) {
 		this.pointSets_ = value;
-		this.draw();
+		if (this.$('#always-refocus-check').checked)
+			this.resetRange();
+		else
+			this.draw();
 	}
 
 	resetRange(zeroMins = false) {
@@ -139,8 +149,8 @@ customElements.define(name, class Chart extends XElement {
 		let sizeSmall = 1;
 
 		this.ctx.lineWidth = 1;
-		this.ctx.strokeStyle = `rgb(0,0,0)`;
-		this.ctx.fillStyle = `rgb(0,0,0)`;
+		this.ctx.strokeStyle = `rgb(0, 0, 0)`;
+		this.ctx.fillStyle = `rgb(0, 0, 0)`;
 		this.ctx.strokeRect(this.width / n, this.height * (n - 1) / n, this.width * (n - 2) / n, 0); // x axis line
 		this.ctx.strokeRect(this.width / n, this.height / n, 0, this.width * (n - 2) / n); // y axis line
 		for (let i = 2; i < n; i += 2) {
@@ -169,6 +179,10 @@ customElements.define(name, class Chart extends XElement {
 			x: x === Infinity ? this.width : (x - this.minX) / this.deltaX * this.width,
 			y: y === Infinity ? 0 : (1 - (y - this.minY) / this.deltaY) * this.height,
 		};
+	}
+
+	saveAutoRefocus() {
+		localStorage.setItem('chart-always-refocus', this.$('#always-refocus-check').checked);
 	}
 
 	static getRange(values, zeroMin = false, buffer = .1) {
