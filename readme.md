@@ -95,45 +95,60 @@ But for expensive items with complicated queries, waiting for the complete respo
 ### Visual guide to the features
 
 ### Simple search
+Queries are automatically saved.
 ![simple.gif](./screenshots/simple.gif)
+
 ### Interactive graph
+We can visualize the value versus price tradeoff.
+Maybe we prefer an item 5% less powerful but at 1/10th the price.
 ![graph.gif](./screenshots/graph.gif)
+
 ### Locking weights amongst properties
+We can lock weights in synch amongst similar mods.
+- E.g. here we're looking for +gem level mods.
+- Rather than set and later update the weights of each mod individually, we lock their weights.
+- When we later update the weight for the 1st mod, the latter mods are automatically updated as well.
 ![locking.gif](./screenshots/locking.gif)
+
 ### Sharing properties amongst queries
+We can share properties amongst queries to keep all our queries updated.
+- E.g., here we 1st configure a query for boots with speed 30%, flat life weight 2, and resists weight 1. 
+- Then we create another query for a helmet.
+- Instead of adding the flat life and resist weights manually again, we share the life and resists weights we configured for the boots.
+- When we later update the flat life weight from 2 to 3 for the helmet, the boot is automatically updated as well.
 ![sharing.gif](./screenshots/sharing.gif)
-### Search for a specific item
-![specific-item.gif](./screenshots/specific-item.gif)
-### Searching for 6-link, including the potential of the Fated Connections prophecy
+
+### Searching for 6-link
+When searching for 6-links, we will find not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
+- E.g., here, we want a 6-link body.
+- The best 6-linked item we find is worth over 400c and has a value of 845.
+- But we also find a similar unlinked item available for just 50c and with a very similar value of 825.
+- In this case, it's cheaper to buy the latter item and 6-link it ourselves with the Fated Connections prophecy.
 ![6-link.gif](./screenshots/6-link.gif)
+
 ### Searching for affixes
+When we have the option to craft an affix, we can not only include items with open affixes, we can also ensure the mods we can craft are not blocked by an existing explicit.
+- E.g., here we want a ring with some lif, resists, and mana.
+- But we can also craft some prefixes ourselves if there's an open prefix available.
+- By setting the prefix input to 60, our search will show both items that have high life, resists, and mana, as well as items that have a slightly lower value but an open prefix to compensate.
+- This is useful, because otherwise, we'd have to do 2 separate searches to include both sets of items.
+- Then we realize the only prefix we want to craft is a 30 flat life prefix, and unfortunately, a lot of the items with an open prefix already have a life explicit.
+- To avoid manually screening the items, we add the flat life explicit as a conditional prefix mod; like before, our search will include items that have an open prefix but only if they don't already have a flat life explicit present.
+- This can be chained multiple times; e.g. if we were also willing to craft a flat mana prefix, we could add a second conditional prefix mod with a lower weight.
 ![affix.gif](./screenshots/affix.gif)
-### Searching for Defenses
+
+### Weighting armour, energy shield, and evasion
+When we are looking for armour, ES, or evasion, we aren't restricted to min and max values, but can instead weight them into the item's overall value, just like other properties. 
+- E.g., here we want evasion gloves; say we value 200 flat life equal to 65 evasion (this is not typical, excuse the bad example).
+- But we don't want to manually do multiple searches to capture all the possible combinations we'd be equally satisfied with: 200 life & 0 evasion, 160 life & 52 evasion, 120 life & 39 evasion, etc.
+- So we instead add a .65 weight to evasion and a 2 weight to flat life to search for every single potential mix.
 ![defense.gif](./screenshots/defense.gif)
+
 ### Filtering results
 ![sockets.gif](./screenshots/sockets.gif)
+- E.g. search '!armo, !evas' to show only ES gear. 
+- E.g. search '!corrupte' to hide all corrupted items. 
+- E.g. search '!unset, !moonstone' to hide all unset and moonstone rings. 
 
-Features:
-- Interactive graph
-    
-    Visualize the value versus price tradeoff. Maybe you'd prefer an item 5% less powerful but at 1/10th the price. Double click to auto-focus, left drag to pan, right drag to zoom.
-    
-- Weight values for armour, es, and evasion
-
-    The other trade sights allow filtering for min and max armour, es, and evasion. This allows weighting them. E.g. perhaps you value 1000 evasion, 4.5% inc life, 40 flat life, and 80 resists equally.   
-
-- Multiple persistent queries with shared weights
-
-    Queries are automatically saved, and weights can be shared between them. E.g. save a query for boots with min 30% speed, flat life weight 2, and resists weight 1. Then create another query for gloves, and share the life and resists weights. Update either query's weights, and the other query will also be updated. Additionally, you can merge multiple queries, e.g. if you want either a high life glove or a specific unique.
-
-- 6 link search
-
-    Includes not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
-
-- Conditional affix
-
-    Not only can you add value weights to open suffixes and prefixes, you can also condition them on not having certain mods already present. E.g. if you consider a crafted flat life on a ring as 60 value, the search will include items that are uncorrupted, uncrafted, have an open prefix, and don't already have a flat life explicit. Can include multiple conditional affixes; e.g. in case an item has a flat life explicit and so you'd instead craft flat mana.
-
-- Smart search
-
-    E.g. search '!unset, !moonstone' to hide all unset and moonstone rings. 
+### Search for a specific item by name
+![specific-item.gif](./screenshots/specific-item.gif)
