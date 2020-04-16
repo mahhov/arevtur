@@ -68,7 +68,7 @@ customElements.define(name, class extends XElement {
 			this.updateQueryParams();
 		});
 		this.$('#offline-check').addEventListener('change', () => {
-			this.offline = this.$('#offline-check').value;
+			this.offline = this.$('#offline-check').checked;
 			this.updateQueryParams();
 		});
 		[...defensePropertyTuples, ...affixPropertyTuples]
@@ -119,7 +119,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set offline(value) {
-		this.$('#offline-check').value = value;
+		this.$('#offline-check').checked = value;
 	}
 
 	set armour(value) {
