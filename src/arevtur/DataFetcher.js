@@ -3,9 +3,44 @@ const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
 
-let rlrQueue = new RateLimitedRetryQueue();
-let rlrGet = (endpoint, queryParams, headers, stopObj) => rlrQueue.add(() => !stopObj.stop && get(endpoint, queryParams, headers));
-let rlrPost = (endpoint, query, headers, stopObj) => rlrQueue.add(() => !stopObj.stop && post(endpoint, query, headers));
+let parseRateLimitResponseHeader = ({rule, state}) => {
+	let r = rule.split(':');
+	let s = state.split(':');
+	return `${s[0]} of ${r[0]} per ${r[1]} s. Timeout ${s[2]} of ${r[2]}`
+};
+
+let getRateLimitHeaders = responseHeaders => {
+	let rules = [
+		...responseHeaders['x-rate-limit-account'].split(','),
+		...responseHeaders['x-rate-limit-ip'].split(',')
+	];
+	let states = [
+		...responseHeaders['x-rate-limit-account-state'].split(','),
+		...responseHeaders['x-rate-limit-ip-state'].split(',')
+	];
+	return rules.map((rule, i) => ({rule, state: states[i]}));
+};
+
+let rlrGetQueue = new RateLimitedRetryQueue(667 * 1.2, [5000, 15000, 60000]);
+let rlrPostQueue = new RateLimitedRetryQueue(1500 * 1.2, [5000, 15000, 60000]);
+
+let rlrGet = (endpoint, queryParams, headers, stopObj) => rlrGetQueue.add(async () => {
+	if (stopObj.stop)
+		return;
+	let g = await get(endpoint, queryParams, headers);
+	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(g.response.headers)[0]);
+	console.log('got, made requests', rateLimitStr);
+	return g;
+});
+
+let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () => {
+	if (stopObj.stop)
+		return;
+	let p = await post(endpoint, query, headers);
+	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(p.response.headers)[0]);
+	console.log('posted, made requests', rateLimitStr);
+	return p;
+});
 
 let deepCopy = obj => {
 	if (typeof obj !== 'object' || obj === null)
