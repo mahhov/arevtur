@@ -294,6 +294,7 @@ class QueryParams {
 			pseudoMods,
 			accountText: `${itemData.listing.account.name} > ${itemData.listing.account.lastCharacterName}`,
 			whisper: itemData.listing.whisper,
+			date: itemData.listing.indexed,
 			note: itemData.item.note,
 			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
 			valueDetails,

@@ -1,6 +1,9 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 
+const now = new Date();
+const msInHour = 1000 * 60 * 60;
+
 const round = n => Math.round(n * 10) / 10;
 
 const listTuples = [
@@ -67,6 +70,8 @@ customElements.define(name, class extends XElement {
 		this.$('#price-expanded-text').textContent = value.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
 			`${value.priceDetails.count} ${value.priceDetails.currency}${expandedPriceShifts.join('')}` : '';
 		this.$('#whisper-button').textContent = value.accountText;
+		let dateDiff = (now - new Date(value.date)) / msInHour;
+		this.$('#date-text').textContent = dateDiff > 24 ? `${round(dateDiff / 24)} days ago` : `${round(dateDiff)} hours ago`;
 
 		this.selected = value.selected;
 		this.hovered = value.hovered;
