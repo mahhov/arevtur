@@ -161,7 +161,7 @@ customElements.define(name, class Inputs extends XElement {
 					affixProperties.prefix ? ['prefix'] : null,
 					affixProperties.suffix ? ['suffix'] : null,
 					...conditionalPrefixEntries.map(([propertyId, weight]) => ['prefix', propertyId, weight]),
-					...conditionalSuffixEntries.map((propertyId, weight) => ['suffix', propertyId, weight]),
+					...conditionalSuffixEntries.map(([propertyId, weight]) => ['suffix', propertyId, weight]),
 				];
 
 				linkedOptions
