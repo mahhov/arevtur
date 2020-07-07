@@ -13,7 +13,7 @@ class ItemsData {
 		// update items
 		this.items = this.items.concat(items)
 			.filter((v, i, a) => {
-				// todo deduping not working
+				// todo deduping sometimes not working
 				let copies = a.filter((vv, i) => vv.id === v.id);
 				if (copies[0] !== v)
 					return false;
