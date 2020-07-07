@@ -19,7 +19,7 @@
     "xx-element": "^2.0.2"
   },
   "devDependencies": {
-    "electron": "^8.1.1",
+    "electron": "^9.1.0",
     "electron-builder": "^20.39.0"
   },
   "repository": {
