@@ -74,7 +74,7 @@ Hence, GGG puts strict limits on what you are allowed to do without a session ID
 Because `arevtur` is open source, a user can verify that the session ID is only stored locally.
 In fact, no user information, not even anonymous usage statistics, are sent remotely.
 I.e., other than yourself and GGG, no one will have access to your session ID.
-This is very important, as sharing your session ID with someone might allow them to impersonate you to a certain extent.
+This is very important, as sharing your session ID with someone allows them to impersonate you to a certain extent.
 
 #### Why is it so slow
 
@@ -126,9 +126,9 @@ When searching for 6-links, we will find not only 6-linked items, but also uncor
 - In this case, it's cheaper to buy the latter item and 6-link it ourselves with the Fated Connections prophecy.
 ![6-link.gif](./screenshots/6-link.gif)
 
-### Searching for affixes
+### Searching for craftable affixes
 When we have the option to craft an affix, we can not only include items with open affixes, we can also ensure the mods we can craft are not blocked by an existing explicit.
-- E.g., here we want a ring with some lif, resists, and mana.
+- E.g., here we want a ring with some life, resists, and mana.
 - But we can also craft some prefixes ourselves if there's an open prefix available.
 - By setting the prefix input to 60, our search will show both items that have high life, resists, and mana, as well as items that have a slightly lower value but an open prefix to compensate.
 - This is useful, because otherwise, we'd have to do 2 separate searches to include both sets of items.
