@@ -19,7 +19,8 @@
 		outline: 1px solid black;
 	}
 
-	label:not(:first-child) {
+	label:not(:first-child),
+	x-multi-select-lined {
 		margin-left: 15px;
 	}
 </style>
@@ -68,9 +69,7 @@
 <div>
 	<label>Uncorrupted<input type="checkbox" id="uncorrupted-check"></label>
 	<label>Non unique<input type="checkbox" id="non-unique-check"></label>
-</div>
-<div>
-	<select id="influence-input" multiple></select>
+	<x-multi-select-lined id="influence-input" title="Add influences"></x-multi-select-lined>
 </div>
 <x-arrangable-list id="query-properties-list"></x-arrangable-list>
 <div>

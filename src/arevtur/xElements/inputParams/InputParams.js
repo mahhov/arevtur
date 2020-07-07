@@ -102,11 +102,12 @@ customElements.define(name, class extends XElement {
 		});
 		influenceProperties.forEach(p => {
 			let option = document.createElement('option');
+			option.slot = 'options';
 			option.textContent = p;
 			this.$('#influence-input').appendChild(option);
 		});
 		this.$('#influence-input').addEventListener('change', () => {
-			this.influences = [...this.$('#influence-input').options].map(o => o.selected);
+			this.influences = this.$('#influence-input').values;
 			this.updateQueryParams();
 		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
@@ -179,7 +180,7 @@ customElements.define(name, class extends XElement {
 
 	set influences(value) {
 		this.influences_ = value;
-		[...this.$('#influence-input').options].forEach((o, i) => o.selected = value[i]);
+		this.$('#influence-input').values = value;
 	}
 
 	async loadQueryParams(queryParams = {}, sharedWeightEntries) {
