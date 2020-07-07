@@ -130,6 +130,7 @@ customElements.define(name, class Inputs extends XElement {
 					defenseProperties,
 					affixProperties, linked,
 					uncorrupted, nonUnique,
+					influences,
 					weightEntries, andEntries, notEntries,
 					conditionalPrefixEntries, conditionalSuffixEntries,
 				} = inputSet.queryParams;
@@ -151,6 +152,7 @@ customElements.define(name, class Inputs extends XElement {
 				query.linked = linked;
 				query.uncorrupted = uncorrupted;
 				query.nonUnique = nonUnique;
+				query.influences = influences;
 				query.weights = weights;
 				query.ands = ands;
 				query.nots = nots;

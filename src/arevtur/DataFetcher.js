@@ -72,6 +72,7 @@ class QueryParams {
 		this.linked = clone.linked || false;
 		this.uncorrupted = clone.uncorrupted || false;
 		this.nonUnique = clone.nonUnique || false;
+		this.influences = [...clone.influences || []];
 		this.uncrafted = clone.uncrafted || false;
 		// {property: weight, ...}
 		this.weights = clone.weights || {};
@@ -115,6 +116,9 @@ class QueryParams {
 			miscFilters.corrupted = {option: false};
 		if (overridden.uncrafted)
 			miscFilters.crafted = {option: false};
+		overridden.influences
+			.filter(influence => influence)
+			.forEach(influence => miscFilters[`${influence}_item`] = {option: true});
 
 		let sort = weightFilters.length ? overridden.sort : ApiConstants.SORT.price;
 
@@ -159,7 +163,7 @@ class QueryParams {
 				}
 			},
 			sort,
-		}
+		};
 	}
 
 	overrideDefenseProperty(name, min) {
@@ -284,6 +288,7 @@ class QueryParams {
 			type: itemData.item.typeLine,
 			itemLevel: itemData.item.ilvl,
 			corrupted: itemData.item.corrupted,
+			influences: Object.keys(itemData.item.influences || {}),
 			sockets,
 			affixes,
 			defenseProperties: defenseProperties.map(nameValue => nameValue.join(' ')),

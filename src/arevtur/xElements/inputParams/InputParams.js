@@ -13,6 +13,15 @@ const affixPropertyTuples = [
 	['suffix', '#suffix-input'],
 ];
 
+const influenceProperties = [
+	'hunter',
+	'crusader',
+	'shaper',
+	'elder',
+	'redeemer',
+	'warlord',
+];
+
 const queryPropertyFilters = [
 	// queryParamsKey, queryPropertyFilter, hasWeight
 	['weightEntries', 'weight', true],
@@ -38,6 +47,7 @@ customElements.define(name, class extends XElement {
 			linked: {boolean: true},
 			uncorrupted: {boolean: true},
 			nonUnique: {boolean: true},
+			/* influences array */
 		};
 	}
 
@@ -90,6 +100,15 @@ customElements.define(name, class extends XElement {
 			this.nonUnique = this.$('#non-unique-check').checked;
 			this.updateQueryParams();
 		});
+		influenceProperties.forEach(p => {
+			let option = document.createElement('option');
+			option.textContent = p;
+			this.$('#influence-input').appendChild(option);
+		});
+		this.$('#influence-input').addEventListener('change', () => {
+			this.influences = [...this.$('#influence-input').options].map(o => o.selected);
+			this.updateQueryParams();
+		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
 			this.updateQueryParams();
@@ -134,6 +153,14 @@ customElements.define(name, class extends XElement {
 		this.$('#energy-shield-input').value = value;
 	}
 
+	set prefix(value) {
+		this.$('#prefix-input').value = value;
+	}
+
+	set suffix(value) {
+		this.$('#suffix-input').value = value;
+	}
+
 	set linked(value) {
 		this.$('#linked-check').checked = value;
 	}
@@ -146,12 +173,13 @@ customElements.define(name, class extends XElement {
 		this.$('#non-unique-check').checked = value;
 	}
 
-	set prefix(value) {
-		this.$('#prefix-input').value = value;
+	get influences() {
+		return this.influences_;
 	}
 
-	set suffix(value) {
-		this.$('#suffix-input').value = value;
+	set influences(value) {
+		this.influences_ = value;
+		[...this.$('#influence-input').options].forEach((o, i) => o.selected = value[i]);
 	}
 
 	async loadQueryParams(queryParams = {}, sharedWeightEntries) {
@@ -171,6 +199,7 @@ customElements.define(name, class extends XElement {
 		this.linked = queryParams.linked || false;
 		this.uncorrupted = queryParams.uncorrupted || false;
 		this.nonUnique = queryParams.nonUnique || false;
+		this.influences = queryParams.influences ? influenceProperties.map(influence => queryParams.influences.includes(influence)) : [];
 		XElement.clearChildren(this.$('#query-properties-list'));
 		sharedWeightEntries
 			.forEach(async ([property, weight, locked]) => {
@@ -304,6 +333,7 @@ customElements.define(name, class extends XElement {
 			linked: this.linked,
 			uncorrupted: this.uncorrupted,
 			nonUnique: this.nonUnique,
+			influences: influenceProperties.filter((_, i) => this.influences[i]),
 			...unsharedEntries,
 		};
 		this.sharedWeightEntries = sharedWeightEntries;

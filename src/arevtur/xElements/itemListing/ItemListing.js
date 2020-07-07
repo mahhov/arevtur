@@ -7,6 +7,7 @@ const msInHour = 1000 * 60 * 60;
 const round = n => Math.round(n * 10) / 10;
 
 const listTuples = [
+	['#influence-list', 'influences'],
 	['#sockets-list', 'sockets'],
 	['#defense-list', 'defenseProperties'],
 	['#enchant-list', 'enchantMods'],
