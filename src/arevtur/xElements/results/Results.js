@@ -145,8 +145,10 @@ customElements.define(name, class Inputs extends XElement {
 				return new Searcher(str, false, not);
 			});
 
-		[...this.$('#results-list').children].forEach(itemListing =>
-			itemListing.classList.toggle('search-hidden',
-				!searchers.every(searcher => searcher.test(itemListing.searchText))));
+		[...this.$('#results-list').children].forEach(itemListing => {
+			let searchTexts = itemListing.searchTexts;
+			let match = searchers.every(searcher => searchTexts.some(searchText => searcher.test(searchText)));
+			itemListing.classList.toggle('search-hidden', !match);
+		});
 	}
 });

@@ -87,9 +87,10 @@ customElements.define(name, class extends XElement {
 		this.classList.toggle('hovered', value);
 	}
 
-	get searchText() {
-		return [...this.$$(':host > div:not(.hidden)')]
-			.map(el => el.textContent)
-			.join(' ');
+	get searchTexts() {
+		return [...this.$$('div')]
+			.filter(div => !div.querySelector('div') && !div.classList.contains('hidden'))
+			.map(div => div.textContent.trim().replace(/\s+/g, ' '))
+			.filter(text => text);
 	}
 });
