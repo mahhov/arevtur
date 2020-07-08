@@ -2,6 +2,10 @@ const path = require('path');
 const {app, BrowserWindow} = require('electron');
 const {appReadyPromise} = require('js-desktop-base');
 
+// workaround for electron bug
+// https://github.com/electron/electron/issues/22119
+app.allowRendererProcessReuse = false;
+
 let window = appReadyPromise.then(() => {
 	let window = new BrowserWindow({
 		width: 1800,
