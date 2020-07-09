@@ -10,14 +10,9 @@ class RateLimitedRetryQueue {
 	}
 
 	add(handler) {
-		return new Promise(async (resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			this.queue.push([handler, resolve, reject]);
-			if (!this.active) {
-				this.active = true;
-				while (this.queue.length)
-					await this.next();
-				this.active = false;
-			}
+			return this.activate();
 		});
 	}
 
@@ -33,10 +28,19 @@ class RateLimitedRetryQueue {
 			}
 		try {
 			this.lastTime = Date.now();
-			return resolve(await handler());
+			resolve(await handler());
 		} catch (e) {
 			reject(e);
 		}
+	}
+
+	async activate() {
+		if (this.active)
+			return;
+		this.active = true;
+		while (this.queue.length)
+			await this.next();
+		this.active = false;
 	}
 }
 
