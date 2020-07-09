@@ -103,14 +103,13 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	static smartFilter(input, array, maxSize = Infinity) {
-		let searcher = new Searcher(input);
-
 		if (!input)
 			return array.slice(0, maxSize);
 
+		let searcher = new Searcher(input, false);
 		let size = 0;
 		return array.filter(v =>
-			size < maxSize && searcher.test(v.match(/[a-z]+|[A-Z][a-z]*|\d+|./g).join(' ')) && ++size);
+			size < maxSize && searcher.test([v.match(/[a-z]+|[A-Z][a-z]*|\d+|./g).join(' ')]) && ++size);
 	}
 
 	focus() {
