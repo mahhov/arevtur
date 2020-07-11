@@ -19,18 +19,7 @@
 <x-results></x-results>
 
 <script>
-	const {XElement} = require('xx-element');
-
 	const $ = document.querySelector.bind(document);
-	const $$ = document.querySelectorAll.bind(document);
-	const $c = (tag, classList = [], text = '', parent = null) => {
-		let el = document.createElement(tag);
-		el.classList.add(...classList);
-		el.textContent = text;
-		if (parent)
-			parent.appendChild(el);
-		return el;
-	};
 
 	let lastQueryParams;
 
