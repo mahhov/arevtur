@@ -10,7 +10,11 @@
 		padding: 10px;
 	}
 
-	progress[value="1"] {
+	#progress-bar[value="1"] {
+		display: none;
+	}
+
+	#progress-bar:not([value="1"]) ~ #uncached-fetch-button {
 		display: none;
 	}
 
@@ -18,13 +22,22 @@
 		margin-bottom: 3px;
 	}
 
+	.search-input-row {
+		display: flex;
+	}
+
 	#search-input {
-		width: 100%;
+		flex: 1;
+		margin-right: 15px;
 	}
 
 	#outputs {
 		margin-top: 15px;
 		overflow: auto;
+	}
+
+	.hidden {
+		display: none !important;
 	}
 
 	.output-item, .output-category {
@@ -34,6 +47,11 @@
 	.title {
 		background: #eee;
 		font-weight: bold;
+	}
+
+	.output-item-title {
+		background: #afa;
+		font-size: x-large;
 	}
 
 	.output-affixes {
@@ -102,7 +120,9 @@
 <div id="container">
 	<div id="inputs">
 		<div>
-			<progress id="progress-bar" max="1" value="0"></progress>
+			<progress id="progress-bar" max="1"></progress>
+			<span id="fetch-time"></span>
+			<button id="uncached-fetch-button">Uncached refresh</button>
 		</div>
 		<div class="input-row">
 			<x-autocomplete-input id="item-input" placeholder="Item"></x-autocomplete-input>
@@ -114,8 +134,9 @@
 		<div class="input-row">
 			<x-multi-select-lined id="tag-input" placeholder="Tags"></x-multi-select-lined>
 		</div>
-		<div class="input-row">
+		<div class="input-row search-input-row">
 			<input id="search-input" placeholder="Search">
+			<button id="clear-search-button">X</button>
 		</div>
 	</div>
 	<div id="outputs"></div>
@@ -124,7 +145,7 @@
 <script>
 	const {XElement} = require('xx-element');
 	const Searcher = require('../arevtur/Searcher');
-	const {modsByItem, progressStream} = require('./modsDataFetcher');
+	const {getModsByItem} = require('./modsDataFetcher');
 	const $ = document.querySelector.bind(document);
 	const $c = (tagName, parent = null, classList = [], text = '') => {
 		let el = document.createElement(tagName);
@@ -135,6 +156,10 @@
 			el.textContent = text;
 		return el;
 	};
+	let setElOwner = (el, owner) => {
+		owner.getVisible = () => !el.classList.contains('hidden');
+		owner.setVisible = visible => el.classList.toggle('hidden', !visible);
+	};
 	const clone = obj => {
 		if (Array.isArray(obj))
 			return obj.map(v => clone(v));
@@ -143,9 +168,15 @@
 		return obj;
 	};
 
-	progressStream.forEach(progress => $('#progress-bar').value = progress);
+	let refreshData = async (uncached = false) => {
+		let {modsByItem, fetchTime, progressStream} = getModsByItem(uncached);
 
-	modsByItem.then(modsByItem => {
+		$('#progress-bar').value = 0;
+		progressStream.forEach(progress => $('#progress-bar').value = progress);
+		progressStream.promise.then(() => $('#progress-bar').value = 1);
+
+		modsByItem = await modsByItem;
+		window.modsByItem = modsByItem;
 		$('#item-input').autocompletes = modsByItem.map(modsForItem => modsForItem.item);
 		$('#category-input').autocompletes = modsByItem
 			.flatMap(modsForItem =>
@@ -157,62 +188,28 @@
 					modsForCategory.modsByGroup.flatMap(modsForGroup => modsForGroup.mods[0].tags)))
 			.filter((v, i, a) => a.indexOf(v) === i);
 
-		$('#item-input').addEventListener('change', updateMods);
-		$('#item-level-input').addEventListener('input', updateMods);
-		$('#category-input').addEventListener('change', updateMods);
-		$('#tag-input').addEventListener('change', updateMods);
-		$('#search-input').addEventListener('input', updateMods);
+		$('#item-input').addEventListener('change', () => filterOutput(modsByItem));
+		$('#item-level-input').addEventListener('input', () => filterOutput(modsByItem));
+		$('#category-input').addEventListener('change', () => filterOutput(modsByItem));
+		$('#tag-input').addEventListener('change', () => filterOutput(modsByItem));
+		$('#search-input').addEventListener('input', () => filterOutput(modsByItem));
+		$('#clear-search-button').addEventListener('click', () => {
+			$('#search-input').value = '';
+			filterOutput(modsByItem);
+		});
 
-		updateMods();
-	});
-
-	let generateOutput = () => {
-
+		generateOutput(modsByItem);
 	};
 
-	let updateMods = async () => {
-		let item = $('#item-input').value;
-		let categories = $('#category-input').values;
-		let tags = $('#tag-input').values;
-		let itemLevel = $('#item-level-input').value;
-		let searcher = $('#search-input').value && new Searcher($('#search-input').value, false);
-
-		let filteredModsByItem = clone(await modsByItem);
-		if (item)
-			filteredModsByItem = filteredModsByItem.filter(modsForItem => modsForItem.item === item);
-		if (categories.length)
-			filteredModsByItem.forEach(modsForItem =>
-				modsForItem.modsByCategory = modsForItem.modsByCategory
-					.filter(modsForCategory => categories.includes(modsForCategory.category)));
-		if (tags.length)
-			filteredModsByItem.forEach(modsForItem =>
-				modsForItem.modsByCategory.forEach(modsForCategory =>
-					modsForCategory.modsByGroup = modsForCategory.modsByGroup
-						.filter(modsForGroup => modsForGroup.tags.some(tag => tags.includes(tag)))));
-		if (itemLevel)
-			filteredModsByItem.forEach(modsForItem =>
-				modsForItem.modsByCategory.forEach(modsForCategory =>
-					modsForCategory.modsByGroup.forEach(modsForGroup =>
-						modsForGroup.mods = modsForGroup.mods
-							.filter(mod => mod.levelRequirement <= itemLevel))));
-		if (searcher)
-			filteredModsByItem.forEach(modsForItem =>
-				modsForItem.modsByCategory.forEach(modsForCategory =>
-					modsForCategory.modsByGroup.forEach(modsForGroup =>
-						modsForGroup.mods = modsForGroup.mods
-							.filter(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name])))));
-		filteredModsByItem.forEach(modsForItem =>
-			modsForItem.modsByCategory.forEach(modsForCategory =>
-				modsForCategory.modsByGroup = modsForCategory.modsByGroup
-					.filter(modsForGroup => modsForGroup.mods.length)));
-
-
+	let generateOutput = modsByItem => {
 		XElement.clearChildren($('#outputs'));
-		filteredModsByItem.forEach(modForItem => {
+		modsByItem.forEach(modForItem => {
 			let itemDiv = $c('div', $('#outputs'), ['output-item']);
+			setElOwner(itemDiv, modForItem);
 			$c('div', itemDiv, ['title', 'output-item-title'], modForItem.item);
 			modForItem.modsByCategory.forEach(modForCategory => {
 				let categoryDiv = $c('div', itemDiv, ['output-category']);
+				setElOwner(categoryDiv, modForCategory);
 				$c('div', categoryDiv, ['title', 'output-category-title'], modForCategory.category);
 				let affixesModsDiv = $c('div', categoryDiv, ['output-affixes']);
 				let prefixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
@@ -221,6 +218,7 @@
 				$c('div', suffixModsDiv, ['title', 'output-affixes-title'], 'Suffixes');
 				modForCategory.modsByGroup.forEach(modsForGroup => {
 					let groupLabel = $c('label', modsForGroup.suffix ? suffixModsDiv : prefixModsDiv, ['output-group']);
+					setElOwner(groupLabel, modsForGroup);
 					let groupToggleModsCheckbox = $c('input', groupLabel, ['output-group-toggle-mods-checkbox']);
 					groupToggleModsCheckbox.type = 'checkbox';
 					let groupSummaryDiv = $c('div', groupLabel, ['output-group-summary']);
@@ -231,6 +229,7 @@
 					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight);
 					modsForGroup.mods.forEach(mod => {
 						let modDiv = $c('div', groupLabel, ['output-mod']);
+						setElOwner(modDiv, mod);
 						$c('span', modDiv, ['output-mod-field-name'], mod.name);
 						$c('span', modDiv, ['output-mod-field-text'], mod.text);
 						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
@@ -241,7 +240,53 @@
 		});
 	};
 
+	let filterOutput = modsByItem => {
+		let item = $('#item-input').value;
+		let categories = $('#category-input').values;
+		let tags = $('#tag-input').values;
+		let itemLevel = $('#item-level-input').value;
+		let searcher = $('#search-input').value && new Searcher($('#search-input').value, false);
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.setVisible(!item || modsForItem.item === item));
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.setVisible(!categories.length || categories.includes(modsForCategory.category))));
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.modsByGroup.forEach(modsForGroup =>
+					modsForGroup.setVisible(!tags.length || modsForGroup.tags.some(tag => tags.includes(tag))))));
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.modsByGroup.forEach(modsForGroup =>
+					modsForGroup.mods.forEach(mod =>
+						mod.setVisible(
+							(!itemLevel || mod.levelRequirement <= itemLevel) &&
+							(!searcher || searcher.test([mod.group, mod.text, ...mod.tags, mod.name])))))));
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.modsByGroup.forEach(modsForGroup =>
+					modsForGroup.setVisible(modsForGroup.getVisible() && modsForGroup.mods.some(mod => mod.getVisible())))));
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.setVisible(modsForCategory.getVisible() && modsForCategory.modsByGroup.some(modsForGroup => modsForGroup.getVisible()))));
+
+		modsByItem.forEach(modsForItem =>
+			modsForItem.setVisible(modsForItem.getVisible() && modsForItem.modsByCategory.some(modsForCategory => modsForCategory.getVisible())));
+	};
+
+	$('#uncached-fetch-button').addEventListener('click', () => refreshData(true));
+	refreshData();
+
+	// todo display performance
+	// todo some mod groups contain mods with multipel tags (e.g. "AilmentChanceAndDuration" on jewels)
 	// todo weight %'s
-	// todo hide & show instead of recreating dom
+	// todo display fetch time
+	// todo multi-select not working when type then click
 
 </script>
