@@ -49,16 +49,16 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.size = this.size || 10;
 	}
 
+	get autocompletes() {
+		return this.autocompletes_;
+	}
+
 	set autocompletes(value) {
 		if (value === this.autocompletes_)
 			return;
 		this.autocompletes_ = value;
 		this.value = this.$('input').value;
 		this.updateAutocompletes();
-	}
-
-	get autocompletes() {
-		return this.autocompletes_;
 	}
 
 	set size(value) {

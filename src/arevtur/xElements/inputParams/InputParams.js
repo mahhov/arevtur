@@ -100,14 +100,9 @@ customElements.define(name, class extends XElement {
 			this.nonUnique = this.$('#non-unique-check').checked;
 			this.updateQueryParams();
 		});
-		influenceProperties.forEach(p => {
-			let option = document.createElement('option');
-			option.slot = 'options';
-			option.textContent = p;
-			this.$('#influence-input').appendChild(option);
-		});
+		this.$('#influence-input').autocompletes = influenceProperties;
 		this.$('#influence-input').addEventListener('change', () => {
-			this.influences = this.$('#influence-input').values;
+			this.influences = this.$('#influence-input').valuesAsArray;
 			this.updateQueryParams();
 		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
@@ -180,7 +175,7 @@ customElements.define(name, class extends XElement {
 
 	set influences(value) {
 		this.influences_ = value;
-		this.$('#influence-input').values = value;
+		this.$('#influence-input').valuesAsArray = value;
 	}
 
 	async loadQueryParams(queryParams = {}, sharedWeightEntries) {

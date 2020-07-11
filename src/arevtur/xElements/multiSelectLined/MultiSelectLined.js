@@ -4,7 +4,7 @@ const {template, name} = importUtil(__filename);
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {
-			title: {},
+			placeholder: {},
 		};
 	}
 
@@ -13,46 +13,53 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('slot').addEventListener('slotchange', () => this.checkForOptions());
-		this.checkForOptions();
-
 		this.values = [];
-		this.$('select').addEventListener('change', () => {
+		this.$('#input').addEventListener('change', () => {
 			let values = this.values;
-			values[this.$('select').selectedIndex - 1] = true;
+			values.push(this.$('#input').value);
 			this.values = values;
-			this.$('select').selectedIndex = 0;
+			this.$('#input').value = '';
+			this.$('#input').updateAutocompletes();
 			this.emit('change');
 		});
 	}
 
-	checkForOptions() {
-		this.$('slot').assignedElements()
-			.forEach(el => this.$('select').appendChild(el));
+	set placeholder(value) {
+		this.$('#input').placeholder = value;
 	}
 
-	set title(value) {
-		this.$('#title-option').textContent = value;
+	get autocompletes() {
+		return this.$('#input').autocompletes;
+	}
+
+	set autocompletes(value) {
+		return this.$('#input').autocompletes = value;
 	}
 
 	get values() {
-		return [...this.$('select').options]
-			.filter((_, i) => i)
-			.map(option => [...this.$('#selected').children].some(selected => option.value === selected.textContent));
+		return [...this.$('#selected').children].map(s => s.textContent);
 	}
 
 	set values(value) {
 		this.clearChildren('#selected');
-		value.forEach((v, i) => {
-			if (!v)
-				return;
-			let el = document.createElement('button');
-			el.textContent = this.$('select').options[i + 1].value;
-			this.$('#selected').appendChild(el);
-			el.addEventListener('click', () => {
-				el.remove();
-				this.emit('change');
+		value
+			.filter((v, i) => value.indexOf(v) === i)
+			.forEach(text => {
+				let el = document.createElement('button');
+				el.textContent = text;
+				this.$('#selected').appendChild(el);
+				el.addEventListener('click', () => {
+					el.remove();
+					this.emit('change');
+				});
 			});
-		});
+	}
+
+	get valuesAsArray() {
+		return this.autocompletes.map(value => this.values.includes(value));
+	}
+
+	set valuesAsArray(value) {
+		this.values = this.autocompletes.filter((_, i) => value[i]);
 	}
 });
