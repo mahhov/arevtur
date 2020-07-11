@@ -1,0 +1,247 @@
+<style>
+	#container {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	#inputs {
+		background: #f8f8f8;
+		padding: 10px;
+	}
+
+	progress[value="1"] {
+		display: none;
+	}
+
+	.input-row:not(:last-child) {
+		margin-bottom: 3px;
+	}
+
+	#search-input {
+		width: 100%;
+	}
+
+	#outputs {
+		margin-top: 15px;
+		overflow: auto;
+	}
+
+	.output-item, .output-category {
+		margin-top: 5px;
+	}
+
+	.title {
+		background: #eee;
+		font-weight: bold;
+	}
+
+	.output-affixes {
+		display: flex;
+	}
+
+	.output-affix {
+		flex: 1;
+	}
+
+	.output-group {
+		display: block;
+		margin-right: 15px;
+	}
+
+	.output-group-toggle-mods-checkbox {
+		display: none;
+	}
+
+	.output-group-toggle-mods-checkbox:not(:checked) ~ .output-mod {
+		display: none;
+	}
+
+	.output-group-summary {
+		display: flex;
+	}
+
+	.output-group-summary-field-group {
+		display: none;
+	}
+
+	.output-group-summary-field-text {
+		flex: 1;
+	}
+
+	.output-group-summary-field-weight {
+		flex-basis: 40px;
+		text-align: end;
+	}
+
+	.output-mod {
+		display: flex;
+		padding-left: 15px;
+		background: #eee;
+	}
+
+	.output-mod-field-name {
+		display: none;
+	}
+
+	.output-mod-field-text {
+		flex: 1;
+	}
+
+	.output-mod-field-weight {
+		flex-basis: 40px;
+		text-align: end;
+	}
+
+</style>
+
+<script>
+	require('../arevtur/xElements/import');
+</script>
+
+<div id="container">
+	<div id="inputs">
+		<div>
+			<progress id="progress-bar" max="1" value="0"></progress>
+		</div>
+		<div class="input-row">
+			<x-autocomplete-input id="item-input" placeholder="Item"></x-autocomplete-input>
+			<input id="item-level-input" type="number" min="0" max="100" placeholder="Level">
+		</div>
+		<div class="input-row">
+			<x-multi-select-lined id="category-input" placeholder="Categories"></x-multi-select-lined>
+		</div>
+		<div class="input-row">
+			<x-multi-select-lined id="tag-input" placeholder="Tags"></x-multi-select-lined>
+		</div>
+		<div class="input-row">
+			<input id="search-input" placeholder="Search">
+		</div>
+	</div>
+	<div id="outputs"></div>
+</div>
+
+<script>
+	const {XElement} = require('xx-element');
+	const Searcher = require('../arevtur/Searcher');
+	const {modsByItem, progressStream} = require('./modsDataFetcher');
+	const $ = document.querySelector.bind(document);
+	const $c = (tagName, parent = null, classList = [], text = '') => {
+		let el = document.createElement(tagName);
+		if (parent)
+			parent.appendChild(el);
+		el.classList.add(...classList);
+		if (text)
+			el.textContent = text;
+		return el;
+	};
+	const clone = obj => {
+		if (Array.isArray(obj))
+			return obj.map(v => clone(v));
+		if (typeof obj === 'object' && obj)
+			return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, clone(v)]))
+		return obj;
+	};
+
+	progressStream.forEach(progress => $('#progress-bar').value = progress);
+
+	modsByItem.then(modsByItem => {
+		$('#item-input').autocompletes = modsByItem.map(modsForItem => modsForItem.item);
+		$('#category-input').autocompletes = modsByItem
+			.flatMap(modsForItem =>
+				modsForItem.modsByCategory.map(modsForCategory => modsForCategory.category))
+			.filter((v, i, a) => a.indexOf(v) === i);
+		$('#tag-input').autocompletes = modsByItem
+			.flatMap(modsForItem =>
+				modsForItem.modsByCategory.flatMap(modsForCategory =>
+					modsForCategory.modsByGroup.flatMap(modsForGroup => modsForGroup.mods[0].tags)))
+			.filter((v, i, a) => a.indexOf(v) === i);
+
+		$('#item-input').addEventListener('change', updateMods);
+		$('#item-level-input').addEventListener('input', updateMods);
+		$('#category-input').addEventListener('change', updateMods);
+		$('#tag-input').addEventListener('change', updateMods);
+		$('#search-input').addEventListener('input', updateMods);
+
+		updateMods();
+	});
+
+	let generateOutput = () => {
+
+	};
+
+	let updateMods = async () => {
+		let item = $('#item-input').value;
+		let categories = $('#category-input').values;
+		let tags = $('#tag-input').values;
+		let itemLevel = $('#item-level-input').value;
+		let searcher = $('#search-input').value && new Searcher($('#search-input').value, false);
+
+		let filteredModsByItem = clone(await modsByItem);
+		if (item)
+			filteredModsByItem = filteredModsByItem.filter(modsForItem => modsForItem.item === item);
+		if (categories.length)
+			filteredModsByItem.forEach(modsForItem =>
+				modsForItem.modsByCategory = modsForItem.modsByCategory
+					.filter(modsForCategory => categories.includes(modsForCategory.category)));
+		if (tags.length)
+			filteredModsByItem.forEach(modsForItem =>
+				modsForItem.modsByCategory.forEach(modsForCategory =>
+					modsForCategory.modsByGroup = modsForCategory.modsByGroup
+						.filter(modsForGroup => modsForGroup.tags.some(tag => tags.includes(tag)))));
+		if (itemLevel)
+			filteredModsByItem.forEach(modsForItem =>
+				modsForItem.modsByCategory.forEach(modsForCategory =>
+					modsForCategory.modsByGroup.forEach(modsForGroup =>
+						modsForGroup.mods = modsForGroup.mods
+							.filter(mod => mod.levelRequirement <= itemLevel))));
+		if (searcher)
+			filteredModsByItem.forEach(modsForItem =>
+				modsForItem.modsByCategory.forEach(modsForCategory =>
+					modsForCategory.modsByGroup.forEach(modsForGroup =>
+						modsForGroup.mods = modsForGroup.mods
+							.filter(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name])))));
+		filteredModsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.modsByGroup = modsForCategory.modsByGroup
+					.filter(modsForGroup => modsForGroup.mods.length)));
+
+
+		XElement.clearChildren($('#outputs'));
+		filteredModsByItem.forEach(modForItem => {
+			let itemDiv = $c('div', $('#outputs'), ['output-item']);
+			$c('div', itemDiv, ['title', 'output-item-title'], modForItem.item);
+			modForItem.modsByCategory.forEach(modForCategory => {
+				let categoryDiv = $c('div', itemDiv, ['output-category']);
+				$c('div', categoryDiv, ['title', 'output-category-title'], modForCategory.category);
+				let affixesModsDiv = $c('div', categoryDiv, ['output-affixes']);
+				let prefixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
+				$c('div', prefixModsDiv, ['title', 'output-affixes-title'], 'Prefixes');
+				let suffixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
+				$c('div', suffixModsDiv, ['title', 'output-affixes-title'], 'Suffixes');
+				modForCategory.modsByGroup.forEach(modsForGroup => {
+					let groupLabel = $c('label', modsForGroup.suffix ? suffixModsDiv : prefixModsDiv, ['output-group']);
+					let groupToggleModsCheckbox = $c('input', groupLabel, ['output-group-toggle-mods-checkbox']);
+					groupToggleModsCheckbox.type = 'checkbox';
+					let groupSummaryDiv = $c('div', groupLabel, ['output-group-summary']);
+					$c('span', groupSummaryDiv, ['output-group-summary-field-group'], modsForGroup.group);
+					$c('span', groupSummaryDiv, ['output-group-summary-field-text'],
+						modsForGroup.mods[modsForGroup.mods.length - 1].text);
+					$c('span', groupSummaryDiv, ['output-group-summary-field-tags'], `[${modsForGroup.tags.join(', ')}]`);
+					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight);
+					modsForGroup.mods.forEach(mod => {
+						let modDiv = $c('div', groupLabel, ['output-mod']);
+						$c('span', modDiv, ['output-mod-field-name'], mod.name);
+						$c('span', modDiv, ['output-mod-field-text'], mod.text);
+						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
+						$c('span', modDiv, ['output-mod-field-weight'], mod.weight);
+					});
+				});
+			});
+		});
+	};
+
+	// todo weight %'s
+	// todo hide & show instead of recreating dom
+
+</script>
