@@ -109,6 +109,10 @@
 		text-align: end;
 	}
 
+	#mod-group-count-div:not(.limited) .mod-group-count-limited {
+		display: none;
+	}
+
 </style>
 
 <script>
@@ -136,6 +140,16 @@
 			<input id="search-input" placeholder="Search">
 			<button id="clear-search-button">X</button>
 		</div>
+		<div class="input-row" id="mod-group-count-div">
+			Showing
+			<span id="mod-group-showing-count"></span>
+			<span class="mod-group-count-limited">
+				of
+				<span id="mod-group-available-count"></span>
+			</span>
+			mod groups.
+			<button id="limited-mod-group-count-show-all-button" class="mod-group-count-limited">Show all</button>
+		</div>
 	</div>
 	<div id="outputs"></div>
 </div>
@@ -156,7 +170,7 @@
 	};
 	let setElOwner = (el, owner) => {
 		owner.getVisible = () => !el.classList.contains('hidden');
-		owner.setVisible = visible => el.classList.toggle('hidden', !visible);
+		owner.setVisible = visible => (el.classList.toggle('hidden', !visible), visible);
 	};
 	const clone = obj => {
 		if (Array.isArray(obj))
@@ -194,12 +208,14 @@
 			$('#search-input').value = '';
 			filterOutput(modsByItem);
 		});
+		$('#limited-mod-group-count-show-all-button').addEventListener('click', () => filterOutput(modsByItem, false));
 
 		$('#progress-bar').value = 1
 		$('#fetch-time').textContent = await time;
 
 		await sleep(0);
 		generateOutput(modsByItem);
+		filterOutput(modsByItem);
 	};
 
 	let generateOutput = modsByItem => {
@@ -242,7 +258,7 @@
 		});
 	};
 
-	let filterOutput = async modsByItem => {
+	let filterOutput = async (modsByItem, modGroupLimit = true) => {
 		let item = $('#item-input').value;
 		let categories = $('#category-input').values;
 		let tags = $('#tag-input').values;
@@ -261,26 +277,20 @@
 
 		modsByItem.setVisible(false);
 
-		modsByItem.forEach(modsForItem =>
-			modsForItem.setVisible(!item || modsForItem.item === item));
+		let modGroupCount = 0;
 
-		modsByItem.forEach(modsForItem =>
-			modsForItem.modsByCategory.forEach(modsForCategory =>
-				modsForCategory.setVisible(!categories.length || categories.includes(modsForCategory.category))));
-
-		modsByItem.forEach(modsForItem =>
-			modsForItem.modsByCategory.forEach(modsForCategory =>
-				modsForCategory.modsByGroup.forEach(modsForGroup =>
-					modsForGroup.setVisible(
+		modsByItem
+			.filter(modsForItem => modsForItem.setVisible(!item || modsForItem.item === item))
+			.forEach(modsForItem => modsForItem.modsByCategory
+				.filter(modsForCategory => modsForCategory.setVisible(!categories.length || categories.includes(modsForCategory.category)))
+				.forEach(modsForCategory => modsForCategory.modsByGroup
+					.filter(modsForGroup => modsForGroup.setVisible(
 						(!tags.length || modsForGroup.tags.some(tag => tags.includes(tag))) &&
 						(!itemLevel || modsForGroup.levelRequirement <= itemLevel) &&
-						(!searcher || modsForGroup.mods.some(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name])))))));
-
-		modsByItem.forEach(modsForItem =>
-			modsForItem.modsByCategory.forEach(modsForCategory =>
-				modsForCategory.modsByGroup.forEach(modsForGroup =>
-					modsForGroup.mods.forEach(mod =>
-						mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel)))));
+						(!searcher || modsForGroup.mods.some(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name]))) &&
+						(modGroupCount++ < 300) || !modGroupLimit))
+					.forEach(modsForGroup => modsForGroup.mods
+						.forEach(mod => mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel)))));
 
 		// hide groups, categories, and items with empty mods, groups, and categories respectively
 
@@ -300,6 +310,9 @@
 		if (await checkAbort())
 			return;
 
+		$('#mod-group-count-div').classList.toggle('limited', modGroupLimit && modGroupCount > 300);
+		$('#mod-group-showing-count').textContent = modGroupLimit ? Math.min(modGroupCount, 300) : modGroupCount;
+		$('#mod-group-available-count').textContent = modGroupCount;
 		modsByItem.setVisible(true);
 	};
 
