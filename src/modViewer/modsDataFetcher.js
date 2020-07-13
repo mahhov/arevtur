@@ -5,7 +5,9 @@ const Stream = require('../arevtur/Stream');
 let clean = str =>
 	str
 		.replace(/&ndash;/g, '-')
-		.replace(/<[^>]+>/g, ' ');
+		.replace(/<[^>]+>/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim();
 
 let getUncachedModsByItem = () => {
 	let endpointPrefix = 'https://poedb.tw/us/json.php/Mods/Gen?';
