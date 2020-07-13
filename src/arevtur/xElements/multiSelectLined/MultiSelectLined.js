@@ -15,6 +15,8 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		this.values = [];
 		this.$('#input').addEventListener('change', () => {
+			if (!this.$('#input').value)
+				return;
 			let values = this.values;
 			values.push(this.$('#input').value);
 			this.values = values;

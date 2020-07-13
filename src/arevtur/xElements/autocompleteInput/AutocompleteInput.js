@@ -97,6 +97,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		optionValues.forEach(v => {
 			let optionEl = document.createElement('option');
 			optionEl.textContent = v;
+			optionEl.value = v; // necessary to prevent whitespace trimming
 			this.$('select').appendChild(optionEl);
 			optionEl.addEventListener('click', () => this.internalSetValue(optionEl.textContent));
 		});
