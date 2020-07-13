@@ -94,10 +94,10 @@ let getUncachedModsByItem = () => {
 				group: mod.CorrectGroup,
 				suffix: mod.ModGenerationTypeID === "2",
 				text: clean(mod.str),
-				tags: mod.mod_no.map(tag => clean(tag)),
+				tags: mod.mod_no.map(tag => clean(tag)).filter((v, i, a) => a.indexOf(v) === i),
 				weight: Number(mod.DropChance) || 0,
-				name: clean(mod.Name || ''),
 				levelRequirement: Number(mod.Level),
+				name: clean(mod.Name || ''),
 			}));
 			let modsByGroup = Object.entries(mods.reduce((modsByGroup, mod) => {
 				modsByGroup[mod.group] = modsByGroup[mod.group] || [];
@@ -107,8 +107,9 @@ let getUncachedModsByItem = () => {
 				group,
 				suffix: mods[mods.length - 1].suffix,
 				text: mods[mods.length - 1].text,
-				tags: mods[mods.length - 1].tags,
+				tags: mods.flatMap(mod => mod.tags).filter((v, i, a) => a.indexOf(v) === i),
 				weight: mods.reduce((sum, mod) => sum + mod.weight, 0),
+				levelRequirement: Math.min(...mods.map(mod => mod.levelRequirement)),
 				mods,
 			}));
 			return {category, modsByGroup};
@@ -159,14 +160,15 @@ module.exports = {getModsByItem};
 				text: '',
 				tags: [''],
 				weight: 0,
+				levelRequirement: 0,
 				mods: [{
 					group: '',
 					suffix: false,
 					text: '',
 					tags: [''],
 					weight: 0,
-					name: '',
 					levelRequirement: 0,
+					name: '',
 				}]
 			}]
 		}]

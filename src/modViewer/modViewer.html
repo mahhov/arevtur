@@ -167,6 +167,7 @@
 			return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, clone(v)]))
 		return obj;
 	};
+	const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 	let refreshData = async (uncached = false) => {
 		let {modsByItem, fetchTime, progressStream} = getModsByItem(uncached);
@@ -176,7 +177,6 @@
 		progressStream.promise.then(() => $('#progress-bar').value = 1);
 
 		modsByItem = await modsByItem;
-		window.modsByItem = modsByItem;
 		$('#item-input').autocompletes = modsByItem.map(modsForItem => modsForItem.item);
 		$('#category-input').autocompletes = modsByItem
 			.flatMap(modsForItem =>
@@ -198,11 +198,13 @@
 			filterOutput(modsByItem);
 		});
 
+		await sleep(0);
 		generateOutput(modsByItem);
 	};
 
 	let generateOutput = modsByItem => {
 		XElement.clearChildren($('#outputs'));
+		setElOwner($('#outputs'), modsByItem)
 		modsByItem.forEach(modForItem => {
 			let itemDiv = $c('div', $('#outputs'), ['output-item']);
 			setElOwner(itemDiv, modForItem);
@@ -240,12 +242,24 @@
 		});
 	};
 
-	let filterOutput = modsByItem => {
+	let filterOutput = async modsByItem => {
 		let item = $('#item-input').value;
 		let categories = $('#category-input').values;
 		let tags = $('#tag-input').values;
 		let itemLevel = $('#item-level-input').value;
-		let searcher = $('#search-input').value && new Searcher($('#search-input').value, false);
+		let searchText = $('#search-input').value;
+		let searcher = searchText && new Searcher(searchText, false);
+
+		let checkAbort = () =>
+			item !== $('#item-input').value ||
+			categories.length !== $('#category-input').values.length ||
+			categories.some((c, i) => c !== $('#category-input').values[i]) ||
+			tags.length !== $('#tag-input').values.length ||
+			tags.some((c, i) => c !== $('#tag-input').values[i]) ||
+			itemLevel !== $('#item-level-input').value ||
+			searchText !== $('#search-input').value;
+
+		modsByItem.setVisible(false);
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.setVisible(!item || modsForItem.item === item));
@@ -257,15 +271,18 @@
 		modsByItem.forEach(modsForItem =>
 			modsForItem.modsByCategory.forEach(modsForCategory =>
 				modsForCategory.modsByGroup.forEach(modsForGroup =>
-					modsForGroup.setVisible(!tags.length || modsForGroup.tags.some(tag => tags.includes(tag))))));
+					modsForGroup.setVisible(
+						(!tags.length || modsForGroup.tags.some(tag => tags.includes(tag))) &&
+						(!itemLevel || modsForGroup.levelRequirement <= itemLevel) &&
+						(!searcher || modsForGroup.mods.some(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name])))))));
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.modsByCategory.forEach(modsForCategory =>
 				modsForCategory.modsByGroup.forEach(modsForGroup =>
 					modsForGroup.mods.forEach(mod =>
-						mod.setVisible(
-							(!itemLevel || mod.levelRequirement <= itemLevel) &&
-							(!searcher || searcher.test([mod.group, mod.text, ...mod.tags, mod.name])))))));
+						mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel)))));
+
+		// hide groups, categories, and items with empty mods, groups, and categories respectively
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.modsByCategory.forEach(modsForCategory =>
@@ -278,6 +295,12 @@
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.setVisible(modsForItem.getVisible() && modsForItem.modsByCategory.some(modsForCategory => modsForCategory.getVisible())));
+
+		await sleep(10);
+		if (await checkAbort())
+			return;
+
+		modsByItem.setVisible(true);
 	};
 
 	$('#uncached-fetch-button').addEventListener('click', () => refreshData(true));
