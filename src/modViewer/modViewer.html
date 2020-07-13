@@ -89,7 +89,14 @@
 		flex: 1;
 	}
 
-	.output-group-summary-field-weight {
+	.output-group-summary-field-tags,
+	.output-mod-field-tags {
+		color: #02a;
+	}
+
+	.output-group-summary-field-weight,
+	.output-mod-field-level-requirement,
+	.output-mod-field-weight {
 		flex-basis: 40px;
 		text-align: end;
 	}
@@ -104,15 +111,9 @@
 		flex: 1;
 	}
 
-	.output-mod-field-weight {
-		flex-basis: 40px;
-		text-align: end;
-	}
-
 	#mod-group-count-div:not(.limited) .mod-group-count-limited {
 		display: none;
 	}
-
 </style>
 
 <script>
@@ -180,6 +181,7 @@
 		return obj;
 	};
 	const sleep = ms => new Promise(r => setTimeout(r, ms));
+	const arrEq = (a1, a2) => a1.length === a2.length && a1.every((v, i) => v === a2[i]);
 
 	let refreshData = async (uncached = false) => {
 		let {modsByItem, progressStream, time} = getModsByItem(uncached);
@@ -250,6 +252,8 @@
 						modDiv.title = mod.name;
 						setElOwner(modDiv, mod);
 						$c('span', modDiv, ['output-mod-field-text'], mod.text);
+						if (!arrEq(mod.tags, modsForGroup.tags))
+							$c('span', modDiv, ['output-mod-field-tags'], `[${mod.tags.join(', ')}]`);
 						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
 						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = mod.weight;
 					});
@@ -268,10 +272,8 @@
 
 		let checkAbort = () =>
 			item !== $('#item-input').value ||
-			categories.length !== $('#category-input').values.length ||
-			categories.some((c, i) => c !== $('#category-input').values[i]) ||
-			tags.length !== $('#tag-input').values.length ||
-			tags.some((c, i) => c !== $('#tag-input').values[i]) ||
+			!arrEq(categories, $('#category-input').values) ||
+			!arrEq(tags, $('#tag-input').values) ||
 			itemLevel !== $('#item-level-input').value ||
 			searchText !== $('#search-input').value;
 
