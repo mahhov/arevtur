@@ -5,7 +5,7 @@ const Stream = require('../arevtur/Stream');
 let clean = str =>
 	str
 		.replace(/&ndash;/g, '-')
-		.replace(/<[^>]+>/g, '');
+		.replace(/<[^>]+>/g, ' ');
 
 let getUncachedModsByItem = () => {
 	let endpointPrefix = 'https://poedb.tw/us/json.php/Mods/Gen?';
@@ -78,6 +78,7 @@ let getUncachedModsByItem = () => {
 	let parallel = new Parallel(20);
 	let progressStream = new Stream();
 	let progressCount = 0;
+	let timeResolve, time = new Promise(resolve => timeResolve = resolve);
 
 	let modsByItem = Promise.all(endpointPaths.map(async endpointPath => {
 		let data = (await parallel.add(() => axios.get(`${endpointPrefix}${endpointPath}`))).data;
@@ -117,30 +118,29 @@ let getUncachedModsByItem = () => {
 		progressStream.write(++progressCount / endpointPaths.length);
 		return {item, modsByCategory};
 	}));
-	modsByItem.then(() => progressStream.done());
 
-	modsByItem.then(modsByItem =>
-		localStorage.setItem('modsByItem', JSON.stringify(modsByItem)));
-	localStorage.setItem('modsByItemTime', new Date().toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'}));
-	return {modsByItem, progressStream};
+	modsByItem.then(modsByItem => {
+		progressStream.done();
+		let timeStr = new Date().toLocaleString('en-US', {dateStyle: 'short', timeStyle: 'short'});
+		timeResolve(timeStr);
+		localStorage.setItem('modsByItem', JSON.stringify(modsByItem));
+		localStorage.setItem('modsByItemTime', timeStr);
+	});
+	return {modsByItem, progressStream, time};
 };
 
 let getModsByItem = (forceUncached = false) => {
-	let modsByItem;
-	let progressStream;
+	let modsByItem, progressStream, time;
 
 	if (!forceUncached && (modsByItem = localStorage.getItem('modsByItem'))) {
 		modsByItem = Promise.resolve(JSON.parse(modsByItem));
 		progressStream = new Stream();
 		progressStream.done();
+		time = Promise.resolve(localStorage.getItem('modsByItemTime'));
 	} else
-		({modsByItem, progressStream} = getUncachedModsByItem());
+		({modsByItem, progressStream, time} = getUncachedModsByItem());
 
-	return {
-		modsByItem,
-		fetchTime: localStorage.getItem('modsByItemTime'),
-		progressStream,
-	};
+	return {modsByItem, progressStream, time};
 };
 
 // const sampleData = require('../../resources/sampleModViewerData');

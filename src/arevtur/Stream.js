@@ -16,8 +16,8 @@ class Stream {
 		this.written.forEach(listener);
 	}
 
-	done() {
-		this.resolve();
+	done(value) {
+		this.resolve(value);
 	}
 }
 

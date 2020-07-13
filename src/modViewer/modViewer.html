@@ -10,16 +10,22 @@
 		padding: 10px;
 	}
 
+
+	.input-row:not(:last-child) {
+		margin-bottom: 3px;
+	}
+
 	#progress-bar[value="1"] {
 		display: none;
 	}
 
-	#progress-bar:not([value="1"]) ~ #uncached-fetch-button {
+	#progress-bar:not([value="1"]) ~ #uncached-fetch-button,
+	#progress-bar:not([value="1"]) ~ *{
 		display: none;
 	}
 
-	.input-row:not(:last-child) {
-		margin-bottom: 3px;
+	#uncached-fetch-button {
+		margin-right: 5px;
 	}
 
 	.search-input-row {
@@ -119,10 +125,10 @@
 
 <div id="container">
 	<div id="inputs">
-		<div>
+		<div class="input-row">
 			<progress id="progress-bar" max="1"></progress>
-			<span id="fetch-time"></span>
 			<button id="uncached-fetch-button">Uncached refresh</button>
+			<span>Last refresh</span><span id="fetch-time"></span>
 		</div>
 		<div class="input-row">
 			<x-autocomplete-input id="item-input" placeholder="Item"></x-autocomplete-input>
@@ -170,11 +176,10 @@
 	const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 	let refreshData = async (uncached = false) => {
-		let {modsByItem, fetchTime, progressStream} = getModsByItem(uncached);
+		let {modsByItem, progressStream, time} = getModsByItem(uncached);
 
 		$('#progress-bar').value = 0;
 		progressStream.forEach(progress => $('#progress-bar').value = progress);
-		progressStream.promise.then(() => $('#progress-bar').value = 1);
 
 		modsByItem = await modsByItem;
 		$('#item-input').autocompletes = modsByItem.map(modsForItem => modsForItem.item);
@@ -197,6 +202,9 @@
 			$('#search-input').value = '';
 			filterOutput(modsByItem);
 		});
+
+		$('#progress-bar').value = 1
+		$('#fetch-time').textContent = await time;
 
 		await sleep(0);
 		generateOutput(modsByItem);
@@ -306,10 +314,7 @@
 	$('#uncached-fetch-button').addEventListener('click', () => refreshData(true));
 	refreshData();
 
-	// todo display performance
-	// todo some mod groups contain mods with multipel tags (e.g. "AilmentChanceAndDuration" on jewels)
 	// todo weight %'s
-	// todo display fetch time
 	// todo multi-select not working when type then click
 
 </script>
