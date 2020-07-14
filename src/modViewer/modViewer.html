@@ -184,6 +184,37 @@
 	const sleep = ms => new Promise(r => setTimeout(r, ms));
 	const arrEq = (a1, a2) => a1.length === a2.length && a1.every((v, i) => v === a2[i]);
 
+	class WeightTracker {
+		constructor() {
+			this.weights = {};
+		}
+
+		addWeight(item, suffix, weight) {
+			this.itemWeights(item)[suffix ? 'suffix' : 'prefix'] += weight;
+		}
+
+		getText(item, suffix, weight) {
+			if (!weight)
+				return '';
+			let itemWeight = this.itemWeights(item);
+			let weight1 = WeightTracker.percentStr(weight / (suffix ? itemWeight.suffix : itemWeight.prefix));
+			let weight2 = WeightTracker.percentStr(weight / (itemWeight.prefix + itemWeight.suffix));
+			return `${weight1} | ${weight2} | ${weight}`;
+		}
+
+		itemWeights(item) {
+			return this.weights[item] = this.weights[item] || {prefix: 0, suffix: 0};
+		}
+
+		static get tooltip() {
+			return 'weight (probability for prefix/suffix only, probability, raw)';
+		}
+
+		static percentStr(num) {
+			return `${Math.round(num * 100)}%`;
+		}
+	}
+
 	let refreshData = async (uncached = false) => {
 		let {modsByItem, progressStream, time} = getModsByItem(uncached);
 
@@ -222,8 +253,6 @@
 	};
 
 	let generateOutput = modsByItem => {
-		const weightTooltip = 'weight (probability for prefix/suffix only, probability, raw)';
-
 		XElement.clearChildren($('#outputs'));
 		setElOwner($('#outputs'), modsByItem)
 		modsByItem.forEach(modForItem => {
@@ -249,7 +278,7 @@
 					$c('span', groupSummaryDiv, ['output-group-summary-field-text'],
 						modsForGroup.mods[modsForGroup.mods.length - 1].text);
 					$c('span', groupSummaryDiv, ['output-group-summary-field-tags'], `[${modsForGroup.tags.join(', ')}]`);
-					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight).title = weightTooltip;
+					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight).title = WeightTracker.tooltip;
 					modsForGroup.mods.forEach(mod => {
 						let modDiv = $c('div', groupLabel, ['output-mod']);
 						modDiv.title = mod.name;
@@ -258,7 +287,7 @@
 						if (!arrEq(mod.tags, modsForGroup.tags))
 							$c('span', modDiv, ['output-mod-field-tags'], `[${mod.tags.join(', ')}]`);
 						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
-						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = weightTooltip;
+						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = WeightTracker.tooltip;
 					});
 				});
 			});
@@ -291,7 +320,7 @@
 
 		modsByItem.setVisible(false);
 
-		let modGroupCount = 0, sumModWeights = {prefix: 0, suffix: 0};
+		let modGroupCount = 0, weightTracker = new WeightTracker();
 
 		modsByItem
 			.filter(modsForItem => modsForItem.setVisible(!item || modsForItem.item === item))
@@ -305,7 +334,7 @@
 						(modGroupCount++ < 300) || !modGroupLimit))
 					.forEach(modsForGroup => modsForGroup.mods
 						.filter(mod => mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel))
-						.forEach(mod => sumModWeights[mod.suffix ? 'suffix' : 'prefix'] += mod.weight))));
+						.forEach(mod => weightTracker.addWeight(modsForItem.item, mod.suffix, mod.weight)))));
 
 		// hide groups, categories, and items with empty mods, groups, and categories respectively
 
@@ -326,10 +355,10 @@
 			modsForItem.modsByCategory.forEach(modsForCategory =>
 				modsForCategory.modsByGroup.forEach(modsForGroup => {
 					let sumWeights = modsForGroup.mods.reduce((sum, mod) => {
-						mod.$('.output-mod-field-weight').textContent = weightText2(mod.weight, mod.suffix, sumModWeights);
+						mod.$('.output-mod-field-weight').textContent = weightTracker.getText(modsForItem.item, mod.suffix, mod.weight);
 						return sum + mod.weight
 					}, 0);
-					modsForGroup.$('.output-group-summary-field-weight').textContent = weightText2(sumWeights, modsForGroup.suffix, sumModWeights)
+					modsForGroup.$('.output-group-summary-field-weight').textContent = weightTracker.getText(modsForItem.item, modsForGroup.suffix, sumWeights);
 				})));
 
 		await sleep(10);
