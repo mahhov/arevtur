@@ -97,7 +97,7 @@
 	.output-group-summary-field-weight,
 	.output-mod-field-level-requirement,
 	.output-mod-field-weight {
-		flex-basis: 40px;
+		flex-basis: 100px;
 		text-align: end;
 	}
 
@@ -172,6 +172,7 @@
 	let setElOwner = (el, owner) => {
 		owner.getVisible = () => !el.classList.contains('hidden');
 		owner.setVisible = visible => (el.classList.toggle('hidden', !visible), visible);
+		owner.$ = query => el.querySelector(query);
 	};
 	const clone = obj => {
 		if (Array.isArray(obj))
@@ -221,6 +222,8 @@
 	};
 
 	let generateOutput = modsByItem => {
+		const weightTooltip = 'weight (probability for prefix/suffix only, probability, raw)';
+
 		XElement.clearChildren($('#outputs'));
 		setElOwner($('#outputs'), modsByItem)
 		modsByItem.forEach(modForItem => {
@@ -246,7 +249,7 @@
 					$c('span', groupSummaryDiv, ['output-group-summary-field-text'],
 						modsForGroup.mods[modsForGroup.mods.length - 1].text);
 					$c('span', groupSummaryDiv, ['output-group-summary-field-tags'], `[${modsForGroup.tags.join(', ')}]`);
-					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight).title = modsForGroup.weight;
+					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight).title = weightTooltip;
 					modsForGroup.mods.forEach(mod => {
 						let modDiv = $c('div', groupLabel, ['output-mod']);
 						modDiv.title = mod.name;
@@ -255,7 +258,7 @@
 						if (!arrEq(mod.tags, modsForGroup.tags))
 							$c('span', modDiv, ['output-mod-field-tags'], `[${mod.tags.join(', ')}]`);
 						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
-						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = mod.weight;
+						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = weightTooltip;
 					});
 				});
 			});
@@ -277,9 +280,18 @@
 			itemLevel !== $('#item-level-input').value ||
 			searchText !== $('#search-input').value;
 
+		let weightText = num => `${Math.round(num * 100)}%`;
+		let weightText2 = (weight, suffix, sumModWeights) => {
+			if (!weight)
+				return '';
+			let weight1 = weightText(weight / (suffix ? sumModWeights.suffix : sumModWeights.prefix));
+			let weight2 = weightText(weight / (sumModWeights.prefix + sumModWeights.suffix));
+			return `${weight1} ${weight2} ${weight}`;
+		};
+
 		modsByItem.setVisible(false);
 
-		let modGroupCount = 0;
+		let modGroupCount = 0, sumModWeights = {prefix: 0, suffix: 0};
 
 		modsByItem
 			.filter(modsForItem => modsForItem.setVisible(!item || modsForItem.item === item))
@@ -292,7 +304,8 @@
 						(!searcher || modsForGroup.mods.some(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name]))) &&
 						(modGroupCount++ < 300) || !modGroupLimit))
 					.forEach(modsForGroup => modsForGroup.mods
-						.forEach(mod => mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel)))));
+						.filter(mod => mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel))
+						.forEach(mod => sumModWeights[mod.suffix ? 'suffix' : 'prefix'] += mod.weight))));
 
 		// hide groups, categories, and items with empty mods, groups, and categories respectively
 
@@ -307,6 +320,17 @@
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.setVisible(modsForItem.getVisible() && modsForItem.modsByCategory.some(modsForCategory => modsForCategory.getVisible())));
+
+		// update weights
+		modsByItem.forEach(modsForItem =>
+			modsForItem.modsByCategory.forEach(modsForCategory =>
+				modsForCategory.modsByGroup.forEach(modsForGroup => {
+					let sumWeights = modsForGroup.mods.reduce((sum, mod) => {
+						mod.$('.output-mod-field-weight').textContent = weightText2(mod.weight, mod.suffix, sumModWeights);
+						return sum + mod.weight
+					}, 0);
+					modsForGroup.$('.output-group-summary-field-weight').textContent = weightText2(sumWeights, modsForGroup.suffix, sumModWeights)
+				})));
 
 		await sleep(10);
 		if (await checkAbort())
