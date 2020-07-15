@@ -37,6 +37,10 @@
 		margin-right: 15px;
 	}
 
+	#mod-group-count-div:not(.limited) .mod-group-count-limited {
+		display: none;
+	}
+
 	#outputs {
 		margin-top: 15px;
 		overflow: auto;
@@ -95,9 +99,8 @@
 	}
 
 	.output-group-summary-field-weight,
-	.output-mod-field-level-requirement,
 	.output-mod-field-weight {
-		flex-basis: 100px;
+		flex-basis: 120px;
 		text-align: end;
 	}
 
@@ -111,8 +114,9 @@
 		flex: 1;
 	}
 
-	#mod-group-count-div:not(.limited) .mod-group-count-limited {
-		display: none;
+	.output-mod-field-level-requirement {
+		flex-basis: 40px;
+		text-align: end;
 	}
 </style>
 
@@ -124,7 +128,7 @@
 	<div id="inputs">
 		<div class="input-row">
 			<progress id="progress-bar" max="1"></progress>
-			<button id="uncached-fetch-button">Uncached refresh</button>
+			<button id="uncached-fetch-button">Refresh</button>
 			<span>Last refresh </span><span id="fetch-time"></span>
 		</div>
 		<div class="input-row">
@@ -265,9 +269,7 @@
 				$c('div', categoryDiv, ['title', 'output-category-title'], modForCategory.category);
 				let affixesModsDiv = $c('div', categoryDiv, ['output-affixes']);
 				let prefixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
-				$c('div', prefixModsDiv, ['title', 'output-affixes-title'], 'Prefixes');
 				let suffixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
-				$c('div', suffixModsDiv, ['title', 'output-affixes-title'], 'Suffixes');
 				modForCategory.modsByGroup.forEach(modsForGroup => {
 					let groupLabel = $c('label', modsForGroup.suffix ? suffixModsDiv : prefixModsDiv, ['output-group']);
 					setElOwner(groupLabel, modsForGroup);
@@ -373,7 +375,4 @@
 
 	$('#uncached-fetch-button').addEventListener('click', () => refreshData(true));
 	refreshData();
-
-	// todo weight %'s
-
 </script>
