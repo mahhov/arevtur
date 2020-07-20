@@ -2,7 +2,8 @@ const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
-const {itemEval, decode64} = require('../pobApi/ItemEval');
+const ItemEval = require('../pobApi/ItemEval');
+const {itemEvalCache} = require('../pobApi/ItemEvalCache');
 
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');
@@ -277,7 +278,7 @@ class QueryParams {
 			defenses: evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
 			mods: evalValue(pseudoMods),
 		};
-		let valueBuild = itemEval.evalItem(decode64(itemData.item.extended.text));
+		let valueBuild = itemEvalCache.last.evalItem(ItemEval.decode64(itemData.item.extended.text));
 		let priceDetails = {
 			count: itemData.listing.price.amount,
 			currency: itemData.listing.price.currency,

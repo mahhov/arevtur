@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const {itemEval} = require('../../../pobApi/ItemEval');
+const {itemEvalCache} = require('../../../pobApi/ItemEvalCache');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -28,6 +28,7 @@ customElements.define(name, class extends XElement {
 			this.weight = this.$('#weight').value;
 			this.emit('change');
 		});
+		// todo allow build filter type that don't affect trade query but help obtain build weight hints
 		this.$('#filter').autocompletes = ['weight', 'and', 'not', 'conditional prefix', 'conditional suffix'];
 		this.$('#filter').addEventListener('change', () => {
 			this.filter = this.$('#filter').value;
@@ -98,7 +99,7 @@ customElements.define(name, class extends XElement {
 		if (!this.property)
 			return;
 		let pluginNumber = 10;
-		let summary = await itemEval.evalItemModSummary(this.property, pluginNumber);
+		let summary = await itemEvalCache.last.evalItemModSummary(this.property, pluginNumber);
 		// todo make this parameterizable
 		this.buildValue = Math.round((
 			summary.dps * 80 / 3 +
@@ -106,7 +107,5 @@ customElements.define(name, class extends XElement {
 			summary.resist) /
 			pluginNumber * 100) / 100;
 		this.buildValueTooltip = summary.text;
-		// todo allow pob query properties
-		// todo show pob tooltips on items
 	}
 });

@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
 const {QueryParams} = require('../../DataFetcher');
-const {itemEval} = require('../../../pobApi/ItemEval');
+const {itemEvalCache} = require('../../../pobApi/ItemEvalCache');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
@@ -16,6 +16,7 @@ customElements.define(name, class Inputs extends XElement {
 	connectedCallback() {
 		this.$('#league-input').value = localStorage.getItem('input-league');
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
+		this.$('#pob-input').path = localStorage.getItem('input-pob') || '';
 		this.$('#build-input').path = localStorage.getItem('input-build');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
@@ -29,11 +30,13 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-currencies-status').classList.add('loaded'));
 		ApiConstants.constants.initItemsPromise.then(() =>
 			this.$('#loaded-items-status').classList.add('loaded'));
-		itemEval.ready.then(() =>
-			this.$('#loaded-pob-status').classList.add('loaded'));
 
 		this.$('#league-input').addEventListener('input', () => this.store());
 		this.$('#session-id-input').addEventListener('input', () => this.store());
+		this.$('#pob-input').addEventListener('selected', () => {
+			this.store();
+			this.onSetPob();
+		});
 		this.$('#build-input').addEventListener('selected', () => {
 			this.store();
 			this.refreshBuild();
@@ -60,7 +63,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#cancel-button').addEventListener('click', e => this.emit('cancel'));
 		this.$('#hide-button').addEventListener('click', e => this.$('#input-params').classList.toggle('hidden'));
 
-		this.refreshBuild();
+		this.onSetPob();
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
 			inputSetEl.name = inputSet.name;
@@ -69,8 +72,15 @@ customElements.define(name, class Inputs extends XElement {
 		this.setInputSetIndex(this.inputSetIndex);
 	}
 
+	onSetPob() {
+		this.$('#loaded-pob-status').classList.remove('loaded');
+		itemEvalCache.getFromPobPath(this.$('#pob-input').path)
+			.ready.then(() => this.$('#loaded-pob-status').classList.add('loaded'));
+		this.refreshBuild();
+	}
+
 	refreshBuild() {
-		itemEval.setBuild(this.$('#build-input').path);
+		itemEvalCache.last.setBuild(this.$('#build-input').path);
 		this.$('#input-params').refreshBuild();
 	}
 
@@ -130,6 +140,7 @@ customElements.define(name, class Inputs extends XElement {
 	store() {
 		localStorage.setItem('input-league', this.$('#league-input').value);
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
+		localStorage.setItem('input-pob', this.$('#pob-input').path);
 		localStorage.setItem('input-build', this.$('#build-input').path);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));

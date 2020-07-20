@@ -3,22 +3,21 @@ const {spawn} = require("child_process");
 const {CustomOsScript} = require('js-desktop-base');
 
 class ItemEval extends CustomOsScript {
-	constructor() {
-		super();
+	constructor(pobPath) {
+		super(pobPath);
 		this.pendingResponses = [];
 		this.readyPromise = new Promise(r => this.pendingResponses.push(r));
-		this.addListener(({out}) => {
-			out.split('::end::')
+		this.addListener(({out, err}) =>
+			out && out.split('::end::')
 				.filter(split => split)
-				.forEach(split => this.pendingResponses.shift()(split));
-		});
+				.forEach(split => this.pendingResponses.shift()(split)))
 	}
 
-	spawnProcess() {
+	spawnProcess(pobPath) {
 		return spawn(
 			path.resolve('./src/pobApi/luajit.exe'),
 			[path.resolve('./src/pobApi/itemEcho.lua')],
-			{cwd: path.resolve('C:/Users/manukh/Downloads/PathOfBuilding-1.4.170')});
+			{cwd: path.resolve(pobPath)});
 	}
 
 	get ready() {
@@ -70,11 +69,10 @@ class ItemEval extends CustomOsScript {
 			.replace(/\r/g, '')
 			.trim();
 	}
+
+	static decode64(string64) {
+		return Buffer.from(string64, 'base64').toString()
+	};
 }
 
-let decode64 = string64 => Buffer.from(string64, 'base64').toString();
-
-module.exports = {
-	itemEval: new ItemEval(),
-	decode64,
-};
+module.exports = ItemEval;
