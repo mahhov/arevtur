@@ -6,5 +6,6 @@ require('./inputs/Inputs');
 require('./inputSet/InputSet');
 require('./itemListing/ItemListing');
 require('./multiSelectLined/MultiSelectLined');
+require('./pathSelect/PathSelect');
 require('./queryProperty/QueryProperty');
 require('./results/Results');

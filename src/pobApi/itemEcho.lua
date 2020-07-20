@@ -1,5 +1,6 @@
 local _, _, scriptPath = string.find(arg[0], '(.+[/\\]).-')
 package.path = package.path .. ';' .. scriptPath .. '?.lua'
+-- todo make this parameterizable
 package.path = package.path .. ';' .. [[C:\Users\manukh\Downloads\PathOfBuilding-1.4.170\lua\?.lua]]
 require('HeadlessWrapper')
 
@@ -49,7 +50,7 @@ while true do
         newItem:BuildModList()
         local tooltip = FakeTooltip:new()
         build.itemsTab:AddItemTooltip(tooltip, newItem)
-        io.write(tooltip.text)
+        io.write(tooltip.text .. '::end::')
         io.flush()
     end
 end

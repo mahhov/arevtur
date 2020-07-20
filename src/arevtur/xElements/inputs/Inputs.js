@@ -2,6 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
 const {QueryParams} = require('../../DataFetcher');
+const {itemEval} = require('../../../pobApi/ItemEval');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
@@ -15,6 +16,7 @@ customElements.define(name, class Inputs extends XElement {
 	connectedCallback() {
 		this.$('#league-input').value = localStorage.getItem('input-league');
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
+		this.$('#build-input').path = localStorage.getItem('input-build');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
@@ -27,9 +29,17 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-currencies-status').classList.add('loaded'));
 		ApiConstants.constants.initItemsPromise.then(() =>
 			this.$('#loaded-items-status').classList.add('loaded'));
+		itemEval.ready.then(() =>
+			this.$('#loaded-pob-status').classList.add('loaded'));
 
 		this.$('#league-input').addEventListener('input', () => this.store());
 		this.$('#session-id-input').addEventListener('input', () => this.store());
+		this.$('#build-input').addEventListener('selected', () => {
+			this.store();
+			this.refreshBuild();
+		});
+		this.$('#build-refresh-button').addEventListener('click', () => this.refreshBuild());
+
 		this.$('#input-set-list').addEventListener('arrange', e => {
 			let [removed] = this.inputSets.splice(e.detail.from, 1);
 			this.inputSets.splice(e.detail.to, 0, removed);
@@ -50,12 +60,18 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#cancel-button').addEventListener('click', e => this.emit('cancel'));
 		this.$('#hide-button').addEventListener('click', e => this.$('#input-params').classList.toggle('hidden'));
 
+		this.refreshBuild();
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
 			inputSetEl.name = inputSet.name;
 			inputSetEl.active = inputSet.active;
 		});
 		this.setInputSetIndex(this.inputSetIndex);
+	}
+
+	refreshBuild() {
+		itemEval.setBuild(this.$('#build-input').path);
+		this.$('#input-params').refreshBuild();
 	}
 
 	setInputSetIndex(index, fromEl = null, exclusive = true) {
@@ -114,6 +130,7 @@ customElements.define(name, class Inputs extends XElement {
 	store() {
 		localStorage.setItem('input-league', this.$('#league-input').value);
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
+		localStorage.setItem('input-build', this.$('#build-input').path);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));

@@ -1,9 +1,14 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const {itemEval} = require('../../../pobApi/ItemEval');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
-		return {property: {}, weight: {}, filter: {}, locked: {boolean: true}, shared: {boolean: true}};
+		return {
+			property: {}, weight: {}, filter: {},
+			locked: {boolean: true}, shared: {boolean: true},
+			buildValue: {}, buildValueTooltip: {},
+		};
 	}
 
 	static get htmlTemplate() {
@@ -37,8 +42,13 @@ customElements.define(name, class extends XElement {
 			this.emit('share-change');
 		});
 		this.$('#remove').addEventListener('click', () => this.emit('remove'));
+		this.$('#build-value').addEventListener('click', () => {
+			this.weight = this.buildValue;
+			this.emit('change');
+		});
 		this.weight = this.weight || 0;
 		this.filter = this.filter || 'weight';
+		this.refreshBuild();
 	}
 
 	set properties(value) {
@@ -47,10 +57,12 @@ customElements.define(name, class extends XElement {
 
 	set property(value) {
 		this.$('#property').value = value;
+		this.refreshBuild();
 	}
 
 	set weight(value) {
 		this.$('#weight').value = value;
+		this.checkUseBuildValueVisible();
 	}
 
 	set filter(value) {
@@ -65,7 +77,36 @@ customElements.define(name, class extends XElement {
 		this.$('#shared').checked = value;
 	}
 
+	set buildValue(value) {
+		this.$('#build-value').textContent = value === '0' ? '' : value;
+		this.checkUseBuildValueVisible();
+	}
+
+	set buildValueTooltip(value) {
+		this.$('#build-value').title = value;
+	}
+
 	focus() {
 		this.$('#property').focus();
+	}
+
+	checkUseBuildValueVisible() {
+		this.$('#build-value').disabled = this.weight === this.buildValue;
+	}
+
+	async refreshBuild() {
+		if (!this.property)
+			return;
+		let pluginNumber = 10;
+		let summary = await itemEval.evalItemModSummary(this.property, pluginNumber);
+		// todo make this parameterizable
+		this.buildValue = Math.round((
+			summary.dps * 80 / 3 +
+			summary.life +
+			summary.resist) /
+			pluginNumber * 100) / 100;
+		this.buildValueTooltip = summary.text;
+		// todo allow pob query properties
+		// todo show pob tooltips on items
 	}
 });

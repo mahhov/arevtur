@@ -5,7 +5,8 @@
 	}
 
 	.loaded-status {
-		background: #faa;
+		background: #fcc;
+		padding: 0 5px;
 	}
 
 	.loaded-status.loaded {
@@ -33,10 +34,13 @@
 	<div>
 		<input id="league-input" placeholder="league">
 		<input id="session-id-input" placeholder="session id">
+		<x-path-select id="build-input" placeholder="Select PoB Build"></x-path-select>
+		<button id="build-refresh-button">Refresh Build</button>
 		<span id="loaded-types-status" class="loaded-status">Types</span>
 		<span id="loaded-properties-status" class="loaded-status">Properties</span>
 		<span id="loaded-currencies-status" class="loaded-status">Currencies</span>
 		<span id="loaded-items-status" class="loaded-status">Items</span>
+		<span id="loaded-pob-status" class="loaded-status">PoB Integration</span>
 	</div>
 
 	<div id="input-set-container">

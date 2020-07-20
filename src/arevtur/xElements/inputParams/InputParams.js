@@ -336,4 +336,9 @@ customElements.define(name, class extends XElement {
 
 		this.emit('change');
 	}
+
+	refreshBuild() {
+		this.$$('#query-properties-list x-query-property')
+			.forEach(queryProperty => queryProperty.refreshBuild());
+	}
 });

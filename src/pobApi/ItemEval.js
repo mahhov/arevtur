@@ -7,7 +7,11 @@ class ItemEval extends CustomOsScript {
 		super();
 		this.pendingResponses = [];
 		this.readyPromise = new Promise(r => this.pendingResponses.push(r));
-		this.addListener(({out}) => this.pendingResponses.shift()(out));
+		this.addListener(({out}) => {
+			out.split('::end::')
+				.filter(split => split)
+				.forEach(split => this.pendingResponses.shift()(split));
+		});
 	}
 
 	spawnProcess() {
@@ -36,18 +40,33 @@ class ItemEval extends CustomOsScript {
 			.then(text => text.split('\n'));
 	}
 
-	evalItemModDpsLife(itemMod) {
-		this.send(`<item> TEST \\n Small Life Flask \\n ${itemMod}`);
+	evalItemModSummary(itemMod, pluginNumber = 1) {
+		itemMod = itemMod
+			.replace(/^#(?!%)/, `+${pluginNumber}`)
+			.replace(/#/g, pluginNumber)
+			.replace(/\([^)]*\)/g, '')
+			.replace(/total/gi, '')
+			.replace(/increased .*damage/i, 'increased damage')
+		let itemText = `TEST \\n Small Life Flask \\n ${itemMod}`;
+		this.send(`<item> ${itemText}`);
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
-			.then(text => ({
-				dps: Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0,
-				life: Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0,
-			}));
+			.then(text => {
+				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold) Res(?:\.|istance)/i;
+				let resist = text.match(new RegExp(resistRegex, 'gi'))?.reduce((sum, m) =>
+					sum + Number(m.match(resistRegex)[1]), 0) || 0;
+				return {
+					dps: Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0,
+					life: Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0,
+					resist,
+					itemMod,
+					itemText,
+					text,
+				}
+			});
 	}
 
 	static clean(outString) {
-		console.log('clean', outString)
 		return outString
 			.replace(/\^x[\dA-F]{6}/g, '')
 			.replace(/\^\d/g, '')
@@ -59,5 +78,7 @@ class ItemEval extends CustomOsScript {
 	}
 }
 
-module.exports = ItemEval;
+module.exports = {
+	itemEval: new ItemEval(),
+};
 
