@@ -2,19 +2,20 @@ const {itemEval} = require('../pobApi/ItemEval');
 itemEval.ready.then(() => console.log('ready'))
 itemEval.setBuild('C:/Users/manukh/Documents/Path of Building/Builds/traickster brand harvest.xml');
 
-let p = [];
-for (let i = 0; i < 100; i++) {
-	let pp = itemEval.evalItemModSummary('+10 total maximum Life').then(a => {
-		// console.log(a)
-		// console.log(a.text.match(/Small Life Flask/gi).length)
-		// if (a.text.match(/Small Life Flask/gi).length > 1)
-		// 	console.log('')
-	});
-	p.push(pp);
-}
-Promise.all(p).then(() => console.log('done'))
+// let p = [];
+// for (let i = 0; i < 100; i++) {
+// 	let pp = itemEval.evalItemModSummary('+10 total maximum Life').then(a => {
+// 		// console.log(a)
+// 		// console.log(a.text.match(/Small Life Flask/gi).length)
+// 		// if (a.text.match(/Small Life Flask/gi).length > 1)
+// 		// 	console.log('')
+// 	});
+// 	p.push(pp);
+// }
+// Promise.all(p).then(() => console.log('done'))
 
-// itemEval.evalItemModSummary('30% increased Spell Damage').then(a => console.log(a));
+itemEval.evalItemModSummary('30% increased Spell Damage').then(a => console.log(a));
+
 // itemEval.evalItemModSummary('30% increased cast speed').then(a => console.log(a));
 // itemEval.evalItemModSummary('+56 to maximum Life').then(a => console.log(a));
 // itemEval.evalItemModSummary('+51 to maximum Mana').then(a => console.log(a));

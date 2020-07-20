@@ -46,11 +46,24 @@ while true do
         loadBuildFromXML(readFile(value))
     elseif cmd == 'item' then
         local itemText = value:gsub([[\n]], "\n")
-        local newItem = new('Item', build.targetVersion, itemText)
-        newItem:BuildModList()
+        local item = new('Item', build.targetVersion, itemText)
+        item:BuildModList()
         local tooltip = FakeTooltip:new()
-        build.itemsTab:AddItemTooltip(tooltip, newItem)
+        build.itemsTab:AddItemTooltip(tooltip, item)
         io.write(tooltip.text .. '::end::')
         io.flush()
+    elseif cmd == 'mod' then
+       local itemText = [[
+           Rarity: normal
+           Vine Circlet
+       ]] .. value
+       local item = new('Item', build.targetVersion, itemText)
+       item:BuildModList()
+       local calcFunc, calcBase =  build.calcsTab:GetNodeCalculator()
+       local output = calcFunc({{modList = item.modList}})
+       local tooltip = FakeTooltip:new()
+       build:AddStatComparesToTooltip(tooltip, calcBase, output, "")
+       io.write(tooltip.text .. '::end::')
+       io.flush()
     end
 end

@@ -47,8 +47,7 @@ class ItemEval extends CustomOsScript {
 			.replace(/\([^)]*\)/g, '')
 			.replace(/total/gi, '')
 			.replace(/increased .*damage/i, 'increased damage')
-		let itemText = `TEST \\n Small Life Flask \\n ${itemMod}`;
-		this.send(`<item> ${itemText}`);
+		this.send(`<mod> ${itemMod}`);
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
 			.then(text => {
@@ -60,7 +59,6 @@ class ItemEval extends CustomOsScript {
 					life: Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0,
 					resist,
 					itemMod,
-					itemText,
 					text,
 				}
 			});
@@ -70,7 +68,8 @@ class ItemEval extends CustomOsScript {
 		return outString
 			.replace(/\^x[\dA-F]{6}/g, '')
 			.replace(/\^\d/g, '')
-			.replace(/\r/g, '');
+			.replace(/\r/g, '')
+			.trim();
 	}
 
 	static decode64(string64) {
