@@ -27,12 +27,12 @@ function FakeTooltip:AddLine(_, text)
 end
 
 function FakeTooltip:AddSeparator()
-    self.text = self.text .. '::sep::' .. '\n'
+    self.text = self.text .. '\n'
 end
 
 -- our loop
 
-io.write('ready')
+io.write('ready ::end::')
 io.flush()
 
 while true do

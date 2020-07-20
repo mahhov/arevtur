@@ -7,10 +7,10 @@ class ItemEval extends CustomOsScript {
 		super(pobPath);
 		this.pendingResponses = [];
 		this.readyPromise = new Promise(r => this.pendingResponses.push(r));
-		this.addListener(({out, err}) =>
-			out && out.split('::end::')
-				.filter(split => split)
-				.forEach(split => this.pendingResponses.shift()(split)))
+		this.addListener(({out}) =>
+			!this.exited && out && out.split('::end::')
+				.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
+				.forEach(split => this.pendingResponses.shift()(split)));
 	}
 
 	spawnProcess(pobPath) {
@@ -25,6 +25,7 @@ class ItemEval extends CustomOsScript {
 	}
 
 	exit() {
+		this.exited = true;
 		this.send('<exit>');
 	}
 
