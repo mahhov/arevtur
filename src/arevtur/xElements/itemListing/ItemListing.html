@@ -51,6 +51,24 @@
 		margin-left: 15px;
 	}
 
+	#value-build-link {
+		position: relative;
+	}
+
+	#value-build-tooltip {
+		position: absolute;
+		background: white;
+		outline: 1px solid;
+		display: none;
+		z-index: 1;
+		white-space: pre;
+		font-size: 14px;
+	}
+
+	#value-build-link:hover #value-build-tooltip {
+		display: block;
+	}
+
 	#date-text {
 		font-size: 14px;
 	}
@@ -90,7 +108,10 @@
 	<div class="value">Mod value: <span id="weight-value-text"></span></div>
 </div>
 <div>
-	<div class="value">Value: <span id="value-text"></span></div>
+	<div>
+		<span class="value">Value: <span id="value-text"></span></span>
+		<span id="value-build-link">(build)<span id="value-build-tooltip"></span></span>
+	</div>
 	<div id="value-expanded-text" class="expanded"></div>
 	<div class="price">Price: <span id="price-text"></span> chaos</div>
 	<div id="price-expanded-text" class="expanded"></div>

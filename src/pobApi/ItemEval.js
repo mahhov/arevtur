@@ -36,8 +36,7 @@ class ItemEval extends CustomOsScript {
 	evalItem(item) {
 		this.send(`<item> ${item.replace(/[\n\r]+/g, ' \\n ')}`);
 		return new Promise(r => this.pendingResponses.push(r))
-			.then(text => ItemEval.clean(text))
-			.then(text => text.split('\n'));
+			.then(text => ItemEval.clean(text));
 	}
 
 	evalItemModSummary(itemMod, pluginNumber = 1) {
@@ -71,13 +70,11 @@ class ItemEval extends CustomOsScript {
 			.replace(/\r/g, '')
 			.trim();
 	}
-
-	static decode64(string64) {
-		return Buffer.from(string64, 'base64').toString();
-	}
 }
+
+let decode64 = string64 => Buffer.from(string64, 'base64').toString();
 
 module.exports = {
 	itemEval: new ItemEval(),
+	decode64,
 };
-
