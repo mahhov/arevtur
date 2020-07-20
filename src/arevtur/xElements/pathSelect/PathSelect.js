@@ -3,7 +3,7 @@ const {template, name} = importUtil(__filename);
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
-		return {placeholder: {}, path: {}};
+		return {placeholder: {}, path: {}, directory: {boolean: true}};
 	}
 
 	static get htmlTemplate() {
@@ -13,7 +13,8 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		this.$('button').addEventListener('click', () => this.$('input').click());
 		this.$('input').addEventListener('input', () => {
-			this.path = this.$('input').files[0].path;
+			let path = this.$('input').files[0].path;
+			this.path = this.directory ? path.replace(/\\[^\\]*$/, '') : path;
 			this.emit('selected');
 		});
 	}
@@ -26,7 +27,11 @@ customElements.define(name, class extends XElement {
 		this.updateText();
 	}
 
+	set directory(value) {
+		this.$('input').webkitdirectory = value;
+	}
+
 	updateText() {
-		this.$('button').textContent = this.path || this.placeholder;
+		this.$('button').textContent = this.path?.slice(-30) || this.placeholder;
 	}
 });
