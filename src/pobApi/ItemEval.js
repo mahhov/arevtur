@@ -7,10 +7,14 @@ class ItemEval extends CustomOsScript {
 		super(pobPath);
 		this.pendingResponses = [];
 		this.readyPromise = new Promise(r => this.pendingResponses.push(r));
-		this.addListener(({out}) =>
-			!this.exited && out && out.split('::end::')
-				.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
-				.forEach(split => this.pendingResponses.shift()(split)));
+		this.addListener(({out, err}) => {
+			if (err)
+				console.error(err);
+			if (!this.exited && out)
+				out.split('::end::')
+					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
+					.forEach(split => this.pendingResponses.shift()(split))
+		});
 	}
 
 	spawnProcess(pobPath) {
@@ -29,8 +33,12 @@ class ItemEval extends CustomOsScript {
 		this.send('<exit>');
 	}
 
-	setBuild(path) {
+	set build(path) {
 		this.send(`<build> ${path}`);
+	}
+
+	set valueParams(valueParams) {
+		this.valueParams_ = valueParams;
 	}
 
 	evalItem(item) {
@@ -50,16 +58,16 @@ class ItemEval extends CustomOsScript {
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
 			.then(text => {
+				let dps = Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
+				let life = Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0;
 				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold) Res(?:\.|istance)/i;
 				let resist = text.match(new RegExp(resistRegex, 'gi'))?.reduce((sum, m) =>
 					sum + Number(m.match(resistRegex)[1]), 0) || 0;
-				return {
-					dps: Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0,
-					life: Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0,
-					resist,
-					itemMod,
-					text,
-				}
+				let value = Math.round((dps * 80 / 3 * (this.valueParams_?.dps || 1) +
+					life * (this.valueParams_?.life || 1) +
+					resist / 3 * (this.valueParams_?.resist || 1)) /
+					pluginNumber * 100) / 100;
+				return {dps, life, resist, value, itemMod, text};
 			});
 	}
 

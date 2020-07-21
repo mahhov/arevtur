@@ -4,8 +4,14 @@
 		padding: 10px;
 	}
 
-	#container > div:not(:last-of-type) {
-		margin-bottom: 5px;
+	x-input-build,
+	#input-set-container {
+		margin-top: 5px;
+	}
+
+	#input-trade-params,
+	#query-buttons {
+		margin-top: 15px;
 	}
 
 	.loaded-status {
@@ -19,10 +25,6 @@
 
 	#input-set-container {
 		margin-left: -3px; /* compensate for 3px padding around each x-input-set */
-	}
-
-	#input-trade-params, #submit-button {
-		margin-top: 15px;
 	}
 
 	#input-set-list x-input-set.dragging {
@@ -44,11 +46,8 @@
 		<span id="loaded-items-status" class="loaded-status">Items</span>
 		<span id="loaded-pob-status" class="loaded-status">PoB Integration</span>
 	</div>
-	<div>
-		<x-path-select id="pob-input" placeholder="Select PoB Path" directory></x-path-select>
-		<x-path-select id="build-input" placeholder="Select PoB Build"></x-path-select>
-		<button id="build-refresh-button">Refresh Build</button>
-	</div>
+
+	<x-input-build id="input-build"></x-input-build>
 
 	<div id="input-set-container">
 		<x-arrangable-list id="input-set-list"></x-arrangable-list>
@@ -57,7 +56,7 @@
 
 	<x-input-trade-params id="input-trade-params"></x-input-trade-params>
 
-	<div>
+	<div id="query-buttons">
 		<button id="submit-button">submit</button>
 		<button id="cancel-button">cancel</button>
 		<button id="hide-button">hide</button>

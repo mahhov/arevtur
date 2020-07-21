@@ -1,6 +1,5 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const {itemEvalCache} = require('../../../pobApi/ItemEvalCache');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -49,7 +48,6 @@ customElements.define(name, class extends XElement {
 		});
 		this.weight = this.weight || 0;
 		this.filter = this.filter || 'weight';
-		this.refreshBuild();
 	}
 
 	set properties(value) {
@@ -95,17 +93,12 @@ customElements.define(name, class extends XElement {
 		this.$('#build-value').disabled = this.weight === this.buildValue;
 	}
 
-	async refreshBuild() {
-		if (!this.property)
+	async refreshBuild(itemEval = this.lastItemEval) {
+		this.lastItemEval = itemEval;
+		if (!this.property || !itemEval)
 			return;
-		let pluginNumber = 10;
-		let summary = await itemEvalCache.last.evalItemModSummary(this.property, pluginNumber);
-		// todo make this parameterizable
-		this.buildValue = Math.round((
-			summary.dps * 80 / 3 +
-			summary.life +
-			summary.resist) /
-			pluginNumber * 100) / 100;
+		let summary = await itemEval.evalItemModSummary(this.property, 10);
+		this.buildValue = summary.value;
 		this.buildValueTooltip = summary.text;
 	}
 });

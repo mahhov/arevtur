@@ -1,0 +1,28 @@
+<style>
+	#weights,
+	label {
+		margin-left: 15px;
+	}
+
+	input {
+		width: 60px;
+	}
+</style>
+
+<x-path-select id="pob-path" placeholder="Select PoB Path" directory></x-path-select>
+<x-path-select id="build-path" placeholder="Select PoB Build"></x-path-select>
+<button id="refresh">Refresh Build</button>
+<span id="weights">Weights:
+	<label>
+		life
+		<input type="number" id="life-weight" min="0">
+	</label>
+	<label>
+		resist
+		<input type="number" id="resist-weight" min="0">
+	</label>
+	<label>
+		damage
+		<input type="number" id="damage-weight" min="0">
+	</label>
+</span>

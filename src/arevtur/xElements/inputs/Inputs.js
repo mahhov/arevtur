@@ -2,7 +2,6 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
 const {QueryParams} = require('../../DataFetcher');
-const {itemEvalCache} = require('../../../pobApi/ItemEvalCache');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
@@ -16,9 +15,8 @@ customElements.define(name, class Inputs extends XElement {
 	connectedCallback() {
 		this.$('#league-input').value = localStorage.getItem('input-league');
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
-		this.$('#pob-input').path = localStorage.getItem('input-pob') || '';
-		this.$('#build-input').path = localStorage.getItem('input-build');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
+		// todo try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
@@ -33,15 +31,13 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#league-input').addEventListener('input', () => this.store());
 		this.$('#session-id-input').addEventListener('input', () => this.store());
-		this.$('#pob-input').addEventListener('selected', () => {
-			this.store();
-			this.onSetPob();
+
+		this.$('#input-build').addEventListener('refreshing', e =>
+			this.$('#loaded-pob-status').classList.remove('loaded'));
+		this.$('#input-build').addEventListener('refresh', e => {
+			this.$('#loaded-pob-status').classList.add('loaded');
+			this.$('#input-trade-params').refreshBuild(e.detail)
 		});
-		this.$('#build-input').addEventListener('selected', () => {
-			this.store();
-			this.refreshBuild();
-		});
-		this.$('#build-refresh-button').addEventListener('click', () => this.refreshBuild());
 
 		this.$('#input-set-list').addEventListener('arrange', e => {
 			let [removed] = this.inputSets.splice(e.detail.from, 1);
@@ -63,25 +59,12 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#cancel-button').addEventListener('click', e => this.emit('cancel'));
 		this.$('#hide-button').addEventListener('click', e => this.$('#input-trade-params').classList.toggle('hidden'));
 
-		this.onSetPob();
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
 			inputSetEl.name = inputSet.name;
 			inputSetEl.active = inputSet.active;
 		});
 		this.setInputSetIndex(this.inputSetIndex);
-	}
-
-	onSetPob() {
-		this.$('#loaded-pob-status').classList.remove('loaded');
-		itemEvalCache.getFromPobPath(this.$('#pob-input').path)
-			.ready.then(() => this.$('#loaded-pob-status').classList.add('loaded'));
-		this.refreshBuild();
-	}
-
-	refreshBuild() {
-		itemEvalCache.last.setBuild(this.$('#build-input').path);
-		this.$('#input-trade-params').refreshBuild();
 	}
 
 	setInputSetIndex(index, fromEl = null, exclusive = true) {
@@ -140,8 +123,6 @@ customElements.define(name, class Inputs extends XElement {
 	store() {
 		localStorage.setItem('input-league', this.$('#league-input').value);
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
-		localStorage.setItem('input-pob', this.$('#pob-input').path);
-		localStorage.setItem('input-build', this.$('#build-input').path);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
