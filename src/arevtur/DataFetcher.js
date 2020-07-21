@@ -276,12 +276,11 @@ class QueryParams {
 			defenses: evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
 			mods: evalValue(pseudoMods),
 		};
-		// let valueBuild = itemEvalCache.last.evalItem(ItemEval.decode64(itemData.item.extended.text));
-		// let priceDetails = {
-		// 	count: itemData.listing.price.amount,
-		// 	currency: itemData.listing.price.currency,
-		// 	shifts: this.priceShifts,
-		// };
+		let priceDetails = {
+			count: itemData.listing.price.amount,
+			currency: itemData.listing.price.currency,
+			shifts: this.priceShifts,
+		};
 
 		return {
 			id: itemData.id,
@@ -304,7 +303,6 @@ class QueryParams {
 			note: itemData.item.note,
 			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
 			valueDetails,
-			valueBuild,
 			evalPrice: await evalPrice(priceDetails),
 			priceDetails,
 			debug: itemData,
