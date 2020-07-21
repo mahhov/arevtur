@@ -54,14 +54,14 @@ customElements.define(name, class Inputs extends XElement {
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
 			this.store();
 		});
-		this.$('#input-params').addEventListener('change', () => {
-			this.inputSets[this.inputSetIndex].queryParams = this.$('#input-params').queryParams;
-			this.sharedWeightEntries = this.$('#input-params').sharedWeightEntries;
+		this.$('#input-trade-params').addEventListener('change', () => {
+			this.inputSets[this.inputSetIndex].queryParams = this.$('#input-trade-params').queryParams;
+			this.sharedWeightEntries = this.$('#input-trade-params').sharedWeightEntries;
 			this.store();
 		});
 		this.$('#submit-button').addEventListener('click', e => this.emit('submit', {add: e.ctrlKey}));
 		this.$('#cancel-button').addEventListener('click', e => this.emit('cancel'));
-		this.$('#hide-button').addEventListener('click', e => this.$('#input-params').classList.toggle('hidden'));
+		this.$('#hide-button').addEventListener('click', e => this.$('#input-trade-params').classList.toggle('hidden'));
 
 		this.onSetPob();
 		this.inputSets.forEach(inputSet => {
@@ -81,7 +81,7 @@ customElements.define(name, class Inputs extends XElement {
 
 	refreshBuild() {
 		itemEvalCache.last.setBuild(this.$('#build-input').path);
-		this.$('#input-params').refreshBuild();
+		this.$('#input-trade-params').refreshBuild();
 	}
 
 	setInputSetIndex(index, fromEl = null, exclusive = true) {
@@ -97,7 +97,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.inputSets[this.inputSetIndex].active = true;
 		// todo propagating to both elements and js objects is cumbersome
 		indexSetEls[this.inputSetIndex].selected = true;
-		this.$('#input-params').loadQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
+		this.$('#input-trade-params').loadQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
 	}
 
 	inputSetIndexFromEl(inputSetEl) {

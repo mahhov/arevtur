@@ -1,9 +1,9 @@
 require('./arrangableList/ArrangableList');
 require('./autocompleteInput/AutocompleteInput');
 require('./chart/Chart');
-require('./inputParams/InputParams');
 require('./inputs/Inputs');
 require('./inputSet/InputSet');
+require('./inputTradeParams/InputTradeParams');
 require('./itemListing/ItemListing');
 require('./multiSelectLined/MultiSelectLined');
 require('./pathSelect/PathSelect');
