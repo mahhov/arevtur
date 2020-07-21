@@ -282,6 +282,7 @@ customElements.define(name, class extends XElement {
 			queryProperty.remove();
 			this.updateQueryParams();
 		});
+		queryProperty.refreshBuild(this.lastItemEval)
 		return queryProperty;
 	};
 
@@ -337,7 +338,8 @@ customElements.define(name, class extends XElement {
 		this.emit('change');
 	}
 
-	refreshBuild(itemEval) {
+	refreshBuild(itemEval = this.lastItemEval) {
+		this.lastItemEval = itemEval;
 		this.$$('#query-properties-list x-query-property')
 			.forEach(queryProperty => queryProperty.refreshBuild(itemEval));
 	}

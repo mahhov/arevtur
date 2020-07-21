@@ -67,7 +67,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.setInputSetIndex(this.inputSetIndex);
 	}
 
-	setInputSetIndex(index, fromEl = null, exclusive = true) {
+	async setInputSetIndex(index, fromEl = null, exclusive = true) {
 		// if fromEl is specified, index is ignored
 		let indexSetEls = [...this.$('#input-set-list').children];
 		this.inputSetIndex = fromEl ? indexSetEls.indexOf(fromEl) : index;
@@ -80,7 +80,8 @@ customElements.define(name, class Inputs extends XElement {
 		this.inputSets[this.inputSetIndex].active = true;
 		// todo propagating to both elements and js objects is cumbersome
 		indexSetEls[this.inputSetIndex].selected = true;
-		this.$('#input-trade-params').loadQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
+		await this.$('#input-trade-params').loadQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
+		this.$('#input-trade-params').refreshBuild(this.itemEval);
 	}
 
 	inputSetIndexFromEl(inputSetEl) {
