@@ -15,7 +15,7 @@
     "bs-better-stream": "^1.9.5",
     "env-paths": "^2.2.0",
     "google-oauth2-x": "^1.1.2",
-    "js-desktop-base": "^3.2.3",
+    "js-desktop-base": "^3.2.6",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {
