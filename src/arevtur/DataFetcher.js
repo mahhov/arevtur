@@ -2,6 +2,7 @@ const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
+const ItemEval = require('../pobApi/ItemEval');
 
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');
@@ -178,10 +179,10 @@ class QueryParams {
 		}
 	}
 
-	getItemsStream(progressCallback) {
+	getItemsStream(progressCallback, itemEval = null) {
 		this.stopObj = {};
 		let stream = new Stream();
-		this.writeItemsToStream(stream, progressCallback)
+		this.writeItemsToStream(stream, progressCallback, itemEval)
 			.then(() => stream.done());
 		return stream;
 	}
@@ -190,8 +191,8 @@ class QueryParams {
 		this.stopObj.stop = true;
 	}
 
-	async writeItemsToStream(stream, progressCallback) {
-		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback);
+	async writeItemsToStream(stream, progressCallback, itemEval) {
+		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback, itemEval);
 
 		let defenseProperty = Object.entries(this.defenseProperties).find(([_, {weight}]) => weight);
 		if (defenseProperty) {
@@ -208,7 +209,7 @@ class QueryParams {
 
 				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
 				let query = this.getQuery(overrides);
-				newItems = await this.queryAndParseItems(query, stream, progressCallback);
+				newItems = await this.queryAndParseItems(query, stream, progressCallback, itemEval);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);
 		}
@@ -216,7 +217,7 @@ class QueryParams {
 		return items;
 	}
 
-	async queryAndParseItems(query, stream, progressCallback) {
+	async queryAndParseItems(query, stream, progressCallback, itemEval) {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
@@ -241,7 +242,7 @@ class QueryParams {
 				let response2 = await rlrGet(endpoint2, queryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
-				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData)));
+				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData, itemEval)));
 				stream.write(items);
 				return items;
 			});
@@ -254,7 +255,7 @@ class QueryParams {
 		}
 	}
 
-	async parseItem(itemData, parsingOptions) {
+	async parseItem(itemData, itemEval) {
 		let sockets = (itemData.item.sockets || []).reduce((a, v) => {
 			a[v.group] = a[v.group] || [];
 			a[v.group].push(v.sColour);
@@ -276,6 +277,7 @@ class QueryParams {
 			defenses: evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
 			mods: evalValue(pseudoMods),
 		};
+		let valueBuild = itemEval?.evalItem(ItemEval.decode64(itemData.item.extended.text)) || Promise.resolve('');
 		let priceDetails = {
 			count: itemData.listing.price.amount,
 			currency: itemData.listing.price.currency,
@@ -303,6 +305,7 @@ class QueryParams {
 			note: itemData.item.note,
 			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
 			valueDetails,
+			valueBuild,
 			evalPrice: await evalPrice(priceDetails),
 			priceDetails,
 			debug: itemData,

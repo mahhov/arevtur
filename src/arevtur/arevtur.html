@@ -33,7 +33,7 @@
 				progressRatios[i] = ratio;
 				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) / progressRatios.length;
 				$('x-results').updateItemsProgress(avgProgressRatio);
-			}).forEach(items => {
+			}, $('x-inputs').itemEval).forEach(items => {
 				$('x-results').joinItems(items);
 				$('x-results').renderItemsData();
 			}));

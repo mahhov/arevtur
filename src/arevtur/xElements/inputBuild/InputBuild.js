@@ -62,7 +62,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	updatePob() {
-		this.itemEval = new ItemEval(this.$('#pob-path').path);
+		this.itemEval = new ItemEval(this.$('#pob-path').path); // this.itemEval is public
 		this.updateBuild();
 		this.updateValueParams();
 	}

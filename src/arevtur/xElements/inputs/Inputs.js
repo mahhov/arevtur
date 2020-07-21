@@ -205,4 +205,8 @@ customElements.define(name, class Inputs extends XElement {
 				return queries;
 			});
 	}
+
+	get itemEval() {
+		return this.$('#input-build').itemEval;
+	}
 });
