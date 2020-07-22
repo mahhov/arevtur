@@ -67,7 +67,8 @@ class ItemEval extends CustomOsScript {
 					life * (this.valueParams_?.life || 1) +
 					resist / 3 * (this.valueParams_?.resist || 1)) /
 					pluginNumber * 100) / 100;
-				return {dps, life, resist, value, itemMod, text};
+				let tooltip = `${itemMod} (${pluginNumber})\n${'-'.repeat(30)}\n${text}`;
+				return {dps, life, resist, value, itemMod, pluginNumber, text, tooltip};
 			});
 	}
 

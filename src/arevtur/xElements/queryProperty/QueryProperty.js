@@ -77,7 +77,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValue(value) {
-		this.$('#build-value').textContent = value === '0' ? '' : value;
+		this.$('#build-value').textContent = value;
 		this.checkUseBuildValueVisible();
 	}
 
@@ -90,15 +90,15 @@ customElements.define(name, class extends XElement {
 	}
 
 	checkUseBuildValueVisible() {
-		this.$('#build-value').disabled = this.weight === this.buildValue;
+		this.$('#build-value').disabled = this.buildValue === '0' || this.weight === this.buildValue;
 	}
 
 	async refreshBuild(itemEval = this.lastItemEval) {
 		this.lastItemEval = itemEval;
 		if (!this.property || !itemEval)
 			return;
-		let summary = await itemEval.evalItemModSummary(this.property, 10);
+		let summary = await itemEval.evalItemModSummary(this.property, 100);
 		this.buildValue = summary.value;
-		this.buildValueTooltip = summary.text;
+		this.buildValueTooltip = summary.tooltip;
 	}
 });
