@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const ApiConstants = require('../../ApiConstants');
 const ItemEval = require('../../../pobApi/ItemEval');
 
 customElements.define(name, class extends XElement {
@@ -19,6 +20,9 @@ customElements.define(name, class extends XElement {
 		this.$('#resist-weight').value = store.resistWeight || 1;
 		this.$('#damage-weight').value = store.damageWeight || 1;
 
+		ApiConstants.constants.propertyTexts().then(propertyTexts =>
+			this.$('#demo-mod-property').autocompletes = propertyTexts);
+
 		this.$('#pob-path').addEventListener('selected', () => {
 			this.updateStore();
 			this.updatePob();
@@ -37,6 +41,8 @@ customElements.define(name, class extends XElement {
 				this.updateValueParams();
 				this.refresh();
 			}));
+		this.$('#demo-mod-property').addEventListener('change', () => this.updateDemo());
+		this.$('#demo-mod-value').addEventListener('input', () => this.updateDemo());
 
 		this.updatePob();
 		this.refresh();
@@ -85,5 +91,11 @@ customElements.define(name, class extends XElement {
 			await this.itemEval.ready;
 			this.emit('refresh', this.itemEval);
 		}
+	}
+
+	async updateDemo() {
+		let summary = await this.itemEval.evalItemModSummary(this.$('#demo-mod-property').value, this.$('#demo-mod-value').value || 100);
+		this.$('#demo-mod-weight').textContent = summary.value;
+		this.$('#demo-mod-weight').title = summary.tooltip;
 	}
 });

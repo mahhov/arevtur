@@ -1,16 +1,22 @@
 <style>
 	#weights,
-	label {
+	label,
+	#demo-mod {
 		margin-left: 15px;
 	}
 
-	input {
+	#weights input,
+	#demo-mod-value {
 		width: 60px;
+	}
+
+	#demo-mod-property {
+		width: 300px;
 	}
 </style>
 
-<x-path-select id="pob-path" placeholder="Select PoB Path" directory></x-path-select>
-<x-path-select id="build-path" placeholder="Select PoB Build"></x-path-select>
+<x-path-select id="pob-path" placeholder="Select PoB Path" directory title="e.g. C:\ProgramData\Path of Building"></x-path-select>
+<x-path-select id="build-path" placeholder="Select PoB Build" title="e.g. C:\Users\manukh\Documents\Path of Building\Builds\myBuild.xml"></x-path-select>
 <button id="refresh">Refresh Build</button>
 <span id="weights">Weights:
 	<label>
@@ -25,4 +31,9 @@
 		damage
 		<input type="number" id="damage-weight" min="0">
 	</label>
+</span>
+<span id="demo-mod">
+	<x-autocomplete-input id="demo-mod-property" placeholder="input a mod here"></x-autocomplete-input>
+	<input id="demo-mod-value" type="number" placeholder="100" min="0">
+	<span id="demo-mod-weight"></span>
 </span>
