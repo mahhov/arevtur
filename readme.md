@@ -131,6 +131,14 @@ Hence, GGG puts strict limits on what you are allowed to do without a session ID
 I.e. other than yourself and GGG, no one will have access to your session ID.
 This is important, because sharing your session ID allows others to impersonate you to a certain extent.
 
+#### Integrating with PoB
+
+1. Have either the executable or standalone PoB unzipped on your computer.
+1. With `Arevtur` opened, click `Select PoB Path`. 
+    - If you're using executable PoB, select its program-data dir; typically `C:\ProgramData\Path of Building` and click `Select Folder`.
+    - If you're using standalone PoB, select where you've placed it; e.g. `C:\Users\<user>\Downloads\PathOfBuilding-<version>`.
+1. Click `Select PoB Build` and select your PoB build file; typically located in `C:\Users\<user>\Documents\Path of Building\Builds`.
+
 #### Why is it slow
 
 tldr; GGG's trade API returns 10 items per request, and limits requests to 1.3 per second per user. So retrieving 100 items will take at least 7.7 seconds.
