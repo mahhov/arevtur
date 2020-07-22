@@ -15,8 +15,8 @@
 	}
 </style>
 
-<x-path-select id="pob-path" placeholder="Select PoB Path" directory title="e.g. C:\ProgramData\Path of Building"></x-path-select>
-<x-path-select id="build-path" placeholder="Select PoB Build" title="e.g. C:\Users\manukh\Documents\Path of Building\Builds\myBuild.xml"></x-path-select>
+<x-path-select id="pob-path" placeholder="Select PoB Path" directory default-path="C:\ProgramData\Path of Building"></x-path-select>
+<x-path-select id="build-path" placeholder="Select PoB Build" extension="xml" default-path="C:\Users\manukh\Documents\Path of Building\Builds\myBuild.xml"></x-path-select>
 <button id="refresh">Refresh Build</button>
 <span id="weights">Weights:
 	<label>
