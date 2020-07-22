@@ -38,6 +38,79 @@ Includes:
 
 ![arevtur.png](./screenshots/arevtur.png)
 
+### Visual guide to the features
+
+#### Simple search
+Queries are automatically saved.
+![simple.gif](./screenshots/simple.gif)
+
+#### PoB Integration (portable release only)
+To make it easier to figure out how e.g. spell damage, cast speed, and ele penetration translate to DPS,
+we can select our PoB dir and PoB build xml to view:
+- How much life and dps some mods give us.
+- A recommended weight based on life, dps, resist, and configurable weights for each.
+- PoB tooltip for searched items.
+![pob-integration.gif](./screenshots/pob-integration.gif)
+![pob-item-tooltip.png](./screenshots/pob-item-tooltip.png)
+![pob-weight-recommendation.png](./screenshots/pob-weight-recommendation.png)
+
+#### Interactive graph
+Value v price are graphed.
+Maybe we prefer an item 5% less powerful but at 1/10th the price.
+![graph.gif](./screenshots/graph.gif)
+
+#### Locking weights amongst properties
+We can lock weights to help keep similar mods in sync.
+- E.g. here we're looking for +gem level mods.
+- Rather than set and update each mod's weight individually, we lock their weights.
+- Updating the weight for the 1st mod will automatically update the locked mods as well.
+![locking.gif](./screenshots/locking.gif)
+
+#### Sharing properties amongst queries
+We can share properties amongst queries to keep all our queries updated.
+- E.g. here we 1st configure a query for boots with speed 30%, flat life weight 2, and resists weight 1. 
+- Then we create another query for a helmet.
+- Instead of adding the flat life and resist weights again and worry about keeping them in sync, we share the life and resists weights we configured for the boots.
+- When we later update the flat life weight from 2 to 3 for the helmet, the boot is automatically updated as well.
+![sharing.gif](./screenshots/sharing.gif)
+
+#### Searching for 6-link
+When searching for 6-links, we will find not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
+- E.g. here, we want a 6-link body.
+- The best 6-linked item we find is worth over 400c and has a value of 845.
+- But we also find a similar unlinked item available for just 50c and with a very similar value of 825.
+- In this case, it's cheaper to buy the latter item and 6-link it ourselves with the Fated Connections prophecy.
+![6-link.gif](./screenshots/6-link.gif)
+
+#### Searching for craftable affixes
+When we have the option to craft an affix, we can not only include items with open affixes, we can also ensure the mods we can craft are not blocked by an existing explicit.
+- E.g. here we want a ring with some life, resists, and mana.
+- But we can also craft some prefixes ourselves if there's an open prefix available.
+- By setting the prefix input to 60, our search will show both items that have high life, resists, and mana, as well as items that have a slightly lower value but an open prefix to compensate.
+- This is useful, because otherwise, we'd have to do 2 separate searches to include both sets of items.
+- Then we realize the only prefix we want to craft is a 30 flat life prefix, and unfortunately, a lot of the items with an open prefix already have a life explicit.
+- To avoid manually screening the items, we add the flat life explicit as a conditional prefix mod; like before, our search will include items that have an open prefix but only if they don't already have a flat life explicit present.
+- This can be chained multiple times; e.g. if we were also willing to craft a flat mana prefix, we could add a second conditional prefix mod with a lower weight.
+![affix.gif](./screenshots/affix.gif)
+
+#### Weighting armour, energy shield, and evasion
+When we are looking for armour, ES, or evasion, we aren't restricted to min and max values, but can instead weight them into the item's overall value, just like other properties. 
+- E.g. here we want evasion gloves; say we value 200 flat life equal to 65 evasion (this is not typical, excuse the bad example).
+- But we don't want to manually do multiple searches to capture all the possible combinations we'd be equally satisfied with: 200 life & 0 evasion, 160 life & 52 evasion, 120 life & 39 evasion, etc.
+- So we instead add a .65 weight to evasion and a 2 weight to flat life to search for every single potential mix.
+![defense.gif](./screenshots/defense.gif)
+
+#### Filtering results
+![sockets.gif](./screenshots/sockets.gif)
+- E.g. search '!armo, !evas' to show only ES gear. 
+- E.g. search '!corrupte' to hide all corrupted items. 
+- E.g. search '!unset, !moonstone' to hide all unset and moonstone rings. 
+
+#### Search for a specific item by name
+![specific-item.gif](./screenshots/specific-item.gif)
+
+### Details
+
 #### Starting the app
 
 When you run POE Pricer, a `$` icon will appear in your system tray at the bottom right of your screen.
@@ -77,75 +150,6 @@ To be on the safe side and avoid timeouts, `Arevtur` limits its requests to 1 pe
 
 Luckily, the app will display partial results while the complete query is still in progress.
 But for expensive items with complicated queries, waiting for the complete response before purchasing is ideal, as later items may be better or cheaper than earlier items. 
-
-### Visual guide to the features
-
-### Simple search
-Queries are automatically saved.
-![simple.gif](./screenshots/simple.gif)
-
-### PoB Integration (portable release only)
-To make it easier to figure out how e.g. spell damage, cast speed, and ele penetration translate to DPS,
-we can select our PoB dir and PoB build xml to view:
-- How much life and dps some mods give us.
-- A recommended weight based on life, dps, resist, and configurable weights for each.
-- PoB tooltip for searched items.
-![pob-integration.gif]
-
-### Interactive graph
-Value v price are graphed.
-Maybe we prefer an item 5% less powerful but at 1/10th the price.
-![graph.gif](./screenshots/graph.gif)
-
-### Locking weights amongst properties
-We can lock weights to help keep similar mods in sync.
-- E.g. here we're looking for +gem level mods.
-- Rather than set and update each mod's weight individually, we lock their weights.
-- Updating the weight for the 1st mod will automatically update the locked mods as well.
-![locking.gif](./screenshots/locking.gif)
-
-### Sharing properties amongst queries
-We can share properties amongst queries to keep all our queries updated.
-- E.g. here we 1st configure a query for boots with speed 30%, flat life weight 2, and resists weight 1. 
-- Then we create another query for a helmet.
-- Instead of adding the flat life and resist weights again and worry about keeping them in sync, we share the life and resists weights we configured for the boots.
-- When we later update the flat life weight from 2 to 3 for the helmet, the boot is automatically updated as well.
-![sharing.gif](./screenshots/sharing.gif)
-
-### Searching for 6-link
-When searching for 6-links, we will find not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
-- E.g. here, we want a 6-link body.
-- The best 6-linked item we find is worth over 400c and has a value of 845.
-- But we also find a similar unlinked item available for just 50c and with a very similar value of 825.
-- In this case, it's cheaper to buy the latter item and 6-link it ourselves with the Fated Connections prophecy.
-![6-link.gif](./screenshots/6-link.gif)
-
-### Searching for craftable affixes
-When we have the option to craft an affix, we can not only include items with open affixes, we can also ensure the mods we can craft are not blocked by an existing explicit.
-- E.g. here we want a ring with some life, resists, and mana.
-- But we can also craft some prefixes ourselves if there's an open prefix available.
-- By setting the prefix input to 60, our search will show both items that have high life, resists, and mana, as well as items that have a slightly lower value but an open prefix to compensate.
-- This is useful, because otherwise, we'd have to do 2 separate searches to include both sets of items.
-- Then we realize the only prefix we want to craft is a 30 flat life prefix, and unfortunately, a lot of the items with an open prefix already have a life explicit.
-- To avoid manually screening the items, we add the flat life explicit as a conditional prefix mod; like before, our search will include items that have an open prefix but only if they don't already have a flat life explicit present.
-- This can be chained multiple times; e.g. if we were also willing to craft a flat mana prefix, we could add a second conditional prefix mod with a lower weight.
-![affix.gif](./screenshots/affix.gif)
-
-### Weighting armour, energy shield, and evasion
-When we are looking for armour, ES, or evasion, we aren't restricted to min and max values, but can instead weight them into the item's overall value, just like other properties. 
-- E.g. here we want evasion gloves; say we value 200 flat life equal to 65 evasion (this is not typical, excuse the bad example).
-- But we don't want to manually do multiple searches to capture all the possible combinations we'd be equally satisfied with: 200 life & 0 evasion, 160 life & 52 evasion, 120 life & 39 evasion, etc.
-- So we instead add a .65 weight to evasion and a 2 weight to flat life to search for every single potential mix.
-![defense.gif](./screenshots/defense.gif)
-
-### Filtering results
-![sockets.gif](./screenshots/sockets.gif)
-- E.g. search '!armo, !evas' to show only ES gear. 
-- E.g. search '!corrupte' to hide all corrupted items. 
-- E.g. search '!unset, !moonstone' to hide all unset and moonstone rings. 
-
-### Search for a specific item by name
-![specific-item.gif](./screenshots/specific-item.gif)
 
 ## Mod Viewer
 
