@@ -1,6 +1,5 @@
 const path = require('path');
 const {ViewHandle: ViewHandleBase, ScreenMouse} = require('js-desktop-base');
-const {app, BrowserWindow, ipcMain: ipc, Menu} = require('electron');
 const appData = require('../../services/appData');
 
 class ViewHandle extends ViewHandleBase {
