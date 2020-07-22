@@ -41,33 +41,29 @@ Includes:
 ### Visual guide to the features
 
 #### Simple search
-Queries are automatically saved.
 ![simple.gif](./screenshots/simple.gif)
 
-#### PoB Integration (portable release only)
-To make it easier to figure out how e.g. spell damage, cast speed, and ele penetration translate to DPS,
-we can select our PoB dir and PoB build xml to view:
-- How much life and dps some mods give us.
-- A recommended weight based on life, dps, resist, and configurable weights for each.
-- PoB tooltip for searched items.
-![pob-integration.gif](./screenshots/pob-integration.gif)
-![pob-item-tooltip.png](./screenshots/pob-item-tooltip.png)
+#### PoB Integration
+Displays the PoB tooltips for mods and items and recommends mod weights.
+This helps compare the effectiveness of e.g. spell damage, cast speed, ele penetration, etc.
 ![pob-weight-recommendation.png](./screenshots/pob-weight-recommendation.png)
+![pob-item-tooltip.png](./screenshots/pob-item-tooltip.png)
+![pob-integration.gif](./screenshots/pob-integration.gif)
 
 #### Interactive graph
-Value v price are graphed.
+Graphs value v price.
 Maybe we prefer an item 5% less powerful but at 1/10th the price.
 ![graph.gif](./screenshots/graph.gif)
 
 #### Locking weights amongst properties
-We can lock weights to help keep similar mods in sync.
+Locking weights will keep similar mods in sync.
 - E.g. here we're looking for +gem level mods.
 - Rather than set and update each mod's weight individually, we lock their weights.
 - Updating the weight for the 1st mod will automatically update the locked mods as well.
 ![locking.gif](./screenshots/locking.gif)
 
 #### Sharing properties amongst queries
-We can share properties amongst queries to keep all our queries updated.
+Sharing properties will keep queries in sync.
 - E.g. here we 1st configure a query for boots with speed 30%, flat life weight 2, and resists weight 1. 
 - Then we create another query for a helmet.
 - Instead of adding the flat life and resist weights again and worry about keeping them in sync, we share the life and resists weights we configured for the boots.
@@ -75,7 +71,7 @@ We can share properties amongst queries to keep all our queries updated.
 ![sharing.gif](./screenshots/sharing.gif)
 
 #### Searching for 6-link
-When searching for 6-links, we will find not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
+Searching for 6-links will display not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
 - E.g. here, we want a 6-link body.
 - The best 6-linked item we find is worth over 400c and has a value of 845.
 - But we also find a similar unlinked item available for just 50c and with a very similar value of 825.
@@ -83,7 +79,7 @@ When searching for 6-links, we will find not only 6-linked items, but also uncor
 ![6-link.gif](./screenshots/6-link.gif)
 
 #### Searching for craftable affixes
-When we have the option to craft an affix, we can not only include items with open affixes, we can also ensure the mods we can craft are not blocked by an existing explicit.
+Searching for craftable mods will check that both the mod is not blocked by an existing explicit, and the necessary affix is available. Can check for multiple craftable mods preferring the highest weighted one.
 - E.g. here we want a ring with some life, resists, and mana.
 - But we can also craft some prefixes ourselves if there's an open prefix available.
 - By setting the prefix input to 60, our search will show both items that have high life, resists, and mana, as well as items that have a slightly lower value but an open prefix to compensate.
@@ -94,7 +90,7 @@ When we have the option to craft an affix, we can not only include items with op
 ![affix.gif](./screenshots/affix.gif)
 
 #### Weighting armour, energy shield, and evasion
-When we are looking for armour, ES, or evasion, we aren't restricted to min and max values, but can instead weight them into the item's overall value, just like other properties. 
+Can search for item defense (i.e. armour, ES, and evasion) with weights.
 - E.g. here we want evasion gloves; say we value 200 flat life equal to 65 evasion (this is not typical, excuse the bad example).
 - But we don't want to manually do multiple searches to capture all the possible combinations we'd be equally satisfied with: 200 life & 0 evasion, 160 life & 52 evasion, 120 life & 39 evasion, etc.
 - So we instead add a .65 weight to evasion and a 2 weight to flat life to search for every single potential mix.
