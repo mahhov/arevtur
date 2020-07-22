@@ -103,7 +103,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		});
 	}
 
-	static smartFilter(input, array, maxSize = Infinity) {
+	static smartFilter(input, array = [], maxSize = Infinity) {
 		if (!input)
 			return array.slice(0, maxSize);
 

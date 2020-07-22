@@ -43,6 +43,7 @@ customElements.define(name, class extends XElement {
 			}));
 		this.$('#demo-mod-property').addEventListener('change', () => this.updateDemo());
 		this.$('#demo-mod-value').addEventListener('input', () => this.updateDemo());
+		this.$('#demo-mod-raw').addEventListener('input', () => this.updateDemo());
 
 		this.updatePob();
 		this.refresh();
@@ -94,7 +95,10 @@ customElements.define(name, class extends XElement {
 	}
 
 	async updateDemo() {
-		let summary = await this.itemEval.evalItemModSummary(this.$('#demo-mod-property').value, this.$('#demo-mod-value').value || 100);
+		let summary = await this.itemEval.evalItemModSummary(
+			this.$('#demo-mod-property').value,
+			this.$('#demo-mod-value').value || 100,
+			this.$('#demo-mod-raw').checked);
 		this.$('#demo-mod-weight').textContent = summary.value;
 		this.$('#demo-mod-weight').title = summary.tooltip;
 	}

@@ -13,6 +13,16 @@
 	#demo-mod-property {
 		width: 300px;
 	}
+
+	label:nth-child(2) {
+		display: none;
+		/* todo fix resists evaluation */
+	}
+
+	#demo-mod {
+		/* todo add toggle to show/hide for debugging */
+		display: none;
+	}
 </style>
 
 <x-path-select id="pob-path" placeholder="Select PoB Path" directory default-path="C:\ProgramData\Path of Building"></x-path-select>
@@ -33,7 +43,8 @@
 	</label>
 </span>
 <span id="demo-mod">
-	<x-autocomplete-input id="demo-mod-property" placeholder="input a mod here"></x-autocomplete-input>
+	<x-autocomplete-input id="demo-mod-property" free-form="true" placeholder="input a mod here"></x-autocomplete-input>
 	<input id="demo-mod-value" type="number" placeholder="100" min="0">
+	<input id="demo-mod-raw" type="checkbox">
 	<span id="demo-mod-weight"></span>
 </span>

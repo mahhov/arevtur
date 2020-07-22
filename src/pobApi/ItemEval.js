@@ -47,20 +47,24 @@ class ItemEval extends CustomOsScript {
 			.then(text => ItemEval.clean(text));
 	}
 
-	evalItemModSummary(itemMod, pluginNumber = 1) {
-		itemMod = itemMod
-			.replace(/^#(?!%)/, `+${pluginNumber}`)
-			.replace(/#/g, pluginNumber)
-			.replace(/\([^)]*\)/g, '')
-			.replace(/total/gi, '')
-			.replace(/increased .*damage/i, 'increased damage')
+	evalItemModSummary(itemMod, pluginNumber = 1, raw = false) {
+		if (!raw)
+			itemMod = itemMod
+				.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
+				.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
+				.replace(/#/g, pluginNumber) // pluginNumber
+				.replace(/\([^)]*\)/g, '') // remove '(...)'
+				.replace(/total/gi, '') // remove 'total'
+				.replace(/increased .*damage/i, 'increased damage') // inc damage
+				.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
+				.replace(/\s+/g, ' '); // clean up whitespace
 		this.send(`<mod> ${itemMod}`);
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
 			.then(text => {
 				let dps = Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
 				let life = Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0;
-				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold) Res(?:\.|istance)/i;
+				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
 				let resist = text.match(new RegExp(resistRegex, 'gi'))?.reduce((sum, m) =>
 					sum + Number(m.match(resistRegex)[1]), 0) || 0;
 				let value = Math.round((dps * 80 / 3 * (this.valueParams_?.dps || 1) +
