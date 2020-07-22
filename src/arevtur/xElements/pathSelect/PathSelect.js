@@ -11,10 +11,14 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('button').addEventListener('click', () => this.$('input').click());
 		this.$('input').addEventListener('input', () => {
 			let path = this.$('input').files[0].path;
 			this.path = this.directory ? path.replace(/\\[^\\]*$/, '') : path;
+			this.emit('selected');
+		});
+		this.$('#path').addEventListener('click', () => this.$('input').click());
+		this.$('#clear').addEventListener('click', () => {
+			this.path = '';
 			this.emit('selected');
 		});
 	}
@@ -24,6 +28,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set path(value) {
+		this.$('input').value = '';
 		this.updateText();
 	}
 
@@ -32,6 +37,6 @@ customElements.define(name, class extends XElement {
 	}
 
 	updateText() {
-		this.$('button').textContent = this.path?.slice(-30) || this.placeholder;
+		this.$('#path').textContent = this.path?.slice(-30) || this.placeholder;
 	}
 });
