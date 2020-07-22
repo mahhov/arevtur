@@ -8,10 +8,14 @@ let configPath = getPath('config.json');
 let config;
 try {
 	config = require(configPath);
+	// TODO FIX THIS IMMEDIATELY, THIS SHOULD BE IN SYNC WITH THE AREVTUR BROWSER WINDOW
+	// This is a hacky fix for everyone who installed versions 4.0.2 or earlier.
+	if (config.league === 'Delirium')
+		config.league = 'Harvest';
 } catch (e) {
 	// For the first run, config.json won't exist. This is expected and ok.
 	config = {
-		league: 'Delirium',
+		league: 'Harvest',
 		restrictToPoeWindow: true,
 	};
 }
