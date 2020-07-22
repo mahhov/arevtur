@@ -19,7 +19,7 @@ class ItemEval extends CustomOsScript {
 
 	spawnProcess(pobPath) {
 		return spawn(
-			path.resolve('./src/pobApi/luajit.exe'),
+			path.resolve(path.join(__dirname, './luajit.exe')),
 			[path.resolve('./src/pobApi/itemEcho.lua')],
 			{cwd: path.resolve(pobPath)});
 	}
