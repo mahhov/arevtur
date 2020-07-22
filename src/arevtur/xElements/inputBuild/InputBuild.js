@@ -81,8 +81,8 @@ customElements.define(name, class extends XElement {
 	updateValueParams() {
 		this.itemEval.valueParams = {
 			life: this.$('#life-weight').value,
-			dps: this.$('#resist-weight').value,
-			resist: this.$('#damage-weight').value,
+			resist: this.$('#resist-weight').value,
+			dps: this.$('#damage-weight').value,
 		};
 	}
 
