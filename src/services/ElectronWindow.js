@@ -1,5 +1,6 @@
 const {app, BrowserWindow} = require('electron');
 const {appReadyPromise} = require('js-desktop-base');
+const {version} = require('../../package.json');
 
 // workaround for electron bug
 // https://github.com/electron/electron/issues/22119
@@ -11,6 +12,7 @@ class ElectronWindow {
 
 		this.window = appReadyPromise.then(() => {
 			let window = new BrowserWindow({
+				title: `${name} - ${version}`,
 				width,
 				height,
 				show: false,
@@ -39,7 +41,6 @@ class ElectronWindow {
 	get trayOptions() {
 		return [
 			{label: `${this.name}`, click: () => this.showView()},
-			{label: `${this.name} - dev`, click: () => this.showDevTools()},
 		];
 	}
 }
