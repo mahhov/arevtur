@@ -1,5 +1,6 @@
 const stream = require('bs-better-stream');
 const DataFetcher = require('../services/DataFetcher');
+const {config} = require('../services/config');
 
 const round = (number, decimals = 2) => {
 	let factor = Math.pow(10, decimals);
@@ -47,6 +48,7 @@ class Pricer {
 	refreshData() {
 		this.dataStream = stream()
 			.write(...this.dataEndpoints)
+			.map(endpoint => endpoint(config.config.league))
 			.map(DataFetcher.getData);
 	}
 

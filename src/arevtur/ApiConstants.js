@@ -1,11 +1,12 @@
 const {httpRequest: {get}} = require('js-desktop-base');
 const ServicesDataFetcher = require('../services/DataFetcher');
+const {configForRenderer} = require('../services/configForRenderer');
 
 class Constants {
 	constructor() {
 		this.initTypesPromise = this.initTypes();
 		this.initPropertiesPromise = this.initProperties();
-		this.initCurrenciesPromise = this.initCurrencies();
+		this.currencies = {};
 		this.initItemsPromise = this.initItems();
 	}
 
@@ -70,9 +71,9 @@ class Constants {
 		return this.properties.find(property => property.id === id)?.text;
 	}
 
-	async initCurrencies() {
-		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.CURRENCY);
-		let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY);
+	async initCurrencies(league) {
+		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.CURRENCY(league));
+		let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
 		prophecyPrices = await prophecyPrices;
@@ -92,14 +93,12 @@ class Constants {
 			.chaosValue;
 		tuples.push(['fatedConnectionsProphecy', fatedConnectionsPrice]);
 		tuples.push(['chaos', 1]);
-		this.currencies = Object.fromEntries(tuples);
-
+		return Object.fromEntries(tuples);
 		/* {alt: .125, ...} */
 	}
 
-	async currencyPrice(currency) {
-		await this.initCurrenciesPromise;
-		return this.currencies[currency];
+	currencyPrices(league) {
+		return this.currencies[league] = this.currencies[league] || this.initCurrencies(league);
 	}
 
 	async initItems() {

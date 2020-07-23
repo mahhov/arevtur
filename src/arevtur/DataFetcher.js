@@ -274,8 +274,8 @@ class QueryParams {
 		let pseudoMods = itemData.item.pseudoMods || [];
 		let valueDetails = {
 			affixes: this.affixValueShift,
-			defenses: evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
-			mods: evalValue(pseudoMods),
+			defenses: QueryParams.evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
+			mods: QueryParams.evalValue(pseudoMods),
 		};
 		let valueBuild = itemEval?.evalItem(ItemEval.decode64(itemData.item.extended.text)) || Promise.resolve('');
 		let priceDetails = {
@@ -306,32 +306,33 @@ class QueryParams {
 			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
 			valueDetails,
 			valueBuild,
-			evalPrice: await evalPrice(priceDetails),
+			evalPrice: await QueryParams.evalPrice(this.league, priceDetails),
 			priceDetails,
 			debug: itemData,
 		};
-	};
+	}
+
+	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
+		return itemDefenseProperties
+			.map(([name, value]) => value * queryDefenseProperties[name].weight)
+			.reduce((sum, v) => sum + v, 0);
+	}
+
+	static evalValue(pseudoMods) {
+		let pseudoSumI = pseudoMods.findIndex(mod => mod.startsWith('Sum: '));
+		if (pseudoSumI === -1)
+			return 0;
+		let [pseudoSum] = pseudoMods.splice(pseudoSumI, 1);
+		return Number(pseudoSum.substring(5));
+	}
+
+	static async evalPrice(league, {currency: currencyId, count, shifts}) {
+		let currencyPrices = (await ApiConstants.constants.currencyPrices(league))[currencyId];
+		if (currencyPrices)
+			return currencyPrices * count + Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
+		console.warn('Missing currency', currencyId);
+		return -1;
+	}
 }
-
-let evalDefensePropertiesValue = (itemDefenseProperties, queryDefenseProperties) =>
-	itemDefenseProperties
-		.map(([name, value]) => value * queryDefenseProperties[name].weight)
-		.reduce((sum, v) => sum + v, 0);
-
-let evalValue = pseudoMods => {
-	let pseudoSumI = pseudoMods.findIndex(mod => mod.startsWith('Sum: '));
-	if (pseudoSumI === -1)
-		return 0;
-	let [pseudoSum] = pseudoMods.splice(pseudoSumI, 1);
-	return Number(pseudoSum.substring(5));
-};
-
-let evalPrice = async ({currency: currencyId, count, shifts}) => {
-	let currencyPrice = await ApiConstants.constants.currencyPrice(currencyId);
-	if (currencyPrice)
-		return currencyPrice * count + Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
-	console.warn('Missing currency', currencyId);
-	return -1;
-};
 
 module.exports = {QueryParams};

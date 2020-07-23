@@ -1,6 +1,5 @@
 const path = require('path');
 const {ViewHandle: ViewHandleBase, ScreenMouse} = require('js-desktop-base');
-const appData = require('../../services/appData');
 
 class ViewHandle extends ViewHandleBase {
 	constructor() {
@@ -22,9 +21,6 @@ class ViewHandle extends ViewHandleBase {
 				break;
 			case 'prevent-close':
 				clearInterval(this.timedHide);
-				break;
-			case 'saveConfig':
-				appData.saveConfig(message.config);
 				break;
 			default:
 				console.error('Unknown window message:', message);

@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
 const {QueryParams} = require('../../DataFetcher');
 
@@ -13,7 +14,14 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#league-input').value = localStorage.getItem('input-league');
+		configForRenderer.listenConfigChange(async config => {
+			this.$('#league-input').value = config.league
+			this.$('#loaded-currencies-status').classList.remove('loaded');
+			await ApiConstants.constants.currencyPrices(config.league);
+			if (config.league === configForRenderer.config.league)
+				this.$('#loaded-currencies-status').classList.add('loaded');
+		});
+
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo try catch JSON.parse
@@ -24,8 +32,6 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-types-status').classList.add('loaded'));
 		ApiConstants.constants.initPropertiesPromise.then(() =>
 			this.$('#loaded-properties-status').classList.add('loaded'));
-		ApiConstants.constants.initCurrenciesPromise.then(() =>
-			this.$('#loaded-currencies-status').classList.add('loaded'));
 		ApiConstants.constants.initItemsPromise.then(() =>
 			this.$('#loaded-items-status').classList.add('loaded'));
 
@@ -122,7 +128,7 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	store() {
-		localStorage.setItem('input-league', this.$('#league-input').value);
+		configForRenderer.config = {'league': this.$('#league-input').value};
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
@@ -130,7 +136,7 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	async getQueries(overridePrice = null) {
-		let fatedConnectionsProphecyPrice = await ApiConstants.constants.currencyPrice('fatedConnectionsProphecy');
+		let fatedConnectionsProphecyPrice = (await ApiConstants.constants.currencyPrices(configForRenderer.config.league))['fatedConnectionsProphecy'];
 		return this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet => {

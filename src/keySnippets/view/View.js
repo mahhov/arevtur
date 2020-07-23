@@ -1,4 +1,5 @@
 const {ipcRenderer: ipc, shell} = require('electron');
+const {configForRenderer} = require('../../services/configForRenderer');
 const appData = require('../../services/appData');
 
 const ipcSend = message => ipc.send('window-request', message);
@@ -84,19 +85,16 @@ window.addEventListener('blur', () =>
 document.body.addEventListener('mousedown', () =>
 	ipcSend({name: 'prevent-close'}));
 
-let saveConfig = () => ipcSend({name: 'saveConfig', config: appData.config});
-
-$('#preferences-league').value = appData.config.league;
-$('#preferences-league').addEventListener('input', () => {
-	appData.config.league = $('#preferences-league').value;
-	saveConfig();
+configForRenderer.listenConfigChange(config => {
+	$('#preferences-league').value = config.league;
+	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
 });
 
-$('#preferences-restrict-window').checked = appData.config.restrictToPoeWindow;
-$('#preferences-restrict-window').addEventListener('input', () => {
-	appData.config.restrictToPoeWindow = $('#preferences-restrict-window').checked;
-	saveConfig();
-});
+$('#preferences-league').addEventListener('input', () =>
+	configForRenderer.config = {league: $('#preferences-league').value});
+
+$('#preferences-restrict-window').addEventListener('input', () =>
+	configForRenderer.config = {restrictToPoeWindow: $('#preferences-restrict-window').checked});
 
 $('#preferences-open').addEventListener('click', () =>
 	shell.openExternal(appData.basePath));

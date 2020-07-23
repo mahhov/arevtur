@@ -1,6 +1,6 @@
 const {ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./view/ViewHandle');
-const appData = require('../services/appData');
+const {config} = require('../services/config');
 const Pricer = require('./Pricer');
 const unlockCodeFetcher = require('./unlockCodeFetcher');
 const cmdUtil = require('./cmdUtil');
@@ -87,7 +87,7 @@ let displayPreferences = async () => {
 let addPoeShortcutListener = (key, handler) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
 		console.log('Key received', key);
-		if (!appData.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
+		if (!config.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
 			handler();
 		else
 			console.log('POE window not focused.');

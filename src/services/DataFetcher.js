@@ -1,12 +1,11 @@
 const {httpRequest: {get}} = require('js-desktop-base');
-const appData = require('./appData');
 
-let getEndpoints = league => {
+let getEndpoints = () => {
 	const BASE = 'https://poe.ninja/api/data';
-	const ITEM = `${BASE}/itemoverview?league=${league}`;
-	const CURRENCY = `${BASE}/currencyoverview?league=${league}`;
+	const ITEM = `itemoverview`;
+	const CURRENCY = `currencyoverview`;
 
-	let endpoint = (prefix, type) => `${prefix}&type=${type}`;
+	let endpoint = (prefix, type) => league => `${BASE}/${prefix}?league=${league}&type=${type}`;
 
 	return {
 		GEM: endpoint(ITEM, 'SkillGem'),
@@ -33,7 +32,7 @@ let getEndpoints = league => {
 	};
 };
 
-let endpoints = getEndpoints(appData.config.league);
+let endpoints = getEndpoints();
 
 const CACHE_DURATION_S = 12 * 60; // 12 minutes
 
@@ -55,6 +54,7 @@ let getData = endpoint => {
 		});
 };
 
+// todo rename endpoints to endpointByLeague to make it clear it's not a string but a function
 module.exports = {endpoints, getData};
 
 // axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() * 10000)}});

@@ -1,8 +1,9 @@
 const path = require('path');
+require('./services/config');
 const {TrayHelper} = require('js-desktop-base');
 const keySnippet = require('./keySnippets/keySnippets');
 const arevtur = require('./arevtur/arevtur');
- const modViewer = require('./modViewer/modViewer');
+const modViewer = require('./modViewer/modViewer');
 
 keySnippet.init();
 
