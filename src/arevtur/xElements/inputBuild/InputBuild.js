@@ -1,9 +1,12 @@
+const path = require('path');
+const fs = require('fs').promises;
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const stream = require('bs-better-stream');
 const ApiConstants = require('../../ApiConstants');
 const ItemEval = require('../../../pobApi/ItemEval');
 
-customElements.define(name, class extends XElement {
+customElements.define(name, class InputBuild extends XElement {
 	static get attributeTypes() {
 		return {}
 	}
@@ -20,6 +23,9 @@ customElements.define(name, class extends XElement {
 		this.$('#resist-weight').value = store.resistWeight || 1;
 		this.$('#damage-weight').value = store.damageWeight || 1;
 
+		InputBuild.defaultPobPath.each(path =>
+			this.$('#pob-path').defaultPath = path);
+		this.$('#build-path').defaultPath = path.resolve(`${process.env.HOME}/Documents/Path of Building/Builds`);
 		ApiConstants.constants.propertyTexts().then(propertyTexts =>
 			this.$('#demo-mod-property').autocompletes = propertyTexts);
 
@@ -101,5 +107,19 @@ customElements.define(name, class extends XElement {
 			this.$('#demo-mod-raw').checked);
 		this.$('#demo-mod-weight').textContent = summary.value;
 		this.$('#demo-mod-weight').title = summary.tooltip;
+	}
+
+	static get defaultPobPath() {
+		return stream().write(
+			`${process.env.ProgramData}`,
+			`${process.env.APPDATA}`,
+			`${process.env.HOMEPATH}/Downloads`,
+		)
+			.map(dir => ({dir, entries: fs.readdir(dir, {withFileTypes: true})}))
+			.waitOnOrdered('entries', true)
+			.flattenOn('entries', 'entry')
+			.filter(({entry}) => entry.isDirectory() && entry.name.match(/path ?of ?building/i))
+			.filterCount(1)
+			.map(({dir, entry}) => path.resolve(dir, entry.name));
 	}
 });

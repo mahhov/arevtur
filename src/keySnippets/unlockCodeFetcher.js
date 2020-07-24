@@ -1,4 +1,3 @@
-const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const GoogleAuth = require('google-oauth2-x');
