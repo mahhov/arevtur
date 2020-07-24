@@ -33,7 +33,7 @@ customElements.define(name, class extends XElement {
 				navigator.clipboard.writeText(valueBuild);
 			});
 			e.stopPropagation();
-		})
+		});
 		this.$('#whisper-button').addEventListener('click', e => {
 			navigator.clipboard.writeText(this.itemData_.whisper);
 			e.stopPropagation();
