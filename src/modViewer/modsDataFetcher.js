@@ -95,7 +95,7 @@ let getUncachedModsByItem = () => {
 				mods = Object.values(mods);
 			mods = mods.map(mod => ({
 				group: mod.CorrectGroup,
-				suffix: mod.ModGenerationTypeID === "2",
+				suffix: mod.ModGenerationTypeID === '2',
 				text: clean(mod.str),
 				tags: mod.mod_no.map(tag => clean(tag)).filter((v, i, a) => a.indexOf(v) === i),
 				weight: Number(mod.DropChance) || 0,
