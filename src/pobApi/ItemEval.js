@@ -1,5 +1,5 @@
-const path = require("path");
-const {spawn} = require("child_process");
+const path = require('path');
+const {spawn} = require('child_process');
 const {CustomOsScript} = require('js-desktop-base');
 
 class ItemEval extends CustomOsScript {
@@ -63,7 +63,7 @@ class ItemEval extends CustomOsScript {
 			.then(text => ItemEval.clean(text))
 			.then(text => {
 				let dps = Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
-				let life = Number(text.match(/([+-]\d+) Total Life/)?.[1]) || 0;
+				let life = Number(text.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
 				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
 				let resist = text.match(new RegExp(resistRegex, 'gi'))?.reduce((sum, m) =>
 					sum + Number(m.match(resistRegex)[1]), 0) || 0;
