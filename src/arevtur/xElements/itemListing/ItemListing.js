@@ -27,10 +27,6 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#whisper-button').addEventListener('click', e => {
-			navigator.clipboard.writeText(this.itemData_.whisper);
-			e.stopPropagation();
-		});
 		this.$('#copy-item-button').addEventListener('click', e => {
 			this.itemData_.valueBuild.then(valueBuild => {
 				valueBuild = valueBuild.substring(0, valueBuild.indexOf('Note:'));
@@ -38,6 +34,10 @@ customElements.define(name, class extends XElement {
 			})
 			e.stopPropagation();
 		})
+		this.$('#whisper-button').addEventListener('click', e => {
+			navigator.clipboard.writeText(this.itemData_.whisper);
+			e.stopPropagation();
+		});
 		this.addEventListener('click', () => this.emit('select'));
 		this.addEventListener('mouseenter', () => {
 			if (!this.hovered)
