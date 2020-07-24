@@ -31,6 +31,13 @@ customElements.define(name, class extends XElement {
 			navigator.clipboard.writeText(this.itemData_.whisper);
 			e.stopPropagation();
 		});
+		this.$('#copy-item-button').addEventListener('click', e => {
+			this.itemData_.valueBuild.then(valueBuild => {
+				valueBuild = valueBuild.substring(0, valueBuild.indexOf('Note:'));
+				navigator.clipboard.writeText(valueBuild);
+			})
+			e.stopPropagation();
+		})
 		this.addEventListener('click', () => this.emit('select'));
 		this.addEventListener('mouseenter', () => {
 			if (!this.hovered)
