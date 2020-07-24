@@ -28,10 +28,13 @@ class Updater {
 	}
 
 	async checkForUpdate() {
-		logger.info('checking for update');
-		autoUpdater.checkForUpdates().then(result =>
-			logger.info('  check for update', result));
-		return this.updateCheck = new XPromise();
+		if (!this.updateCheck || this.updateCheck.done) {
+			logger.info('checking for update x');
+			autoUpdater.checkForUpdates().then(result =>
+				logger.info('  check for update', result));
+			this.updateCheck = new XPromise();
+		}
+		return this.updateCheck;
 	}
 
 	async updateAndRestart() {

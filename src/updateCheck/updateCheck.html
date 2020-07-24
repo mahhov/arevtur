@@ -12,6 +12,12 @@
 		margin-top: 15px;
 	}
 
+	#container {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
 	#current-container {
 		font-size: 24px;
 		font-weight: bold;
@@ -26,34 +32,58 @@
 
 	#result.checking #checking,
 	#result.no-update #no-update,
-	#result.yes-update #yes-update,
 	#result:not(.checking) #check-button {
 		display: block;
 	}
 
+	#result.yes-update #yes-update {
+		display: flex;
+	}
+
+	#result,
+	#yes-update {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		flex: 1;
+		overflow: hidden;
+	}
+
+	#yes-update {
+		align-self: stretch;
+	}
+
+	#update-description {
+		overflow: auto;
+		align-self: stretch;
+		border: 1px solid;
+		padding: 3px;
+	}
 </style>
 
-<div id="current-container">
-	Current version
-	<span id="current"><!--4.4.0--></span>
-</div>
-
-<div id="result" class="section checking">
-	<div id="checking">Checking for updates...</div>
-
-	<div id="no-update" class="large-font">No updates available</div>
-
-	<div id="yes-update">
-		<div class="large-font section"><span id="update-version"><!--4.4.2--></span> available.</div>
-		<div>Released on<span id="update-date"><!--23/07/2020, 15:48:18--></span>.</div>
-		<div class="section">List of changes:</div>
-		<div id="update-description"></div>
-		<div class="section">
-			<button id="update-button">Update & restart</button>
-		</div>
+<div id="container">
+	<div id="current-container">
+		Current version
+		<span id="current"><!--4.4.0--></span>
 	</div>
 
-	<button id="check-button" class="section">Check again</button>
+	<div id="result" class="section checking">
+		<div id="checking">Checking for updates...</div>
+
+		<div id="no-update" class="large-font">No updates available</div>
+
+		<div id="yes-update">
+			<div class="large-font section"><span id="update-version"><!--4.4.2--></span> available.</div>
+			<div>Released on<span id="update-date"><!--23/07/2020, 15:48:18--></span>.</div>
+			<div class="section">List of changes:</div>
+			<div id="update-description"></div>
+			<div class="section">
+				<button id="update-button">Update & restart</button>
+			</div>
+		</div>
+
+		<button id="check-button" class="section">Check again</button>
+	</div>
 </div>
 
 <script>
