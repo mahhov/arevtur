@@ -28,10 +28,7 @@ customElements.define(name, class extends XElement {
 
 	connectedCallback() {
 		this.$('#copy-item-button').addEventListener('click', e => {
-			this.itemData_.valueBuild.then(valueBuild => {
-				valueBuild = valueBuild.substring(0, valueBuild.indexOf('Note:'));
-				navigator.clipboard.writeText(valueBuild);
-			});
+			navigator.clipboard.writeText(this.itemData_.text);
 			e.stopPropagation();
 		});
 		this.$('#whisper-button').addEventListener('click', e => {

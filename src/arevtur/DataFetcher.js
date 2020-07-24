@@ -277,7 +277,8 @@ class QueryParams {
 			defenses: QueryParams.evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
 			mods: QueryParams.evalValue(pseudoMods),
 		};
-		let valueBuild = itemEval?.evalItem(ItemEval.decode64(itemData.item.extended.text)) || Promise.resolve('');
+		let text = ItemEval.decode64(itemData.item.extended.text);
+		let valueBuild = itemEval?.evalItem(text) || Promise.resolve('');
 		let priceDetails = {
 			count: itemData.listing.price.amount,
 			currency: itemData.listing.price.currency,
@@ -308,6 +309,7 @@ class QueryParams {
 			valueBuild,
 			evalPrice: await QueryParams.evalPrice(this.league, priceDetails),
 			priceDetails,
+			text,
 			debug: itemData,
 		};
 	}
