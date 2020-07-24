@@ -4,7 +4,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder .",
+    "build-dev": "electron-builder . -c.compression=store",
     "clean-build": "rm -rf dist; electron-builder .",
     "ship": "git push && build --win -p always"
   },
@@ -13,6 +13,8 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bs-better-stream": "^1.9.5",
+    "electron-log": "^4.2.2",
+    "electron-updater": "^4.3.1",
     "env-paths": "^2.2.0",
     "google-oauth2-x": "^1.1.2",
     "js-desktop-base": "^3.2.6",
@@ -38,9 +40,6 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/icons/fa-dollar-sign-solid-256.png",
-    "linux": {
-      "target": "AppImage"
-    }
+    "icon": "./resources/icons/fa-dollar-sign-solid-256.png"
   }
 }

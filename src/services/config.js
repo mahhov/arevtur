@@ -30,9 +30,7 @@ class Config {
 	}
 
 	sendConfigChange(listeners = this.configChangeListeners) {
-		console.log('config sent to ', listeners.length, 'of', this.configChangeListeners.length, this.config)
 		this.configChangeListeners.forEach(listener => listener.send('config-changed', this.config));
-
 	}
 }
 

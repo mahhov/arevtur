@@ -3,7 +3,6 @@ const {ipcRenderer} = require('electron');
 class ConfigForRenderer {
 	constructor() {
 		ipcRenderer.on('config-changed', (event, config) => {
-			console.log('config set', config)
 			this.config_ = config;
 			this.listeners.forEach(handle => handle(this.config_));
 		});

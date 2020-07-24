@@ -1,0 +1,101 @@
+<style>
+	body {
+		font-family: Arial, serif;
+	}
+
+	.large-font {
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	.section {
+		margin-top: 15px;
+	}
+
+	#current-container {
+		font-size: 24px;
+		font-weight: bold;
+	}
+
+	#checking,
+	#no-update,
+	#yes-update,
+	#check-button {
+		display: none;
+	}
+
+	#result.checking #checking,
+	#result.no-update #no-update,
+	#result.yes-update #yes-update,
+	#result:not(.checking) #check-button {
+		display: block;
+	}
+
+</style>
+
+<div id="current-container">
+	Current version
+	<span id="current"><!--4.4.0--></span>
+</div>
+
+<div id="result" class="section checking">
+	<div id="checking">Checking for updates...</div>
+
+	<div id="no-update" class="large-font">No updates available</div>
+
+	<div id="yes-update">
+		<div class="large-font section"><span id="update-version"><!--4.4.2--></span> available.</div>
+		<div>Released on<span id="update-date"><!--23/07/2020, 15:48:18--></span>.</div>
+		<div class="section">List of changes:</div>
+		<div id="update-description"></div>
+		<div class="section">
+			<button id="update-button">Update & restart</button>
+		</div>
+	</div>
+
+	<button id="check-button" class="section">Check again</button>
+</div>
+
+<script>
+	const {ipcRenderer} = require('electron');
+	const {XElement} = require('xx-element');
+	const $ = document.querySelector.bind(document);
+	const $c = (tagName, parent = null, classList = [], text = '') => {
+		let el = document.createElement(tagName);
+		if (parent)
+			parent.appendChild(el);
+		el.classList.add(...classList);
+		if (text)
+			el.textContent = text;
+		return el;
+	};
+
+	ipcRenderer.invoke('request-current-version').then(version =>
+		$('#current').textContent = version);
+
+	let setResultProgress = progress => {
+		['checking', 'no-update', 'yes-update'].forEach(c =>
+			$('#result').classList.remove(c));
+		$('#result').classList.add(progress);
+	};
+
+	let checkForUpdate = () => {
+		setResultProgress('checking');
+		ipcRenderer.invoke('request-check-updates').then(update => {
+			setResultProgress(update ? 'yes-update' : 'no-update');
+			if (!update)
+				return;
+			$('#update-version').textContent = update.version;
+			$('#update-date').textContent = new Date(update.releaseDate).toLocaleString();
+			XElement.clearChildren($('#update-description'));
+			update.releaseNotes
+				.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, '')])
+				.forEach(text => $c('div', $('#update-description'), [], text));
+		});
+	};
+
+	$('#check-button').addEventListener('click', checkForUpdate);
+	$('#update-button').addEventListener('click', () => ipcRenderer.invoke('request-update'));
+
+	checkForUpdate();
+</script>

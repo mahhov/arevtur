@@ -315,7 +315,6 @@ let getPrice = async (text) => {
 	let textItem = new TextItem(text);
 	if (textItem.error)
 		return [textItem.error];
-	console.log(textItem)
 	let prices2d = await pricers.map(pricer => pricer.price(textItem)).promise;
 	let priceText = stream()
 		.write([textItem.name])

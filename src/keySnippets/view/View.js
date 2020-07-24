@@ -8,7 +8,6 @@ const $ = document.querySelector.bind(document);
 const $c = document.createElement.bind(document);
 
 ipc.on('window-command', (_, command) => {
-	console.log('received', command);
 	switch (command.name) {
 		case 'setTexts':
 			updateTexts(command.texts);
