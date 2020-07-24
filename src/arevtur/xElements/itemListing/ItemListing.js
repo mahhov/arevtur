@@ -31,7 +31,7 @@ customElements.define(name, class extends XElement {
 			this.itemData_.valueBuild.then(valueBuild => {
 				valueBuild = valueBuild.substring(0, valueBuild.indexOf('Note:'));
 				navigator.clipboard.writeText(valueBuild);
-			})
+			});
 			e.stopPropagation();
 		})
 		this.$('#whisper-button').addEventListener('click', e => {
