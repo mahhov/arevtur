@@ -134,9 +134,10 @@ This is important, because sharing your session ID allows others to impersonate 
 #### Integrating with PoB
 
 1. Have either the executable or standalone PoB unzipped on your computer.
-1. With `Arevtur` opened, click `Select PoB Path`. 
-    - If you're using executable PoB, select its program-data dir; typically `C:\ProgramData\Path of Building` and click `Select Folder`.
-    - If you're using standalone PoB, select where you've placed it; e.g. `C:\Users\<user>\Downloads\PathOfBuilding-<version>`.
+1. With `Arevtur` opened, click `Select PoB Path` and select your PoB launch dir: 
+    - For the executable openArl PoB, typically `C:\ProgramData\Path of Building`
+    - For the executable community PoB, typically `C:\Users\manukh\AppData\Roaming\Path of Building Community`
+    - For the standalone PoB, typically `C:\Users\<user>\Downloads\PathOfBuilding[Community-Setup]-<version>`
 1. Click `Select PoB Build` and select your PoB build file; typically located in `C:\Users\<user>\Documents\Path of Building\Builds`.
 
 #### Why is it slow
