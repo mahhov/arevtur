@@ -12,6 +12,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	connectedCallback() {
+		this.$('input').addEventListener('focus', () => this.updateAutocompletes(true));
 		this.$('input').addEventListener('change', () => this.internalSetValue(this.$('input').value));
 		this.$('input').addEventListener('input', () => {
 			this.updateAutocompletes();
@@ -86,11 +87,12 @@ customElements.define(name, class AutocompleteInput extends XElement {
 
 	internalSetValue(value) {
 		this.value = value;
+		this.$('input').value = value;
 		this.emit('change');
 	}
 
-	updateAutocompletes() {
-		let optionValues = AutocompleteInput.smartFilter(this.$('input').value, this.autocompletes, 500);
+	updateAutocompletes(showAll = false) {
+		let optionValues = AutocompleteInput.smartFilter(!showAll && this.$('input').value, this.autocompletes, 500);
 		if (this.freeForm && optionValues[0] !== this.$('input').value)
 			optionValues.unshift(this.$('input').value);
 		XElement.clearChildren(this.$('select'));
