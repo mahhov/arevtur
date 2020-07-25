@@ -1,13 +1,23 @@
 const {httpRequest: {get}} = require('js-desktop-base');
 const ServicesDataFetcher = require('../services/DataFetcher');
-const {configForRenderer} = require('../services/configForRenderer');
 
 class Constants {
 	constructor() {
+		this.leagues = this.initLeagues();
+		// todo this is ugly, the actual values should be wrapped in a promise
 		this.initTypesPromise = this.initTypes();
 		this.initPropertiesPromise = this.initProperties();
 		this.currencies = {};
 		this.initItemsPromise = this.initItems();
+	}
+
+	async initLeagues() {
+		return JSON.parse((await get('https://api.pathofexile.com/leagues')).string)
+			.filter(league => !league.rules.some(rule => rule.id === 'NoParties'))
+			.map(league => league.id);
+		/*
+			['Harvest', ...]
+		*/
 	}
 
 	async initTypes() {

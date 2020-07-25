@@ -22,12 +22,16 @@ customElements.define(name, class Inputs extends XElement {
 				this.$('#loaded-currencies-status').classList.add('loaded');
 		});
 
+		ApiConstants.constants.leagues.then(leagues =>
+			this.$('#league-input').autocompletes = leagues);
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
+		ApiConstants.constants.leagues.then(() =>
+			this.$('#loaded-leagues-status').classList.add('loaded'));
 		ApiConstants.constants.initTypesPromise.then(() =>
 			this.$('#loaded-types-status').classList.add('loaded'));
 		ApiConstants.constants.initPropertiesPromise.then(() =>
@@ -35,7 +39,7 @@ customElements.define(name, class Inputs extends XElement {
 		ApiConstants.constants.initItemsPromise.then(() =>
 			this.$('#loaded-items-status').classList.add('loaded'));
 
-		this.$('#league-input').addEventListener('input', () => this.store());
+		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('input', () => this.store());
 
 		this.$('#input-build').addEventListener('refreshing', e =>
