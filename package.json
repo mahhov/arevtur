@@ -16,7 +16,7 @@
     "electron-updater": "^4.3.1",
     "env-paths": "^2.2.0",
     "google-oauth2-x": "^1.1.2",
-    "js-desktop-base": "^3.2.9",
+    "js-desktop-base": "^3.3.0",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {

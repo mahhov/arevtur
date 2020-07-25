@@ -88,7 +88,7 @@ let addPoeShortcutListener = (key, handler) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
 		console.log('Key received', key);
 		if (!config.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
-			handler();
+		handler();
 		else
 			console.log('POE window not focused.');
 	});
