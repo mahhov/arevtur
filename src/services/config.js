@@ -13,6 +13,7 @@ class Config {
 			this.config = {
 				league: 'Harvest',
 				restrictToPoeWindow: true,
+				darkTheme: false,
 			};
 		}
 

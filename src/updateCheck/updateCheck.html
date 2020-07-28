@@ -1,9 +1,6 @@
 <style>
+	@import '../themeStyle.css';
 	@import '../sharedStyle.css';
-
-	body {
-		font-family: Arial, serif;
-	}
 
 	.large-font {
 		font-size: 18px;
@@ -23,6 +20,10 @@
 	#current-container {
 		font-size: 24px;
 		font-weight: bold;
+	}
+
+	x-theme-toggle-button {
+		float: right;
 	}
 
 	#checking,
@@ -63,10 +64,15 @@
 	}
 </style>
 
+<script>
+	require('../arevtur/xElements/import');
+</script>
+
 <div id="container">
 	<div id="current-container">
 		Current version
 		<span id="current"><!--4.4.0--></span>
+		<x-theme-toggle-button></x-theme-toggle-button>
 	</div>
 
 	<div id="result" class="section checking">

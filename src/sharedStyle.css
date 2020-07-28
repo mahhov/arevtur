@@ -1,8 +1,88 @@
-:root {
-	--light-blue: #40586f;
-	--dark-blue: #20384f;
-	--light-gray: #888;
-	--dark-gray: #444;
-	--red: #f65;
-	--white-blue: #73b4e6;
+html {
+	color: var(--primary);
+	background: var(--back);
 }
+
+body {
+	font-family: sans-serif;
+}
+
+.alternate {
+	color: var(--alternate-primary);
+}
+
+.area {
+	color: var(--area-primary);
+	background: var(--area-back);
+}
+
+.header {
+	color: var(--header-primary);
+	background: var(--header-back);
+}
+
+.invalid {
+	color: var(--invalid-primary);
+	border-color: var(--invalid-primary);
+	background: var(--invalid-back);
+}
+
+.valid {
+	color: var(--valid-primary);
+	border-color: var(--valid-primary);
+	background: var(--valid-back);
+}
+
+:focus {
+	outline: 0;
+	border-color: var(--interactable-focus-border);
+}
+
+button, input, select,
+::-webkit-scrollbar-thumb {
+	background: var(--interactable-back);
+	color: var(--interactable-primary);
+	border: 1px solid var(--interactable-border);
+	outline: 0;
+}
+
+button {
+	outline: 0;
+	cursor: pointer;
+}
+
+button:hover, option:hover,
+::-webkit-scrollbar-thumb:hover {
+	background: var(--interactable-hover-back);
+}
+
+button:active, option:active,
+::-webkit-scrollbar-thumb:active {
+	background: var(--interactable-active-back);
+}
+
+input {
+	padding: 3px;
+}
+
+progress {
+	-webkit-appearance: none;
+	height: 8px;
+}
+
+progress::-webkit-progress-bar {
+	background-color: var(--non-interactable-back);
+	outline: 1px solid var(--non-interactable-border);
+}
+
+progress::-webkit-progress-value {
+	background-color: var(--non-interactable-fill);
+}
+
+::-webkit-scrollbar {
+	background: var(--area-back);
+	border: 1px solid var(--interactable-border);
+	width: 12px;
+}
+
+/* todo checkbox styling */

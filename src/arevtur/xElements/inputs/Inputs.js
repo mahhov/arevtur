@@ -16,10 +16,10 @@ customElements.define(name, class Inputs extends XElement {
 	connectedCallback() {
 		configForRenderer.listenConfigChange(async config => {
 			this.$('#league-input').value = config.league
-			this.$('#loaded-currencies-status').classList.remove('loaded');
+			this.$('#loaded-currencies-status').classList.remove('valid');
 			await ApiConstants.constants.currencyPrices(config.league);
 			if (config.league === configForRenderer.config.league)
-				this.$('#loaded-currencies-status').classList.add('loaded');
+				this.$('#loaded-currencies-status').classList.add('valid');
 		});
 
 		ApiConstants.constants.leagues.then(leagues =>
@@ -31,21 +31,21 @@ customElements.define(name, class Inputs extends XElement {
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
 		ApiConstants.constants.leagues.then(() =>
-			this.$('#loaded-leagues-status').classList.add('loaded'));
+			this.$('#loaded-leagues-status').classList.add('valid'));
 		ApiConstants.constants.initTypesPromise.then(() =>
-			this.$('#loaded-types-status').classList.add('loaded'));
+			this.$('#loaded-types-status').classList.add('valid'));
 		ApiConstants.constants.initPropertiesPromise.then(() =>
-			this.$('#loaded-properties-status').classList.add('loaded'));
+			this.$('#loaded-properties-status').classList.add('valid'));
 		ApiConstants.constants.initItemsPromise.then(() =>
-			this.$('#loaded-items-status').classList.add('loaded'));
+			this.$('#loaded-items-status').classList.add('valid'));
 
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('input', () => this.store());
 
 		this.$('#input-build').addEventListener('refreshing', e =>
-			this.$('#loaded-pob-status').classList.remove('loaded'));
+			this.$('#loaded-pob-status').classList.remove('valid'));
 		this.$('#input-build').addEventListener('refresh', e => {
-			this.$('#loaded-pob-status').classList.add('loaded');
+			this.$('#loaded-pob-status').classList.add('valid');
 			this.$('#input-trade-params').refreshBuild(e.detail)
 		});
 

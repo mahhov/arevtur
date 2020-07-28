@@ -1,0 +1,65 @@
+:root {
+	--primary: black;
+	--alternate-primary: #02a; /* text that needs to stand out a bit */
+	--back: white;
+
+	/* areas that need to be distinguished e.g. inputs or outputs */
+	--area-primary: black;
+	--area-back: #f8f8f8;
+
+	/* section headers */
+	--header-primary: black;
+	--header-back: #eee;
+
+	/* interactable elements e.g buttons or inputs */
+	--interactable-primary: black;
+	--interactable-back: white;
+	--interactable-border: #888;
+	--interactable-hover-back: #eee;
+	--interactable-active-back: #ddd;
+	--interactable-focus-border: #02a;
+
+	/* non interactable elements that need to stand out e.g. progress bar */
+	--non-interactable-back: #f8f8f8;
+	--non-interactable-border: #888;
+	--non-interactable-fill: #ddd;
+
+	/* invalid & valid */
+	--invalid-primary: black;
+	--invalid-back: #fdd5d5;
+	--valid-primary: black;
+	--valid-back: #aaffaa;
+}
+
+:root.dark {
+	--primary: white;
+	--alternate-primary: #73b4e6; /* text that needs to stand out a bit */
+	--back: black;
+
+	/* areas that need to be distinguished e.g. inputs or outputs */
+	--area-primary: white;
+	--area-back: #222;
+
+	/* section headers */
+	--header-primary: white;
+	--header-back: #20384f;
+
+	/* interactable elements e.g buttons or inputs */
+	--interactable-primary: white;
+	--interactable-back: black;
+	--interactable-border: #888;
+	--interactable-hover-back: #444;
+	--interactable-active-back: #888;
+	--interactable-focus-border: #73b4e6;
+
+	/* non interactable elements that need to stand out e.g. progress bar */
+	--non-interactable-back: #20384f;
+	--non-interactable-border: #667;
+	--non-interactable-fill: #40586f;
+
+	/* invalid & valid */
+	--invalid-primary: #f65;
+	--invalid-back: #400;
+	--valid-primary: white;
+	--valid-back: #070;
+}

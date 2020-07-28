@@ -1,4 +1,5 @@
 <style>
+	@import '../themeStyle.css';
 	@import '../sharedStyle.css';
 
 	#container {
@@ -8,13 +9,11 @@
 	}
 
 	#inputs {
-		background: #f8f8f8;
 		padding: 10px;
 	}
 
-
 	.input-row:not(:last-child) {
-		margin-bottom: 3px;
+		margin-bottom: 5px;
 	}
 
 	#progress-bar[value="1"] {
@@ -28,6 +27,10 @@
 
 	#uncached-fetch-button {
 		margin-right: 5px;
+	}
+
+	x-theme-toggle-button {
+		float: right;
 	}
 
 	.search-input-row {
@@ -57,12 +60,10 @@
 	}
 
 	.title {
-		background: #eee;
 		font-weight: bold;
 	}
 
 	.output-item-title {
-		background: #afa;
 		font-size: x-large;
 	}
 
@@ -95,11 +96,6 @@
 		flex: 1;
 	}
 
-	.output-group-summary-field-tags,
-	.output-mod-field-tags {
-		color: #02a;
-	}
-
 	.output-group-summary-field-weight,
 	.output-mod-field-weight {
 		flex-basis: 130px;
@@ -109,7 +105,6 @@
 	.output-mod {
 		display: flex;
 		padding-left: 15px;
-		background: #eee;
 	}
 
 	.output-mod-field-text {
@@ -127,11 +122,12 @@
 </script>
 
 <div id="container">
-	<div id="inputs">
+	<div id="inputs" class="area">
 		<div class="input-row">
 			<progress id="progress-bar" max="1"></progress>
 			<button id="uncached-fetch-button">Refresh</button>
 			<span>Last refresh </span><span id="fetch-time"></span>
+			<x-theme-toggle-button></x-theme-toggle-button>
 		</div>
 		<div class="input-row">
 			<x-autocomplete-input id="item-input" placeholder="Item"></x-autocomplete-input>
@@ -264,11 +260,11 @@
 		modsByItem.forEach(modForItem => {
 			let itemDiv = $c('div', $('#outputs'), ['output-item']);
 			setElOwner(itemDiv, modForItem);
-			$c('div', itemDiv, ['title', 'output-item-title'], modForItem.item);
+			$c('div', itemDiv, ['header', 'title', 'output-item-title'], modForItem.item);
 			modForItem.modsByCategory.forEach(modForCategory => {
 				let categoryDiv = $c('div', itemDiv, ['output-category']);
 				setElOwner(categoryDiv, modForCategory);
-				$c('div', categoryDiv, ['title', 'output-category-title'], modForCategory.category);
+				$c('div', categoryDiv, ['header', 'title', 'output-category-title'], modForCategory.category);
 				let affixesModsDiv = $c('div', categoryDiv, ['output-affixes']);
 				let prefixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
 				let suffixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
@@ -281,15 +277,15 @@
 					groupSummaryDiv.title = modsForGroup.group;
 					$c('span', groupSummaryDiv, ['output-group-summary-field-text'],
 						modsForGroup.mods[modsForGroup.mods.length - 1].text);
-					$c('span', groupSummaryDiv, ['output-group-summary-field-tags'], `[${modsForGroup.tags.join(', ')}]`);
+					$c('span', groupSummaryDiv, ['alternate', 'output-group-summary-field-tags'], `[${modsForGroup.tags.join(', ')}]`);
 					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight).title = WeightTracker.tooltip;
 					modsForGroup.mods.forEach(mod => {
-						let modDiv = $c('div', groupLabel, ['output-mod']);
+						let modDiv = $c('div', groupLabel, ['area', 'output-mod']);
 						modDiv.title = mod.name;
 						setElOwner(modDiv, mod);
 						$c('span', modDiv, ['output-mod-field-text'], mod.text);
 						if (!arrEq(mod.tags, modsForGroup.tags))
-							$c('span', modDiv, ['output-mod-field-tags'], `[${mod.tags.join(', ')}]`);
+							$c('span', modDiv, ['alternate', 'output-mod-field-tags'], `[${mod.tags.join(', ')}]`);
 						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
 						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = WeightTracker.tooltip;
 					});
