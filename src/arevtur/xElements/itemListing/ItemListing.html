@@ -8,11 +8,11 @@
 	}
 
 	:host(.selected) {
-		background: #ffffd3;
+		background: var(--non-interactable-back);
 	}
 
 	:host(.hovered) {
-		background: #d3f0ff;
+		background: var(--non-interactable-fill);
 	}
 
 	:host > div:not(:first-of-type) {
@@ -57,9 +57,10 @@
 		position: relative;
 	}
 
+	/* todo for consistency, use similar tooltips for input build recommendations and other tooltips */
 	#value-build-tooltip {
 		position: absolute;
-		background: white;
+		background: var(--back);
 		outline: 1px solid;
 		display: none;
 		z-index: 1;

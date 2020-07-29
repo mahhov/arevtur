@@ -3,15 +3,21 @@
 
 	#container {
 		display: inline-block;
-		padding: 3px;
 	}
 
-	#container.active {
-		background: #d5d5d5;
+	#remove {
+		margin-left: -5px;
+		padding-top: 3px;
+		padding-bottom: 3px;
+		border-left: none;
 	}
 
-	#container.selected {
-		background: #cdf;
+	#container.selected * {
+		border-color: var(--interactable-focus-border);
+	}
+
+	#container.active:not(.selected) * {
+		background-color: var(--interactable-active-back);
 	}
 </style>
 

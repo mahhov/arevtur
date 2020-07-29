@@ -51,7 +51,7 @@ button {
 	cursor: pointer;
 }
 
-button:hover, option:hover,
+button:hover, input:hover, option:hover,
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--interactable-hover-back);
 }
@@ -68,15 +68,20 @@ input {
 progress {
 	-webkit-appearance: none;
 	height: 8px;
+	border: 0;
 }
 
 progress::-webkit-progress-bar {
 	background-color: var(--non-interactable-back);
 	outline: 1px solid var(--non-interactable-border);
+	border: 0;
+	/* todo consider border for consistency */
+	/* or switch everything to outlines for easier width adjustment */
 }
 
 progress::-webkit-progress-value {
 	background-color: var(--non-interactable-fill);
+	border: 0;
 }
 
 ::-webkit-scrollbar {
