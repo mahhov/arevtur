@@ -11,6 +11,8 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
+		if (this.draggable)
+			return;
 		this.$('#name').addEventListener('change', () => {
 			this.name = this.$('#name').value;
 			this.emit('name-change')
@@ -19,18 +21,17 @@ customElements.define(name, class extends XElement {
 			this.emit('remove');
 			e.stopPropagation();
 		});
-		this.name = this.name || '';
 	}
 
 	set name(value) {
-		this.$('#name').value = value
+		this.$('#name').value = value;
 	}
 
 	set active(value) {
 		this.$('#container').classList.toggle('active', value);
 	}
 
-	set selected(value){
+	set selected(value) {
 		this.$('#container').classList.toggle('selected', value);
 	}
 });

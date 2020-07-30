@@ -121,7 +121,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.inputSets.splice(index, 1);
 			inputSetEl.remove();
 			if (!this.inputSets.length) {
-				this.inputSets.push({});
+				this.inputSets.push({name: ''});
 				this.addInputSetEl();
 				this.setInputSetIndex(0);
 			} else

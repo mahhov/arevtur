@@ -15,6 +15,8 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
+		if (this.draggable)
+			return;
 		this.$('#container').addEventListener('keyup', e => {
 			if (e.key === 'Enter' && !e.shiftKey)
 				this.$('#container > :focus-within + *').focus();
