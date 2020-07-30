@@ -32,11 +32,11 @@ customElements.define(name, class Inputs extends XElement {
 
 		ApiConstants.constants.leagues.then(() =>
 			this.$('#loaded-leagues-status').classList.add('valid'));
-		ApiConstants.constants.initTypesPromise.then(() =>
+		ApiConstants.constants.types.then(() =>
 			this.$('#loaded-types-status').classList.add('valid'));
-		ApiConstants.constants.initPropertiesPromise.then(() =>
+		ApiConstants.constants.properties.then(() =>
 			this.$('#loaded-properties-status').classList.add('valid'));
-		ApiConstants.constants.initItemsPromise.then(() =>
+		ApiConstants.constants.items.then(() =>
 			this.$('#loaded-items-status').classList.add('valid'));
 
 		this.$('#league-input').addEventListener('change', () => this.store());

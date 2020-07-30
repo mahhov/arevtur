@@ -4,11 +4,10 @@ const ServicesDataFetcher = require('../services/DataFetcher');
 class Constants {
 	constructor() {
 		this.leagues = this.initLeagues();
-		// todo this is ugly, the actual values should be wrapped in a promise
-		this.initTypesPromise = this.initTypes();
-		this.initPropertiesPromise = this.initProperties();
+		this.types = this.initTypes();
+		this.properties = this.initProperties();
 		this.currencies = {};
-		this.initItemsPromise = this.initItems();
+		this.items = this.initItems();
 	}
 
 	async initLeagues() {
@@ -26,11 +25,12 @@ class Constants {
 		let cleanStr = str.replace(/[^:,{}[\]]+/g, field =>
 			field[0] === '"' ? field : `"${field.replace(/"/g, '\\"')}"`)
 		let data = JSON.parse(cleanStr);
-		this.types = data.propertyFilters
+		let types = data.propertyFilters
 			.find(({id}) => id === 'type_filters').filters
 			.find(({id}) => id === 'category').option.options
 			.map(({id, text}) => ({id, text: text.match(/"(.*)"/)[1]}));
-		this.types.find(({id}) => id === 'armour.chest').text += ' chest';
+		types.find(({id}) => id === 'armour.chest').text += ' chest';
+		return types;
 		/*
 			[{
 				id: 'weapon.claw',
@@ -40,22 +40,19 @@ class Constants {
 	}
 
 	async typeTexts() {
-		await this.initTypesPromise;
-		return this.types.map(({text}) => text);
+		return (await this.types).map(({text}) => text);
 	}
 
 	async typeTextToId(text) {
-		await this.initTypesPromise;
-		return this.types.find(type => type.text === text)?.id;
+		return (await this.types).find(type => type.text === text)?.id;
 	}
 
 	async typeIdToText(id) {
-		await this.initTypesPromise;
-		return this.types.find(type => type.id === id)?.text;
+		return (await this.types).find(type => type.id === id)?.text;
 	}
 
 	async initProperties() {
-		this.properties = JSON.parse((await get('https://www.pathofexile.com/api/trade/data/stats')).string).result
+		return JSON.parse((await get('https://www.pathofexile.com/api/trade/data/stats')).string).result
 			.flatMap(({entries}) => entries)
 			.map(({id, text, type}) => ({id, text: `${text} (${type})`}));
 		/*
@@ -67,18 +64,15 @@ class Constants {
 	}
 
 	async propertyTexts() {
-		await this.initPropertiesPromise;
-		return this.properties.map(({text}) => text);
+		return (await this.properties).map(({text}) => text);
 	}
 
 	async propertyTextToId(text) {
-		await this.initPropertiesPromise;
-		return this.properties.find(property => property.text === text)?.id;
+		return (await this.properties).find(property => property.text === text)?.id;
 	}
 
 	async propertyIdToText(id) {
-		await this.initPropertiesPromise;
-		return this.properties.find(property => property.id === id)?.text;
+		return (await this.properties).find(property => property.id === id)?.text;
 	}
 
 	async initCurrencies(league) {
@@ -108,11 +102,12 @@ class Constants {
 	}
 
 	currencyPrices(league) {
+		// todo consider expiring cache to keep currencies updated even if the apps been running a while
 		return this.currencies[league] = this.currencies[league] || this.initCurrencies(league);
 	}
 
 	async initItems() {
-		this.items = JSON.parse((await get('https://www.pathofexile.com/api/trade/data/items')).string).result
+		return JSON.parse((await get('https://www.pathofexile.com/api/trade/data/items')).string).result
 			.flatMap(({entries}) => entries)
 			.map(({name, text}) => name || text);
 		/* ['Pledge of Hands', ...] */
