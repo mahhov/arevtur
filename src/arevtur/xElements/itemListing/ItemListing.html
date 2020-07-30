@@ -4,7 +4,7 @@
 	:host {
 		display: block;
 		padding: 5px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--interactable-border);
 	}
 
 	:host(.selected) {
@@ -61,7 +61,7 @@
 	#value-build-tooltip {
 		position: absolute;
 		background: var(--back);
-		outline: 1px solid;
+		outline: 1px solid var(--interactable-focus-border);
 		display: none;
 		z-index: 1;
 		white-space: pre;

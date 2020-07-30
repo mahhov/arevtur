@@ -14,15 +14,15 @@
 	/* interactable elements e.g buttons or inputs */
 	--interactable-primary: black;
 	--interactable-back: white;
-	--interactable-border: #888;
+	--interactable-border: #ddd;
 	--interactable-hover-back: #eee;
 	--interactable-active-back: #ddd;
 	--interactable-focus-border: #002ad0;
 
 	/* non interactable elements that need to stand out e.g. progress bar */
-	--non-interactable-back: #eee;
+	--non-interactable-back: #e5e5e5;
 	--non-interactable-border: #888;
-	--non-interactable-fill: #ddd;
+	--non-interactable-fill: #c8c8c8;
 
 	/* invalid & valid */
 	--invalid-primary: black;
@@ -47,7 +47,7 @@
 	/* interactable elements e.g buttons or inputs */
 	--interactable-primary: white;
 	--interactable-back: black;
-	--interactable-border: #888;
+	--interactable-border: #222;
 	--interactable-hover-back: #444;
 	--interactable-active-back: #888;
 	--interactable-focus-border: #73b4e6;
