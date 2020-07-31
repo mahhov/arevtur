@@ -1,38 +1,38 @@
 const {httpRequest: {get}} = require('js-desktop-base');
 
-let getEndpoints = () => {
+let getEndpointsByLeague = () => {
 	const BASE = 'https://poe.ninja/api/data';
 	const ITEM = `itemoverview`;
 	const CURRENCY = `currencyoverview`;
 
-	let endpoint = (prefix, type) => league => `${BASE}/${prefix}?league=${league}&type=${type}`;
+	let genEndpointByLeague = (prefix, type) => league => `${BASE}/${prefix}?league=${league}&type=${type}`;
 
 	return {
-		GEM: endpoint(ITEM, 'SkillGem'),
-		DIVINATION_CARD: endpoint(ITEM, 'DivinationCard'),
-		ESSENCE: endpoint(ITEM, 'Essence'),
-		CURRENCY: endpoint(CURRENCY, 'Currency'),
-		UNIQUE_JEWEL: endpoint(ITEM, 'UniqueJewel'),
-		UNIQUE_FLASK: endpoint(ITEM, 'UniqueFlask'),
-		UNIQUE_WEAPON: endpoint(ITEM, 'UniqueWeapon'),
-		UNIQUE_ARMOUR: endpoint(ITEM, 'UniqueArmour'),
-		UNIQUE_ACCESSORY: endpoint(ITEM, 'UniqueAccessory'),
-		UNIQUE_MAP: endpoint(ITEM, 'UniqueMap'),
-		FOSSIL: endpoint(ITEM, 'Fossil'),
-		RESONATOR: endpoint(ITEM, 'Resonator'),
-		FRAGMENT: endpoint(CURRENCY, 'Fragment'),
-		PROPHECY: endpoint(ITEM, 'Prophecy'),
-		MAP: endpoint(ITEM, 'Map'),
-		SCARAB: endpoint(ITEM, 'Scarab'),
-		BASE_ITEM: endpoint(ITEM, 'BaseType'),
-		INCUBATOR: endpoint(ITEM, 'Incubator'),
-		OIL: endpoint(ITEM, 'Oil'),
-		BEAST: endpoint(ITEM, 'Beast'),
-		DELIRIUM_ORB: endpoint(ITEM, 'DeliriumOrb'),
+		GEM: genEndpointByLeague(ITEM, 'SkillGem'),
+		DIVINATION_CARD: genEndpointByLeague(ITEM, 'DivinationCard'),
+		ESSENCE: genEndpointByLeague(ITEM, 'Essence'),
+		CURRENCY: genEndpointByLeague(CURRENCY, 'Currency'),
+		UNIQUE_JEWEL: genEndpointByLeague(ITEM, 'UniqueJewel'),
+		UNIQUE_FLASK: genEndpointByLeague(ITEM, 'UniqueFlask'),
+		UNIQUE_WEAPON: genEndpointByLeague(ITEM, 'UniqueWeapon'),
+		UNIQUE_ARMOUR: genEndpointByLeague(ITEM, 'UniqueArmour'),
+		UNIQUE_ACCESSORY: genEndpointByLeague(ITEM, 'UniqueAccessory'),
+		UNIQUE_MAP: genEndpointByLeague(ITEM, 'UniqueMap'),
+		FOSSIL: genEndpointByLeague(ITEM, 'Fossil'),
+		RESONATOR: genEndpointByLeague(ITEM, 'Resonator'),
+		FRAGMENT: genEndpointByLeague(CURRENCY, 'Fragment'),
+		PROPHECY: genEndpointByLeague(ITEM, 'Prophecy'),
+		MAP: genEndpointByLeague(ITEM, 'Map'),
+		SCARAB: genEndpointByLeague(ITEM, 'Scarab'),
+		BASE_ITEM: genEndpointByLeague(ITEM, 'BaseType'),
+		INCUBATOR: genEndpointByLeague(ITEM, 'Incubator'),
+		OIL: genEndpointByLeague(ITEM, 'Oil'),
+		BEAST: genEndpointByLeague(ITEM, 'Beast'),
+		DELIRIUM_ORB: genEndpointByLeague(ITEM, 'DeliriumOrb'),
 	};
 };
 
-let endpoints = getEndpoints();
+let endpointsByLeague = getEndpointsByLeague();
 
 const CACHE_DURATION_S = 12 * 60; // 12 minutes
 
@@ -54,8 +54,7 @@ let getData = endpoint => {
 		});
 };
 
-// todo rename endpoints to endpointByLeague to make it clear it's not a string but a function
-module.exports = {endpoints, getData};
+module.exports = {endpointsByLeague, getData};
 
 // axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() * 10000)}});
 // df = require('./DataFetcher');

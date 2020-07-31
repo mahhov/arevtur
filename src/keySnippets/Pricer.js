@@ -40,15 +40,15 @@ class TextItem {
 }
 
 class Pricer {
-	constructor(type, dataEndpoints) {
+	constructor(type, dataEndpointsByLeague) {
 		this.type = type;
-		this.dataEndpoints = dataEndpoints;
+		this.dataEndpointsByLeague = dataEndpointsByLeague;
 	}
 
 	refreshData() {
 		this.dataStream = stream()
-			.write(...this.dataEndpoints)
-			.map(endpoint => endpoint(config.config.league))
+			.write(...this.dataEndpointsByLeague)
+			.map(endpointByLeague => endpointByLeague(config.config.league))
 			.map(DataFetcher.getData);
 	}
 
@@ -84,12 +84,12 @@ class Pricer {
 class UniquePricer extends Pricer {
 	constructor() {
 		super('Unique', [
-			DataFetcher.endpoints.UNIQUE_JEWEL,
-			DataFetcher.endpoints.UNIQUE_FLASK,
-			DataFetcher.endpoints.UNIQUE_WEAPON,
-			DataFetcher.endpoints.UNIQUE_ARMOUR,
-			DataFetcher.endpoints.UNIQUE_ACCESSORY,
-			DataFetcher.endpoints.UNIQUE_MAP,
+			DataFetcher.endpointsByLeague.UNIQUE_JEWEL,
+			DataFetcher.endpointsByLeague.UNIQUE_FLASK,
+			DataFetcher.endpointsByLeague.UNIQUE_WEAPON,
+			DataFetcher.endpointsByLeague.UNIQUE_ARMOUR,
+			DataFetcher.endpointsByLeague.UNIQUE_ACCESSORY,
+			DataFetcher.endpointsByLeague.UNIQUE_MAP,
 		]);
 	}
 
@@ -100,7 +100,7 @@ class UniquePricer extends Pricer {
 
 class CurrencyPricer extends Pricer {
 	constructor() {
-		super('Currency', [DataFetcher.endpoints.CURRENCY]);
+		super('Currency', [DataFetcher.endpointsByLeague.CURRENCY]);
 	}
 
 	typeFilter(inputItem) {
@@ -125,13 +125,13 @@ class CurrencyPricer extends Pricer {
 
 class DivinationPricer extends Pricer {
 	constructor() {
-		super('Divination Card', [DataFetcher.endpoints.DIVINATION_CARD]);
+		super('Divination Card', [DataFetcher.endpointsByLeague.DIVINATION_CARD]);
 	}
 }
 
 class EssencePricer extends Pricer {
 	constructor() {
-		super('Currency', [DataFetcher.endpoints.ESSENCE]);
+		super('Currency', [DataFetcher.endpointsByLeague.ESSENCE]);
 	}
 
 	typeFilter(inputItem) {
@@ -145,7 +145,7 @@ class EssencePricer extends Pricer {
 
 class GemPricer extends Pricer {
 	constructor() {
-		super('Gem', [DataFetcher.endpoints.GEM]);
+		super('Gem', [DataFetcher.endpointsByLeague.GEM]);
 	}
 
 	priceString(item) {
@@ -156,7 +156,7 @@ class GemPricer extends Pricer {
 
 class FossilPricer extends Pricer {
 	constructor() {
-		super('Currency', [DataFetcher.endpoints.FOSSIL]);
+		super('Currency', [DataFetcher.endpointsByLeague.FOSSIL]);
 	}
 
 	typeFilter(inputItem) {
@@ -170,7 +170,7 @@ class FossilPricer extends Pricer {
 
 class FragmentPricer extends Pricer {
 	constructor() {
-		super('', [DataFetcher.endpoints.FRAGMENT]);
+		super('', [DataFetcher.endpointsByLeague.FRAGMENT]);
 	}
 
 	typeFilter(inputItem) {
@@ -193,7 +193,7 @@ class FragmentPricer extends Pricer {
 
 class ResonatorPricer extends Pricer {
 	constructor() {
-		super('Currency', [DataFetcher.endpoints.RESONATOR]);
+		super('Currency', [DataFetcher.endpointsByLeague.RESONATOR]);
 	}
 
 	typeFilter(inputItem) {
@@ -207,13 +207,13 @@ class ResonatorPricer extends Pricer {
 
 class ProphecyPricer extends Pricer {
 	constructor() {
-		super('Normal', [DataFetcher.endpoints.PROPHECY]);
+		super('Normal', [DataFetcher.endpointsByLeague.PROPHECY]);
 	}
 }
 
 class MapPricer extends Pricer {
 	constructor() {
-		super('Normal', [DataFetcher.endpoints.MAP]);
+		super('Normal', [DataFetcher.endpointsByLeague.MAP]);
 	}
 
 	typeFilter(inputItem) {
@@ -235,13 +235,13 @@ class MapPricer extends Pricer {
 
 class ScarabPricer extends Pricer {
 	constructor() {
-		super('Normal', [DataFetcher.endpoints.SCARAB]);
+		super('Normal', [DataFetcher.endpointsByLeague.SCARAB]);
 	}
 }
 
 class BaseItemPricer extends Pricer {
 	constructor() {
-		super('', [DataFetcher.endpoints.BASE_ITEM]);
+		super('', [DataFetcher.endpointsByLeague.BASE_ITEM]);
 	}
 
 	typeFilter(inputItem) {
@@ -270,25 +270,25 @@ class BaseItemPricer extends Pricer {
 
 class IncubatorPricer extends Pricer {
 	constructor() {
-		super('Normal', [DataFetcher.endpoints.INCUBATOR]);
+		super('Normal', [DataFetcher.endpointsByLeague.INCUBATOR]);
 	}
 }
 
 class OilPricer extends Pricer {
 	constructor() {
-		super('Currency', [DataFetcher.endpoints.OIL]);
+		super('Currency', [DataFetcher.endpointsByLeague.OIL]);
 	}
 }
 
 class BeastPricer extends Pricer {
 	constructor() {
-		super('Unique', [DataFetcher.endpoints.BEAST]);
+		super('Unique', [DataFetcher.endpointsByLeague.BEAST]);
 	}
 }
 
 class DeliriumOrbPricer extends Pricer {
 	constructor() {
-		super('Currency', [DataFetcher.endpoints.DELIRIUM_ORB]);
+		super('Currency', [DataFetcher.endpointsByLeague.DELIRIUM_ORB]);
 	}
 }
 

@@ -76,8 +76,8 @@ class Constants {
 	}
 
 	async initCurrencies(league) {
-		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.CURRENCY(league));
-		let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpoints.PROPHECY(league));
+		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpointsByLeague.CURRENCY(league));
+		let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpointsByLeague.PROPHECY(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
 		prophecyPrices = await prophecyPrices;
