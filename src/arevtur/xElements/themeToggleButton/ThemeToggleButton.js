@@ -14,9 +14,7 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		this.$('button').addEventListener('click', () =>
 			configForRenderer.config = {darkTheme: !configForRenderer.config.darkTheme});
-		configForRenderer.listenConfigChange(config => {
-			this.$('button').classList.toggle('active', config.darkTheme);
-			document.documentElement.classList.toggle('dark', config.darkTheme);
-		});
+		configForRenderer.listenConfigChange(config =>
+			document.documentElement.classList.toggle('dark', config.darkTheme));
 	}
 });

@@ -39,7 +39,7 @@ body {
 }
 
 button, input, select,
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb, .interactable {
 	background: var(--interactable-back);
 	color: var(--interactable-primary);
 	border: 1px solid var(--interactable-border);

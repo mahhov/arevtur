@@ -22,8 +22,6 @@ customElements.define(name, class Inputs extends XElement {
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 
-		this.$('#results-chart').background = 'rgb(245,245,245)';
-
 		this.$('#results-chart').addEventListener('action', e =>
 			this.emit('submit', {overridePrice: e.detail.x || null}));
 
@@ -102,31 +100,23 @@ customElements.define(name, class Inputs extends XElement {
 	renderItemsDataChart(resetChartRange = false) {
 		this.$('#results-chart').pointSets = [
 			{
-				color: 'rgb(255,255,255)',
-				fill: true,
-				size: 1,
-				points: this.itemsData.searchBoundPath,
-				isPath: true,
-			}, {
-				color: 'rgb(0,0,255)',
+				cssPropertyValueColor: '--interactable-primary',
 				size: 1,
 				points: this.itemsData.bestBoundPath,
 				isPath: true,
 			}, {
-				color: 'rgb(0,0,0)',
+				cssPropertyValueColor: '--alternate-primary',
+				fill: true,
+				size: 8,
+				points: ItemsData.itemsToPoints(this.itemsData.selectedItems),
+			}, {
+				cssPropertyValueColor: '--interactable-primary',
 				fill: true,
 				size: 4,
 				points: ItemsData.itemsToPoints(this.itemsData.items),
 			}, {
-				color: 'rgb(0,0,255)',
-				size: 8,
-				points: ItemsData.itemsToPoints(this.itemsData.bestBoundItems),
-			}, {
-				color: 'rgb(170,170,0)',
-				size: 8,
-				points: ItemsData.itemsToPoints(this.itemsData.selectedItems),
-			}, {
-				color: 'rgb(20,70,100)',
+				cssPropertyValueColor: '--alternate-primary',
+				fill: true,
 				size: 8,
 				points: ItemsData.itemsToPoints(this.itemsData.hoveredItems),
 			},

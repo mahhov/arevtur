@@ -1,9 +1,10 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const {configForRenderer} = require('../../../services/configForRenderer')
 
 customElements.define(name, class Chart extends XElement {
 	static get attributeTypes() {
-		return {width: {}, height: {}, background: {}};
+		return {width: {}, height: {}, axisLabelX: {}, axisLabelY: {}};
 	}
 
 	static get htmlTemplate() {
@@ -11,8 +12,10 @@ customElements.define(name, class Chart extends XElement {
 	}
 
 	connectedCallback() {
+		configForRenderer.listenConfigChange(config =>
+			this.draw());
+
 		this.ctx = this.$('canvas').getContext('2d');
-		this.ctx.font = '14px serif';
 
 		this.$('canvas').addEventListener('mousedown', e => {
 			this.dragged = false;
@@ -25,6 +28,7 @@ customElements.define(name, class Chart extends XElement {
 			if (!this.mouseDown)
 				return;
 			this.dragged = true;
+			this.$('#always-refocus-check').checked = false;
 			if (e.buttons & 1 && !e.shiftKey)
 				this.panRange(e.offsetX - this.mouseDown.x, e.offsetY - this.mouseDown.y);
 			else if (e.buttons & 2 || e.shiftKey)
@@ -43,14 +47,21 @@ customElements.define(name, class Chart extends XElement {
 				return;
 			this.resetRange(e.shiftKey);
 		});
+		this.$('canvas').addEventListener('wheel', e => {
+			this.$('#always-refocus-check').checked = false;
+			let d = e.deltaY / 10;
+			this.zoomRange(-d, d);
+		});
 
 		this.$('#always-refocus-check').checked = localStorage.getItem('chart-always-refocus');
 		this.$('#refocus-button').addEventListener('click', () => this.resetRange());
-		this.$('#always-refocus-check').addEventListener('input', () => this.saveAutoRefocus());
+		this.$('#always-refocus-check').addEventListener('input', () => {
+			this.saveAutoRefocus();
+			this.resetRange();
+		});
 
-		this.background = this.background || 'white';
-		this.pointSets = [];
 		this.resetRange();
+		this.pointSets = [];
 	}
 
 	set width(value) {
@@ -61,7 +72,11 @@ customElements.define(name, class Chart extends XElement {
 		this.$('canvas').height = value;
 	}
 
-	set background(value) {
+	set axisLabelX(value) {
+		this.draw();
+	}
+
+	set axisLabelY(value) {
 		this.draw();
 	}
 
@@ -107,16 +122,16 @@ customElements.define(name, class Chart extends XElement {
 	}
 
 	draw() {
-		if (!this.background || !this.pointSets_ || this.minX === undefined)
+		if (!this.ctx || !this.pointSets_ || this.minX === undefined)
 			return;
-		this.ctx.fillStyle = this.background;
-		this.ctx.fillRect(0, 0, this.width, this.height);
+		this.ctx.clearRect(0, 0, this.width, this.height);
 		this.drawPoints();
 		this.drawAxis();
 	}
 
 	drawPoints() {
-		this.pointSets_.forEach(({color, fill, size, points, isPath}) => {
+		this.pointSets_.forEach(({color, cssPropertyValueColor, fill, size, points, isPath}) => {
+			color = color || getComputedStyle(this).getPropertyValue(cssPropertyValueColor);
 			this.ctx.strokeStyle = color;
 			this.ctx.fillStyle = color;
 			if (isPath) {
@@ -144,25 +159,52 @@ customElements.define(name, class Chart extends XElement {
 
 	drawAxis() {
 		let n = 20;
-		let step = this.width / n;
-		let size = 10;
-		let sizeSmall = 1;
+		let step = this.width / n, stepY = this.height / n;
+		let tickLength = 10;
 
 		this.ctx.lineWidth = 1;
-		this.ctx.strokeStyle = `rgb(0, 0, 0)`;
-		this.ctx.fillStyle = `rgb(0, 0, 0)`;
-		this.ctx.strokeRect(this.width / n, this.height * (n - 1) / n, this.width * (n - 2) / n, 0); // x axis line
-		this.ctx.strokeRect(this.width / n, this.height / n, 0, this.width * (n - 2) / n); // y axis line
+		let color = getComputedStyle(this).getPropertyValue('--interactable-primary');
+		this.ctx.strokeStyle = color;
+		this.ctx.fillStyle = color;
+		this.line(step * 1.5, stepY * 18.5, step * 18, 0); // x axis line
+		this.line(step * 1.5, stepY * .5, 0, stepY * 18); // y axis line
+		this.ctx.font = '16px arial';
+		this.ctx.textAlign = 'center';
+		this.ctx.textBaseline = 'bottom';
+		this.ctx.fillText(this.axisLabelX, step * 10, stepY * 20); // x axis label
+		this.ctx.textAlign = 'center';
+		this.ctx.textBaseline = 'top';
+		this.verticalText(this.axisLabelY, 0, stepY * 10); // y axis label
+		this.ctx.font = '14px arial';
 		for (let i = 2; i < n; i += 2) {
 			let x = i * step;
-			let y = (n - i) * step;
+			let y = (n - i) * stepY;
 			let xText = Chart.numToPrint(this.minX + i / n * this.deltaX);
 			let yText = Chart.numToPrint(this.minY + i / n * this.deltaY);
-			this.ctx.fillText(xText, x - 9, step * (n - 1) + 17); // x axis text
-			this.ctx.fillText(yText, step - 28, y + 4, 30); // y axis text
-			this.ctx.fillRect(x - sizeSmall / 2, step * (n - 1) - size / 2, sizeSmall, size); // x axis dots
-			this.ctx.fillRect(step - size / 2, x - sizeSmall / 2, size, sizeSmall); // y axis dots
+			this.ctx.textAlign = 'center';
+			this.ctx.textBaseline = 'top';
+			this.ctx.fillText(xText, x, stepY * 18.5 + tickLength); // x axis text
+			this.ctx.textAlign = 'right';
+			this.ctx.textBaseline = 'middle';
+			this.ctx.fillText(yText, step * 1.5 - tickLength, y, 30); // y axis text
+			this.line(x, stepY * 18.5 - tickLength / 2, 0, tickLength); // x axis tick
+			this.line(step * 1.5 - tickLength / 2, y, tickLength, 0); // y axis tick
 		}
+	}
+
+	verticalText(text, x, y) {
+		this.ctx.save();
+		this.ctx.translate(x, y);
+		this.ctx.rotate(-Math.PI / 2);
+		this.ctx.fillText(text, 0, 0);
+		this.ctx.restore();
+	}
+
+	line(x, y, xd, yd) {
+		this.ctx.beginPath();
+		this.ctx.moveTo(x, y);
+		this.ctx.lineTo(x + xd, y + yd);
+		this.ctx.stroke();
 	}
 
 	pixelToCoord(x, y) {
