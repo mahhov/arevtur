@@ -1,5 +1,8 @@
-const {httpRequest: {get}} = require('js-desktop-base');
+const {httpRequest} = require('js-desktop-base');
 const ServicesDataFetcher = require('../services/DataFetcher');
+
+// Without a non-empty user-agent header, PoE will return 403.
+let get = endpoint => httpRequest.get(endpoint, {}, {'User-Agent': '_'});
 
 class Constants {
 	constructor() {
