@@ -221,7 +221,8 @@ class QueryParams {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
-			let headers = this.sessionId ? {Cookie: `POESESSID=${this.sessionId}`} : {};
+			// Without a non-empty user-agent header, PoE will return 403.
+			let headers = {'User-Agent': '_', Cookie: this.sessionId ? `POESESSID=${this.sessionId}` : ''};
 			progressCallback('Initial query.', 0);
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
