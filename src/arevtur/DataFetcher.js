@@ -155,9 +155,9 @@ class QueryParams {
 					},
 					armour_filters: {
 						filters: {
-							ar: {min: overridden.defenseProperties.armour.min},
-							ev: {min: overridden.defenseProperties.evasion.min},
-							es: {min: overridden.defenseProperties.energyShield.min},
+							ar: overridden.defenseProperties.armour.min && {min: overridden.defenseProperties.armour.min},
+							ev: overridden.defenseProperties.evasion.min && {min: overridden.defenseProperties.evasion.min},
+							es: overridden.defenseProperties.energyShield.min && {min: overridden.defenseProperties.energyShield.min},
 						}
 					},
 					misc_filters: {filters: miscFilters},
