@@ -211,12 +211,6 @@ class ResonatorPricer extends Pricer {
 	}
 }
 
-class ProphecyPricer extends Pricer {
-	constructor() {
-		super('Normal', [DataFetcher.endpointsByLeague.PROPHECY]);
-	}
-}
-
 class MapPricer extends Pricer {
 	constructor() {
 		super('Normal', [DataFetcher.endpointsByLeague.MAP]);
@@ -307,7 +301,6 @@ let pricers = stream().write(
 	new FossilPricer(),
 	new FragmentPricer(),
 	new ResonatorPricer(),
-	new ProphecyPricer(),
 	new MapPricer(),
 	new ScarabPricer(),
 	new BaseItemPricer(),

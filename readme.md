@@ -25,7 +25,6 @@ Includes:
 - fossil
 - resonator
 - fragment
-- prophecy
 - map
 - scarab
 - crafting base item (per ilvl)

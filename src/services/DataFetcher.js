@@ -21,7 +21,6 @@ let getEndpointsByLeague = () => {
 		FOSSIL: genEndpointByLeague(ITEM, 'Fossil'),
 		RESONATOR: genEndpointByLeague(ITEM, 'Resonator'),
 		FRAGMENT: genEndpointByLeague(CURRENCY, 'Fragment'),
-		PROPHECY: genEndpointByLeague(ITEM, 'Prophecy'),
 		MAP: genEndpointByLeague(ITEM, 'Map'),
 		SCARAB: genEndpointByLeague(ITEM, 'Scarab'),
 		BASE_ITEM: genEndpointByLeague(ITEM, 'BaseType'),
