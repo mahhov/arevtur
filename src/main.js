@@ -4,8 +4,8 @@ require('./services/config');
 const keySnippet = require('./keySnippets/keySnippets');
 let windows = [
 	// require('./updateCheck/updateCheck'),
-	// require('./arevtur/arevtur'),
-	require('./arevtur2/arevtur'),
+	require('./arevtur/arevtur'),
+	// require('./arevtur2/arevtur'),
 	require('./modViewer/modViewer'),
 ];
 

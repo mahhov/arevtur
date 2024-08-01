@@ -70,11 +70,11 @@ Sharing properties will keep queries in sync.
 ![sharing.gif](./screenshots/sharing.gif)
 
 #### Searching for 6-link
-Searching for 6-links will display not only 6-linked items, but also uncorrupted, unlinked items with the price of the Fated Connections prophecy factored in.
+Searching for 6-links will display not only 6-linked items, but also uncorrupted, unlinked items with the price of the 6-link bench craft factored in.
 - E.g. here, we want a 6-link body.
 - The best 6-linked item we find is worth over 400c and has a value of 845.
 - But we also find a similar unlinked item available for just 50c and with a very similar value of 825.
-- In this case, it's cheaper to buy the latter item and 6-link it ourselves with the Fated Connections prophecy.
+- In this case, it's cheaper to buy the latter item and 6-link it ourselves with the bench craft.
 ![6-link.gif](./screenshots/6-link.gif)
 
 #### Searching for craftable affixes

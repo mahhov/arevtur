@@ -14,7 +14,8 @@ class Constants {
 	}
 
 	async initLeagues() {
-		return JSON.parse((await get('https://api.pathofexile.com/leagues')).string)
+		let response = await get('https://api.pathofexile.com/leagues');
+		return JSON.parse(response.string)
 			.filter(league => !league.rules.some(rule => rule.id === 'NoParties'))
 			.map(league => league.id);
 		/*
@@ -23,15 +24,16 @@ class Constants {
 	}
 
 	async initTypes() {
-		let str = (await get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js')).string
-			.match(/return(.*)\}\);/)[1];
-		let cleanStr = str.replace(/[^:,{}[\]]+/g, field =>
-			field[0] === '"' ? field : `"${field.replace(/"/g, '\\"')}"`)
+		let response = await get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js');
+		let str = response.string.match(/return(.*)}\)\);/)[1];
+		let cleanStr = str
+			.replace(/e\.translate\("(.*?)"\)/g, '"$1"')
+			.replace(/([{,])(\w+):/g, '$1"$2":')
+			.replace(/!(\d)/g, `"!${1}}}"`);
 		let data = JSON.parse(cleanStr);
 		let types = data.propertyFilters
 			.find(({id}) => id === 'type_filters').filters
-			.find(({id}) => id === 'category').option.options
-			.map(({id, text}) => ({id, text: text.match(/"(.*)"/)[1]}));
+			.find(({id}) => id === 'category').option.options;
 		types.find(({id}) => id === 'armour.chest').text += ' chest';
 		return types;
 		/*
@@ -43,19 +45,23 @@ class Constants {
 	}
 
 	async typeTexts() {
-		return (await this.types).map(({text}) => text);
+		let types = await this.types;
+		return types.map(({text}) => text);
 	}
 
 	async typeTextToId(text) {
-		return (await this.types).find(type => type.text === text)?.id;
+		let types = await this.types;
+		return types.find(type => type.text === text)?.id;
 	}
 
 	async typeIdToText(id) {
-		return (await this.types).find(type => type.id === id)?.text;
+		let types = await this.types;
+		return types.find(type => type.id === id)?.text;
 	}
 
 	async initProperties() {
-		return JSON.parse((await get('https://www.pathofexile.com/api/trade/data/stats')).string).result
+		let response = await get('https://www.pathofexile.com/api/trade/data/stats');
+		return JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({id, text, type}) => ({id, text: `${text} (${type})`}));
 		/*
@@ -67,23 +73,24 @@ class Constants {
 	}
 
 	async propertyTexts() {
-		return (await this.properties).map(({text}) => text);
+		let properties = await this.properties;
+		return properties.map(({text}) => text);
 	}
 
 	async propertyTextToId(text) {
-		return (await this.properties).find(property => property.text === text)?.id;
+		let properties = await this.properties;
+		return properties.find(property => property.text === text)?.id;
 	}
 
 	async propertyIdToText(id) {
-		return (await this.properties).find(property => property.id === id)?.text;
+		let properties = await this.properties;
+		return properties.find(property => property.id === id)?.text;
 	}
 
 	async initCurrencies(league) {
 		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpointsByLeague.CURRENCY(league));
-		let prophecyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpointsByLeague.PROPHECY(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
-		prophecyPrices = await prophecyPrices;
 		staticDataStr = await staticDataStr;
 
 		let tuples = JSON.parse(staticDataStr.string).result
@@ -95,10 +102,7 @@ class Constants {
 				return [id, price];
 			});
 
-		let fatedConnectionsPrice = prophecyPrices.lines
-			.find(line => line.name === 'Fated Connections')
-			.chaosValue;
-		tuples.push(['fatedConnectionsProphecy', fatedConnectionsPrice]);
+		tuples.push(['fatedConnectionsProphecy', 750]); // todo use the price for 1500 fuse bench craft
 		tuples.push(['chaos', 1]);
 		return Object.fromEntries(tuples);
 		/* {alt: .125, ...} */
@@ -110,7 +114,8 @@ class Constants {
 	}
 
 	async initItems() {
-		return JSON.parse((await get('https://www.pathofexile.com/api/trade/data/items')).string).result
+		let response = await get('https://www.pathofexile.com/api/trade/data/items');
+		return JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({name, text}) => name || text);
 		/* ['Pledge of Hands', ...] */
