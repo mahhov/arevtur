@@ -5,6 +5,11 @@ const ApiConstants = require('../../ApiConstants');
 const {QueryImport} = require('../../DataFetcher');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 
+let timestamp = () => {
+	let date = new Date();
+	return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
+};
+
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
 		return {};
@@ -54,7 +59,7 @@ customElements.define(name, class Inputs extends XElement {
 			let queryImport = new QueryImport(this.$('#session-id-input').value, e.detail);
 			let apiQueryParams = await queryImport.getApiQueryParams();
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
-			this.inputSets.push({active: false, queryParams: unifiedQueryParams});
+			this.inputSets.push({name: `imported ${timestamp()}}`, active: false, queryParams: unifiedQueryParams});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1);
 			this.store();
@@ -66,7 +71,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.store();
 		});
 		this.$('#add-input-set-button').addEventListener('click', e => {
-			this.inputSets.push({});
+			this.inputSets.push({name: timestamp()});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
 			this.store();
@@ -119,6 +124,7 @@ customElements.define(name, class Inputs extends XElement {
 	addInputSetEl() {
 		let inputSetEl = document.createElement('x-input-set');
 		inputSetEl.slot = 'list';
+		inputSetEl.name = this.inputSets[this.inputSets.length - 1].name;
 		this.$('#input-set-list').appendChild(inputSetEl);
 		inputSetEl.addEventListener('click', e =>
 			this.setInputSetIndex(0, inputSetEl, !e.ctrlKey));
@@ -133,7 +139,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.inputSets.splice(index, 1);
 			inputSetEl.remove();
 			if (!this.inputSets.length) {
-				this.inputSets.push({name: ''});
+				this.inputSets.push({name: timestamp()});
 				this.addInputSetEl();
 				this.setInputSetIndex(0);
 			} else
