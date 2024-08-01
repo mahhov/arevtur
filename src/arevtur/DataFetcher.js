@@ -52,6 +52,7 @@ class QueryParams {
 		this.type = data.type || '';
 		this.minValue = data.minValue || 0;
 		this.maxPrice = data.maxPrice || 0;
+		this.online = data.online || false;
 		this.defenseProperties = data.defenseProperties || {
 			armour: {min: 0, weight: 0},
 			evasion: {min: 0, weight: 0},
@@ -73,7 +74,6 @@ class QueryParams {
 		// {property: undefined, ...}
 		this.nots = data.nots || {};
 		this.sort = data.sort || ApiConstants.SORT.value;
-		this.online = data.online || false;
 		this.affixValueShift = data.affixValueShift || 0;
 		this.priceShifts = data.priceShifts || {};
 	}

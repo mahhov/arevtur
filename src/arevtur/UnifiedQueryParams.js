@@ -151,6 +151,7 @@ class UnifiedQueryParams {
 			maxPrice: maxPrice,
 			online: !this.offline,
 			defenseProperties: this.defenseProperties,
+			affixProperties: {prefix: false, suffix: false},
 			linked: this.linked,
 			uncorrupted: this.uncorrupted,
 			nonUnique: this.nonUnique,
