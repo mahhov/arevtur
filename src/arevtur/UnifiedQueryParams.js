@@ -147,6 +147,7 @@ class UnifiedQueryParams {
 			sessionId: sessionId,
 			name: this.name,
 			type: this.type,
+			minValue: this.minValue,
 			maxPrice: maxPrice,
 			online: !this.offline,
 			defenseProperties: this.defenseProperties,
@@ -289,7 +290,7 @@ class UnifiedQueryParams {
 			type: filters?.type_filters?.filters?.category?.option || '',
 			minValue: weightedStats?.value?.min || 0,
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 1,
-			offline: apiQueryParams.status !== 'online' && apiQueryParams.status?.option !== 'online',
+			offline: apiQueryParams?.query.status !== 'online' && apiQueryParams?.query.status.option !== 'online',
 			// defenseProperties
 			// affixProperties
 			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,
