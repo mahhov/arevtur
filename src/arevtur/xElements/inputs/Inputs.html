@@ -14,8 +14,10 @@
 	}
 
 	x-input-build,
-	#input-set-container {
-		margin-top: 5px;
+	input-import-trade-search-url,
+	#input-trade-params,
+	#query-buttons {
+		margin-top: 15px;
 	}
 
 	x-input-build {
@@ -24,11 +26,6 @@
 
 	#input-set-list x-input-set.dragging {
 		outline: 1px solid var(--interactable-focus-border);
-	}
-
-	#input-trade-params,
-	#query-buttons {
-		margin-top: 15px;
 	}
 
 	#input-trade-params.hidden {
@@ -46,11 +43,12 @@
 		<span id="loaded-currencies-status" class="loaded-status invalid">Currencies</span>
 		<span id="loaded-items-status" class="loaded-status invalid">Items</span>
 		<span id="loaded-pob-status" class="loaded-status invalid">PoB Integration</span>
-
 		<x-theme-toggle-button></x-theme-toggle-button>
 	</div>
 
 	<x-input-build id="input-build"></x-input-build>
+
+	<x-input-import-trade-search-url id="input-import-trade-search-url" url="https://www.pathofexile.com/trade/search/Settlers/Wevlbqrsm"></x-input-import-trade-search-url>
 
 	<div id="input-set-container">
 		<x-arrangable-list id="input-set-list"></x-arrangable-list>

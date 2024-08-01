@@ -24,6 +24,7 @@ class RateLimitedRetryQueue {
 				this.lastTime = Date.now();
 				return resolve(await handler());
 			} catch (e) {
+				console.warn('RateLimitedRetryQueue failed', e, '. Will retry in ', retry);
 				await sleep(retry);
 			}
 		try {

@@ -3,8 +3,13 @@
 	@import '../sharedStyle.css';
 
 	body {
+		display: flex
+	}
+
+	.container {
 		display: flex;
 		flex-direction: column;
+		flex: 1
 	}
 
 	x-results {
@@ -18,20 +23,21 @@
 	require('./xElements/import');
 </script>
 
-<x-inputs></x-inputs>
-<x-results></x-results>
+<div class="container">
+	<x-inputs></x-inputs>
+	<x-results></x-results>
+</div>
 
 <script>
+	const {QueryParams} = require('./DataFetcher');
 	const $ = document.querySelector.bind(document);
 
 	let lastQueryParams;
-
-	let submitQueries = async queryParams => {
-		if (lastQueryParams)
-			cancelQueries();
-		lastQueryParams = queryParams;
-		let progressRatios = queryParams.map(_ => 0);
-		queryParams.forEach((queryParam, i) =>
+	let submitQueries = async queryParamsDatas => {
+		cancelQueries();
+		lastQueryParams = queryParamsDatas.map(data => new QueryParams(data));
+		let progressRatios = lastQueryParams.map(_ => 0);
+		lastQueryParams.forEach((queryParam, i) =>
 			queryParam.getItemsStream((text, ratio) => {
 				progressRatios[i] = ratio;
 				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) / progressRatios.length;
@@ -42,7 +48,7 @@
 			}));
 	};
 
-	let cancelQueries = async () => {
+	let cancelQueries = () => {
 		lastQueryParams?.forEach(queryParam => queryParam.stop());
 		lastQueryParams = null;
 	};
@@ -50,13 +56,13 @@
 	$('x-inputs').addEventListener('submit', async e => {
 		if (!e.detail.add)
 			$('x-results').clearItems();
-		submitQueries(await $('x-inputs').getQueries());
+		submitQueries(await $('x-inputs').getQueryParamsDatas());
 	});
 
 	$('x-inputs').addEventListener('cancel', cancelQueries);
 
 	$('x-results').addEventListener('submit', async e =>
-		submitQueries(await $('x-inputs').getQueries(e.detail.overridePrice)));
+		submitQueries(await $('x-inputs').getQueryParamsDatas(e.detail.overridePrice)));
 
 	// todo
 	// assume quality 0%

@@ -1,35 +1,8 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
-
-const defensePropertyTuples = [
-	['armour', '#armour-input'],
-	['evasion', '#evasion-input'],
-	['energyShield', '#energy-shield-input'],
-];
-
-const affixPropertyTuples = [
-	['prefix', '#prefix-input'],
-	['suffix', '#suffix-input'],
-];
-
-const influenceProperties = [
-	'hunter',
-	'crusader',
-	'shaper',
-	'elder',
-	'redeemer',
-	'warlord',
-];
-
-const queryPropertyFilters = [
-	// queryParamsKey, queryPropertyFilter, hasWeight
-	['weightEntries', 'weight', true],
-	['andEntries', 'and', true],
-	['notEntries', 'not'],
-	['conditionalPrefixEntries', 'conditional prefix', true],
-	['conditionalSuffixEntries', 'conditional suffix', true],
-]
+const UnifiedQueryParams = require('../../UnifiedQueryParams');
+const {defensePropertyTuples, affixPropertyTuples, influenceProperties} = require('./Properties');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -178,52 +151,11 @@ customElements.define(name, class extends XElement {
 		this.$('#influence-input').valuesAsArray = value;
 	}
 
-	async loadQueryParams(queryParams = {}, sharedWeightEntries) {
-		this.name = queryParams.name || '';
-		this.type = await ApiConstants.constants.typeIdToText(queryParams.type) || '';
-		this.minValue = queryParams.minValue || 0;
-		this.price = queryParams.maxPrice || 1;
-		this.offline = queryParams.offline || false;
-		let defenseProperties = queryParams.defenseProperties || {};
-		defensePropertyTuples.forEach(([property]) => {
-			let defenseProperty = defenseProperties[property];
-			this[property] = defenseProperty ? defenseProperty.weight : 0;
-		});
-		let affixProperties = queryParams.affixProperties || {};
-		affixPropertyTuples.forEach(([property]) =>
-			this[property] = affixProperties[property] || 0);
-		this.linked = queryParams.linked || false;
-		this.uncorrupted = queryParams.uncorrupted || false;
-		this.nonUnique = queryParams.nonUnique || false;
-		this.influences = queryParams.influences ? influenceProperties.map(influence => queryParams.influences.includes(influence)) : [];
-		XElement.clearChildren(this.$('#query-properties-list'));
-		sharedWeightEntries
-			.forEach(async ([property, weight, locked]) => {
-				let queryProperty = this.addQueryProperty();
-				queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
-				queryProperty.weight = weight;
-				queryProperty.filter = 'weight';
-				queryProperty.locked = locked;
-				queryProperty.shared = true;
-			});
-
-		queryPropertyFilters.forEach(([key, filter, hasWeight]) => {
-			if (queryParams[key])
-				queryParams[key]
-					.forEach(async ([property, weight, locked]) => {
-						let queryProperty = this.addQueryProperty();
-						queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
-						queryProperty.filter = filter;
-						if (hasWeight) {
-							queryProperty.weight = weight;
-							queryProperty.locked = locked;
-						}
-					});
-		});
-
+	async loadQueryParams(queryParams) {
+		await queryParams.toInputTradeQueryParams(this);
 		this.addQueryProperty();
 		this.queryParams = queryParams;
-		this.sharedWeightEntries = sharedWeightEntries;
+		this.sharedWeightEntries = queryParams.sharedWeightEntries;
 	}
 
 	checkProperties() {
@@ -282,59 +214,13 @@ customElements.define(name, class extends XElement {
 			queryProperty.remove();
 			this.updateQueryParams();
 		});
-		queryProperty.refreshBuild(this.lastItemEval)
+		queryProperty.refreshBuild(this.lastItemEval);
 		return queryProperty;
 	};
 
 	async updateQueryParams() {
-		let type = await ApiConstants.constants.typeTextToId(this.type);
-
-		let defenseProperties = Object.fromEntries(defensePropertyTuples
-			.map(([property]) => [property, {
-				weight: Number(this[property]),
-				min: 0,
-			}]));
-
-		let affixProperties = Object.fromEntries(affixPropertyTuples
-			.map(([property]) => [property, Number(this[property])]));
-
-		let propertyEntries = (await Promise.all([...this.$$('#query-properties-list x-query-property')]
-			.map(async queryProperty => ({
-				propertyId: await ApiConstants.constants.propertyTextToId(queryProperty.property),
-				weight: Number(queryProperty.weight),
-				filter: queryProperty.filter,
-				locked: queryProperty.locked,
-				shared: queryProperty.shared,
-			})))).filter(({propertyId}) => propertyId);
-
-		// todo make shared entries more similar to unshared entries so that they can be processed similarly
-		let sharedWeightEntries = propertyEntries
-			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
-			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
-		let unsharedEntries = Object.fromEntries(
-			queryPropertyFilters.map(([key, filter, hasWeight]) => {
-				let entries = propertyEntries
-					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
-					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] : [entry.propertyId]);
-				return [key, entries];
-			}));
-
-		this.queryParams = {
-			name: this.name,
-			type,
-			minValue: Number(this.minValue),
-			maxPrice: Number(this.price),
-			offline: this.offline,
-			defenseProperties,
-			affixProperties,
-			linked: this.linked,
-			uncorrupted: this.uncorrupted,
-			nonUnique: this.nonUnique,
-			influences: influenceProperties.filter((_, i) => this.influences[i]),
-			...unsharedEntries,
-		};
-		this.sharedWeightEntries = sharedWeightEntries;
-
+		this.queryParams = await UnifiedQueryParams.fromInputTradeQueryParams(this);
+		this.sharedWeightEntries = this.queryParams.sharedWeightEntries;
 		this.emit('change');
 	}
 

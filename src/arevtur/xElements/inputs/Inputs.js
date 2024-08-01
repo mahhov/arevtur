@@ -2,7 +2,8 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
-const {QueryParams} = require('../../DataFetcher');
+const {QueryParams, QueryImport} = require('../../DataFetcher');
+const UnifiedQueryParams = require('../../UnifiedQueryParams');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
@@ -15,7 +16,7 @@ customElements.define(name, class Inputs extends XElement {
 
 	connectedCallback() {
 		configForRenderer.listenConfigChange(async config => {
-			this.$('#league-input').value = config.league
+			this.$('#league-input').value = config.league;
 			this.$('#loaded-currencies-status').classList.remove('valid');
 			await ApiConstants.constants.currencyPrices(config.league);
 			if (config.league === configForRenderer.config.league)
@@ -46,7 +47,23 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-pob-status').classList.remove('valid'));
 		this.$('#input-build').addEventListener('refresh', e => {
 			this.$('#loaded-pob-status').classList.add('valid');
-			this.$('#input-trade-params').refreshBuild(e.detail)
+			this.$('#input-trade-params').refreshBuild(e.detail);
+		});
+
+		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
+			let queryImport = new QueryImport(this.$('#session-id-input').value, e.detail);
+			let apiQuery = await queryImport.getApiQuery();
+			let weightedStats = apiQuery.query.stats.find(stats => stats.type = 'weight');
+			debugger;
+			this.inputSets.push({
+				name: apiQuery.name,
+				type: apiQuery.query.filters.type_filters.filters.category.option,
+				minValue: weightedStats.value.min,
+				maxPrice: apiQuery.query.filters.trade_filters.filters.price.max,
+			});
+			this.addInputSetEl();
+			this.setInputSetIndex(this.inputSets.length - 1);
+			this.store();
 		});
 
 		this.$('#input-set-list').addEventListener('arrange', e => {
@@ -56,7 +73,7 @@ customElements.define(name, class Inputs extends XElement {
 		});
 		this.$('#add-input-set-button').addEventListener('click', e => {
 			this.inputSets.push({});
-			let inputSetEl = this.addInputSetEl();
+			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
 			this.store();
 		});
@@ -90,7 +107,8 @@ customElements.define(name, class Inputs extends XElement {
 		this.inputSets[this.inputSetIndex].active = true;
 		// todo propagating to both elements and js objects is cumbersome
 		indexSetEls[this.inputSetIndex].selected = true;
-		await this.$('#input-trade-params').loadQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
+		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
+		await this.$('#input-trade-params').loadQueryParams(unifiedQueryParams);
 		this.$('#input-trade-params').refreshBuild(this.itemEval);
 	}
 
@@ -139,82 +157,17 @@ customElements.define(name, class Inputs extends XElement {
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
 	}
 
-	async getQueries(overridePrice = null) {
-		let fatedConnectionsProphecyPrice = (await ApiConstants.constants.currencyPrices(configForRenderer.config.league))['fatedConnectionsProphecy'];
+	async getQueryParamsDatas(overridePrice = null) {
+		let currencyPrices = await ApiConstants.constants.currencyPrices(configForRenderer.config.league);
+		let fatedConnectionsProphecyPrice = currencyPrices['fatedConnectionsProphecy'];
+		let league = this.$('#league-input').value;
+		let sessionId = this.$('#session-id-input').value;
 		return this.inputSets
 			.filter(inputSet => inputSet.active)
-			.flatMap(inputSet => {
-				let {
-					name,
-					type, maxPrice, offline,
-					defenseProperties,
-					affixProperties, linked,
-					uncorrupted, nonUnique,
-					influences,
-					weightEntries, andEntries, notEntries,
-					conditionalPrefixEntries, conditionalSuffixEntries,
-				} = inputSet.queryParams;
-				maxPrice = overridePrice !== null ? overridePrice : maxPrice;
-				let weights = Object.fromEntries([...weightEntries, ...this.sharedWeightEntries]);
-				let ands = Object.fromEntries(andEntries);
-				let nots = Object.fromEntries(notEntries);
-
-				let queries = [];
-
-				let query = new QueryParams();
-				query.league = this.$('#league-input').value;
-				query.sessionId = this.$('#session-id-input').value;
-				query.name = name;
-				query.type = type;
-				query.maxPrice = maxPrice;
-				query.online = !offline;
-				query.defenseProperties = defenseProperties;
-				query.linked = linked;
-				query.uncorrupted = uncorrupted;
-				query.nonUnique = nonUnique;
-				query.influences = influences;
-				query.weights = weights;
-				query.ands = ands;
-				query.nots = nots;
-
-				let linkedOptions = [false, linked && maxPrice > fatedConnectionsProphecyPrice ? true : null];
-				let affixOptions = [
-					false,
-					affixProperties.prefix ? ['prefix'] : null,
-					affixProperties.suffix ? ['suffix'] : null,
-					...conditionalPrefixEntries.map(([propertyId, weight]) => ['prefix', propertyId, weight]),
-					...conditionalSuffixEntries.map(([propertyId, weight]) => ['suffix', propertyId, weight]),
-				];
-
-				linkedOptions
-					.filter(lo => lo !== null)
-					.forEach(lo =>
-						affixOptions
-							.filter(ao => ao !== null)
-							.forEach(ao => {
-								let queryO = new QueryParams(query);
-								if (lo) {
-									queryO.linked = false;
-									queryO.uncorrupted = true;
-									queryO.maxPrice -= fatedConnectionsProphecyPrice;
-									queryO.priceShifts.fatedConnections = fatedConnectionsProphecyPrice;
-								}
-								if (ao) {
-									queryO.affixProperties[ao[0]] = true;
-									queryO.uncorrupted = true;
-									queryO.uncrafted = true;
-									if (ao.length === 1)
-										queryO.affixValueShift += affixProperties[ao[0]];
-									else {
-										queryO.nots[ao[1]] = undefined;
-										queryO.affixValueShift += ao[2];
-									}
-								}
-								queries.push(queryO);
-							}));
-
-				return queries;
-			});
+			.flatMap(inputSet =>
+				UnifiedQueryParams
+					.fromStorageQueryParams(inputSet.queryParams, this.sharedWeightEntries)
+					.toDataFetcherQueryParamsDatas(league, sessionId, overridePrice, fatedConnectionsProphecyPrice));
 	}
 
 	get itemEval() {

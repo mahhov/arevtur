@@ -3,21 +3,22 @@ const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
 const ItemEval = require('../pobApi/ItemEval');
+const UnifiedQueryParams = require('./UnifiedQueryParams');
 
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');
 	let s = state.split(':');
-	return `${s[0]} of ${r[0]} per ${r[1]} s. Timeout ${s[2]} of ${r[2]}`
+	return `${s[0]} of ${r[0]} per ${r[1]} s. Timeout ${s[2]} of ${r[2]}`;
 };
 
 let getRateLimitHeaders = responseHeaders => {
 	let rules = [
 		...responseHeaders['x-rate-limit-account'].split(','),
-		...responseHeaders['x-rate-limit-ip'].split(',')
+		...responseHeaders['x-rate-limit-ip'].split(','),
 	];
 	let states = [
 		...responseHeaders['x-rate-limit-account-state'].split(','),
-		...responseHeaders['x-rate-limit-ip-state'].split(',')
+		...responseHeaders['x-rate-limit-ip-state'].split(','),
 	];
 	return rules.map((rule, i) => ({rule, state: states[i]}));
 };
@@ -43,128 +44,47 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
-let deepCopy = obj => {
-	if (typeof obj !== 'object' || obj === null)
-		return obj;
-	if (Array.isArray(obj))
-		return obj.map(v => deepCopy(v));
-	return Object.fromEntries(Object.entries(obj)
-		.map(([k, v]) => [k, deepCopy(v)]));
-};
-
 class QueryParams {
-	constructor(clone = {}) {
-		clone = deepCopy(clone);
-		this.league = clone.league || 'Standard';
-		this.sessionId = clone.sessionId || '';
-		this.name = clone.name || '';
-		this.type = clone.type || '';
-		this.minValue = clone.minValue || 0;
-		this.maxPrice = clone.maxPrice || 0;
-		this.defenseProperties = clone.defenseProperties || {
+	constructor(data) {
+		this.league = data.league || 'Standard';
+		this.sessionId = data.sessionId || '';
+		this.name = data.name || '';
+		this.type = data.type || '';
+		this.minValue = data.minValue || 0;
+		this.maxPrice = data.maxPrice || 0;
+		this.defenseProperties = data.defenseProperties || {
 			armour: {min: 0, weight: 0},
 			evasion: {min: 0, weight: 0},
 			energyShield: {min: 0, weight: 0},
 		};
-		this.affixProperties = clone.affixProperties || {
+		this.affixProperties = data.affixProperties || {
 			prefix: false,
 			suffix: false,
 		};
-		this.linked = clone.linked || false;
-		this.uncorrupted = clone.uncorrupted || false;
-		this.nonUnique = clone.nonUnique || false;
-		this.influences = [...clone.influences || []];
-		this.uncrafted = clone.uncrafted || false;
+		this.linked = data.linked || false;
+		this.uncorrupted = data.uncorrupted || false;
+		this.nonUnique = data.nonUnique || false;
+		this.influences = [...data.influences || []];
+		this.uncrafted = data.uncrafted || false;
 		// {property: weight, ...}
-		this.weights = clone.weights || {};
+		this.weights = data.weights || {};
 		// {property: min, ...}
-		this.ands = clone.ands || {};
+		this.ands = data.ands || {};
 		// {property: undefined, ...}
-		this.nots = clone.nots || {};
-		this.sort = clone.sort || ApiConstants.SORT.value;
-		this.online = clone.online || false;
-		this.affixValueShift = clone.affixValueShift || 0;
-		this.priceShifts = clone.priceShifts || {};
+		this.nots = data.nots || {};
+		this.sort = data.sort || ApiConstants.SORT.value;
+		this.online = data.online || false;
+		this.affixValueShift = data.affixValueShift || 0;
+		this.priceShifts = data.priceShifts || {};
+	}
+
+	static createRequestHeader(sessionId = undefined) {
+		// Without a non-empty user-agent header, PoE will return 403.
+		return {'User-Agent': '_', Cookie: sessionId ? `POESESSID=${sessionId}` : ''};
 	}
 
 	getQuery(overrides = {}) {
-		let overridden = {...this, ...overrides};
-
-		let weightFilters = Object.entries(overridden.weights).map(([property, weight]) => ({
-			id: property,
-			value: {weight},
-		}));
-		let andFilters = Object.entries(overridden.ands).map(([property, min]) => ({
-			id: property,
-			value: {min},
-		}));
-		let notFilters = Object.entries(overridden.nots).map(([property]) => ({
-			id: property,
-		}));
-
-		if (overridden.affixProperties.prefix)
-			andFilters.push({id: 'pseudo.pseudo_number_of_empty_prefix_mods'});
-		if (overridden.affixProperties.suffix)
-			andFilters.push({id: 'pseudo.pseudo_number_of_empty_suffix_mods'});
-
-		let typeFilters = {};
-		typeFilters.category = {option: overridden.type};
-		if (overridden.nonUnique)
-			typeFilters.rarity = {option: 'nonunique'};
-
-		let miscFilters = {};
-		if (overridden.uncorrupted)
-			miscFilters.corrupted = {option: false};
-		if (overridden.uncrafted)
-			miscFilters.crafted = {option: false};
-		overridden.influences
-			.filter(influence => influence)
-			.forEach(influence => miscFilters[`${influence}_item`] = {option: true});
-
-		let sort = weightFilters.length ? overridden.sort : ApiConstants.SORT.price;
-
-		return {
-			query: {
-				status: {option: overridden.online ? 'online' : 'any'},
-				term: this.name,
-				stats: [
-					{
-						type: 'weight',
-						filters: weightFilters,
-						value: {min: overridden.minValue},
-					}, {
-						type: 'and',
-						filters: andFilters,
-					}, {
-						type: 'not',
-						filters: notFilters,
-					},
-				],
-				filters: {
-					type_filters: {filters: typeFilters},
-					trade_filters: {
-						filters: {
-							price: {max: overridden.maxPrice}
-						}
-					},
-					socket_filters: {
-						filters: {
-							links: {min: 6}
-						},
-						disabled: !overridden.linked
-					},
-					armour_filters: {
-						filters: {
-							ar: overridden.defenseProperties.armour.min && {min: overridden.defenseProperties.armour.min},
-							ev: overridden.defenseProperties.evasion.min && {min: overridden.defenseProperties.evasion.min},
-							es: overridden.defenseProperties.energyShield.min && {min: overridden.defenseProperties.energyShield.min},
-						}
-					},
-					misc_filters: {filters: miscFilters},
-				}
-			},
-			sort,
-		};
+		return UnifiedQueryParams.toApiQueryParams(this, overrides);
 	}
 
 	overrideDefenseProperty(name, min) {
@@ -174,9 +94,9 @@ class QueryParams {
 				[name]: {
 					...this.defenseProperties[name],
 					min,
-				}
-			}
-		}
+				},
+			},
+		};
 	}
 
 	getItemsStream(progressCallback, itemEval = null) {
@@ -221,8 +141,7 @@ class QueryParams {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
-			// Without a non-empty user-agent header, PoE will return 403.
-			let headers = {'User-Agent': '_', Cookie: this.sessionId ? `POESESSID=${this.sessionId}` : ''};
+			let headers = QueryParams.createRequestHeader(this.sessionId);
 			progressCallback('Initial query.', 0);
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
@@ -338,4 +257,21 @@ class QueryParams {
 	}
 }
 
-module.exports = {QueryParams};
+class QueryImport {
+	constructor(sessionId, tradeSearchUrl) {
+		this.sessionId = sessionId;
+		this.tradeSearchUrl = tradeSearchUrl;
+	}
+
+	async getApiQuery() {
+		let response = await get(this.tradeSearchUrl, {}, QueryParams.createRequestHeader(this.sessionId));
+		let jsonString = response.string.match(/require.*main.*t\(\{((.|\n)*?)\}\);/)[1];
+		let obj = JSON.parse(`{${jsonString}}`);
+		return {
+			query: obj.state,
+			sort: {'statgroup.0': 'desc'},
+		};
+	}
+}
+
+module.exports = {QueryParams, QueryImport};
