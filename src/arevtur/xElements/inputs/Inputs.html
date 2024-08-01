@@ -13,14 +13,8 @@
 		float: right;
 	}
 
-	x-input-build,
-	input-import-trade-search-url,
-	#input-trade-params,
-	#query-buttons {
+	#container > *:not(:first-child) {
 		margin-top: 15px;
-	}
-
-	x-input-build {
 		display: block;
 	}
 
@@ -35,24 +29,27 @@
 
 <div id="container" class="area">
 	<div>
-		<x-autocomplete-input id="league-input" placeholder="league" size="4"></x-autocomplete-input>
-		<input id="session-id-input" placeholder="session id">
-		<span id="loaded-leagues-status" class="loaded-status invalid">Leagues</span>
-		<span id="loaded-types-status" class="loaded-status invalid">Types</span>
-		<span id="loaded-properties-status" class="loaded-status invalid">Properties</span>
-		<span id="loaded-currencies-status" class="loaded-status invalid">Currencies</span>
-		<span id="loaded-items-status" class="loaded-status invalid">Items</span>
-		<span id="loaded-pob-status" class="loaded-status invalid">PoB Integration</span>
-		<x-theme-toggle-button></x-theme-toggle-button>
+		<div>
+			<x-autocomplete-input id="league-input" placeholder="league" size="4"></x-autocomplete-input>
+			<input id="session-id-input" placeholder="session id">
+			<span id="loaded-leagues-status" class="loaded-status invalid">Leagues</span>
+			<span id="loaded-types-status" class="loaded-status invalid">Types</span>
+			<span id="loaded-properties-status" class="loaded-status invalid">Properties</span>
+			<span id="loaded-currencies-status" class="loaded-status invalid">Currencies</span>
+			<span id="loaded-items-status" class="loaded-status invalid">Items</span>
+			<span id="loaded-pob-status" class="loaded-status invalid">PoB Integration</span>
+			<x-theme-toggle-button></x-theme-toggle-button>
+		</div>
+		<x-input-build id="input-build"></x-input-build>
 	</div>
 
-	<x-input-build id="input-build"></x-input-build>
 
-	<x-input-import-trade-search-url id="input-import-trade-search-url" url="https://www.pathofexile.com/trade/search/Settlers/Wevlbqrsm"></x-input-import-trade-search-url>
-
-	<div id="input-set-container">
-		<x-arrangable-list id="input-set-list"></x-arrangable-list>
-		<button id="add-input-set-button">add</button>
+	<div>
+		<x-input-import-trade-search-url id="input-import-trade-search-url" url="https://www.pathofexile.com/trade/search/Settlers/Wevlbqrsm"></x-input-import-trade-search-url>
+		<div id="input-set-container">
+			<x-arrangable-list id="input-set-list"></x-arrangable-list>
+			<button id="add-input-set-button">add</button>
+		</div>
 	</div>
 
 	<x-input-trade-params id="input-trade-params"></x-input-trade-params>
