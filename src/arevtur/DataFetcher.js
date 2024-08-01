@@ -263,7 +263,7 @@ class QueryImport {
 		this.tradeSearchUrl = tradeSearchUrl;
 	}
 
-	async getApiQuery() {
+	async getApiQueryParams() {
 		let response = await get(this.tradeSearchUrl, {}, QueryParams.createRequestHeader(this.sessionId));
 		let jsonString = response.string.match(/require.*main.*t\(\{((.|\n)*?)\}\);/)[1];
 		let obj = JSON.parse(`{${jsonString}}`);

@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
-const {QueryParams, QueryImport} = require('../../DataFetcher');
+const {QueryImport} = require('../../DataFetcher');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 
 customElements.define(name, class Inputs extends XElement {
@@ -52,15 +52,9 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
 			let queryImport = new QueryImport(this.$('#session-id-input').value, e.detail);
-			let apiQuery = await queryImport.getApiQuery();
-			let weightedStats = apiQuery.query.stats.find(stats => stats.type = 'weight');
-			debugger;
-			this.inputSets.push({
-				name: apiQuery.name,
-				type: apiQuery.query.filters.type_filters.filters.category.option,
-				minValue: weightedStats.value.min,
-				maxPrice: apiQuery.query.filters.trade_filters.filters.price.max,
-			});
+			let apiQueryParams = await queryImport.getApiQueryParams();
+			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
+			this.inputSets.push({active: false, queryParams: unifiedQueryParams});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1);
 			this.store();

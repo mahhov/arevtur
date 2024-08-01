@@ -17,22 +17,119 @@ class UnifiedQueryParams {
 	minValue = 0;
 	maxPrice = 1;
 	offline = false;
-	defenseProperties = {};
-	affixProperties = {};
+	defenseProperties = {}; // {armour, evasion, energyShield: {weight: 0, min: 0}}
+	affixProperties = {};   // {prefix, suffix: 0}
 	linked = false;
 	uncorrupted = false;
 	nonUnique = false;
 	influences = [];
-	weightEntries = [];
-	andEntries = [];
-	notEntries = [];
-	conditionalPrefixEntries = [];
-	conditionalSuffixEntries = [];
+	weightEntries = [];            // (propertyId, weight, locked)[]
+	andEntries = [];               // (propertyId, weight, locked)[]
+	notEntries = [];               // (propertyId)[]
+	conditionalPrefixEntries = []; // (propertyId, weight, locked)[]
+	conditionalSuffixEntries = []; // (propertyId, weight, locked)[]
 	sharedWeightEntries = [];
+
+	constructor() {
+		defensePropertyTuples.forEach(([property]) =>
+			this.defenseProperties[property] = {weight: 0, min: 0});
+		affixPropertyTuples.forEach(([property]) =>
+			this.affixProperties[property] = 0);
+	}
 
 	static fromStorageQueryParams(storageQueryParams, sharedWeightEntries = []) {
 		let unifiedQueryParams = new UnifiedQueryParams();
 		Object.assign(unifiedQueryParams, storageQueryParams);
+		unifiedQueryParams.sharedWeightEntries = sharedWeightEntries;
+		return unifiedQueryParams;
+	}
+
+	async toInputTradeQueryParams(inputElement) {
+		inputElement.name = this.name || '';
+		inputElement.type = await ApiConstants.constants.typeIdToText(this.type) || '';
+		inputElement.minValue = this.minValue || 0;
+		inputElement.price = this.maxPrice || 1;
+		inputElement.offline = this.offline || false;
+		let defenseProperties = this.defenseProperties || {};
+		defensePropertyTuples.forEach(([property]) => {
+			let defenseProperty = defenseProperties[property];
+			inputElement[property] = defenseProperty ? defenseProperty.weight : 0;
+		});
+		let affixProperties = this.affixProperties || {};
+		affixPropertyTuples.forEach(([property]) =>
+			inputElement[property] = affixProperties[property] || 0);
+		inputElement.linked = this.linked || false;
+		inputElement.uncorrupted = this.uncorrupted || false;
+		inputElement.nonUnique = this.nonUnique || false;
+		inputElement.influences = this.influences ? influenceProperties.map(influence => this.influences.includes(influence)) : [];
+		XElement.clearChildren(inputElement.$('#query-properties-list'));
+		this.sharedWeightEntries.forEach(async ([property, weight, locked]) => {
+			let queryProperty = inputElement.addQueryProperty();
+			queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
+			queryProperty.weight = weight;
+			queryProperty.filter = 'weight';
+			queryProperty.locked = locked;
+			queryProperty.shared = true;
+		});
+
+		queryPropertyFilters.forEach(([key, filter, hasWeight]) =>
+			this[key].forEach(async ([property, weight, locked]) => {
+				let queryProperty = inputElement.addQueryProperty();
+				queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
+				queryProperty.filter = filter;
+				if (hasWeight) {
+					queryProperty.weight = weight;
+					queryProperty.locked = locked;
+				}
+			}));
+	}
+
+	static async fromInputTradeQueryParams(inputElement) {
+		let type = await ApiConstants.constants.typeTextToId(inputElement.type);
+
+		let defenseProperties = Object.fromEntries(defensePropertyTuples
+			.map(([property]) => [property, {
+				weight: Number(inputElement[property]),
+				min: 0,
+			}]));
+
+		let affixProperties = Object.fromEntries(affixPropertyTuples
+			.map(([property]) => [property, Number(inputElement[property])]));
+
+		let propertyEntries = (await Promise.all([...inputElement.$$('#query-properties-list x-query-property')]
+			.map(async queryProperty => ({
+				propertyId: await ApiConstants.constants.propertyTextToId(queryProperty.property),
+				weight: Number(queryProperty.weight),
+				filter: queryProperty.filter,
+				locked: queryProperty.locked,
+				shared: queryProperty.shared,
+			})))).filter(({propertyId}) => propertyId);
+
+		// todo make shared entries more similar to unshared entries so that they can be processed similarly
+		let sharedWeightEntries = propertyEntries
+			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
+			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
+		let unsharedEntries = Object.fromEntries(
+			queryPropertyFilters.map(([key, filter, hasWeight]) => {
+				let entries = propertyEntries
+					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
+					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] : [entry.propertyId]);
+				return [key, entries];
+			}));
+
+		let unifiedQueryParams = new UnifiedQueryParams();
+		unifiedQueryParams.name = inputElement.name;
+		unifiedQueryParams.type = type;
+		unifiedQueryParams.minValue = Number(inputElement.minValue);
+		unifiedQueryParams.maxPrice = Number(inputElement.price);
+		unifiedQueryParams.offline = inputElement.offline;
+		unifiedQueryParams.defenseProperties = defenseProperties;
+		unifiedQueryParams.affixProperties = affixProperties;
+		unifiedQueryParams.linked = inputElement.linked;
+		unifiedQueryParams.uncorrupted = inputElement.uncorrupted;
+		unifiedQueryParams.nonUnique = inputElement.nonUnique;
+		unifiedQueryParams.influences = influenceProperties.filter((_, i) => inputElement.influences[i]);
+		Object.assign(unifiedQueryParams, unsharedEntries);
 		unifiedQueryParams.sharedWeightEntries = sharedWeightEntries;
 		return unifiedQueryParams;
 	}
@@ -181,93 +278,33 @@ class UnifiedQueryParams {
 		};
 	}
 
-	async toInputTradeQueryParams(inputElement) {
-		inputElement.name = this.name || '';
-		inputElement.type = await ApiConstants.constants.typeIdToText(this.type) || '';
-		inputElement.minValue = this.minValue || 0;
-		inputElement.price = this.maxPrice || 1;
-		inputElement.offline = this.offline || false;
-		let defenseProperties = this.defenseProperties || {};
-		defensePropertyTuples.forEach(([property]) => {
-			let defenseProperty = defenseProperties[property];
-			inputElement[property] = defenseProperty ? defenseProperty.weight : 0;
-		});
-		let affixProperties = this.affixProperties || {};
-		affixPropertyTuples.forEach(([property]) =>
-			inputElement[property] = affixProperties[property] || 0);
-		inputElement.linked = this.linked || false;
-		inputElement.uncorrupted = this.uncorrupted || false;
-		inputElement.nonUnique = this.nonUnique || false;
-		inputElement.influences = this.influences ? influenceProperties.map(influence => this.influences.includes(influence)) : [];
-		XElement.clearChildren(inputElement.$('#query-properties-list'));
-		this.sharedWeightEntries.forEach(async ([property, weight, locked]) => {
-			let queryProperty = inputElement.addQueryProperty();
-			queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
-			queryProperty.weight = weight;
-			queryProperty.filter = 'weight';
-			queryProperty.locked = locked;
-			queryProperty.shared = true;
-		});
-
-		queryPropertyFilters.forEach(([key, filter, hasWeight]) =>
-			this[key].forEach(async ([property, weight, locked]) => {
-				let queryProperty = inputElement.addQueryProperty();
-				queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
-				queryProperty.filter = filter;
-				if (hasWeight) {
-					queryProperty.weight = weight;
-					queryProperty.locked = locked;
-				}
-			}));
-	}
-
-	static async fromInputTradeQueryParams(inputElement) {
-		let type = await ApiConstants.constants.typeTextToId(inputElement.type);
-
-		let defenseProperties = Object.fromEntries(defensePropertyTuples
-			.map(([property]) => [property, {
-				weight: Number(inputElement[property]),
-				min: 0,
-			}]));
-
-		let affixProperties = Object.fromEntries(affixPropertyTuples
-			.map(([property]) => [property, Number(inputElement[property])]));
-
-		let propertyEntries = (await Promise.all([...inputElement.$$('#query-properties-list x-query-property')]
-			.map(async queryProperty => ({
-				propertyId: await ApiConstants.constants.propertyTextToId(queryProperty.property),
-				weight: Number(queryProperty.weight),
-				filter: queryProperty.filter,
-				locked: queryProperty.locked,
-				shared: queryProperty.shared,
-			})))).filter(({propertyId}) => propertyId);
-
-		// todo make shared entries more similar to unshared entries so that they can be processed similarly
-		let sharedWeightEntries = propertyEntries
-			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
-			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
-		let unsharedEntries = Object.fromEntries(
-			queryPropertyFilters.map(([key, filter, hasWeight]) => {
-				let entries = propertyEntries
-					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
-					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] : [entry.propertyId]);
-				return [key, entries];
-			}));
-
+	static fromApiQueryParams(apiQueryParams) {
+		let filters = apiQueryParams.query?.filters;
+		let stats = apiQueryParams.query?.stats;
+		let weightedStats = stats?.find(stats => stats.type === 'weight');
+		let andStats = stats?.find(stats => stats.type === 'and');
+		let notStats = stats?.find(stats => stats.type === 'not');
+		let data = {
+			name: apiQueryParams.term || '',
+			type: filters?.type_filters?.filters?.category?.option || '',
+			minValue: weightedStats?.value?.min || 0,
+			maxPrice: filters?.trade_filters?.filters?.price?.max || 1,
+			offline: apiQueryParams.status !== 'online' && apiQueryParams.status?.option !== 'online',
+			// defenseProperties
+			// affixProperties
+			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,
+			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,
+			nonUnique: filters?.type_filters?.filters?.rarity?.option === 'nonunique' || false,
+			// influences
+			weightEntries: weightedStats?.filters?.map(entry => [entry?.id, entry?.value?.weight, false]) || [],
+			andEntries: andStats?.filters?.map(entry => [entry?.id, entry?.value?.min, false]) || [],
+			notEntries: notStats?.filters?.map(entry => entry?.id) || [],
+			// conditionalPrefixEntries
+			// conditionalSuffixEntries
+			// sharedWeightEntries
+		};
 		let unifiedQueryParams = new UnifiedQueryParams();
-		unifiedQueryParams.name = inputElement.name;
-		unifiedQueryParams.type = type;
-		unifiedQueryParams.minValue = Number(inputElement.minValue);
-		unifiedQueryParams.maxPrice = Number(inputElement.price);
-		unifiedQueryParams.offline = inputElement.offline;
-		unifiedQueryParams.defenseProperties = defenseProperties;
-		unifiedQueryParams.affixProperties = affixProperties;
-		unifiedQueryParams.linked = inputElement.linked;
-		unifiedQueryParams.uncorrupted = inputElement.uncorrupted;
-		unifiedQueryParams.nonUnique = inputElement.nonUnique;
-		unifiedQueryParams.influences = influenceProperties.filter((_, i) => inputElement.influences[i]);
-		Object.assign(unifiedQueryParams, unsharedEntries);
-		unifiedQueryParams.sharedWeightEntries = sharedWeightEntries;
+		Object.assign(unifiedQueryParams, data);
 		return unifiedQueryParams;
 	}
 }
