@@ -3,9 +3,11 @@ const {TrayHelper} = require('js-desktop-base');
 require('./services/config');
 const keySnippet = require('./keySnippets/keySnippets');
 let windows = [
-	require('./updateCheck/updateCheck'),
-	require('./arevtur/arevtur'),
-	require('./modViewer/modViewer')];
+	// require('./updateCheck/updateCheck'),
+	// require('./arevtur/arevtur'),
+	require('./arevtur2/arevtur'),
+	require('./modViewer/modViewer'),
+];
 
 keySnippet.init();
 

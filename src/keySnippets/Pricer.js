@@ -25,14 +25,17 @@ class TextItem {
 			return {error: 'blank input'};
 
 		this.text = text;
-		this.lines = text.split(/\r?\n/).filter(a => a).map(line => ({line, words: line.split(' ')}));
+		this.lines = text.split(/\r?\n/).filter(a => a).map(line => ({
+			line,
+			words: line.split(' ')
+		}));
 		this.lastLine = this.lines[this.lines.length - 1];
 
 		if (this.lines.length < 2)
 			return {error: 'short input'};
 
-		this.type = this.lines[0].words.slice(1).join(' ');
-		this.name = this.lines[1].line;
+		this.type = this.lines[1].words.slice(1).join(' ');
+		this.name = this.lines[2].line;
 
 		this.shaper = this.lastLine.line === 'Shaper Item';
 		this.elder = this.lastLine.line === 'Elder Item';
@@ -56,6 +59,8 @@ class Pricer {
 		if (!this.typeFilter(inputItem))
 			return Promise.resolve([]);
 
+		console.log('Trying pricer', this.type, this.dataEndpointsByLeague[0](config.config.league));
+
 		this.refreshData();
 
 		return this.dataStream.promise.then(() =>
@@ -77,7 +82,7 @@ class Pricer {
 	}
 
 	priceString(item) {
-		return price(item.chaosValue)
+		return price(item.chaosValue);
 	}
 }
 
@@ -117,8 +122,9 @@ class CurrencyPricer extends Pricer {
 	priceString(item) {
 		let value = item.chaosEquivalent;
 		let inverseValue = 1 / value;
-		let low = 1 / item.pay.value;
-		let high = item.receive.value;
+		let low = 1 / item.pay?.value;
+		let high = item.receive?.value;
+		console.log(value, inverseValue, low, high);
 		return `${price(value)} ${price(inverseValue, '/c')} [${price(low)} - ${price(high)}]`;
 	}
 }
@@ -134,12 +140,12 @@ class EssencePricer extends Pricer {
 		super('Currency', [DataFetcher.endpointsByLeague.ESSENCE]);
 	}
 
-	typeFilter(inputItem) {
-		return super.typeFilter(inputItem) && EssencePricer.essenceTypeFilter(inputItem);
-	}
-
 	static essenceTypeFilter(inputItem) {
 		return / Essence of /.test(inputItem.name);
+	}
+
+	typeFilter(inputItem) {
+		return super.typeFilter(inputItem) && EssencePricer.essenceTypeFilter(inputItem);
 	}
 }
 
@@ -159,12 +165,12 @@ class FossilPricer extends Pricer {
 		super('Currency', [DataFetcher.endpointsByLeague.FOSSIL]);
 	}
 
-	typeFilter(inputItem) {
-		return super.typeFilter(inputItem) && FossilPricer.fossilTypeFilter(inputItem);
-	}
-
 	static fossilTypeFilter(inputItem) {
 		return / Fossil$/.test(inputItem.name);
+	}
+
+	typeFilter(inputItem) {
+		return super.typeFilter(inputItem) && FossilPricer.fossilTypeFilter(inputItem);
 	}
 }
 
@@ -196,12 +202,12 @@ class ResonatorPricer extends Pricer {
 		super('Currency', [DataFetcher.endpointsByLeague.RESONATOR]);
 	}
 
-	typeFilter(inputItem) {
-		return super.typeFilter(inputItem) && ResonatorPricer.resonatorTypeFilter(inputItem);
-	}
-
 	static resonatorTypeFilter(inputItem) {
 		return / Resonator$/.test(inputItem.name);
+	}
+
+	typeFilter(inputItem) {
+		return super.typeFilter(inputItem) && ResonatorPricer.resonatorTypeFilter(inputItem);
 	}
 }
 
@@ -216,12 +222,12 @@ class MapPricer extends Pricer {
 		super('Normal', [DataFetcher.endpointsByLeague.MAP]);
 	}
 
-	typeFilter(inputItem) {
-		return MapPricer.mapTypeFilter(inputItem);
+	static mapTypeFilter(inputItem) {
+		return /^Map Tier:/.test(inputItem.lines[4].line);
 	}
 
-	static mapTypeFilter(inputItem) {
-		return /^Map Tier:/.test(inputItem.lines[3].line);
+	typeFilter(inputItem) {
+		return MapPricer.mapTypeFilter(inputItem);
 	}
 
 	nameFilter(item, inputItem) {
@@ -244,22 +250,22 @@ class BaseItemPricer extends Pricer {
 		super('', [DataFetcher.endpointsByLeague.BASE_ITEM]);
 	}
 
-	typeFilter(inputItem) {
-		return inputItem.type !== 'Unique';
-	}
-
-	nameFilter(item, inputItem) {
-		if (item.name !== inputItem.lines[1].line && item.name !== inputItem.lines[2].line)
-			return false;
-		return BaseItemPricer.isSameVariant(item, inputItem);
-	}
-
 	static isSameVariant(item, inputItem) {
 		if (inputItem.shaper)
 			return item.variant === 'Shaper';
 		if (inputItem.elder)
 			return item.variant === 'Elder';
 		return !item.variant;
+	}
+
+	typeFilter(inputItem) {
+		return inputItem.type !== 'Unique';
+	}
+
+	nameFilter(item, inputItem) {
+		if (item.name !== inputItem.lines[2].line && item.name !== inputItem.lines[3].line)
+			return false;
+		return BaseItemPricer.isSameVariant(item, inputItem);
 	}
 
 	priceString(item) {

@@ -4,6 +4,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
+    "start-ts": "cp -rT src lib && npx tsc --project tsconfig.json && electron .",
+    "test": "cp -rT src lib && npx tsc --project tsconfig.json && electron lib/src/test.js",
     "build-dev": "electron-builder . -c.compression=store",
     "clean-build": "rm -rf dist; electron-builder .",
     "ship": "git push && build --win -p always"
@@ -13,15 +15,16 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bs-better-stream": "^1.9.5",
+    "electron": "^31.3.1",
     "electron-updater": "^4.3.1",
     "env-paths": "^2.2.0",
     "google-oauth2-x": "^1.1.2",
-    "js-desktop-base": "^3.3.0",
+    "js-desktop-base": "^5.4.0",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {
-    "electron": "^9.1.0",
-    "electron-builder": "^20.44.4"
+    "electron-builder": "^20.44.4",
+    "typescript": "^5.5.4"
   },
   "repository": {
     "type": "git",

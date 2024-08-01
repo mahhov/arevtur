@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "outDir": "lib/src",
+    "sourceMap": true,
+    "experimentalDecorators": true
+  }
+}

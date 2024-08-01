@@ -15,7 +15,10 @@ class ElectronWindow {
 				width,
 				height,
 				show: false,
-				webPreferences: {nodeIntegration: true},
+				webPreferences: {
+					nodeIntegration: true,
+					contextIsolation: false,
+				},
 			});
 			window.setMenu(null);
 			window.loadFile(htmlPath);
@@ -29,18 +32,16 @@ class ElectronWindow {
 		});
 	}
 
+	get trayOptions() {
+		return [{label: `${this.name}`, click: () => this.showView()}];
+	}
+
 	async showView() {
 		(await this.window).show();
 	}
 
 	async showDevTools() {
 		(await this.window).webContents.openDevTools();
-	}
-
-	get trayOptions() {
-		return [
-			{label: `${this.name}`, click: () => this.showView()},
-		];
 	}
 }
 

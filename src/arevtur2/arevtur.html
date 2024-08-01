@@ -1,0 +1,91 @@
+<style>
+	@import '../themeStyle.css';
+	@import '../sharedStyle.css';
+
+	body {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.inputs {
+		display: flex;
+	}
+
+	#search-body-string {
+		flex-grow: 1;
+	}
+
+	x-results {
+		margin-top: 15px;
+		flex: 1;
+		flex-basis: 0;
+	}
+</style>
+
+<script>
+	require('./xElements/import');
+</script>
+
+<div class="inputs">
+	<input id="session-id" placeholder="Session ID">
+	<input id="league" placeholder="League">
+	<input id="search-body-string" placeholder="Search body string">
+	<input id="max-results" type=number placeholder="Max results">
+</div>
+<button id="submit">Submit</button>
+
+<x-results></x-results>
+
+<script>
+	const QueryParams2 = require('./DataFetcher');
+
+	const $ = document.querySelector.bind(document);
+
+	let lastQueryParams;
+	let submitQueries = async queryParams => {
+		lastQueryParams?.stop();
+		lastQueryParams = queryParams;
+		queryParams.getItemsStream((text, ratio) => {
+			console.log(text, ratio);
+			$('x-results').updateItemsProgress(ratio);
+		}).forEach(items => {
+			$('x-results').joinItems(items);
+			$('x-results').renderItemsData();
+		});
+	};
+
+	$('#submit').addEventListener('click', () => {
+		store();
+		$('x-results').clearItems();
+		submitQueries(new QueryParams2(
+			$('#session-id').value,
+			$('#league').value,
+			$('#search-body-string').value,
+			Number($('#max-results').value),
+		));
+	});
+
+	let store = () =>
+		localStorage.setItem('arevtur2', JSON.stringify({
+			sessionId: $('#session-id').value,
+			league: $('#league').value,
+			searchBodyString: $('#search-body-string').value,
+			maxResults: Number($('#max-results').value),
+		}));
+
+	let load = () => {
+		let string = localStorage.getItem('arevtur2');
+		try {
+			let obj = JSON.parse(string);
+			$('#session-id').value = obj.sessionId || '';
+			$('#league').value = obj.league || '';
+			$('#search-body-string').value = obj.searchBodyString || '';
+			$('#max-results').value = obj.maxResults || 50;
+		} catch (e) {
+			console.log('error loading local storage', e);
+		}
+	};
+
+	load();
+</script>

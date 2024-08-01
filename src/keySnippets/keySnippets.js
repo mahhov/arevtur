@@ -2,71 +2,15 @@ const {ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-de
 const ViewHandle = require('./view/ViewHandle');
 const {config} = require('../services/config');
 const Pricer = require('./Pricer');
-const unlockCodeFetcher = require('./unlockCodeFetcher');
-const cmdUtil = require('./cmdUtil');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
+const {clipboard: electronClipboard} = require('electron');
 
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
 
-let startPricer = async () => {
-	keySender.string(keySender.RELEASE, '{control}{shift}xc');
-	let clipboardInput = await clipboard.copy();
-	keySender.string(keySender.PRESS, '{control}{shift}');
-	if (await viewHandle.visible && clipboardInput === startPricer.lastClipboardInput)
-		viewHandle.hide();
-	else {
-		startPricer.lastClipboardInput = clipboardInput;
-		await viewHandle.showTexts([{text: 'fetching'}], 6000);
-		// for whatever reason, when electron tries to resize a window, it releases the shift key.
-		keySender.string(keySender.PRESS, '{shift}');
-		let priceLines = await Pricer.getPrice(clipboardInput);
-		await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
-	}
-};
-
-let hideout = () => {
-	keySender.strings(
-		[keySender.RELEASE, '{control}{shift}h'],
-		[keySender.TYPE, '{enter}/hideout{enter}'],
-		[keySender.PRESS, '{control}{shift}']);
-};
-
-let oos = () => {
-	keySender.strings(
-		[keySender.RELEASE, '{control}{shift}o'],
-		[keySender.TYPE, '{enter}/oos{enter}'],
-		[keySender.PRESS, '{control}{shift}']);
-};
-
-let unlock = async () => {
-	await viewHandle.showTexts([{text: 'fetching'}], 6000);
-	let code = await unlockCodeFetcher.fetch();
-	viewHandle.hide();
-	let uCode = code.toUpperCase();
-	keySender.strings(
-		[keySender.RELEASE, '{control}{shift}u'],
-		[keySender.TYPE, uCode]);
-};
-
-let battery = async () => {
-	if (await viewHandle.visible)
-		viewHandle.hide();
-	else {
-		let out = await cmdUtil.battery();
-		await viewHandle.showTexts([{text: `${out.percent}% [${out.charging ? 'charging' : `${out.minutes} minutes`}]`}], 3000);
-	}
-};
-
-let networkFlush = async () => {
-	if (await viewHandle.visible)
-		viewHandle.hide();
-	else
-		cmdUtil.networkFlush(async out => {
-			console.log(out);
-			await viewHandle.showTexts(out.map(text => ({text})), 3000);
-		});
-};
+// todo key sending seems to hang the machine
+let slashType = (name = 'hideout') =>
+	keySender.strings([keySender.TYPE, '{enter}/' + name + '{enter}']);
 
 let displayGemQualityArbitrage = async () => {
 	if (await viewHandle.visible)
@@ -84,25 +28,38 @@ let displayPreferences = async () => {
 		await viewHandle.showPreferences();
 };
 
-let addPoeShortcutListener = (key, handler) =>
+let windowCheck = async () => !config.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile';
+
+let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
 		console.log('Key received', key);
-		if (!config.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile')
-		handler();
+		if (ignoreWindow || await windowCheck())
+			handler();
 		else
 			console.log('POE window not focused.');
 	});
 
 let init = () => {
-	addPoeShortcutListener('x', startPricer);
-	addPoeShortcutListener('c', startPricer);
-	addPoeShortcutListener('h', hideout);
-	addPoeShortcutListener('o', oos);
-	addPoeShortcutListener('u', unlock);
-	addPoeShortcutListener('b', battery);
-	// addPoeShortcutListener('n', networkFlush);
-	addPoeShortcutListener('g', displayGemQualityArbitrage);
-	addPoeShortcutListener('p', displayPreferences);
+	console.log('init start');
+	// addPoeShortcutListener('h', () => slashType('hideout'));
+	// addPoeShortcutListener('k', () => slashType('kingsmarch'));
+	// addPoeShortcutListener('g', displayGemQualityArbitrage);
+	addPoeShortcutListener('p', displayPreferences, true);
+
+	setTimeout(() => {
+		electronClipboard.clear();
+		clipboard.addListener(async read => {
+			if (!read || !await windowCheck())
+				return;
+			console.log('clipboard', read);
+			let priceLines = await Pricer.getPrice(read);
+			console.log('priceLines', priceLines);
+			await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
+		});
+		console.log('clipboard ready');
+	}, 500);
+
+	console.log('init done');
 };
 
 module.exports = {

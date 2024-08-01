@@ -10,7 +10,10 @@ class ViewHandle extends ViewHandleBase {
 			alwaysOnTop: true,
 			focusable: true,
 			show: false,
-			webPreferences: {nodeIntegration: true}
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+			}
 		}, path.join(__dirname, './View.html'));
 	}
 
