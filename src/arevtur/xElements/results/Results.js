@@ -15,7 +15,14 @@ customElements.define(name, class Inputs extends XElement {
 
 	connectedCallback() {
 		this.itemsData = new ItemsData();
+		this.setSortHandler();
 
+		this.$('#sort-build-value-check').addEventListener('input', () => {
+			this.setSortHandler();
+			this.renderItemsData(false, true);
+		});
+
+		// todo add global shortcut ctrl+enter to search
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
 				this.$('#search-input').focus();
@@ -44,6 +51,11 @@ customElements.define(name, class Inputs extends XElement {
 		// debugging only
 		this.itemsData.join(testItems);
 		this.renderItemsData(false, true);
+	}
+
+	setSortHandler() {
+		this.itemsData.valueHandler = this.$('#sort-build-value-check').checked ?
+			ItemsData.BUILD_VALUE_HANDLER : ItemsData.EVAL_VALUE_HANDLER;
 	}
 
 	clearItems() {
@@ -108,17 +120,17 @@ customElements.define(name, class Inputs extends XElement {
 				cssPropertyValueColor: '--alternate-primary',
 				fill: true,
 				size: 8,
-				points: ItemsData.itemsToPoints(this.itemsData.selectedItems),
+				points: this.itemsData.itemsToPoints(this.itemsData.selectedItems),
 			}, {
 				cssPropertyValueColor: '--interactable-primary',
 				fill: true,
 				size: 4,
-				points: ItemsData.itemsToPoints(this.itemsData.items),
+				points: this.itemsData.itemsToPoints(this.itemsData.items),
 			}, {
 				cssPropertyValueColor: '--alternate-primary',
 				fill: true,
 				size: 8,
-				points: ItemsData.itemsToPoints(this.itemsData.hoveredItems),
+				points: this.itemsData.itemsToPoints(this.itemsData.hoveredItems),
 			},
 		];
 		if (resetChartRange)

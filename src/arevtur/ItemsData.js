@@ -1,12 +1,22 @@
 class ItemsData {
 	constructor() {
 		this.clear();
+		this.valueHandler = ItemsData.EVAL_SORT_HANDLER;
 	}
+
+	static EVAL_VALUE_HANDLER = item => item.evalValue;
+	static BUILD_VALUE_HANDLER = item => item.valueBuild.value;
 
 	clear() {
 		this.items = [];
 		this.bestBoundItems_ = []; // top
-		this.searchBoundItems = []; // bottom
+	}
+
+	set valueHandler(valueHandler) { // todo use boolean param
+		this.y = valueHandler;
+		let items = this.items;
+		this.clear();
+		this.join(items);
 	}
 
 	join(items) {
@@ -24,11 +34,11 @@ class ItemsData {
 				return true;
 			})
 			// high to low values, low to high prices
-			.sort((a, b) => b.evalValue - a.evalValue || a.evalPrice - b.evalPrice);
+			.sort((a, b) => this.y(b) - this.y(a) || a.evalPrice - b.evalPrice);
 
 		// todo use actual max price query param instead of maximum price of items
 		this.maxPrice = Math.max(...items.map(item => item.evalPrice));
-		let minValue = Math.min(...items.map(item => item.evalValue).filter(v => v > 0));
+		let minAltValue = Math.min(...items.map(item => this.y(item)).filter(v => v > 0));
 
 		// update bestBoundItems
 		let minPriceFound = Infinity;
@@ -38,20 +48,6 @@ class ItemsData {
 				if (item.evalPrice >= minPriceFound)
 					return false;
 				minPriceFound = item.evalPrice;
-				return true;
-			});
-
-		// update searchBoundItems
-		this.searchBoundItems.push({evalPrice: this.maxPrice, evalValue: minValue});
-		let maxPriceFound = -Infinity;
-		// ordered bottom left to top right
-		this.searchBoundItems = this.searchBoundItems
-			.sort((a, b) => a.evalValue - b.evalValue || b.evalPrice - a.evalPrice)
-			// low to high value, high to low price
-			.filter(item => {
-				if (item.evalPrice <= maxPriceFound)
-					return false;
-				maxPriceFound = item.evalPrice;
 				return true;
 			});
 	}
@@ -70,8 +66,11 @@ class ItemsData {
 		let maxValue = value + valueRange / 2;
 		let minPrice = price - priceRange / 2;
 		let maxPrice = price + priceRange / 2;
-		return this.items.findIndex(({evalValue, evalPrice}) =>
-			evalValue > minValue && evalValue < maxValue && evalPrice > minPrice && evalPrice < maxPrice);
+		return this.items.findIndex(item =>
+			this.y(item) > minValue &&
+			this.y(item) < maxValue &&
+			item.evalPrice > minPrice &&
+			item.evalPrice < maxPrice);
 	}
 
 	get bestBoundItems() {
@@ -87,28 +86,20 @@ class ItemsData {
 	}
 
 	get bestBoundPath() {
-		let path = this.bestBoundItems_.flatMap(({evalValue, evalPrice}, i, a) =>
-			[{evalValue, evalPrice: i ? a[i - 1].evalPrice : this.maxPrice}, {evalValue, evalPrice}]);
-		return ItemsData.itemsToPoints(path);
-	}
-
-	get searchBoundPath() {
-		let path = this.searchBoundItems.flatMap(({evalValue, evalPrice}, i, a) =>
-			[{evalValue, evalPrice: i ? a[i - 1].evalPrice : 0}, {evalValue, evalPrice}]);
-		if (!path.length)
-			return path;
-		let last = path[path.length - 1];
-		path.push({evalValue: Infinity, evalPrice: last.evalPrice});
-		path.push({evalValue: Infinity, evalPrice: 0});
-		return ItemsData.itemsToPoints(path);
+		let path = this.bestBoundItems.flatMap((item, i, a) =>
+			[{
+				...item,
+				evalPrice: i ? a[i - 1].evalPrice : this.maxPrice,
+			}, item]);
+		return this.itemsToPoints(path);
 	}
 
 	get length() {
 		return this.items.length;
 	}
 
-	static itemsToPoints(items) {
-		return items.map(item => ({x: item.evalPrice, y: item.evalValue}));
+	itemsToPoints(items) {
+		return items.map(item => ({x: item.evalPrice, y: this.y(item)}));
 	}
 }
 

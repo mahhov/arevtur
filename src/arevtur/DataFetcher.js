@@ -137,6 +137,7 @@ class QueryParams {
 	}
 
 	async queryAndParseItems(query, stream, progressCallback, pobApi) {
+		// todo more selective try/catch
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
@@ -197,7 +198,7 @@ class QueryParams {
 			mods: QueryParams.evalValue(pseudoMods),
 		};
 		let text = QueryParams.decode64(itemData.item.extended.text);
-		let valueBuild = pobApi?.evalItem(text) || Promise.resolve();
+		let valueBuild = await pobApi?.evalItem(text) || null;
 		let priceDetails = {
 			count: itemData.listing.price.amount,
 			currency: itemData.listing.price.currency,
