@@ -60,10 +60,10 @@ class ItemEval extends CustomOsScript {
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
 		// todo don't rerun pob for weight changes
-		// todo seems not to work on startup
 		// todo do for armour, evasion, es too
 		// todo clearer and consistent UI for item and mod tooltips
 		// todo recover from lua crash
+		// todo allow sorting items by pob value
 		let pobType = ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
 		if (!pobType || !itemMod)
 			return {value: 0, tooltip: ''};

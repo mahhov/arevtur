@@ -189,8 +189,8 @@ customElements.define(name, class extends XElement {
 
 	addQueryProperty() {
 		let queryProperty = document.createElement('x-query-property');
-		ApiConstants.constants.propertyTexts().then(propertyTexts =>
-			queryProperty.properties = propertyTexts);
+		queryProperty.type = this.type;
+		ApiConstants.constants.propertyTexts().then(propertyTexts => queryProperty.properties = propertyTexts);
 		queryProperty.slot = 'list';
 		this.$('#query-properties-list').appendChild(queryProperty);
 		queryProperty.addEventListener('change', () => {
