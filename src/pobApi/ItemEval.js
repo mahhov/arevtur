@@ -59,9 +59,14 @@ class ItemEval extends CustomOsScript {
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
-		if (!type || !itemMod)
-			return {value: 0, tooltip: ''};
+		// todo don't rerun pob for weight changes
+		// todo seems not to work on startup
+		// todo do for armour, evasion, es too
+		// todo clearer and consistent UI for item and mod tooltips
+		// todo recover from lua crash
 		let pobType = ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
+		if (!pobType || !itemMod)
+			return {value: 0, tooltip: ''};
 		let cleanItemMod = raw ? itemMod : itemMod
 			.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
 			.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
@@ -76,22 +81,33 @@ class ItemEval extends CustomOsScript {
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
 			.then(text => {
-				let dps = Number(text.match(/Total DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
+				let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
+				let effectiveHitPool = Number(text.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
 				let life = Number(text.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
 				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
-				let resist = text.match(new RegExp(resistRegex, 'gi'))?.reduce((sum, m) =>
-					sum + Number(m.match(resistRegex)[1]), 0) || 0;
-				let value = Math.round((dps * 80 / 3 * (this.valueParams_?.dps || 1) +
-						life * (this.valueParams_?.life || 1) +
-						resist / 3 * (this.valueParams_?.resist || 1)) /
-					pluginNumber * 100) / 100;
-				let tooltip = `${cleanItemMod} (${pluginNumber})\n${'-'.repeat(30)}\n${text}`;
-				// todo extract correctly
-				return {dps, life, resist, value, cleanItemMod, pluginNumber, text, tooltip};
+				let resist = text
+					.match(new RegExp(resistRegex, 'gi'))
+					?.reduce((sum, m) => sum + Number(m.match(resistRegex)[1]), 0) || 0;
+				let value = Math.round(
+					(
+						fullDps * (this.valueParams_?.dps || 1) +
+						effectiveHitPool * (this.valueParams_?.life || 1) +
+						resist * (this.valueParams_?.resist || 1)
+					) / pluginNumber * 100) / 100;
+				let tooltip = [
+					`${cleanItemMod} (${pluginNumber})`,
+					'-'.repeat(30),
+					text,
+					'-'.repeat(30),
+					`Full DPS ${fullDps}%`,
+					`Effective hit pool ${effectiveHitPool}%`,
+					`Life ${life}`,
+					`Total Resist ${resist}`,
+					`Value ${value}`,
+				].join('\n');
+				return {value, tooltip};
 			});
 	}
-
-	// todo clearer and consistent UI for item and mod tooltips
 
 	static clean(outString) {
 		return outString
