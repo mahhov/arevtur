@@ -1,7 +1,7 @@
 require('./arrangableList/ArrangableList');
 require('./autocompleteInput/AutocompleteInput');
 require('./chart/Chart');
-// require('./inputBuild/InputBuild');
+require('./inputBuild/InputBuild');
 require('./inputImportTradeSearchUrl/InputImportTradeSearchUrl');
 require('./inputSet/InputSet');
 require('./inputTradeParams/InputTradeParams');

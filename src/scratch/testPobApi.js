@@ -1,6 +1,6 @@
 const ItemEval = require('../pobApi/ItemEval');
-let itemEval = new ItemEval('C:\\Users\\manukh\\Downloads\\PathOfBuilding-1.4.170\\');
-itemEval.build = 'C:/Users/manukh/Documents/Path of Building/Builds/traickster brand harvest.xml';
+let itemEval = new ItemEval('C:\\Users\\placeholder\\Downloads\\PathOfBuilding-1.4.170\\');
+itemEval.build = 'C:/Users/placeholder/Documents/Path of Building/Builds/traickster brand harvest.xml';
 itemEval.ready.then(() => console.log('ready'))
 
 // let p = [];
