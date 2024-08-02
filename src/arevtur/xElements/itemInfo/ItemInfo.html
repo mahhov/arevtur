@@ -2,6 +2,15 @@
 	@import '../sharedStyle.css';
 
 	#container {
+		display: inline-block;
+		position: relative;
+	}
+
+	#container:has(button:empty) {
+		display: none;
+	}
+
+	#tooltip {
 		position: absolute;
 		background: var(--back);
 		outline: 2px solid var(--interactable-focus-border);
@@ -11,6 +20,13 @@
 		font-size: 14px;
 		padding: 5px;
 	}
+
+	#container:not(:hover) #tooltip {
+		display: none;
+	}
 </style>
 
-<div id="container"></div>
+<div id="container">
+	<button id="button"></button>
+	<div id="tooltip"></div>
+</div>

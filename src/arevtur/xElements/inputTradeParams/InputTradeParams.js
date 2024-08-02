@@ -147,27 +147,27 @@ customElements.define(name, class extends XElement {
 	}
 
 	set armourBuildValue(value) {
-		this.$('#armour-build-value-button').textContent = value;
+		this.$('#armour-build-value').text = value;
 	}
 
 	set evasionBuildValue(value) {
-		this.$('#evasion-build-value-button').textContent = value;
+		this.$('#evasion-build-value').text = value;
 	}
 
 	set energyShieldBuildValue(value) {
-		this.$('#energy-shield-build-value-button').textContent = value;
+		this.$('#energy-shield-build-value').text = value;
 	}
 
 	set armourBuildValueTooltip(value) {
-		this.$('#armour-build-value-tooltip').text = value;
+		this.$('#armour-build-value').tooltip = value;
 	}
 
 	set evasionBuildValueTooltip(value) {
-		this.$('#evasion-build-value-tooltip').text = value;
+		this.$('#evasion-build-value').tooltip = value;
 	}
 
 	set energyShieldBuildValueTooltip(value) {
-		this.$('#energy-shield-build-value-tooltip').text = value;
+		this.$('#energy-shield-build-value').tooltip = value;
 	}
 
 	set prefix(value) {

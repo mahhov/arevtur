@@ -72,8 +72,8 @@ customElements.define(name, class extends XElement {
 		this.$('#value-expanded-text').textContent = expandedValues.length > 1 ?
 			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
 		data.valueBuild.then(valueBuild => {
-			this.$('#value-build-tooltip').text = valueBuild?.text;
-			this.$('#value-build-link').classList.toggle('hidden', !valueBuild);
+			this.$('#value-build').classList.toggle('hidden', !valueBuild);
+			this.$('#value-build').tooltip = valueBuild?.text;
 		});
 		this.$('#price-text').textContent = round(data.evalPrice);
 		let expandedPriceShifts = Object.entries(data.priceDetails.shifts).map(([name, value]) => ` + ${name} (${round(value)} chaos)`);

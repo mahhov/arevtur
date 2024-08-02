@@ -5,6 +5,7 @@ customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 	static get attributeTypes() {
 		return {
 			text: {},
+			tooltip: {},
 		};
 	}
 
@@ -13,10 +14,15 @@ customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 	}
 
 	connectedCallback() {
+		this.$('#button').addEventListener('click', () => this.emit('click'));
 	}
 
 	set text(value) {
-		this.$('#container').textContent = value;
+		this.$('#button').textContent = value;
+	}
+
+	set tooltip(value) {
+		this.$('#tooltip').textContent = value;
 		// todo color formatting
 	}
 });

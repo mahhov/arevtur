@@ -6,9 +6,9 @@ const defensePropertyTuples = [
 
 const defenseBuildValueTuples = [
 	// this key, el query, mapping to defense property, mod property
-	['armourBuildValue', '#armour-build-value-button', 'armour', '# Armour'],
-	['evasionBuildValue', '#evasion-build-value-button', 'evasion', '# Evasion'],
-	['energyShieldBuildValue', '#energy-shield-build-value-button', 'energyShield', '# Energy shield'],
+	['armourBuildValue', '#armour-build-value', 'armour', '# Armour'],
+	['evasionBuildValue', '#evasion-build-value', 'evasion', '# Evasion'],
+	['energyShieldBuildValue', '#energy-shield-build-value', 'energyShield', '# Energy shield'],
 ];
 
 const affixPropertyTuples = [

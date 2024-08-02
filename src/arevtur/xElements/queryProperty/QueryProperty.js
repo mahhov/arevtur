@@ -72,7 +72,6 @@ customElements.define(name, class extends XElement {
 
 	set weight(value) {
 		this.$('#weight').value = value;
-		this.checkUseBuildValueVisible();
 	}
 
 	set filter(value) {
@@ -88,20 +87,15 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValue(value) {
-		this.$('#build-value').textContent = value;
-		this.checkUseBuildValueVisible();
+		this.$('#build-value').text = value;
 	}
 
 	set buildValueTooltip(value) {
-		this.$('#build-value-tooltip').text = value;
+		this.$('#build-value').tooltip = value;
 	}
 
 	focus() {
 		this.$('#property').focus();
-	}
-
-	checkUseBuildValueVisible() {
-		this.$('#build-value').disabled = this.buildValue === '0' || this.weight === this.buildValue;
 	}
 
 	async refreshBuild(pobApi = this.lastPobApi) {

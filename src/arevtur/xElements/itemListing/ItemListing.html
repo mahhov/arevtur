@@ -53,15 +53,6 @@
 		margin-left: 15px;
 	}
 
-	#value-build-link {
-		display: inline-block;
-		position: relative;
-	}
-
-	#value-build-link:not(:hover) #value-build-tooltip {
-		display: none;
-	}
-
 	#date-text {
 		font-size: 14px;
 	}
@@ -103,10 +94,7 @@
 <div>
 	<div>
 		<span class="value">Value: <span id="value-text"></span></span>
-		<span class="hidden" id="value-build-link">
-			(build)
-			<x-item-info id="value-build-tooltip"></x-item-info>
-		</span>
+		<x-item-info id="value-build" class="hidden" text="(build)"></x-item-info>
 		<button id="copy-item-button">Copy item</button>
 	</div>
 	<div class="expanded" id="value-expanded-text"></div>
