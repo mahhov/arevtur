@@ -17,6 +17,18 @@
 		width: 60px;
 	}
 
+	.build-value-container {
+		display: inline-block;
+	}
+
+	.build-value-container:not(:hover) > x-item-info {
+		display: none;
+	}
+
+	.build-value:empty {
+		display: none;
+	}
+
 	#query-properties-list x-query-property.dragging {
 		outline: 1px solid var(--interactable-focus-border);
 	}
@@ -24,10 +36,6 @@
 	label:not(:first-child),
 	x-multi-select-lined {
 		margin-left: 15px;
-	}
-
-	.build-value:empty {
-		display: none;
 	}
 </style>
 
@@ -52,17 +60,26 @@
 	<label>
 		armour
 		<input class="short-input" id="armour-input" type="number">
-		<button class="build-value" id="armour-build-value-button"></button>
+		<span class="build-value-container">
+			<button class="build-value" id="armour-build-value-button"></button>
+			<x-item-info id="armour-build-value-tooltip"></x-item-info>
+		</span>
 	</label>
 	<label>
 		evasion
 		<input class="short-input" id="evasion-input" type="number">
-		<button class="build-value" id="evasion-build-value-button"></button>
+		<span class="build-value-container">
+			<button class="build-value" id="evasion-build-value-button"></button>
+			<x-item-info id="evasion-build-value-tooltip"></x-item-info>
+		</span>
 	</label>
 	<label>
 		energy shield
 		<input class="short-input" id="energy-shield-input" type="number">
-		<button class="build-value" id="energy-shield-build-value-button"></button>
+		<span class="build-value-container">
+			<button class="build-value" id="energy-shield-build-value-button"></button>
+			<x-item-info id="energy-shield-build-value-tooltip"></x-item-info>
+		</span>
 	</label>
 </div>
 <div>

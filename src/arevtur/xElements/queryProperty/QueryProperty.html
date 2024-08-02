@@ -16,6 +16,14 @@
 	#build-value:empty {
 		display: none;
 	}
+
+	#build-value-container {
+		display: inline-block;
+	}
+
+	#build-value-container:not(:hover) > #build-value-tooltip {
+		display: none;
+	}
 </style>
 
 <div id="container">
@@ -25,5 +33,8 @@
 	<label>Lock<input id="locked" type="checkbox"></label>
 	<label>Shared<input id="shared" type="checkbox"></label>
 	<button id="remove">X</button>
-	<button id="build-value"></button>
+	<span id="build-value-container">
+		<button id="build-value"></button>
+		<x-item-info id="build-value-tooltip"></x-item-info>
+	</span>
 </div>

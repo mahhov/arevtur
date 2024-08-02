@@ -93,7 +93,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValueTooltip(value) {
-		this.$('#build-value').title = value;
+		this.$('#build-value-tooltip').text = value;
 	}
 
 	focus() {

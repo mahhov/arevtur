@@ -159,15 +159,15 @@ customElements.define(name, class extends XElement {
 	}
 
 	set armourBuildValueTooltip(value) {
-		this.$('#armour-build-value-button').title = value;
+		this.$('#armour-build-value-tooltip').text = value;
 	}
 
 	set evasionBuildValueTooltip(value) {
-		this.$('#evasion-build-value-button').title = value;
+		this.$('#evasion-build-value-tooltip').text = value;
 	}
 
 	set energyShieldBuildValueTooltip(value) {
-		this.$('#energy-shield-build-value-button').title = value;
+		this.$('#energy-shield-build-value-tooltip').text = value;
 	}
 
 	set prefix(value) {

@@ -27,7 +27,7 @@ class PobApi extends CustomOsScript {
 			if (err)
 				console.error(err);
 			if (out) {
-				console.log(out);
+				// console.log(out);
 				out.split('.>')
 					.map(split => split.split('<.')[1])
 					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
@@ -76,7 +76,6 @@ class PobApi extends CustomOsScript {
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
 		// todo allow sorting items by pob value
-		// todo clearer and consistent UI for item and mod tooltips
 		// todo don't rerun pob for weight changes
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
