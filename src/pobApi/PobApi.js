@@ -90,8 +90,8 @@ class PobApi extends CustomOsScript {
 			.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
 			.replace(/\s+/g, ' ') // clean up whitespace
 			.trim();
-		this.send('mod', cleanItemMod, pobType, 1 / pluginNumber, `${cleanItemMod} (${pluginNumber})`);
-		return this.awaitResponse.then(text => this.parseItemTooltip(text));
+		this.send('mod', cleanItemMod, pobType);
+		return this.awaitResponse.then(text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
 	}
 
 	async generateQuery(type = undefined, maxPrice = 10) {
@@ -109,31 +109,53 @@ class PobApi extends CustomOsScript {
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
 		itemText = PobApi.clean(itemText);
-		let effectiveHitPool = Number(itemText.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
-		let life = Number(itemText.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
-		let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
-		let resist = itemText
-			.match(new RegExp(resistRegex, 'gi'))
-			?.reduce((sum, m) => sum + Number(m.match(resistRegex)[1]), 0) || 0;
-		let fullDps = Number(itemText.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
-		let value = Math.round(
-			(
-				effectiveHitPool * this.valueParams_.life +
-				resist * this.valueParams_.resist +
-				fullDps * this.valueParams_.dps
-			) * valueScale * 100) / 100;
+
+		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
+		let flatLifeRegex = /([+-][\d,]+) total life/i;
+		let anyResistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) res(?:\.|istance)/i;
+		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
+
+		let effectiveHitPool = Number(itemText.match(effectiveHitPoolRegex)?.[1]) || 0;
+		let flatLife = Number(itemText.match(flatLifeRegex)?.[1].replace(/,/g, '')) || 0;
+		let totalResist = itemText
+			.match(new RegExp(anyResistRegex, 'gi'))
+			?.reduce((sum, m) => sum + Number(m.match(anyResistRegex)[1]), 0) || 0;
+		let fullDps = Number(itemText.match(fullDpsRegex)?.[1]) || 0;
+
+		let unscaledValue =
+			effectiveHitPool * this.valueParams_.life +
+			totalResist * this.valueParams_.resist +
+			fullDps * this.valueParams_.dps;
+
 		let summaryText = [
-			textPrefix,
+			textPrefix ? `@bold,green ${textPrefix}` : '',
 			textPrefix ? '-'.repeat(30) : '',
-			itemText,
+			...itemText.split('\n').map(itemTextLine => {
+				if (itemTextLine === textPrefix)
+					return `@bold,green ${itemTextLine}`;
+				if (itemTextLine.match(effectiveHitPoolRegex))
+					return `@bold,blue ${itemTextLine}`;
+				if (itemTextLine.match(flatLifeRegex))
+					return `@bold,blue ${itemTextLine}`;
+				if (itemTextLine.match(anyResistRegex))
+					return `@bold,orange ${itemTextLine}`;
+				if (itemTextLine.match(fullDpsRegex))
+					return `@bold,red ${itemTextLine}`;
+				return itemTextLine;
+			}),
 			'-'.repeat(30),
-			`Full DPS ${fullDps}%`,
-			`Effective hit pool ${effectiveHitPool}%`,
-			`Life ${life}`,
-			`Total Resist ${resist}`,
-			`Value ${value}`,
+			effectiveHitPool ? `@blue,bold Effective Hit Pool ${effectiveHitPool}%` : '',
+			flatLife ? `@blue,bold Flat Life ${flatLife}` : '',
+			totalResist ? `@orange,bold Total Resist ${totalResist}` : '',
+			fullDps ? `@red,bold Full DPS ${fullDps}%` : '',
+			`@green,bold Value ${PobApi.round(unscaledValue, 3)}`,
 		].filter(v => v).join('\n');
-		return {value, text: summaryText};
+
+		return {
+			unscaledValue: PobApi.round(unscaledValue, 3),
+			value: PobApi.round(unscaledValue * valueScale, 3),
+			text: summaryText,
+		};
 	}
 
 	static clean(outString) {
@@ -142,6 +164,11 @@ class PobApi extends CustomOsScript {
 			.replace(/\^\d/g, '')
 			.replace(/\r/g, '')
 			.trim();
+	}
+
+	static round(number, precision) {
+		let m = 10 ** precision;
+		return Math.round(number * m) / m;
 	}
 }
 

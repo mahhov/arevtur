@@ -29,6 +29,12 @@
 	--invalid-back: #fdd5d5;
 	--valid-primary: black;
 	--valid-back: #aaffaa;
+
+	/* colored text */
+	--colored-text-orange: orange;
+	--colored-text-red: red;
+	--colored-text-green: green;
+	--colored-text-blue: blue;
 }
 
 :root.dark {
@@ -62,4 +68,10 @@
 	--invalid-back: #400;
 	--valid-primary: white;
 	--valid-back: #070;
+
+	/* colored text */
+	--colored-text-orange: orange;
+	--colored-text-red: red;
+	--colored-text-green: green;
+	--colored-text-blue: blue;
 }
