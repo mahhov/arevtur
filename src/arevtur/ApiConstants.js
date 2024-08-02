@@ -137,8 +137,44 @@ const SORT = {
 	price: {price: 'asc'},
 };
 
+// From PoB src/Classes/ItemsTab.lua
+const POB_TYPES = {
+	'weapon': 'Weapon 1',
+	'weapon.one': 'Weapon 1',
+	'weapon.onemelee': 'Weapon 1',
+	'weapon.twomelee': 'Weapon 1',
+	'weapon.bow': 'Weapon 1',
+	'weapon.claw': 'Weapon 1',
+	'weapon.dagger': 'Weapon 1',
+	'weapon.basedagger': 'Weapon 1',
+	'weapon.runedagger': 'Weapon 1',
+	'weapon.oneaxe': 'Weapon 1',
+	'weapon.onesword': 'Weapon 1',
+	'weapon.onemace': 'Weapon 1',
+	'weapon.basemace': 'Weapon 1',
+	'weapon.sceptre': 'Weapon 1',
+	'weapon.staff': 'Weapon 1',
+	'weapon.basestaff': 'Weapon 1',
+	'weapon.warstaff': 'Weapon 1',
+	'weapon.twoaxe': 'Weapon 1',
+	'weapon.twomace': 'Weapon 1',
+	'weapon.twosword': 'Weapon 1',
+	'weapon.wand': 'Weapon 1',
+	'weapon.rod': 'Weapon 1',
+	'accessory.amulet': 'Amulet',
+	'armour.helmet': 'Helmet',
+	'armour.shield': 'Weapon 2',
+	'armour.quiver': 'Weapon 2',
+	'armour.chest': 'Body Armour',
+	'armour.gloves': 'Gloves',
+	'armour.boots': 'Boots',
+	'accessory.ring': 'Ring 1',
+	'accessory.belt': 'Belt',
+};
+
 module.exports = {
 	SHORT_PROPERTIES,
 	SORT,
+	POB_TYPES,
 	constants: new Constants(),
 };

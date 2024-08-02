@@ -99,7 +99,7 @@ customElements.define(name, class extends XElement {
 		this.lastItemEval = itemEval;
 		if (!this.property || !itemEval)
 			return;
-		let summary = await itemEval.evalItemModSummary(this.property, 100);
+		let summary = await itemEval.evalItemModSummary('Amulet', this.property, 100);
 		this.buildValue = summary.value;
 		this.buildValueTooltip = summary.tooltip;
 	}

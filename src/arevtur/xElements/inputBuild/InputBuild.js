@@ -8,7 +8,7 @@ const ItemEval = require('../../../pobApi/ItemEval');
 
 customElements.define(name, class InputBuild extends XElement {
 	static get attributeTypes() {
-		return {}
+		return {};
 	}
 
 	static get htmlTemplate() {
@@ -26,8 +26,11 @@ customElements.define(name, class InputBuild extends XElement {
 		InputBuild.defaultPobPath.each(path =>
 			this.$('#pob-path').defaultPath = path);
 		this.$('#build-path').defaultPath = path.resolve(`${process.env.HOME}/Documents/Path of Building/Builds`);
-		ApiConstants.constants.propertyTexts().then(propertyTexts =>
-			this.$('#demo-mod-property').autocompletes = propertyTexts);
+		Promise.all(Object.keys(ApiConstants.POB_TYPES)
+			.map(typeId => ApiConstants.constants.typeIdToText(typeId)))
+			.then(pobTypes => this.$('#demo-mod-type').autocompletes = pobTypes);
+		ApiConstants.constants.propertyTexts()
+			.then(propertyTexts => this.$('#demo-mod-property').autocompletes = propertyTexts);
 
 		this.$('#pob-path').addEventListener('selected', () => {
 			this.updateStore();
@@ -47,6 +50,7 @@ customElements.define(name, class InputBuild extends XElement {
 				this.updateValueParams();
 				this.refresh();
 			}));
+		this.$('#demo-mod-type').addEventListener('change', () => this.updateDemo());
 		this.$('#demo-mod-property').addEventListener('change', () => this.updateDemo());
 		this.$('#demo-mod-value').addEventListener('input', () => this.updateDemo());
 		this.$('#demo-mod-raw').addEventListener('input', () => this.updateDemo());
@@ -59,7 +63,7 @@ customElements.define(name, class InputBuild extends XElement {
 		try {
 			return JSON.parse(localStorage.getItem('input-build-config')) || {};
 		} catch (e) {
-			return {}
+			return {};
 		}
 	}
 
@@ -101,8 +105,13 @@ customElements.define(name, class InputBuild extends XElement {
 	}
 
 	async updateDemo() {
+		let pobType = ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(this.$('#demo-mod-type').value)];
+		let property = this.$('#demo-mod-property').value;
+		if (!pobType || !property)
+			return;
 		let summary = await this.itemEval.evalItemModSummary(
-			this.$('#demo-mod-property').value,
+			pobType,
+			property,
 			this.$('#demo-mod-value').value || 100,
 			this.$('#demo-mod-raw').checked);
 		this.$('#demo-mod-weight').textContent = summary.value;
