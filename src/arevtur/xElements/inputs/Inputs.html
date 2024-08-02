@@ -9,7 +9,7 @@
 		padding: 0 5px;
 	}
 
-	x-theme-toggle-button {
+	.right {
 		float: right;
 	}
 
@@ -38,14 +38,17 @@
 			<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
 			<span class="loaded-status invalid" id="loaded-items-status">Items</span>
 			<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
-			<x-theme-toggle-button></x-theme-toggle-button>
+			<span class="right">
+				<button id="reload-button">Refresh</button>
+				<x-theme-toggle-button></x-theme-toggle-button>
+			</span>
 		</div>
 		<x-input-build id="input-build"></x-input-build>
 	</div>
 
 
 	<div>
-		<x-input-import-trade-search-url id="input-import-trade-search-url" url="https://www.pathofexile.com/trade/search/Settlers/Wevlbqrsm"></x-input-import-trade-search-url>
+		<x-input-import-trade-search-url id="input-import-trade-search-url"></x-input-import-trade-search-url>
 		<div id="input-set-container">
 			<x-arrangable-list id="input-set-list"></x-arrangable-list>
 			<button id="add-input-set-button">add</button>
