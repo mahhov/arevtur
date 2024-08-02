@@ -20,14 +20,15 @@ class ItemEval extends CustomOsScript {
 	}
 
 	spawnProcess(pobPath) {
-		// todo cwd path
+		// e.g. /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
 		return spawn(
 			'luajit',
 			[path.join(__dirname, './itemEcho.lua')],
-			{cwd: '/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src'});
+			{cwd: pobPath});
 	}
 
-	send(text) {
+	send(command, arg1 = '', arg2 = '') {
+		let text = `<${command}> <${arg1}> <${arg2}>`;
 		console.log('ItemEval sending:', text);
 		return super.send(text);
 	}
@@ -38,13 +39,12 @@ class ItemEval extends CustomOsScript {
 
 	exit() {
 		this.exited = true;
-		this.send('<exit>');
+		this.send('exit');
 	}
 
 	set build(path) {
-		// todo path
-		path = '/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml';
-		this.send(`<build> <${path}> <>`);
+		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+		this.send('build', path);
 	}
 
 	set valueParams(valueParams) {
@@ -52,7 +52,7 @@ class ItemEval extends CustomOsScript {
 	}
 
 	evalItem(item) {
-		this.send(`<item> <${item.replace(/[\n\r]+/g, ' \\n ')}>`);
+		this.send('item', item.replace(/[\n\r]+/g, ' \\n '));
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text));
 	}
@@ -71,7 +71,7 @@ class ItemEval extends CustomOsScript {
 				.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
 				.replace(/\s+/g, ' ') // clean up whitespace
 				.trim();
-		this.send(`<mod> <${itemMod}> <${equipmentSlot}>`);
+		this.send('mod', itemMod, equipmentSlot);
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
 			.then(text => {
@@ -89,6 +89,8 @@ class ItemEval extends CustomOsScript {
 				return {dps, life, resist, value, itemMod, pluginNumber, text, tooltip};
 			});
 	}
+
+	// todo clearer and consistent UI for item and mod tooltips
 
 	static clean(outString) {
 		return outString
