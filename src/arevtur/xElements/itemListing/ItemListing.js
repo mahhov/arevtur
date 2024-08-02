@@ -43,48 +43,48 @@ customElements.define(name, class extends XElement {
 		this.addEventListener('mouseleave', () => this.emit('hover', false));
 	}
 
-	set itemData(value) {
-		this.itemData_ = value;
+	set itemData(data) {
+		this.itemData_ = data;
 
-		this.$('#name-text').textContent = value.name;
-		this.$('#type-text').textContent = value.type;
-		this.$('#item-level-text').textContent = value.itemLevel;
+		this.$('#name-text').textContent = data.name;
+		this.$('#type-text').textContent = data.type;
+		this.$('#item-level-text').textContent = data.itemLevel;
 
-		this.$('#corrupted-text').classList.toggle('hidden', !value.corrupted);
+		this.$('#corrupted-text').classList.toggle('hidden', !data.corrupted);
 
 		listTuples.forEach(([containerQuery, propertyName]) => {
 			XElement.clearChildren(this.$(containerQuery));
-			value[propertyName].forEach(mod => {
+			data[propertyName].forEach(mod => {
 				let modDiv = document.createElement('div');
 				modDiv.textContent = mod;
 				this.$(containerQuery).appendChild(modDiv);
 			});
 		});
 
-		this.$('#prefixes-text').textContent = value.affixes.prefix;
-		this.$('#suffixes-text').textContent = value.affixes.suffix;
-		this.$('#affix-value-text').textContent = value.valueDetails.affixes;
-		this.$('#defense-value-text').textContent = value.valueDetails.defenses;
-		this.$('#weight-value-text').textContent = value.valueDetails.mods;
+		this.$('#prefixes-text').textContent = data.affixes.prefix;
+		this.$('#suffixes-text').textContent = data.affixes.suffix;
+		this.$('#affix-value-text').textContent = data.valueDetails.affixes;
+		this.$('#defense-value-text').textContent = data.valueDetails.defenses;
+		this.$('#weight-value-text').textContent = data.valueDetails.mods;
 
-		this.$('#value-text').textContent = round(value.evalValue);
-		let expandedValues = Object.entries(value.valueDetails).filter(([_, value]) => value);
+		this.$('#value-text').textContent = round(data.evalValue);
+		let expandedValues = Object.entries(data.valueDetails).filter(([_, value]) => value);
 		this.$('#value-expanded-text').textContent = expandedValues.length > 1 ?
 			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
-		value.valueBuild.then(valueBuild => {
-			this.$('#value-build-tooltip').textContent = valueBuild;
+		data.valueBuild.then(valueBuild => {
+			this.$('#value-build-tooltip').textContent = valueBuild?.tooltip;
 			this.$('#value-build-link').classList.toggle('hidden', !valueBuild);
 		});
-		this.$('#price-text').textContent = round(value.evalPrice);
-		let expandedPriceShifts = Object.entries(value.priceDetails.shifts).map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
-		this.$('#price-expanded-text').textContent = value.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
-			`${value.priceDetails.count} ${value.priceDetails.currency}${expandedPriceShifts.join('')}` : '';
-		this.$('#whisper-button').textContent = value.accountText;
-		let dateDiff = (now - new Date(value.date)) / msInHour;
+		this.$('#price-text').textContent = round(data.evalPrice);
+		let expandedPriceShifts = Object.entries(data.priceDetails.shifts).map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
+		this.$('#price-expanded-text').textContent = data.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
+			`${data.priceDetails.count} ${data.priceDetails.currency}${expandedPriceShifts.join('')}` : '';
+		this.$('#whisper-button').textContent = data.accountText;
+		let dateDiff = (now - new Date(data.date)) / msInHour;
 		this.$('#date-text').textContent = dateDiff > 24 ? `${round(dateDiff / 24)} days ago` : `${round(dateDiff)} hours ago`;
 
-		this.selected = value.selected;
-		this.hovered = value.hovered;
+		this.selected = data.selected;
+		this.hovered = data.hovered;
 	}
 
 	set selected(value) {

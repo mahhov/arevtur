@@ -71,7 +71,7 @@ class PobApi extends CustomOsScript {
 
 	evalItem(item) {
 		this.send('item', item.replace(/[\n\r]+/g, ' \\n '));
-		return this.awaitResponse.then(text => PobApi.clean(text));
+		return this.awaitResponse.then(text => this.parseItemTooltip(text));
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
@@ -91,36 +91,8 @@ class PobApi extends CustomOsScript {
 			.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
 			.replace(/\s+/g, ' ') // clean up whitespace
 			.trim();
-		this.send('mod', cleanItemMod, pobType);
-		return this.awaitResponse
-			.then(text => PobApi.clean(text))
-			.then(text => {
-				let effectiveHitPool = Number(text.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
-				let life = Number(text.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
-				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
-				let resist = text
-					.match(new RegExp(resistRegex, 'gi'))
-					?.reduce((sum, m) => sum + Number(m.match(resistRegex)[1]), 0) || 0;
-				let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
-				let value = Math.round(
-					(
-						effectiveHitPool * this.valueParams_.life +
-						resist * this.valueParams_.resist +
-						fullDps * this.valueParams_.dps
-					) / pluginNumber * 100) / 100;
-				let tooltip = [
-					`${cleanItemMod} (${pluginNumber})`,
-					'-'.repeat(30),
-					text,
-					'-'.repeat(30),
-					`Full DPS ${fullDps}%`,
-					`Effective hit pool ${effectiveHitPool}%`,
-					`Life ${life}`,
-					`Total Resist ${resist}`,
-					`Value ${value}`,
-				].join('\n');
-				return {value, tooltip};
-			});
+		this.send('mod', cleanItemMod, pobType, 1 / pluginNumber, `${cleanItemMod} (${pluginNumber})`);
+		return this.awaitResponse.then(text => this.parseItemTooltip(text));
 	}
 
 	async generateQuery(type = undefined, maxPrice = 10) {
@@ -134,6 +106,35 @@ class PobApi extends CustomOsScript {
 
 	static async getPobType(type = undefined) {
 		return ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
+	}
+
+	parseItemTooltip(text, valueScale = 1, tooltipPrefix = '') {
+		text = PobApi.clean(text);
+		let effectiveHitPool = Number(text.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
+		let life = Number(text.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
+		let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
+		let resist = text
+			.match(new RegExp(resistRegex, 'gi'))
+			?.reduce((sum, m) => sum + Number(m.match(resistRegex)[1]), 0) || 0;
+		let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
+		let value = Math.round(
+			(
+				effectiveHitPool * this.valueParams_.life +
+				resist * this.valueParams_.resist +
+				fullDps * this.valueParams_.dps
+			) * valueScale * 100) / 100;
+		let tooltip = [
+			tooltipPrefix,
+			tooltipPrefix ? '-'.repeat(30) : '',
+			text,
+			'-'.repeat(30),
+			`Full DPS ${fullDps}%`,
+			`Effective hit pool ${effectiveHitPool}%`,
+			`Life ${life}`,
+			`Total Resist ${resist}`,
+			`Value ${value}`,
+		].filter(v => v).join('\n');
+		return {value, tooltip};
 	}
 
 	static clean(outString) {

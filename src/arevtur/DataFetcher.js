@@ -197,7 +197,7 @@ class QueryParams {
 			mods: QueryParams.evalValue(pseudoMods),
 		};
 		let text = QueryParams.decode64(itemData.item.extended.text);
-		let valueBuild = pobApi?.evalItem(text) || Promise.resolve('');
+		let valueBuild = pobApi?.evalItem(text) || Promise.resolve();
 		let priceDetails = {
 			count: itemData.listing.price.amount,
 			currency: itemData.listing.price.currency,
