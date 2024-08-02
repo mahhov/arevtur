@@ -6,6 +6,11 @@ const ApiConstants = require('../arevtur/ApiConstants');
 class PobApi extends CustomOsScript {
 	constructor(pobPath) {
 		super(pobPath);
+		this.valueParams = {
+			life: 0,
+			resist: 0,
+			dps: 0,
+		};
 		this.pendingResponses = [];
 		this.readyPromise = new Promise(r => this.pendingResponses.push(r));
 		this.addListener(({out, err}) => {
@@ -81,18 +86,18 @@ class PobApi extends CustomOsScript {
 		return this.awaitResponse
 			.then(text => PobApi.clean(text))
 			.then(text => {
-				let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
 				let effectiveHitPool = Number(text.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
 				let life = Number(text.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
 				let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
 				let resist = text
 					.match(new RegExp(resistRegex, 'gi'))
 					?.reduce((sum, m) => sum + Number(m.match(resistRegex)[1]), 0) || 0;
+				let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
 				let value = Math.round(
 					(
-						fullDps * (this.valueParams_?.dps || 1) +
-						effectiveHitPool * (this.valueParams_?.life || 1) +
-						resist * (this.valueParams_?.resist || 1)
+						effectiveHitPool * this.valueParams_.life +
+						resist * this.valueParams_.resist +
+						fullDps * this.valueParams_.dps
 					) / pluginNumber * 100) / 100;
 				let tooltip = [
 					`${cleanItemMod} (${pluginNumber})`,
@@ -113,7 +118,8 @@ class PobApi extends CustomOsScript {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return;
-		this.send('generateQuery', pobType, maxPrice);
+		// todo figure out how to get resist stats in PoB
+		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life, this.valueParams_.dps);
 		return this.awaitResponse;
 	}
 

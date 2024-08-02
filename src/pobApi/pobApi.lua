@@ -98,13 +98,23 @@ while true do
     elseif cmd == 'generateQuery' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is max price, e.g. '10'
+        -- args[4] is life weight, e.g. '1'
+        -- args[5] is DPS weight, e.g. '1'
         local fakeQueryTab = { pbLeagueRealName = '', itemsTab = build.itemsTab }
         local tradeQueryGenerator = new("TradeQueryGenerator", fakeQueryTab)
         local slot = build.itemsTab.slots[args[2]]
         local context = { slotTbl = {} }
         local statWeights = {
-            { stat = 'FullDPS',            label = 'FullDPS label',            weightMult = 1 },
-            { stat = 'Effective Hit Pool', label = 'Effective Hit Pool label', weightMult = 1 },
+            { stat = 'Effective Hit Pool', label = '', weightMult = args[4] },
+            { stat = 'FullDPS',            label = '', weightMult = args[5] },
+            --{ stat = '"FireResist"',             label = '', weightMult = 0 },
+            --{ stat = '"FireResistOverCap"',      label = '', weightMult = 0 },
+            --{ stat = '"ColdResist"',             label = '', weightMult = 0 },
+            --{ stat = '"ColdResistOverCap"',      label = '', weightMult = 0 },
+            --{ stat = '"LightningResist"',        label = '', weightMult = 0 },
+            --{ stat = '"LightningResistOverCap"', label = '', weightMult = 0 },
+            --{ stat = '"ChaosResist"',            label = '', weightMult = 0 },
+            --{ stat = '"ChaosResistOverCap"',     label = '', weightMult = 0 },
         }
         local options = {
             includeCorrupted = true,

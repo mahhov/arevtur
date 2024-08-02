@@ -90,9 +90,9 @@ customElements.define(name, class InputBuild extends XElement {
 
 	updateValueParams() {
 		this.pobApi.valueParams = {
-			life: this.$('#life-weight').value,
-			resist: this.$('#resist-weight').value,
-			dps: this.$('#damage-weight').value,
+			life: Number(this.$('#life-weight').value) || 0,
+			resist: Number(this.$('#resist-weight').value) || 0,
+			dps: Number(this.$('#damage-weight').value) || 0,
 		};
 	}
 
