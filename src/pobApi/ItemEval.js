@@ -14,7 +14,8 @@ class ItemEval extends CustomOsScript {
 			if (err)
 				console.error(err);
 			if (!this.exited && out)
-				out.split('::end::')
+				out.split('>->')
+					.map(split => split.split('<-<')[1])
 					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
 					.forEach(split => this.pendingResponses.shift()(split));
 		});
@@ -64,7 +65,7 @@ class ItemEval extends CustomOsScript {
 		// todo clearer and consistent UI for item and mod tooltips
 		// todo recover from lua crash
 		// todo allow sorting items by pob value
-		let pobType = ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
+		let pobType = await ItemEval.getPobType(type);
 		if (!pobType || !itemMod)
 			return {value: 0, tooltip: ''};
 		let cleanItemMod = raw ? itemMod : itemMod
@@ -107,6 +108,21 @@ class ItemEval extends CustomOsScript {
 				].join('\n');
 				return {value, tooltip};
 			});
+	}
+
+	async generateQuery(type = undefined, maxPrice = 10) {
+		let pobType = await ItemEval.getPobType(type);
+		if (!pobType)
+			return;
+		this.send('generateQuery', type, maxPrice);
+		return new Promise(r => this.pendingResponses.push(r))
+			.then(queryString => {
+				console.log(queryString);
+			});
+	}
+
+	static async getPobType(type = undefined) {
+		return ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
 	}
 
 	static clean(outString) {

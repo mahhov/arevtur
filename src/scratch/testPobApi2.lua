@@ -33,9 +33,9 @@ end
 
 -- our loop
 
-table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
-io.write('ready ::end::')
-io.flush()
+--table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
+--io.write('ready ::end::')
+--io.flush()
 
 buildXmlFile =
 '/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
@@ -93,14 +93,44 @@ loadBuildFromXML(buildXml)
 ----io.flush()
 --
 --
-local arg1 = '100% additional Physical Damage Reduction'
-local arg2 = 'Helmet'
-local slots = build.itemsTab.slots
-local slot = slots[arg2]
-local equippedItem = build.itemsTab.items[slot.selItemId]
-io.write('>' .. arg2 ..', ' .. slot.selItemId .. '::end::')
-local newItem = new('Item', equippedItem.raw .. '\n' .. arg1)
-local tooltip = FakeTooltip:new()
-build.itemsTab:AddItemTooltip(tooltip, newItem)
-io.write(tooltip.text .. '::end::')
-io.flush()
+--local arg1 = '+100 intelligence'
+--local arg2 = 'Amulet'
+--local slots = build.itemsTab.slots
+--local slot = slots[arg2]
+--local equippedItem = build.itemsTab.items[slot.selItemId]
+--io.write('>' .. arg2 ..', ' .. slot.selItemId .. '\n')
+--local newItem = new('Item', equippedItem.raw .. '\n' .. arg1)
+--local tooltip = FakeTooltip:new()
+--build.itemsTab:AddItemTooltip(tooltip, newItem)
+--io.write(tooltip.text .. '::end::')
+--io.flush()
+
+local arg1 = 'Amulet'
+local arg2 = '10'
+local fakeQueryTab = { pbLeagueRealName = '', itemsTab = build.itemsTab }
+local tradeQueryGenerator = new("TradeQueryGenerator", fakeQueryTab)
+local slot = build.itemsTab.slots[arg1]
+local context = { slotTbl = {} }
+local statWeights = {
+  { stat = 'FullDPS',            label = 'FullDPS label',            weightMult = 1 },
+  { stat = 'Effective Hit Pool', label = 'Effective Hit Pool label', weightMult = 1 },
+}
+local options = {
+  includeCorrupted = true,
+  includeSynthesis = false,
+  includeEldritch = false,
+  includeScourge = false,
+  includeTalisman = true,
+  influence1 = 1,
+  influence2 = 1,
+  maxPrice = tonumber(arg2),
+  maxPriceType = nil,
+  statWeights = statWeights,
+}
+tradeQueryGenerator:RequestQuery(slot, context, statWeights, function(context, query, errMsg)
+  io.write('done')
+  io.write(query)
+  io.flush()
+end)
+tradeQueryGenerator:StartQuery(slot, options)
+tradeQueryGenerator:OnFrame(slot, options)
