@@ -281,7 +281,7 @@ customElements.define(name, class extends XElement {
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
 			this[buildValue] = summary.value;
-			this[buildValue + 'Tooltip'] = summary.tooltip;
+			this[buildValue + 'Tooltip'] = summary.text;
 		});
 	}
 });

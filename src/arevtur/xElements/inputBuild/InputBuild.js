@@ -111,7 +111,7 @@ customElements.define(name, class InputBuild extends XElement {
 			this.$('#demo-mod-value').value || 100,
 			this.$('#demo-mod-raw').checked);
 		this.$('#demo-mod-weight').textContent = summary.value;
-		this.$('#demo-mod-weight').title = summary.tooltip;
+		this.$('#demo-mod-weight').title = summary.text;
 	}
 
 	static get defaultPobPath() {

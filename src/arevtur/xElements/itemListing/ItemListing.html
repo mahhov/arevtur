@@ -57,20 +57,8 @@
 		position: relative;
 	}
 
-	/* todo for consistency, use similar tooltips for input build recommendations and other tooltips */
-	#value-build-tooltip {
-		position: absolute;
-		background: var(--back);
-		outline: 1px solid var(--interactable-focus-border);
+	#value-build-link:not(:hover) #value-build-tooltip {
 		display: none;
-		z-index: 1;
-		white-space: pre;
-		font-size: 14px;
-		padding: 5px;
-	}
-
-	#value-build-link:hover #value-build-tooltip {
-		display: block;
 	}
 
 	#date-text {
@@ -114,7 +102,10 @@
 <div>
 	<div>
 		<span class="value">Value: <span id="value-text"></span></span>
-		<span class="hidden" id="value-build-link">(build)<span id="value-build-tooltip"></span></span>
+		<span class="hidden" id="value-build-link">
+			(build)
+			<x-item-info id="value-build-tooltip"></x-item-info>
+		</span>
 		<button id="copy-item-button">Copy item</button>
 	</div>
 	<div class="expanded" id="value-expanded-text"></div>

@@ -80,7 +80,7 @@ class PobApi extends CustomOsScript {
 		// todo don't rerun pob for weight changes
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
-			return {value: 0, tooltip: ''};
+			return {value: 0, text: ''};
 		let cleanItemMod = raw ? itemMod : itemMod
 			.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
 			.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
@@ -108,25 +108,25 @@ class PobApi extends CustomOsScript {
 		return ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
 	}
 
-	parseItemTooltip(text, valueScale = 1, tooltipPrefix = '') {
-		text = PobApi.clean(text);
-		let effectiveHitPool = Number(text.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
-		let life = Number(text.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
+	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
+		itemText = PobApi.clean(itemText);
+		let effectiveHitPool = Number(itemText.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
+		let life = Number(itemText.match(/([+-][\d,]+) Total Life/)?.[1].replace(/,/g, '')) || 0;
 		let resistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) Res(?:\.|istance)/i;
-		let resist = text
+		let resist = itemText
 			.match(new RegExp(resistRegex, 'gi'))
 			?.reduce((sum, m) => sum + Number(m.match(resistRegex)[1]), 0) || 0;
-		let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
+		let fullDps = Number(itemText.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
 		let value = Math.round(
 			(
 				effectiveHitPool * this.valueParams_.life +
 				resist * this.valueParams_.resist +
 				fullDps * this.valueParams_.dps
 			) * valueScale * 100) / 100;
-		let tooltip = [
-			tooltipPrefix,
-			tooltipPrefix ? '-'.repeat(30) : '',
-			text,
+		let summaryText = [
+			textPrefix,
+			textPrefix ? '-'.repeat(30) : '',
+			itemText,
 			'-'.repeat(30),
 			`Full DPS ${fullDps}%`,
 			`Effective hit pool ${effectiveHitPool}%`,
@@ -134,7 +134,7 @@ class PobApi extends CustomOsScript {
 			`Total Resist ${resist}`,
 			`Value ${value}`,
 		].filter(v => v).join('\n');
-		return {value, tooltip};
+		return {value, text: summaryText};
 	}
 
 	static clean(outString) {
