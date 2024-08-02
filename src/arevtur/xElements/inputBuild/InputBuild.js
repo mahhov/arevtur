@@ -4,7 +4,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const stream = require('bs-better-stream');
 const ApiConstants = require('../../ApiConstants');
-const ItemEval = require('../../../pobApi/ItemEval');
+const PobApi = require('../../../pobApi/PobApi');
 
 customElements.define(name, class InputBuild extends XElement {
 	static get attributeTypes() {
@@ -79,17 +79,17 @@ customElements.define(name, class InputBuild extends XElement {
 	}
 
 	updatePob() {
-		this.itemEval = new ItemEval(this.$('#pob-path').path); // this.itemEval is public
+		this.pobApi = new PobApi(this.$('#pob-path').path); // this.pobApi is public
 		this.updateBuild();
 		this.updateValueParams();
 	}
 
 	updateBuild() {
-		this.itemEval.build = this.$('#build-path').path;
+		this.pobApi.build = this.$('#build-path').path;
 	}
 
 	updateValueParams() {
-		this.itemEval.valueParams = {
+		this.pobApi.valueParams = {
 			life: this.$('#life-weight').value,
 			resist: this.$('#resist-weight').value,
 			dps: this.$('#damage-weight').value,
@@ -97,15 +97,15 @@ customElements.define(name, class InputBuild extends XElement {
 	}
 
 	async refresh() {
-		this.emit('refreshing', this.itemEval);
+		this.emit('refreshing', this.pobApi);
 		if (this.$('#pob-path').path && this.$('#build-path').path) {
-			await this.itemEval.ready;
-			this.emit('refresh', this.itemEval);
+			await this.pobApi.ready;
+			this.emit('refresh', this.pobApi);
 		}
 	}
 
 	async updateDemo() {
-		let summary = await this.itemEval.evalItemModSummary(
+		let summary = await this.pobApi.evalItemModSummary(
 			this.$('#demo-mod-type').value,
 			this.$('#demo-mod-property').value,
 			this.$('#demo-mod-value').value || 100,

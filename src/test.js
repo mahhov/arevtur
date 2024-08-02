@@ -33,9 +33,9 @@
 const {ClipboardListener} = require('js-desktop-base');
 let clipboard = new ClipboardListener();
 clipboard.addListener(async read => {
-    if (!read)
-        return;
-    console.log('clipboard', read)
+	if (!read)
+		return;
+	console.log('clipboard', read);
 });
 
 // SCREEN

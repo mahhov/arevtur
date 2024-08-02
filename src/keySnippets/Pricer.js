@@ -27,7 +27,7 @@ class TextItem {
 		this.text = text;
 		this.lines = text.split(/\r?\n/).filter(a => a).map(line => ({
 			line,
-			words: line.split(' ')
+			words: line.split(' '),
 		}));
 		this.lastLine = this.lines[this.lines.length - 1];
 

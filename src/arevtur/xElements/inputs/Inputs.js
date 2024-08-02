@@ -108,7 +108,7 @@ customElements.define(name, class Inputs extends XElement {
 		indexSetEls[this.inputSetIndex].selected = true;
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
 		await this.$('#input-trade-params').loadQueryParams(unifiedQueryParams);
-		this.$('#input-trade-params').refreshBuild(this.itemEval);
+		this.$('#input-trade-params').refreshBuild(this.pobApi);
 	}
 
 	inputSetIndexFromEl(inputSetEl) {
@@ -170,7 +170,7 @@ customElements.define(name, class Inputs extends XElement {
 					.toDataFetcherQueryParamsDatas(league, sessionId, overridePrice, fatedConnectionsProphecyPrice));
 	}
 
-	get itemEval() {
-		return this.$('#input-build').itemEval;
+	get pobApi() {
+		return this.$('#input-build').pobApi;
 	}
 });

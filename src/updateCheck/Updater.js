@@ -1,10 +1,10 @@
-const {autoUpdater} = require("electron-updater");
+const {autoUpdater} = require('electron-updater');
 const {XPromise} = require('js-desktop-base');
 
 class Updater {
 	constructor() {
 		autoUpdater.autoInstallOnAppQuit = false;
-		autoUpdater.fullChangelog = true
+		autoUpdater.fullChangelog = true;
 		this.checkForUpdate();
 
 		autoUpdater.on('update-available', result =>

@@ -104,11 +104,11 @@ customElements.define(name, class extends XElement {
 		this.$('#build-value').disabled = this.buildValue === '0' || this.weight === this.buildValue;
 	}
 
-	async refreshBuild(itemEval = this.lastItemEval) {
-		this.lastItemEval = itemEval;
-		if (!itemEval)
+	async refreshBuild(pobApi = this.lastPobApi) {
+		this.lastPobApi = pobApi;
+		if (!pobApi)
 			return;
-		let summary = await itemEval.evalItemModSummary(this.type, this.property, 100);
+		let summary = await pobApi.evalItemModSummary(this.type, this.property, 100);
 		this.buildValue = summary.value;
 		this.buildValueTooltip = summary.tooltip;
 	}

@@ -29,7 +29,7 @@ networkFlush = async callback => {
 		let success, outObj;
 		try {
 			success = true;
-			outObj = await exec(cmds[i])
+			outObj = await exec(cmds[i]);
 		} catch (e) {
 			outObj = e;
 		}

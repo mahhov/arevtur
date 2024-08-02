@@ -216,7 +216,7 @@ customElements.define(name, class extends XElement {
 			queryProperty.remove();
 			this.updateQueryParams();
 		});
-		queryProperty.refreshBuild(this.lastItemEval);
+		queryProperty.refreshBuild(this.lastPobApi);
 		return queryProperty;
 	};
 
@@ -226,9 +226,9 @@ customElements.define(name, class extends XElement {
 		this.emit('change');
 	}
 
-	refreshBuild(itemEval = this.lastItemEval) {
-		this.lastItemEval = itemEval;
+	refreshBuild(pobApi = this.lastPobApi) {
+		this.lastPobApi = pobApi;
 		this.$$('#query-properties-list x-query-property')
-			.forEach(queryProperty => queryProperty.refreshBuild(itemEval));
+			.forEach(queryProperty => queryProperty.refreshBuild(pobApi));
 	}
 });

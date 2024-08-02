@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const {configForRenderer} = require('../../../services/configForRenderer')
+const {configForRenderer} = require('../../../services/configForRenderer');
 
 customElements.define(name, class Chart extends XElement {
 	static get attributeTypes() {
@@ -212,7 +212,7 @@ customElements.define(name, class Chart extends XElement {
 			x: x / this.width * this.deltaX + this.minX,
 			y: (1 - y / this.height) * this.deltaY + this.minY,
 			width: 20 / this.width * this.deltaX,
-			height: 20 / this.height * this.deltaY
+			height: 20 / this.height * this.deltaY,
 		};
 	}
 
@@ -231,7 +231,7 @@ customElements.define(name, class Chart extends XElement {
 		let min = values.length && !zeroMin ? Math.min(...values) : 0;
 		let max = values.length ? Math.max(...values) : 10;
 		let delta = max - min + .001;
-		return [min - delta * buffer, delta + delta * buffer * 2]
+		return [min - delta * buffer, delta + delta * buffer * 2];
 	}
 
 	static numToPrint(n) {

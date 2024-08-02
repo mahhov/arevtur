@@ -22,27 +22,27 @@
 	}
 </style>
 
-<x-path-select id="pob-path" placeholder="Select PoB Path" directory></x-path-select>
-<x-path-select id="build-path" placeholder="Select PoB Build" extension="xml"></x-path-select>
+<x-path-select directory id="pob-path" placeholder="Select PoB Path"></x-path-select>
+<x-path-select extension="xml" id="build-path" placeholder="Select PoB Build"></x-path-select>
 <button id="refresh">Refresh Build</button>
 <span id="weights">Weights:
 	<label>
 		life
-		<input type="number" id="life-weight" min="0">
+		<input id="life-weight" min="0" type="number">
 	</label>
 	<label>
 		resist
-		<input type="number" id="resist-weight" min="0">
+		<input id="resist-weight" min="0" type="number">
 	</label>
 	<label>
 		damage
-		<input type="number" id="damage-weight" min="0">
+		<input id="damage-weight" min="0" type="number">
 	</label>
 </span>
 <span id="demo-mod">
-	<x-autocomplete-input id="demo-mod-type" free-form="true" placeholder="input a type here"></x-autocomplete-input>
-	<x-autocomplete-input id="demo-mod-property" free-form="true" placeholder="input a mod here"></x-autocomplete-input>
-	<input id="demo-mod-value" type="number" placeholder="100" min="0">
+	<x-autocomplete-input free-form="true" id="demo-mod-type" placeholder="input a type here"></x-autocomplete-input>
+	<x-autocomplete-input free-form="true" id="demo-mod-property" placeholder="input a mod here"></x-autocomplete-input>
+	<input id="demo-mod-value" min="0" placeholder="100" type="number">
 	<input id="demo-mod-raw" type="checkbox">
 	<span id="demo-mod-weight"></span>
 </span>

@@ -36,7 +36,7 @@ class Searcher {
 }
 
 // Test
-let testSearcher = new Searcher("small 'cat' | kitten, brown fur, !fat | ugly");
+let testSearcher = new Searcher('small \'cat\' | kitten, brown fur, !fat | ugly');
 [
 	[testSearcher.test(['brown fur', 'kittens', '']), true],
 	[testSearcher.test(['brown fur', 'veryugly', 'kittens', '']), false],
@@ -46,7 +46,7 @@ let testSearcher = new Searcher("small 'cat' | kitten, brown fur, !fat | ugly");
 	[testSearcher.test(['brown', 'kittens', 'fur']), false],
 ].forEach(([a, b], i) => a !== b && console.log('Failed testSearcher test case', i));
 
-let testSearcherNoOrder = new Searcher("small 'cat' | kitten, brown fur, !fat | ugly", false);
+let testSearcherNoOrder = new Searcher('small \'cat\' | kitten, brown fur, !fat | ugly', false);
 [
 	[testSearcherNoOrder.test(['brown fur', 'kittens', '']), true],
 	[testSearcherNoOrder.test(['brown fur', 'veryugly', 'kittens', '']), false],

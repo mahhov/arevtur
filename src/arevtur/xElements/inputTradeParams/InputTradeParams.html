@@ -34,43 +34,43 @@
 	<x-autocomplete-input id="type-input" placeholder="type"></x-autocomplete-input>
 	<label>
 		value
-		<input id="min-value-input" class="short-input" type="number">
+		<input class="short-input" id="min-value-input" type="number">
 		<!--todo trim leading 0's from number inputs-->
 	</label>
 	<label>
 		price
-		<input id="price-input" class="short-input" type="number">
+		<input class="short-input" id="price-input" type="number">
 	</label>
-	<label>Offline<input type="checkbox" id="offline-check"></label>
+	<label>Offline<input id="offline-check" type="checkbox"></label>
 </div>
 <div>
 	<label>
 		armour
-		<input id="armour-input" class="short-input" type="number">
+		<input class="short-input" id="armour-input" type="number">
 	</label>
 	<label>
 		evasion
-		<input id="evasion-input" class="short-input" type="number">
+		<input class="short-input" id="evasion-input" type="number">
 	</label>
 	<label>
 		energy shield
-		<input id="energy-shield-input" class="short-input" type="number">
+		<input class="short-input" id="energy-shield-input" type="number">
 	</label>
 </div>
 <div>
 	<label>
 		prefix
-		<input id="prefix-input" class="short-input" type="number">
+		<input class="short-input" id="prefix-input" type="number">
 	</label>
 	<label>
 		suffix
-		<input id="suffix-input" class="short-input" type="number">
+		<input class="short-input" id="suffix-input" type="number">
 	</label>
-	<label>6-link<input type="checkbox" id="linked-check"></label>
+	<label>6-link<input id="linked-check" type="checkbox"></label>
 </div>
 <div>
-	<label>Uncorrupted<input type="checkbox" id="uncorrupted-check"></label>
-	<label>Non unique<input type="checkbox" id="non-unique-check"></label>
+	<label>Uncorrupted<input id="uncorrupted-check" type="checkbox"></label>
+	<label>Non unique<input id="non-unique-check" type="checkbox"></label>
 	<x-multi-select-lined id="influence-input" placeholder="Add influences"></x-multi-select-lined>
 </div>
 <x-arrangable-list id="query-properties-list"></x-arrangable-list>

@@ -51,7 +51,7 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	joinItems(items) {
-		this.itemsData.join(items)
+		this.itemsData.join(items);
 	}
 
 	updateItemsProgress(ratio) {

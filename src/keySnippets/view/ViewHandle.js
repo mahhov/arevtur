@@ -13,7 +13,7 @@ class ViewHandle extends ViewHandleBase {
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
-			}
+			},
 		}, path.join(__dirname, './View.html'));
 	}
 

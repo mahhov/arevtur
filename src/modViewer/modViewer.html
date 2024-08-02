@@ -122,7 +122,7 @@
 </script>
 
 <div id="container">
-	<div id="inputs" class="area">
+	<div class="area" id="inputs">
 		<div class="input-row">
 			<progress id="progress-bar" max="1"></progress>
 			<button id="uncached-fetch-button">Refresh</button>
@@ -131,7 +131,7 @@
 		</div>
 		<div class="input-row">
 			<x-autocomplete-input id="item-input" placeholder="Item"></x-autocomplete-input>
-			<input id="item-level-input" type="number" min="0" max="100" placeholder="Level">
+			<input id="item-level-input" max="100" min="0" placeholder="Level" type="number">
 		</div>
 		<div class="input-row">
 			<x-multi-select-lined id="category-input" placeholder="Categories"></x-multi-select-lined>
@@ -151,7 +151,7 @@
 				<span id="mod-group-available-count"></span>
 			</span>
 			mod groups.
-			<button id="limited-mod-group-count-show-all-button" class="mod-group-count-limited">Show all</button>
+			<button class="mod-group-count-limited" id="limited-mod-group-count-show-all-button">Show all</button>
 		</div>
 	</div>
 	<div id="outputs"></div>
@@ -180,7 +180,7 @@
 		if (Array.isArray(obj))
 			return obj.map(v => clone(v));
 		if (typeof obj === 'object' && obj)
-			return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, clone(v)]))
+			return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, clone(v)]));
 		return obj;
 	};
 	const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -246,7 +246,7 @@
 		});
 		$('#limited-mod-group-count-show-all-button').addEventListener('click', () => filterOutput(modsByItem, false));
 
-		$('#progress-bar').value = 1
+		$('#progress-bar').value = 1;
 		$('#fetch-time').textContent = await time;
 
 		await sleep(0);
@@ -256,7 +256,7 @@
 
 	let generateOutput = modsByItem => {
 		XElement.clearChildren($('#outputs'));
-		setElOwner($('#outputs'), modsByItem)
+		setElOwner($('#outputs'), modsByItem);
 		modsByItem.forEach(modForItem => {
 			let itemDiv = $c('div', $('#outputs'), ['output-item']);
 			setElOwner(itemDiv, modForItem);
@@ -356,7 +356,7 @@
 				modsForCategory.modsByGroup.forEach(modsForGroup => {
 					let sumWeights = modsForGroup.mods.reduce((sum, mod) => {
 						mod.$('.output-mod-field-weight').textContent = weightTracker.getText(modsForItem.item, mod.suffix, mod.weight);
-						return sum + mod.weight
+						return sum + mod.weight;
 					}, 0);
 					modsForGroup.$('.output-group-summary-field-weight').textContent = weightTracker.getText(modsForItem.item, modsForGroup.suffix, sumWeights);
 				})));

@@ -3,7 +3,7 @@ const {spawn} = require('child_process');
 const {CustomOsScript} = require('js-desktop-base');
 const ApiConstants = require('../arevtur/ApiConstants');
 
-class ItemEval extends CustomOsScript {
+class PobApi extends CustomOsScript {
 	constructor(pobPath) {
 		super(pobPath);
 		this.pendingResponses = [];
@@ -25,13 +25,13 @@ class ItemEval extends CustomOsScript {
 		// e.g. /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
 		return spawn(
 			'luajit',
-			[path.join(__dirname, './itemEcho.lua')],
+			[path.join(__dirname, './pobApi.lua')],
 			{cwd: pobPath});
 	}
 
 	send(command, arg1 = '', arg2 = '') {
 		let text = `<${command}> <${arg1}> <${arg2}>`;
-		console.log('ItemEval sending:', text);
+		console.log('PobApi sending:', text);
 		return super.send(text);
 	}
 
@@ -56,7 +56,7 @@ class ItemEval extends CustomOsScript {
 	evalItem(item) {
 		this.send('item', item.replace(/[\n\r]+/g, ' \\n '));
 		return new Promise(r => this.pendingResponses.push(r))
-			.then(text => ItemEval.clean(text));
+			.then(text => PobApi.clean(text));
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
@@ -65,7 +65,7 @@ class ItemEval extends CustomOsScript {
 		// todo clearer and consistent UI for item and mod tooltips
 		// todo recover from lua crash
 		// todo allow sorting items by pob value
-		let pobType = await ItemEval.getPobType(type);
+		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return {value: 0, tooltip: ''};
 		let cleanItemMod = raw ? itemMod : itemMod
@@ -80,7 +80,7 @@ class ItemEval extends CustomOsScript {
 			.trim();
 		this.send('mod', cleanItemMod, pobType);
 		return new Promise(r => this.pendingResponses.push(r))
-			.then(text => ItemEval.clean(text))
+			.then(text => PobApi.clean(text))
 			.then(text => {
 				let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
 				let effectiveHitPool = Number(text.match(/Effective Hit Pool \(([+-][\d.]+)%\)/)?.[1]) || 0;
@@ -111,7 +111,7 @@ class ItemEval extends CustomOsScript {
 	}
 
 	async generateQuery(type = undefined, maxPrice = 10) {
-		let pobType = await ItemEval.getPobType(type);
+		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return;
 		this.send('generateQuery', type, maxPrice);
@@ -132,10 +132,6 @@ class ItemEval extends CustomOsScript {
 			.replace(/\r/g, '')
 			.trim();
 	}
-
-	static decode64(string64) {
-		return Buffer.from(string64, 'base64').toString();
-	};
 }
 
-module.exports = ItemEval;
+module.exports = PobApi;

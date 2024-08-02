@@ -2,7 +2,6 @@ const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
-const ItemEval = require('../pobApi/ItemEval');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
 
 let parseRateLimitResponseHeader = ({rule, state}) => {
@@ -99,10 +98,10 @@ class QueryParams {
 		};
 	}
 
-	getItemsStream(progressCallback, itemEval = null) {
+	getItemsStream(progressCallback, pobApi = null) {
 		this.stopObj = {};
 		let stream = new Stream();
-		this.writeItemsToStream(stream, progressCallback, itemEval)
+		this.writeItemsToStream(stream, progressCallback, pobApi)
 			.then(() => stream.done());
 		return stream;
 	}
@@ -111,8 +110,8 @@ class QueryParams {
 		this.stopObj.stop = true;
 	}
 
-	async writeItemsToStream(stream, progressCallback, itemEval) {
-		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback, itemEval);
+	async writeItemsToStream(stream, progressCallback, pobApi) {
+		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback, pobApi);
 
 		let defenseProperty = Object.entries(this.defenseProperties).find(([_, {weight}]) => weight);
 		if (defenseProperty) {
@@ -129,7 +128,7 @@ class QueryParams {
 
 				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
 				let query = this.getQuery(overrides);
-				newItems = await this.queryAndParseItems(query, stream, progressCallback, itemEval);
+				newItems = await this.queryAndParseItems(query, stream, progressCallback, pobApi);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);
 		}
@@ -137,7 +136,7 @@ class QueryParams {
 		return items;
 	}
 
-	async queryAndParseItems(query, stream, progressCallback, itemEval) {
+	async queryAndParseItems(query, stream, progressCallback, pobApi) {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
@@ -162,7 +161,7 @@ class QueryParams {
 				let response2 = await rlrGet(endpoint2, queryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
-				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData, itemEval)));
+				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData, pobApi)));
 				stream.write(items);
 				return items;
 			});
@@ -175,7 +174,7 @@ class QueryParams {
 		}
 	}
 
-	async parseItem(itemData, itemEval) {
+	async parseItem(itemData, pobApi) {
 		let sockets = (itemData.item.sockets || []).reduce((a, v) => {
 			a[v.group] = a[v.group] || [];
 			a[v.group].push(v.sColour);
@@ -197,8 +196,8 @@ class QueryParams {
 			defenses: QueryParams.evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
 			mods: QueryParams.evalValue(pseudoMods),
 		};
-		let text = ItemEval.decode64(itemData.item.extended.text);
-		let valueBuild = itemEval?.evalItem(text) || Promise.resolve('');
+		let text = QueryParams.decode64(itemData.item.extended.text);
+		let valueBuild = pobApi?.evalItem(text) || Promise.resolve('');
 		let priceDetails = {
 			count: itemData.listing.price.amount,
 			currency: itemData.listing.price.currency,
@@ -255,6 +254,10 @@ class QueryParams {
 		console.warn('Missing currency', currencyId);
 		return -1;
 	}
+
+	static decode64(string64) {
+		return Buffer.from(string64, 'base64').toString();
+	};
 }
 
 class QueryImport {

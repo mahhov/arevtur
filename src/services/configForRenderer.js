@@ -10,13 +10,13 @@ class ConfigForRenderer {
 		this.listeners = [];
 	}
 
+	get config() {
+		return this.config_;
+	}
+
 	set config(newConfig) {
 		// this.config_ will be updated in the on('config-change') callback
 		ipcRenderer.invoke('config-change', newConfig);
-	}
-
-	get config() {
-		return this.config_;
 	}
 
 	listenConfigChange(handle) {
