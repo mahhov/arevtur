@@ -105,14 +105,14 @@ loadBuildFromXML(buildXml)
 --io.write(tooltip.text .. '::end::')
 --io.flush()
 
-local arg1 = 'Amulet'
+local arg1 = 'Belt'
 local arg2 = '10'
 local fakeQueryTab = { pbLeagueRealName = '', itemsTab = build.itemsTab }
 local tradeQueryGenerator = new("TradeQueryGenerator", fakeQueryTab)
 local slot = build.itemsTab.slots[arg1]
 local context = { slotTbl = {} }
 local statWeights = {
-  { stat = 'FullDPS',            label = 'FullDPS label',            weightMult = 1 },
+  { stat = 'FullDPS',            label = 'FullDPS label',            weightMult = .5 },
   { stat = 'Effective Hit Pool', label = 'Effective Hit Pool label', weightMult = 1 },
 }
 local options = {

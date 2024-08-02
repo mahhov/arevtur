@@ -1,13 +1,16 @@
 <style>
 	@import '../sharedStyle.css';
 
-	#container {
+	.container {
 		display: inline-block;
-		/*position: relative;*/
 	}
 
-	#container:has(button:empty) {
+	.container:has(button:empty) {
 		display: none;
+	}
+
+	.relative {
+		position: relative;
 	}
 
 	#tooltip {
@@ -21,7 +24,7 @@
 		padding: 5px;
 	}
 
-	#container:not(:hover) #tooltip {
+	.container:not(:hover) #tooltip {
 		display: none;
 	}
 
@@ -46,7 +49,9 @@
 	}
 </style>
 
-<div id="container">
+<div class="container">
 	<button id="button"></button>
-	<div id="tooltip"></div>
+	<div class="relative">
+		<div id="tooltip"></div>
+	</div>
 </div>
