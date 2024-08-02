@@ -96,6 +96,8 @@ customElements.define(name, class extends XElement {
 
 	set type(value) {
 		this.$('#type-input').value = value;
+		this.$$('#query-properties-list x-query-property').forEach(queryProperty =>
+			queryProperty.type = value);
 	}
 
 	set minValue(value) {

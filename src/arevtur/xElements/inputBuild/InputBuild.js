@@ -105,13 +105,9 @@ customElements.define(name, class InputBuild extends XElement {
 	}
 
 	async updateDemo() {
-		let pobType = ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(this.$('#demo-mod-type').value)];
-		let property = this.$('#demo-mod-property').value;
-		if (!pobType || !property)
-			return;
 		let summary = await this.itemEval.evalItemModSummary(
-			pobType,
-			property,
+			this.$('#demo-mod-type').value,
+			this.$('#demo-mod-property').value,
 			this.$('#demo-mod-value').value || 100,
 			this.$('#demo-mod-raw').checked);
 		this.$('#demo-mod-weight').textContent = summary.value;

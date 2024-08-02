@@ -1,6 +1,7 @@
 const path = require('path');
 const {spawn} = require('child_process');
 const {CustomOsScript} = require('js-desktop-base');
+const ApiConstants = require('../arevtur/ApiConstants');
 
 class ItemEval extends CustomOsScript {
 	constructor(pobPath) {
@@ -57,19 +58,21 @@ class ItemEval extends CustomOsScript {
 			.then(text => ItemEval.clean(text));
 	}
 
-	evalItemModSummary(pobType, itemMod, pluginNumber = 1, raw = false) {
-		if (!raw)
-			itemMod = itemMod
-				.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
-				.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
-				.replace(/#/g, pluginNumber) // pluginNumber
-				.replace(/\([^)]*\)/g, '') // remove '(...)'
-				.replace(/total/gi, '') // remove 'total'
-				.replace(/increased .*damage/i, 'increased damage') // inc damage
-				.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
-				.replace(/\s+/g, ' ') // clean up whitespace
-				.trim();
-		this.send('mod', itemMod, pobType);
+	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
+		if (!type || !itemMod)
+			return {value: 0, tooltip: ''};
+		let pobType = ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
+		let cleanItemMod = raw ? itemMod : itemMod
+			.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
+			.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
+			.replace(/#/g, pluginNumber) // pluginNumber
+			.replace(/\([^)]*\)/g, '') // remove '(...)'
+			.replace(/total/gi, '') // remove 'total'
+			.replace(/increased .*damage/i, 'increased damage') // inc damage
+			.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
+			.replace(/\s+/g, ' ') // clean up whitespace
+			.trim();
+		this.send('mod', cleanItemMod, pobType);
 		return new Promise(r => this.pendingResponses.push(r))
 			.then(text => ItemEval.clean(text))
 			.then(text => {
@@ -82,9 +85,9 @@ class ItemEval extends CustomOsScript {
 						life * (this.valueParams_?.life || 1) +
 						resist / 3 * (this.valueParams_?.resist || 1)) /
 					pluginNumber * 100) / 100;
-				let tooltip = `${itemMod} (${pluginNumber})\n${'-'.repeat(30)}\n${text}`;
+				let tooltip = `${cleanItemMod} (${pluginNumber})\n${'-'.repeat(30)}\n${text}`;
 				// todo extract correctly
-				return {dps, life, resist, value, itemMod, pluginNumber, text, tooltip};
+				return {dps, life, resist, value, cleanItemMod, pluginNumber, text, tooltip};
 			});
 	}
 

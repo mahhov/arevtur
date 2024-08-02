@@ -4,9 +4,14 @@ const {template, name} = importUtil(__filename);
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {
-			property: {}, weight: {}, filter: {},
-			locked: {boolean: true}, shared: {boolean: true},
-			buildValue: {}, buildValueTooltip: {},
+			type: {},
+			property: {},
+			weight: {},
+			filter: {},
+			locked: {boolean: true},
+			shared: {boolean: true},
+			buildValue: {},
+			buildValueTooltip: {},
 		};
 	}
 
@@ -50,6 +55,10 @@ customElements.define(name, class extends XElement {
 		});
 		this.weight = this.weight || 0;
 		this.filter = this.filter || 'weight';
+	}
+
+	set type(value) {
+		this.refreshBuild();
 	}
 
 	set properties(value) {
@@ -97,9 +106,9 @@ customElements.define(name, class extends XElement {
 
 	async refreshBuild(itemEval = this.lastItemEval) {
 		this.lastItemEval = itemEval;
-		if (!this.property || !itemEval)
+		if (!itemEval)
 			return;
-		let summary = await itemEval.evalItemModSummary('Amulet', this.property, 100);
+		let summary = await itemEval.evalItemModSummary(this.type, this.property, 100);
 		this.buildValue = summary.value;
 		this.buildValueTooltip = summary.tooltip;
 	}
