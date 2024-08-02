@@ -31,10 +31,10 @@
 	--valid-back: #aaffaa;
 
 	/* colored text */
-	--colored-text-orange: orange;
-	--colored-text-red: red;
-	--colored-text-green: green;
-	--colored-text-blue: blue;
+	--colored-text-orange: lch(65 230 80);
+	--colored-text-red: lch(65 230 0);
+	--colored-text-green: lch(65 230 120);
+	--colored-text-blue: lch(65 230 290);
 }
 
 :root.dark {
@@ -70,8 +70,5 @@
 	--valid-back: #070;
 
 	/* colored text */
-	--colored-text-orange: orange;
-	--colored-text-red: red;
-	--colored-text-green: green;
-	--colored-text-blue: blue;
+	/* inherit */
 }

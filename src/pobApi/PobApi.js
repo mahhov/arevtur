@@ -131,7 +131,7 @@ class PobApi extends CustomOsScript {
 			textPrefix ? `@bold,green ${textPrefix}` : '',
 			textPrefix ? '-'.repeat(30) : '',
 			...itemText.split('\n').map(itemTextLine => {
-				if (itemTextLine === textPrefix)
+				if (itemTextLine && itemTextLine === textPrefix)
 					return `@bold,green ${itemTextLine}`;
 				if (itemTextLine.match(effectiveHitPoolRegex))
 					return `@bold,blue ${itemTextLine}`;
