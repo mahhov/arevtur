@@ -31,8 +31,19 @@ function FakeTooltip:AddSeparator()
     self.text = self.text .. '\n'
 end
 
-function respond(response)
-    io.write('<-<' .. response .. '>->')
+function getArgs(input)
+    args = {}
+    for arg in input:gmatch('<(.-)>') do
+        table.insert(args, arg)
+    end
+    return args
+end
+
+function respond(response, debug)
+    if not debug then
+        response = '<.' .. response .. '.>'
+    end
+    io.write(response .. '\n')
     io.flush()
 end
 
@@ -43,35 +54,29 @@ respond('ready')
 
 while true do
     local input = io.read()
-    local _, _, cmd = input:find('<(.*)> <.*> <.*>')
-    local _, _, arg1 = input:find('<.*> <(.*)> <.*>')
-    local _, _, arg2 = input:find('<.*> <.*> <(.*)>')
+    local args = getArgs(input)
+    local cmd = args[1]
     if cmd == 'exit' then
-        -- arg1 is empty
-        -- arg2 is empty
         os.exit()
     elseif cmd == 'build' then
-        -- arg1 is build xml path
-        -- arg2 is empty
-        loadBuildFromXML(readFile(arg1))
+        -- args[2] is build xml path
+        loadBuildFromXML(readFile(args[2]))
     elseif cmd == 'item' then
-        -- arg1 is item text
-        -- arg2 is empty
-        local itemText = arg1:gsub([[\n]], "\n")
+        -- args[2] is item text
+        local itemText = args[2]:gsub([[\n]], "\n")
         local item = new('Item', itemText)
         item:BuildModList()
         local tooltip = FakeTooltip:new()
         build.itemsTab:AddItemTooltip(tooltip, item)
         respond(tooltip.text)
-    elseif cmd == 'modold' then
-        -- arg1 is mod, e.g. '+100 evasion'
-        -- arg2 is empty
+    elseif cmd == 'mod-old' then
+        -- args[2] is mod, e.g. '+100 evasion'
         itemText = [[
             Item Class: Helmets
             Rarity: Rare
             Havoc Dome
             Noble Tricorne
-        ]] .. arg1
+        ]] .. args[2]
         table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
         local item = new('Item', itemText)
         local calcFunc = build.calcsTab:GetMiscCalculator()
@@ -81,21 +86,21 @@ while true do
         build:AddStatComparesToTooltip(tooltip, outputBase, outputNew, "")
         respond(tooltip.text)
     elseif cmd == 'mod' then
-        -- arg1 is type, e.g. 'Amulet'
-        -- arg2 is mod, e.g. '+100 evasion'
+        -- args[2] is type, e.g. 'Amulet'
+        -- args[3] is mod, e.g. '+100 evasion'
         local slots = build.itemsTab.slots
-        local slot = slots[arg2]
+        local slot = slots[args[3]]
         local equippedItem = build.itemsTab.items[slot.selItemId]
-        local newItem = new('Item', equippedItem.raw .. '\n' .. arg1)
+        local newItem = new('Item', equippedItem.raw .. '\n' .. args[2])
         local tooltip = FakeTooltip:new()
         build.itemsTab:AddItemTooltip(tooltip, newItem)
         respond(tooltip.text)
     elseif cmd == 'generateQuery' then
-        -- arg1 is type, e.g. 'Amulet'
-        -- arg2 is max price, e.g. '10'
+        -- args[2] is type, e.g. 'Amulet'
+        -- args[3] is max price, e.g. '10'
         local fakeQueryTab = { pbLeagueRealName = '', itemsTab = build.itemsTab }
         local tradeQueryGenerator = new("TradeQueryGenerator", fakeQueryTab)
-        local slot = build.itemsTab.slots[arg1]
+        local slot = build.itemsTab.slots[args[2]]
         local context = { slotTbl = {} }
         local statWeights = {
             { stat = 'FullDPS',            label = 'FullDPS label',            weightMult = 1 },
@@ -109,7 +114,7 @@ while true do
             includeTalisman = true,
             influence1 = 1,
             influence2 = 1,
-            maxPrice = tonumber(arg2),
+            maxPrice = tonumber(args[3]),
             maxPriceType = nil,
             statWeights = statWeights,
         }

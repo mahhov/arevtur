@@ -14,8 +14,8 @@ class PobApi extends CustomOsScript {
 			if (err)
 				console.error(err);
 			if (!this.exited && out)
-				out.split('>->')
-					.map(split => split.split('<-<')[1])
+				out.split('.>')
+					.map(split => split.split('<.')[1])
 					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
 					.forEach(split => this.pendingResponses.shift()(split));
 		});
@@ -29,8 +29,8 @@ class PobApi extends CustomOsScript {
 			{cwd: pobPath});
 	}
 
-	send(command, arg1 = '', arg2 = '') {
-		let text = `<${command}> <${arg1}> <${arg2}>`;
+	send(...args) {
+		let text = args.map(arg => `<${arg}>`).join(' ');
 		console.log('PobApi sending:', text);
 		return super.send(text);
 	}
