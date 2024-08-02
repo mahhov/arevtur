@@ -25,6 +25,10 @@
 	x-multi-select-lined {
 		margin-left: 15px;
 	}
+
+	.build-value:empty {
+		display: none;
+	}
 </style>
 
 <div>
@@ -48,14 +52,17 @@
 	<label>
 		armour
 		<input class="short-input" id="armour-input" type="number">
+		<button class="build-value" id="armour-build-value-button"></button>
 	</label>
 	<label>
 		evasion
 		<input class="short-input" id="evasion-input" type="number">
+		<button class="build-value" id="evasion-build-value-button"></button>
 	</label>
 	<label>
 		energy shield
 		<input class="short-input" id="energy-shield-input" type="number">
+		<button class="build-value" id="energy-shield-build-value-button"></button>
 	</label>
 </div>
 <div>

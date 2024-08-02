@@ -4,6 +4,13 @@ const defensePropertyTuples = [
 	['energyShield', '#energy-shield-input'],
 ];
 
+const defenseBuildValueTuples = [
+	// this key, el query, mapping to defense property, mod property
+	['armourBuildValue', '#armour-build-value-button', 'armour', '# Armour'],
+	['evasionBuildValue', '#evasion-build-value-button', 'evasion', '# Evasion'],
+	['energyShieldBuildValue', '#energy-shield-build-value-button', 'energyShield', '# Energy shield'],
+];
+
 const affixPropertyTuples = [
 	['prefix', '#prefix-input'],
 	['suffix', '#suffix-input'],
@@ -29,6 +36,7 @@ const queryPropertyFilters = [
 
 module.exports = {
 	defensePropertyTuples,
+	defenseBuildValueTuples,
 	affixPropertyTuples,
 	influenceProperties,
 	queryPropertyFilters,

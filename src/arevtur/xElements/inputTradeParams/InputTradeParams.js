@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
-const {defensePropertyTuples, affixPropertyTuples, influenceProperties} = require('./Properties');
+const {defensePropertyTuples, defenseBuildValueTuples, affixPropertyTuples, influenceProperties} = require('./Properties');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -15,6 +15,12 @@ customElements.define(name, class extends XElement {
 			armour: {},
 			evasion: {},
 			energyShield: {},
+			armourBuildValue: {},
+			evasionBuildValue: {},
+			energyShieldBuildValue: {},
+			armourBuildValueTooltip: {},
+			evasionBuildValueTooltip: {},
+			energyShieldBuildValueTooltip: {},
 			prefix: {},
 			suffix: {},
 			linked: {boolean: true},
@@ -67,6 +73,13 @@ customElements.define(name, class extends XElement {
 			.forEach(([property, query]) => {
 				this.$(query).addEventListener('change', () => {
 					this[property] = this.$(query).value;
+					this.updateQueryParams();
+				});
+			});
+		defenseBuildValueTuples
+			.forEach(([buildValue, query, property]) => {
+				this.$(query).addEventListener('click', () => {
+					this[property] = this[buildValue];
 					this.updateQueryParams();
 				});
 			});
@@ -131,6 +144,30 @@ customElements.define(name, class extends XElement {
 
 	set energyShield(value) {
 		this.$('#energy-shield-input').value = value;
+	}
+
+	set armourBuildValue(value) {
+		this.$('#armour-build-value-button').textContent = value;
+	}
+
+	set evasionBuildValue(value) {
+		this.$('#evasion-build-value-button').textContent = value;
+	}
+
+	set energyShieldBuildValue(value) {
+		this.$('#energy-shield-build-value-button').textContent = value;
+	}
+
+	set armourBuildValueTooltip(value) {
+		this.$('#armour-build-value-button').title = value;
+	}
+
+	set evasionBuildValueTooltip(value) {
+		this.$('#evasion-build-value-button').title = value;
+	}
+
+	set energyShieldBuildValueTooltip(value) {
+		this.$('#energy-shield-build-value-button').title = value;
 	}
 
 	set prefix(value) {
@@ -239,5 +276,12 @@ customElements.define(name, class extends XElement {
 		this.lastPobApi = pobApi;
 		this.$$('#query-properties-list x-query-property')
 			.forEach(queryProperty => queryProperty.refreshBuild(pobApi));
+		if (!pobApi)
+			return;
+		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
+			let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
+			this[buildValue] = summary.value;
+			this[buildValue + 'Tooltip'] = summary.tooltip;
+		});
 	}
 });
