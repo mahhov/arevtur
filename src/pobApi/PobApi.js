@@ -55,8 +55,7 @@ class PobApi extends CustomOsScript {
 
 	evalItem(item) {
 		this.send('item', item.replace(/[\n\r]+/g, ' \\n '));
-		return new Promise(r => this.pendingResponses.push(r))
-			.then(text => PobApi.clean(text));
+		return this.awaitResponse.then(text => PobApi.clean(text));
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
@@ -79,7 +78,7 @@ class PobApi extends CustomOsScript {
 			.replace(/\s+/g, ' ') // clean up whitespace
 			.trim();
 		this.send('mod', cleanItemMod, pobType);
-		return new Promise(r => this.pendingResponses.push(r))
+		return this.awaitResponse
 			.then(text => PobApi.clean(text))
 			.then(text => {
 				let fullDps = Number(text.match(/Full DPS \(([+-][\d.]+)%\)/)?.[1]) || 0;
@@ -114,11 +113,12 @@ class PobApi extends CustomOsScript {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return;
-		this.send('generateQuery', type, maxPrice);
-		return new Promise(r => this.pendingResponses.push(r))
-			.then(queryString => {
-				console.log(queryString);
-			});
+		this.send('generateQuery', pobType, maxPrice);
+		return this.awaitResponse;
+	}
+
+	get awaitResponse() {
+		return new Promise(r => this.pendingResponses.push(r));
 	}
 
 	static async getPobType(type = undefined) {
