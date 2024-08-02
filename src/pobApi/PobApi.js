@@ -1,6 +1,6 @@
 const path = require('path');
 const {spawn} = require('child_process');
-const {CustomOsScript} = require('js-desktop-base');
+const {CustomOsScript, XPromise} = require('js-desktop-base');
 const ApiConstants = require('../arevtur/ApiConstants');
 
 class PobApi extends CustomOsScript {
@@ -12,17 +12,27 @@ class PobApi extends CustomOsScript {
 			dps: 0,
 		};
 		this.pendingResponses = [];
-		this.readyPromise = new Promise(r => this.pendingResponses.push(r));
-		this.addListener(({out, err}) => {
-			if (out)
-				console.log(out);
+		this.readyPromise = this.awaitResponse;
+		this.addListener(({out, err, exit}) => {
+			if (exit) {
+				// todo turn pob status red on crash and only restart if user clicks pob red icon
+				console.error('PobApi process exited, starting new process');
+				this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
+				this.pendingResponses = [];
+				this.restartProcess();
+				this.readyPromise = this.awaitResponse;
+				if (this.build_)
+					this.build = this.build_;
+			}
 			if (err)
 				console.error(err);
-			if (!this.exited && out)
+			if (out) {
+				console.log(out);
 				out.split('.>')
 					.map(split => split.split('<.')[1])
 					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
-					.forEach(split => this.pendingResponses.shift()(split));
+					.forEach(split => this.pendingResponses.shift().resolve(split));
+			}
 		});
 	}
 
@@ -40,17 +50,18 @@ class PobApi extends CustomOsScript {
 		return super.send(text);
 	}
 
+	get awaitResponse() {
+		this.pendingResponses.push(new XPromise);
+		return this.pendingResponses[this.pendingResponses.length - 1];
+	}
+
 	get ready() {
 		return this.readyPromise;
 	}
 
-	exit() {
-		this.exited = true;
-		this.send('exit');
-	}
-
 	set build(path) {
 		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+		this.build_ = path;
 		this.send('build', path);
 	}
 
@@ -64,7 +75,6 @@ class PobApi extends CustomOsScript {
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
-		// todo recover from lua crash
 		// todo allow sorting items by pob value
 		// todo clearer and consistent UI for item and mod tooltips
 		// todo don't rerun pob for weight changes
@@ -120,10 +130,6 @@ class PobApi extends CustomOsScript {
 		// todo figure out how to get resist stats in PoB
 		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life, this.valueParams_.dps);
 		return this.awaitResponse;
-	}
-
-	get awaitResponse() {
-		return new Promise(r => this.pendingResponses.push(r));
 	}
 
 	static async getPobType(type = undefined) {
