@@ -1,19 +1,30 @@
 class ItemsData {
+	static valueHandlers = [
+		{
+			name: 'Eval sorting',
+			description: 'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set above.',
+			handler: item => item.evalValue,
+		},
+		{
+			name: 'Build sorting',
+			description: 'Sort by changes in effective health, total dps, and total resists according to the weights set above.',
+			handler: item => item.valueBuild.value,
+		},
+	];
+
 	constructor() {
 		this.clear();
-		this.valueHandler = ItemsData.EVAL_SORT_HANDLER;
+		this.valueHandler = ItemsData.valueHandlers[0].name;
 	}
-
-	static EVAL_VALUE_HANDLER = item => item.evalValue;
-	static BUILD_VALUE_HANDLER = item => item.valueBuild.value;
 
 	clear() {
 		this.items = [];
 		this.bestBoundItems_ = []; // top
 	}
 
-	set valueHandler(valueHandler) { // todo use boolean param
-		this.y = valueHandler;
+	set valueHandler(name) {
+		let entry = ItemsData.valueHandlers.find(entry => entry.name === name) || ItemsData.valueHandlers[0];
+		this.y = entry.handler;
 		let items = this.items;
 		this.clear();
 		this.join(items);

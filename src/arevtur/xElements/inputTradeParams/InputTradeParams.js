@@ -37,7 +37,6 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		ApiConstants.constants.itemTexts().then(itemTexts =>
 			this.$('#name-input').autocompletes = itemTexts);
-		this.$('#name-input').freeForm = true;
 		this.$('#name-input').addEventListener('change', () => {
 			this.name = this.$('#name-input').value;
 			this.updateQueryParams();

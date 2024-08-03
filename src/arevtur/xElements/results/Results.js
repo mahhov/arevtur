@@ -15,10 +15,11 @@ customElements.define(name, class Inputs extends XElement {
 
 	connectedCallback() {
 		this.itemsData = new ItemsData();
-		this.setSortHandler();
 
-		this.$('#sort-build-value-check').addEventListener('input', () => {
-			this.setSortHandler();
+		this.$('#sort-build-value-input').autocompletes = ItemsData.valueHandlers.map(entry => entry.name);
+		this.$('#sort-build-value-input').tooltips = ItemsData.valueHandlers.map(entry => entry.description);
+		this.$('#sort-build-value-input').addEventListener('change', () => {
+			this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
 			this.renderItemsData(false, true);
 		});
 
@@ -51,11 +52,6 @@ customElements.define(name, class Inputs extends XElement {
 		// debugging only
 		this.itemsData.join(testItems);
 		this.renderItemsData(false, true);
-	}
-
-	setSortHandler() {
-		this.itemsData.valueHandler = this.$('#sort-build-value-check').checked ?
-			ItemsData.BUILD_VALUE_HANDLER : ItemsData.EVAL_VALUE_HANDLER;
 	}
 
 	clearItems() {

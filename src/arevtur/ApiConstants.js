@@ -117,7 +117,7 @@ class Constants {
 		let response = await get('https://www.pathofexile.com/api/trade/data/items');
 		return JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
-			.map(({name, text}) => name || text);
+			.map(({name, text, type}) => name || text || type);
 		/* ['Pledge of Hands', ...] */
 	}
 

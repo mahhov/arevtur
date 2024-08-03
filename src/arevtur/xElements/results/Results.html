@@ -9,6 +9,11 @@
 
 	#top-row {
 		display: flex;
+		align-items: center;
+	}
+
+	#top-row > :not(:first-child) {
+		margin-left: 15px
 	}
 
 	#results-count {
@@ -17,7 +22,6 @@
 
 	#search-input {
 		flex: 1;
-		margin-left: 15px;
 	}
 
 	#center {
@@ -63,7 +67,7 @@
 <div>
 	<div id="top-row">
 		Count: <span id="results-count"></span>
-		Sort by build value <input type="checkbox" id="sort-build-value-check">
+		<x-autocomplete-input id="sort-build-value-input" placeholder="sort" size="2"></x-autocomplete-input>
 		<input id="search-input" placeholder="search (e.g. energyshield, !evasion, !armour)">
 	</div>
 </div>
