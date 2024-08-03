@@ -4,7 +4,7 @@ const Searcher = require('../../Searcher');
 
 customElements.define(name, class AutocompleteInput extends XElement {
 	static get attributeTypes() {
-		return {size: {}, value: {}, placeholder: {}, freeForm: {boolean: true}};
+		return {size: {}, value: {}, placeholder: {}, freeform: {boolean: true}};
 	}
 
 	static get htmlTemplate() {
@@ -12,8 +12,12 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	connectedCallback() {
+		this.autocompletes = this.autocompletes || [];
+		this.tooltips = [];
+		this.size = this.size || 10;
+
 		this.$('input').addEventListener('focus', () => this.updateAutocompletes(true));
-		this.$('input').addEventListener('change', () => this.internalSetValue(this.$('input').value, ''));
+		this.$('input').addEventListener('change', () => this.internalSetValue(this.$('input').value, '', true));
 		this.$('input').addEventListener('input', () => {
 			this.updateAutocompletes();
 			this.$('select').selectedIndex = -1;
@@ -27,8 +31,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				this.$('select').focus();
 			} else if (e.key === 'Enter') {
 				let optionEl = this.$('select').options[0];
-				if (optionEl)
-					this.internalSetValue(optionEl.value, optionEl.title);
+				if (/*this.$('input').value &&*/ optionEl)
+					this.internalSetValue(optionEl.value, optionEl.title, true);
 			} else
 				return;
 			e.preventDefault();
@@ -36,7 +40,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.$('select').addEventListener('keydown', e => {
 			if (e.key === 'Enter') {
 				let optionEl = this.$('select').selectedOptions[0];
-				this.internalSetValue(optionEl.value, optionEl.title);
+				this.internalSetValue(optionEl.value, optionEl.title, false);
 			}
 			let arrowOut =
 				e.key === 'ArrowDown' && this.$('select').selectedIndex === this.$('select').length - 1 ||
@@ -49,8 +53,6 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				this.$('input').focus();
 			}
 		});
-		this.autocompletes = this.autocompletes || [];
-		this.size = this.size || 10;
 	}
 
 	get autocompletes() {
@@ -76,7 +78,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	set value(value) {
-		if (value && !this.freeForm && !this.autocompletes.includes(value)) {
+		if (value && !this.freeform && !this.autocompletes.includes(value)) {
 			this.value = '';
 			this.$('input').classList.add('invalid');
 		} else
@@ -88,23 +90,25 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.$('input').placeholder = value;
 	}
 
-	set freeForm(value) {
+	set freeform(value) {
 		this.value = this.$('input').value;
 		this.updateAutocompletes();
 	}
 
-	internalSetValue(value, tooltip) {
+	internalSetValue(value, tooltip, blur) {
 		this.value = value;
 		this.$('input').value = value;
 		this.$('input').title = tooltip || '';
+		if (blur)
+			this.blur();
 		this.emit('change');
 	}
 
 	updateAutocompletes(showAll = false) {
 		let optionIndexes = AutocompleteInput.smartFilter(!showAll && this.$('input').value, this.autocompletes, 500);
 		let optionValues = optionIndexes.map(i => this.autocompletes[i]);
-		let optionTooltips = optionIndexes.map(i => this.tooltips_?.[i]);
-		if (this.freeForm && optionValues[0] !== this.$('input').value) {
+		let optionTooltips = optionIndexes.map(i => this.tooltips_[i]);
+		if (this.freeform && optionValues[0] !== this.$('input').value) {
 			optionValues.unshift(this.$('input').value);
 			optionTooltips.unshift(null);
 		}
@@ -115,7 +119,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 			optionEl.value = v; // necessary to prevent whitespace trimming
 			optionEl.title = optionTooltips[i] || '';
 			this.$('select').appendChild(optionEl);
-			optionEl.addEventListener('click', () => this.internalSetValue(optionEl.value, optionEl.title));
+			optionEl.addEventListener('click', () => this.internalSetValue(optionEl.value, optionEl.title, true));
 		});
 	}
 
