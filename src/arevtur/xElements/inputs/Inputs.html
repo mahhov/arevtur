@@ -30,7 +30,8 @@
 <div class="area" id="container">
 	<div>
 		<div>
-			<x-autocomplete-input id="league-input" placeholder="league" size="4"></x-autocomplete-input>
+			<x-autocomplete-input id="league-input" placeholder="league"
+			                      size="4"></x-autocomplete-input>
 			<input id="session-id-input" placeholder="session id">
 			<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
 			<span class="loaded-status invalid" id="loaded-types-status">Types</span>
@@ -43,12 +44,13 @@
 				<x-theme-toggle-button></x-theme-toggle-button>
 			</span>
 		</div>
-		<x-input-build id="input-build"></x-input-build>
 	</div>
 
+	<x-input-build id="input-build"></x-input-build>
 
 	<div>
-		<x-input-import-trade-search-url id="input-import-trade-search-url"></x-input-import-trade-search-url>
+		<x-input-import-trade-search-url
+				id="input-import-trade-search-url"></x-input-import-trade-search-url>
 		<div id="input-set-container">
 			<x-arrangable-list id="input-set-list"></x-arrangable-list>
 			<button id="add-input-set-button">add</button>

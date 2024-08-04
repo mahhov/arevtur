@@ -35,6 +35,7 @@
 	--colored-text-red: lch(65 230 0);
 	--colored-text-green: lch(65 230 120);
 	--colored-text-blue: lch(65 230 290);
+	--colored-text-cyan: lch(77.25% 40.67 208.98)
 }
 
 :root.dark {

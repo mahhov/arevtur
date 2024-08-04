@@ -85,4 +85,9 @@ progress::-webkit-progress-value {
 	width: 12px;
 }
 
+.pob {
+	outline: 1px var(--colored-text-red) solid;
+	outline: 1px var(--colored-text-cyan) solid;
+}
+
 /* todo checkbox styling */

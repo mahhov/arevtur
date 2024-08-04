@@ -1,6 +1,10 @@
 <style>
 	@import '../sharedStyle.css';
 
+	.container {
+		display: inline-block
+	}
+
 	#weights,
 	label,
 	#demo-mod {
@@ -22,27 +26,31 @@
 	}
 </style>
 
-<x-path-select directory id="pob-path" placeholder="Select PoB Path"></x-path-select>
-<x-path-select extension="xml" id="build-path" placeholder="Select PoB Build"></x-path-select>
-<button id="refresh">Refresh Build</button>
-<span id="weights">Weights:
-	<label>
-		life
-		<input id="life-weight" min="0" type="number">
-	</label>
-	<label>
-		resist
-		<input id="resist-weight" min="0" type="number">
-	</label>
-	<label>
-		damage
-		<input id="damage-weight" min="0" type="number">
-	</label>
-</span>
-<span id="demo-mod">
-	<x-autocomplete-input free-form="true" id="demo-mod-type" placeholder="input a type here"></x-autocomplete-input>
-	<x-autocomplete-input free-form="true" id="demo-mod-property" placeholder="input a mod here"></x-autocomplete-input>
-	<input id="demo-mod-value" min="0" placeholder="100" type="number">
-	<input id="demo-mod-raw" type="checkbox">
-	<span id="demo-mod-weight"></span>
+<span class="container pob">
+	<x-path-select directory id="pob-path" placeholder="Select PoB Path"></x-path-select>
+	<x-path-select extension="xml" id="build-path" placeholder="Select PoB Build"></x-path-select>
+	<button id="refresh">Refresh Build</button>
+	<span id="weights">Weights:
+		<label>
+			life
+			<input id="life-weight" min="0" type="number">
+		</label>
+		<label>
+			resist
+			<input id="resist-weight" min="0" type="number">
+		</label>
+		<label>
+			damage
+			<input id="damage-weight" min="0" type="number">
+		</label>
+	</span>
+	<span id="demo-mod">
+		<x-autocomplete-input free-form="true" id="demo-mod-type"
+		                      placeholder="input a type here"></x-autocomplete-input>
+		<x-autocomplete-input free-form="true" id="demo-mod-property"
+		                      placeholder="input a mod here"></x-autocomplete-input>
+		<input id="demo-mod-value" min="0" placeholder="100" type="number">
+		<input id="demo-mod-raw" type="checkbox">
+		<span id="demo-mod-weight"></span>
+	</span>
 </span>
