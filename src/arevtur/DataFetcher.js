@@ -43,6 +43,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
+// todo rename to TradeQuery
 class QueryParams {
 	constructor(data) {
 		this.league = data.league || 'Standard';
@@ -143,6 +144,7 @@ class QueryParams {
 			let endpoint = `${api}/search/${this.league}`;
 			let headers = QueryParams.createRequestHeader(this.sessionId);
 			progressCallback('Initial query.', 0);
+			console.log('initial query', query);
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
 			progressCallback(`Received ${data.result.length} items.`, 0);
@@ -261,6 +263,7 @@ class QueryParams {
 	};
 }
 
+// todo rename to TradeQueryImport
 class QueryImport {
 	constructor(sessionId, tradeSearchUrl) {
 		this.sessionId = sessionId;
@@ -269,6 +272,9 @@ class QueryImport {
 
 	async getApiQueryParams() {
 		let response = await get(this.tradeSearchUrl, {}, QueryParams.createRequestHeader(this.sessionId));
+		// todo use 'api' path for easier parsing; e.g.
+		//  pathofexile.com/api/trade/search/Settlers/kD3Y6MjF5 gives JSON, whereas
+		//  pathofexile.com    /trade/search/Settlers/kD3Y6MjF5 gives HTML
 		let jsonString = response.string.match(/require.*main.*t\(\{((.|\n)*?)\}\);/)[1];
 		let obj = JSON.parse(`{${jsonString}}`);
 		return {

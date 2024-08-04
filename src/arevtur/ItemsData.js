@@ -48,8 +48,7 @@ class ItemsData {
 			.sort((a, b) => this.y(b) - this.y(a) || a.evalPrice - b.evalPrice);
 
 		// todo use actual max price query param instead of maximum price of items
-		this.maxPrice = Math.max(...items.map(item => item.evalPrice));
-		let minAltValue = Math.min(...items.map(item => this.y(item)).filter(v => v > 0));
+		this.maxPrice = Math.max(...this.items.map(item => item.evalPrice));
 
 		// update bestBoundItems
 		let minPriceFound = Infinity;
