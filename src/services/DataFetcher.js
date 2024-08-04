@@ -5,7 +5,8 @@ let getEndpointsByLeague = () => {
 	const ITEM = `itemoverview`;
 	const CURRENCY = `currencyoverview`;
 
-	let genEndpointByLeague = (prefix, type) => league => `${BASE}/${prefix}?league=${league}&type=${type}`;
+	let genEndpointByLeague = (prefix,
+	                           type) => league => `${BASE}/${prefix}?league=${league}&type=${type}`;
 
 	return {
 		GEM: genEndpointByLeague(ITEM, 'SkillGem'),
@@ -55,7 +56,6 @@ let getData = endpoint => {
 
 module.exports = {endpointsByLeague, getData};
 
-// axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() * 10000)}});
-// df = require('./DataFetcher');
-// df.getData(df.Endpoints.DIVINATION_CARD).then(data => console.log(data));
-// df.getData(df.Endpoints.UNIQUE_ACCESSORY).then(data => console.log(data));
+// axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() *
+// 10000)}}); df = require('./DataFetcher'); df.getData(df.Endpoints.DIVINATION_CARD).then(data =>
+// console.log(data)); df.getData(df.Endpoints.UNIQUE_ACCESSORY).then(data => console.log(data));

@@ -59,7 +59,8 @@ class Pricer {
 		if (!this.typeFilter(inputItem))
 			return Promise.resolve([]);
 
-		console.log('Trying pricer', this.type, this.dataEndpointsByLeague[0](config.config.league));
+		console.log('Trying pricer', this.type,
+			this.dataEndpointsByLeague[0](config.config.league));
 
 		this.refreshData();
 
@@ -156,7 +157,8 @@ class GemPricer extends Pricer {
 
 	priceString(item) {
 		let corruptedString = item.corrupted ? 'c' : '';
-		return `${price(item.chaosValue)} - ${item.gemLevel}/${item.gemQuality}q ${corruptedString}`;
+		return `${price(
+			item.chaosValue)} - ${item.gemLevel}/${item.gemQuality}q ${corruptedString}`;
 	}
 }
 

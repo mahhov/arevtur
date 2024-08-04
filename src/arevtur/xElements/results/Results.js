@@ -16,8 +16,10 @@ customElements.define(name, class Inputs extends XElement {
 	connectedCallback() {
 		this.itemsData = new ItemsData();
 
-		this.$('#sort-build-value-input').autocompletes = ItemsData.valueHandlers.map(entry => entry.name);
-		this.$('#sort-build-value-input').tooltips = ItemsData.valueHandlers.map(entry => entry.description);
+		this.$('#sort-build-value-input').autocompletes =
+			ItemsData.valueHandlers.map(entry => entry.name);
+		this.$('#sort-build-value-input').tooltips =
+			ItemsData.valueHandlers.map(entry => entry.description);
 		this.$('#sort-build-value-input').addEventListener('change', () => {
 			this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
 			this.renderItemsData(false, true);
@@ -34,7 +36,8 @@ customElements.define(name, class Inputs extends XElement {
 			this.emit('submit', {overridePrice: e.detail.x || null}));
 
 		this.$('#results-chart').addEventListener('select', async e => {
-			let itemIndex = this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height, e.detail.width);
+			let itemIndex = this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
+				e.detail.width);
 			if (itemIndex !== -1) {
 				this.itemsData.selectItem(itemIndex);
 				this.renderItemsData(true);
@@ -44,7 +47,8 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#results-chart').addEventListener('hover', async e => {
 			let itemIndex = e.detail &&
-				this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height, e.detail.width);
+				this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
+					e.detail.width);
 			this.itemsData.hoverItem(itemIndex);
 			this.renderItemsData(true);
 		});

@@ -4,9 +4,9 @@ class Searcher {
 	//   phrase: 'small', 'cat', 'kitten' ....
 	//   or: "small 'cat'", 'kitten'
 	//   segment: "small 'cat' | kitten'
-	// When preserveOrder is true, 'brown ... fur' must be present; otherwise, 'fur ... brown' will also suffice.
-	// Order of operations: , ! | <space> '
-	// Doesn't support escaping these operators. E.g. searching for a comma or quoted text.
+	// When preserveOrder is true, 'brown ... fur' must be present; otherwise, 'fur ... brown' will
+	// also suffice. Order of operations: , ! | <space> ' Doesn't support escaping these operators.
+	// E.g. searching for a comma or quoted text.
 	constructor(searchText, preserveOrder = true) {
 		this.segments = searchText
 			.replace(/([.*+?^${}()[\]\\])/g, '\\$1') // doesn't replace '|'

@@ -3,7 +3,8 @@ const childProcess = require('child_process');
 const exec = promisify(childProcess.exec);
 
 let battery = async () => {
-	let batteryOut = (await exec('wmic path Win32_Battery get EstimatedChargeRemaining, EstimatedRunTime, BatteryStatus '))
+	let batteryOut = (await exec(
+		'wmic path Win32_Battery get EstimatedChargeRemaining, EstimatedRunTime, BatteryStatus '))
 		.stdout
 		.split(/\s+/);
 	let parsed = {};

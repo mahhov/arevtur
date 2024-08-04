@@ -88,7 +88,8 @@ class Constants {
 	}
 
 	async initCurrencies(league) {
-		let currencyPrices = ServicesDataFetcher.getData(ServicesDataFetcher.endpointsByLeague.CURRENCY(league));
+		let currencyPrices = ServicesDataFetcher.getData(
+			ServicesDataFetcher.endpointsByLeague.CURRENCY(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
 		staticDataStr = await staticDataStr;
@@ -102,14 +103,16 @@ class Constants {
 				return [id, price];
 			});
 
-		tuples.push(['fatedConnectionsProphecy', 750]); // todo use the price for 1500 fuse bench craft
+		tuples.push(['fatedConnectionsProphecy', 750]); // todo use the price for 1500 fuse bench
+		                                                // craft
 		tuples.push(['chaos', 1]);
 		return Object.fromEntries(tuples);
 		/* {alt: .125, ...} */
 	}
 
 	currencyPrices(league) {
-		// todo consider expiring cache to keep currencies updated even if the apps been running a while
+		// todo consider expiring cache to keep currencies updated even if the apps been running a
+		// while
 		return this.currencies[league] = this.currencies[league] || this.initCurrencies(league);
 	}
 

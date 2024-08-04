@@ -31,7 +31,8 @@ class Config {
 	}
 
 	sendConfigChange(listeners = this.configChangeListeners) {
-		this.configChangeListeners.forEach(listener => listener.send('config-changed', this.config));
+		this.configChangeListeners.forEach(
+			listener => listener.send('config-changed', this.config));
 	}
 }
 

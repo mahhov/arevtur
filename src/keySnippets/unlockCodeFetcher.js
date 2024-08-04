@@ -20,7 +20,8 @@ class GmailAuth extends GoogleAuth {
 	}
 
 	async queryEmailIds(q, maxResults = 1) {
-		return (await this.getMessage_(`?${GmailAuth.queryParams_({q, maxResults})}`)).messages.map(({id}) => id);
+		return (await this.getMessage_(`?${GmailAuth.queryParams_({q, maxResults})}`)).messages.map(
+			({id}) => id);
 	}
 
 	async getEmailBody(emailId) {

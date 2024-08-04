@@ -28,7 +28,8 @@ let displayPreferences = async () => {
 		await viewHandle.showPreferences();
 };
 
-let windowCheck = async () => !config.config.restrictToPoeWindow || (await frontWindowTitle.get()).out.trim() === 'Path of Exile';
+let windowCheck = async () => !config.config.restrictToPoeWindow ||
+	(await frontWindowTitle.get()).out.trim() === 'Path of Exile';
 
 let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {

@@ -112,9 +112,11 @@ class QueryParams {
 	}
 
 	async writeItemsToStream(stream, progressCallback, pobApi) {
-		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback, pobApi);
+		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback,
+			pobApi);
 
-		let defenseProperty = Object.entries(this.defenseProperties).find(([_, {weight}]) => weight);
+		let defenseProperty = Object.entries(this.defenseProperties)
+			.find(([_, {weight}]) => weight);
 		if (defenseProperty) {
 			let newItems = items;
 			let lastMinDefensePropertyValue = 0;
@@ -122,12 +124,15 @@ class QueryParams {
 				let newItemsMinValue = Math.min(...newItems.map(({evalValue}) => evalValue));
 				let maxValue = Math.max(...items.map(({evalValue}) => evalValue));
 				let minModValue = Math.min(...items.map(item => item.valueDetails.mods));
-				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
+				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) /
+					defenseProperty[1].weight;
 
-				minDefensePropertyValue = Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
+				minDefensePropertyValue =
+					Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
 				lastMinDefensePropertyValue = minDefensePropertyValue;
 
-				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
+				let overrides = this.overrideDefenseProperty(defenseProperty[0],
+					minDefensePropertyValue);
 				let query = this.getQuery(overrides);
 				newItems = await this.queryAndParseItems(query, stream, progressCallback, pobApi);
 				items = items.concat(newItems);
@@ -152,19 +157,23 @@ class QueryParams {
 			let requestGroups = [];
 			while (data.result.length)
 				requestGroups.push(data.result.splice(0, 10));
-			progressCallback(`Will make ${requestGroups.length} grouped item queries.`, 1 / (requestGroups.length + 1));
+			progressCallback(`Will make ${requestGroups.length} grouped item queries.`,
+				1 / (requestGroups.length + 1));
 
 			let receivedCount = 0;
 			let promises = requestGroups.map(async (requestGroup, i) => {
 				let queryParams = {
 					query: data.id,
-					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes, ApiConstants.SHORT_PROPERTIES.flatLife],
+					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes,
+						ApiConstants.SHORT_PROPERTIES.flatLife],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
 				let response2 = await rlrGet(endpoint2, queryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
-				progressCallback(`Received grouped item query # ${i}.`, (1 + ++receivedCount) / (requestGroups.length + 1));
-				let items = await Promise.all(data2.result.map(async itemData => await this.parseItem(itemData, pobApi)));
+				progressCallback(`Received grouped item query # ${i}.`,
+					(1 + ++receivedCount) / (requestGroups.length + 1));
+				let items = await Promise.all(
+					data2.result.map(async itemData => await this.parseItem(itemData, pobApi)));
 				stream.write(items);
 				return items;
 			});
@@ -191,12 +200,14 @@ class QueryParams {
 				['ar', 'armour'],
 				['ev', 'evasion'],
 				['es', 'energyShield'],
-			].map(([responseName, fullName]) => [fullName, itemData.item.extended[responseName] || 0])
+			].map(
+				([responseName, fullName]) => [fullName, itemData.item.extended[responseName] || 0])
 				.filter(([_, value]) => value);
 		let pseudoMods = itemData.item.pseudoMods || [];
 		let valueDetails = {
 			affixes: this.affixValueShift,
-			defenses: QueryParams.evalDefensePropertiesValue(defenseProperties, this.defenseProperties),
+			defenses: QueryParams.evalDefensePropertiesValue(defenseProperties,
+				this.defenseProperties),
 			mods: QueryParams.evalValue(pseudoMods),
 		};
 		let text = QueryParams.decode64(itemData.item.extended.text);
@@ -253,7 +264,8 @@ class QueryParams {
 	static async evalPrice(league, {currency: currencyId, count, shifts}) {
 		let currencyPrices = (await ApiConstants.constants.currencyPrices(league))[currencyId];
 		if (currencyPrices)
-			return currencyPrices * count + Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
+			return currencyPrices * count +
+				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
 		console.warn('Missing currency', currencyId);
 		return -1;
 	}
@@ -271,7 +283,8 @@ class QueryImport {
 	}
 
 	async getApiQueryParams() {
-		let response = await get(this.tradeSearchUrl, {}, QueryParams.createRequestHeader(this.sessionId));
+		let response = await get(this.tradeSearchUrl, {},
+			QueryParams.createRequestHeader(this.sessionId));
 		// todo use 'api' path for easier parsing; e.g.
 		//  pathofexile.com/api/trade/search/Settlers/kD3Y6MjF5 gives JSON, whereas
 		//  pathofexile.com    /trade/search/Settlers/kD3Y6MjF5 gives HTML

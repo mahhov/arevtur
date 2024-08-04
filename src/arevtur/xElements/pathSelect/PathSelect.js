@@ -4,7 +4,13 @@ const {ipcRenderer} = require('electron');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
-		return {placeholder: {}, path: {}, defaultPath: {}, directory: {boolean: true}, extension: {}};
+		return {
+			placeholder: {},
+			path: {},
+			defaultPath: {},
+			directory: {boolean: true},
+			extension: {},
+		};
 	}
 
 	static get htmlTemplate() {

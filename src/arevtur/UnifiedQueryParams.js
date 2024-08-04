@@ -1,6 +1,11 @@
 const ApiConstants = require('./ApiConstants');
 const {XElement} = require('xx-element');
-const {defensePropertyTuples, affixPropertyTuples, influenceProperties, queryPropertyFilters} = require('./xElements/inputTradeParams/Properties');
+const {
+	defensePropertyTuples,
+	affixPropertyTuples,
+	influenceProperties,
+	queryPropertyFilters,
+} = require('./xElements/inputTradeParams/Properties');
 
 let deepCopy = obj => {
 	if (typeof obj !== 'object' || obj === null)
@@ -61,7 +66,8 @@ class UnifiedQueryParams {
 		inputElement.linked = this.linked || false;
 		inputElement.uncorrupted = this.uncorrupted || false;
 		inputElement.nonUnique = this.nonUnique || false;
-		inputElement.influences = this.influences ? influenceProperties.map(influence => this.influences.includes(influence)) : [];
+		inputElement.influences = this.influences ?
+			influenceProperties.map(influence => this.influences.includes(influence)) : [];
 		XElement.clearChildren(inputElement.$('#query-properties-list'));
 		this.sharedWeightEntries.forEach(async ([property, weight, locked]) => {
 			let queryProperty = inputElement.addQueryProperty();
@@ -96,24 +102,29 @@ class UnifiedQueryParams {
 		let affixProperties = Object.fromEntries(affixPropertyTuples
 			.map(([property]) => [property, Number(inputElement[property])]));
 
-		let propertyEntries = (await Promise.all([...inputElement.$$('#query-properties-list x-query-property')]
-			.map(async queryProperty => ({
-				propertyId: await ApiConstants.constants.propertyTextToId(queryProperty.property),
-				weight: Number(queryProperty.weight),
-				filter: queryProperty.filter,
-				locked: queryProperty.locked,
-				shared: queryProperty.shared,
-			})))).filter(({propertyId}) => propertyId);
+		let propertyEntries = (await Promise.all(
+			[...inputElement.$$('#query-properties-list x-query-property')]
+				.map(async queryProperty => ({
+					propertyId: await ApiConstants.constants.propertyTextToId(
+						queryProperty.property),
+					weight: Number(queryProperty.weight),
+					filter: queryProperty.filter,
+					locked: queryProperty.locked,
+					shared: queryProperty.shared,
+				})))).filter(({propertyId}) => propertyId);
 
-		// todo make shared entries more similar to unshared entries so that they can be processed similarly
+		// todo make shared entries more similar to unshared entries so that they can be processed
+		// similarly
 		let sharedWeightEntries = propertyEntries
 			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
 			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
 		let unsharedEntries = Object.fromEntries(
 			queryPropertyFilters.map(([key, filter, hasWeight]) => {
 				let entries = propertyEntries
-					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
-					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] : [entry.propertyId]);
+					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) &&
+						!entry.shared)
+					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] :
+						[entry.propertyId]);
 				return [key, entries];
 			}));
 
@@ -128,7 +139,8 @@ class UnifiedQueryParams {
 		unifiedQueryParams.linked = inputElement.linked;
 		unifiedQueryParams.uncorrupted = inputElement.uncorrupted;
 		unifiedQueryParams.nonUnique = inputElement.nonUnique;
-		unifiedQueryParams.influences = influenceProperties.filter((_, i) => inputElement.influences[i]);
+		unifiedQueryParams.influences =
+			influenceProperties.filter((_, i) => inputElement.influences[i]);
 		Object.assign(unifiedQueryParams, unsharedEntries);
 		unifiedQueryParams.sharedWeightEntries = sharedWeightEntries;
 		return unifiedQueryParams;
@@ -161,13 +173,16 @@ class UnifiedQueryParams {
 			nots: nots,
 		};
 
-		let linkedOptions = [false, this.linked && maxPrice > fatedConnectionsProphecyPrice ? true : null];
+		let linkedOptions = [false,
+			this.linked && maxPrice > fatedConnectionsProphecyPrice ? true : null];
 		let affixOptions = [
 			false,
 			this.affixProperties.prefix ? ['prefix'] : null,
 			this.affixProperties.suffix ? ['suffix'] : null,
-			...this.conditionalPrefixEntries.map(([propertyId, weight]) => ['prefix', propertyId, weight]),
-			...this.conditionalSuffixEntries.map(([propertyId, weight]) => ['suffix', propertyId, weight]),
+			...this.conditionalPrefixEntries.map(
+				([propertyId, weight]) => ['prefix', propertyId, weight]),
+			...this.conditionalSuffixEntries.map(
+				([propertyId, weight]) => ['suffix', propertyId, weight]),
 		];
 
 		linkedOptions
@@ -268,9 +283,12 @@ class UnifiedQueryParams {
 					},
 					armour_filters: {
 						filters: {
-							ar: overridden.defenseProperties.armour.min ? {min: overridden.defenseProperties.armour.min} : undefined,
-							ev: overridden.defenseProperties.evasion.min ? {min: overridden.defenseProperties.evasion.min} : undefined,
-							es: overridden.defenseProperties.energyShield.min ? {min: overridden.defenseProperties.energyShield.min} : undefined,
+							ar: overridden.defenseProperties.armour.min ?
+								{min: overridden.defenseProperties.armour.min} : undefined,
+							ev: overridden.defenseProperties.evasion.min ?
+								{min: overridden.defenseProperties.evasion.min} : undefined,
+							es: overridden.defenseProperties.energyShield.min ?
+								{min: overridden.defenseProperties.energyShield.min} : undefined,
 						},
 					},
 					misc_filters: {filters: miscFilters},
@@ -291,15 +309,18 @@ class UnifiedQueryParams {
 			type: filters?.type_filters?.filters?.category?.option || '',
 			minValue: weightedStats?.value?.min || 0,
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 1,
-			offline: apiQueryParams?.query.status !== 'online' && apiQueryParams?.query.status.option !== 'online',
+			offline: apiQueryParams?.query.status !== 'online' &&
+				apiQueryParams?.query.status.option !== 'online',
 			// defenseProperties
 			// affixProperties
 			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,
 			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,
 			nonUnique: filters?.type_filters?.filters?.rarity?.option === 'nonunique' || false,
 			// influences
-			weightEntries: weightedStats?.filters?.map(entry => [entry?.id, entry?.value?.weight, false]) || [],
-			andEntries: andStats?.filters?.map(entry => [entry?.id, entry?.value?.min, false]) || [],
+			weightEntries: weightedStats?.filters?.map(
+				entry => [entry?.id, entry?.value?.weight, false]) || [],
+			andEntries: andStats?.filters?.map(entry => [entry?.id, entry?.value?.min, false]) ||
+				[],
 			notEntries: notStats?.filters?.map(entry => entry?.id) || [],
 			// conditionalPrefixEntries
 			// conditionalSuffixEntries

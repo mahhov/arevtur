@@ -2,7 +2,12 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ApiConstants = require('../../ApiConstants');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
-const {defensePropertyTuples, defenseBuildValueTuples, affixPropertyTuples, influenceProperties} = require('./Properties');
+const {
+	defensePropertyTuples,
+	defenseBuildValueTuples,
+	affixPropertyTuples,
+	influenceProperties,
+} = require('./Properties');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -235,7 +240,8 @@ customElements.define(name, class extends XElement {
 	addQueryProperty() {
 		let queryProperty = document.createElement('x-query-property');
 		queryProperty.type = this.type;
-		ApiConstants.constants.propertyTexts().then(propertyTexts => queryProperty.properties = propertyTexts);
+		ApiConstants.constants.propertyTexts()
+			.then(propertyTexts => queryProperty.properties = propertyTexts);
 		queryProperty.slot = 'list';
 		this.$('#query-properties-list').appendChild(queryProperty);
 		queryProperty.addEventListener('change', () => {

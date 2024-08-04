@@ -25,7 +25,8 @@ customElements.define(name, class InputBuild extends XElement {
 
 		InputBuild.defaultPobPath.each(path =>
 			this.$('#pob-path').defaultPath = path);
-		this.$('#build-path').defaultPath = path.resolve(`${process.env.HOME}/Documents/Path of Building/Builds`);
+		this.$('#build-path').defaultPath =
+			path.resolve(`${process.env.HOME}/Documents/Path of Building/Builds`);
 		Promise.all(Object.keys(ApiConstants.POB_TYPES)
 			.map(typeId => ApiConstants.constants.typeIdToText(typeId)))
 			.then(pobTypes => this.$('#demo-mod-type').autocompletes = pobTypes);

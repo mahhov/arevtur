@@ -74,12 +74,16 @@ customElements.define(name, class extends XElement {
 		this.$('#value-build').text = data.valueBuild?.value;
 		this.$('#value-build').tooltip = data.valueBuild?.text;
 		this.$('#price-text').textContent = round(data.evalPrice);
-		let expandedPriceShifts = Object.entries(data.priceDetails.shifts).map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
-		this.$('#price-expanded-text').textContent = data.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
-			`${data.priceDetails.count} ${data.priceDetails.currency}${expandedPriceShifts.join('')}` : '';
+		let expandedPriceShifts = Object.entries(data.priceDetails.shifts)
+			.map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
+		this.$('#price-expanded-text').textContent =
+			data.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
+				`${data.priceDetails.count} ${data.priceDetails.currency}${expandedPriceShifts.join(
+					'')}` : '';
 		this.$('#whisper-button').textContent = data.accountText;
 		let dateDiff = (now - new Date(data.date)) / msInHour;
-		this.$('#date-text').textContent = dateDiff > 24 ? `${round(dateDiff / 24)} days ago` : `${round(dateDiff)} hours ago`;
+		this.$('#date-text').textContent =
+			dateDiff > 24 ? `${round(dateDiff / 24)} days ago` : `${round(dateDiff)} hours ago`;
 
 		this.selected = data.selected;
 		this.hovered = data.hovered;

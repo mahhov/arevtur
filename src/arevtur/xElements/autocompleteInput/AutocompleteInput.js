@@ -17,7 +17,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.size = this.size || 10;
 
 		this.$('input').addEventListener('focus', () => this.updateAutocompletes(true));
-		this.$('input').addEventListener('change', () => this.internalSetValue(this.$('input').value, '', true));
+		this.$('input').addEventListener('change',
+			() => this.internalSetValue(this.$('input').value, '', true));
 		this.$('input').addEventListener('input', () => {
 			this.updateAutocompletes();
 			this.$('select').selectedIndex = -1;
@@ -43,7 +44,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				this.internalSetValue(optionEl.value, optionEl.title, false);
 			}
 			let arrowOut =
-				e.key === 'ArrowDown' && this.$('select').selectedIndex === this.$('select').length - 1 ||
+				e.key === 'ArrowDown' && this.$('select').selectedIndex ===
+				this.$('select').length - 1 ||
 				e.key === 'ArrowUp' && this.$('select').selectedIndex === 0;
 			if (arrowOut)
 				e.preventDefault();
@@ -105,7 +107,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	updateAutocompletes(showAll = false) {
-		let optionIndexes = AutocompleteInput.smartFilter(!showAll && this.$('input').value, this.autocompletes, 500);
+		let optionIndexes = AutocompleteInput.smartFilter(!showAll && this.$('input').value,
+			this.autocompletes, 500);
 		let optionValues = optionIndexes.map(i => this.autocompletes[i]);
 		let optionTooltips = optionIndexes.map(i => this.tooltips_[i]);
 		if (this.freeform && optionValues[0] !== this.$('input').value) {
@@ -119,7 +122,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 			optionEl.value = v; // necessary to prevent whitespace trimming
 			optionEl.title = optionTooltips[i] || '';
 			this.$('select').appendChild(optionEl);
-			optionEl.addEventListener('click', () => this.internalSetValue(optionEl.value, optionEl.title, true));
+			optionEl.addEventListener('click',
+				() => this.internalSetValue(optionEl.value, optionEl.title, true));
 		});
 	}
 

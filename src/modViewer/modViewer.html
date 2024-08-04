@@ -134,7 +134,8 @@
 			<input id="item-level-input" max="100" min="0" placeholder="Level" type="number">
 		</div>
 		<div class="input-row">
-			<x-multi-select-lined id="category-input" placeholder="Categories"></x-multi-select-lined>
+			<x-multi-select-lined id="category-input"
+			                      placeholder="Categories"></x-multi-select-lined>
 		</div>
 		<div class="input-row">
 			<x-multi-select-lined id="tag-input" placeholder="Tags"></x-multi-select-lined>
@@ -151,7 +152,9 @@
 				<span id="mod-group-available-count"></span>
 			</span>
 			mod groups.
-			<button class="mod-group-count-limited" id="limited-mod-group-count-show-all-button">Show all</button>
+			<button class="mod-group-count-limited" id="limited-mod-group-count-show-all-button">
+				Show all
+			</button>
 		</div>
 	</div>
 	<div id="outputs"></div>
@@ -199,8 +202,10 @@
 			if (!weight)
 				return '';
 			let itemWeight = this.itemWeights(item);
-			let weight1 = WeightTracker.percentStr(weight / (suffix ? itemWeight.suffix : itemWeight.prefix));
-			let weight2 = WeightTracker.percentStr(weight / (itemWeight.prefix + itemWeight.suffix));
+			let weight1 = WeightTracker.percentStr(
+				weight / (suffix ? itemWeight.suffix : itemWeight.prefix));
+			let weight2 = WeightTracker.percentStr(
+				weight / (itemWeight.prefix + itemWeight.suffix));
 			return `${weight1} | ${weight2} | ${weight}`;
 		}
 
@@ -244,7 +249,8 @@
 			$('#search-input').value = '';
 			filterOutput(modsByItem);
 		});
-		$('#limited-mod-group-count-show-all-button').addEventListener('click', () => filterOutput(modsByItem, false));
+		$('#limited-mod-group-count-show-all-button')
+			.addEventListener('click', () => filterOutput(modsByItem, false));
 
 		$('#progress-bar').value = 1;
 		$('#fetch-time').textContent = await time;
@@ -264,30 +270,38 @@
 			modForItem.modsByCategory.forEach(modForCategory => {
 				let categoryDiv = $c('div', itemDiv, ['output-category']);
 				setElOwner(categoryDiv, modForCategory);
-				$c('div', categoryDiv, ['header', 'title', 'output-category-title'], modForCategory.category);
+				$c('div', categoryDiv, ['header', 'title', 'output-category-title'],
+					modForCategory.category);
 				let affixesModsDiv = $c('div', categoryDiv, ['output-affixes']);
 				let prefixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
 				let suffixModsDiv = $c('div', affixesModsDiv, ['output-affix']);
 				modForCategory.modsByGroup.forEach(modsForGroup => {
-					let groupLabel = $c('label', modsForGroup.suffix ? suffixModsDiv : prefixModsDiv, ['output-group']);
+					let groupLabel = $c('label',
+						modsForGroup.suffix ? suffixModsDiv : prefixModsDiv, ['output-group']);
 					setElOwner(groupLabel, modsForGroup);
-					let groupToggleModsCheckbox = $c('input', groupLabel, ['output-group-toggle-mods-checkbox']);
+					let groupToggleModsCheckbox = $c('input', groupLabel,
+						['output-group-toggle-mods-checkbox']);
 					groupToggleModsCheckbox.type = 'checkbox';
 					let groupSummaryDiv = $c('div', groupLabel, ['output-group-summary']);
 					groupSummaryDiv.title = modsForGroup.group;
 					$c('span', groupSummaryDiv, ['output-group-summary-field-text'],
 						modsForGroup.mods[modsForGroup.mods.length - 1].text);
-					$c('span', groupSummaryDiv, ['alternate', 'output-group-summary-field-tags'], `[${modsForGroup.tags.join(', ')}]`);
-					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'], modsForGroup.weight).title = WeightTracker.tooltip;
+					$c('span', groupSummaryDiv, ['alternate', 'output-group-summary-field-tags'],
+						`[${modsForGroup.tags.join(', ')}]`);
+					$c('span', groupSummaryDiv, ['output-group-summary-field-weight'],
+						modsForGroup.weight).title = WeightTracker.tooltip;
 					modsForGroup.mods.forEach(mod => {
 						let modDiv = $c('div', groupLabel, ['area', 'output-mod']);
 						modDiv.title = mod.name;
 						setElOwner(modDiv, mod);
 						$c('span', modDiv, ['output-mod-field-text'], mod.text);
 						if (!arrEq(mod.tags, modsForGroup.tags))
-							$c('span', modDiv, ['alternate', 'output-mod-field-tags'], `[${mod.tags.join(', ')}]`);
-						$c('span', modDiv, ['output-mod-field-level-requirement'], mod.levelRequirement);
-						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title = WeightTracker.tooltip;
+							$c('span', modDiv, ['alternate', 'output-mod-field-tags'],
+								`[${mod.tags.join(', ')}]`);
+						$c('span', modDiv, ['output-mod-field-level-requirement'],
+							mod.levelRequirement);
+						$c('span', modDiv, ['output-mod-field-weight'], mod.weight).title =
+							WeightTracker.tooltip;
 					});
 				});
 			});
@@ -313,7 +327,8 @@
 		let weightText2 = (weight, suffix, sumModWeights) => {
 			if (!weight)
 				return '';
-			let weight1 = weightText(weight / (suffix ? sumModWeights.suffix : sumModWeights.prefix));
+			let weight1 = weightText(
+				weight / (suffix ? sumModWeights.suffix : sumModWeights.prefix));
 			let weight2 = weightText(weight / (sumModWeights.prefix + sumModWeights.suffix));
 			return `${weight1} ${weight2} ${weight}`;
 		};
@@ -325,40 +340,49 @@
 		modsByItem
 			.filter(modsForItem => modsForItem.setVisible(!item || modsForItem.item === item))
 			.forEach(modsForItem => modsForItem.modsByCategory
-				.filter(modsForCategory => modsForCategory.setVisible(!categories.length || categories.includes(modsForCategory.category)))
+				.filter(modsForCategory => modsForCategory.setVisible(
+					!categories.length || categories.includes(modsForCategory.category)))
 				.forEach(modsForCategory => modsForCategory.modsByGroup
 					.filter(modsForGroup => modsForGroup.setVisible(
 						(!tags.length || modsForGroup.tags.some(tag => tags.includes(tag))) &&
 						(!itemLevel || modsForGroup.levelRequirement <= itemLevel) &&
-						(!searcher || modsForGroup.mods.some(mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name]))) &&
+						(!searcher || modsForGroup.mods.some(
+							mod => searcher.test([mod.group, mod.text, ...mod.tags, mod.name]))) &&
 						(modGroupCount++ < 300) || !modGroupLimit))
 					.forEach(modsForGroup => modsForGroup.mods
-						.filter(mod => mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel))
-						.forEach(mod => weightTracker.addWeight(modsForItem.item, mod.suffix, mod.weight)))));
+						.filter(
+							mod => mod.setVisible(!itemLevel || mod.levelRequirement <= itemLevel))
+						.forEach(mod => weightTracker.addWeight(modsForItem.item, mod.suffix,
+							mod.weight)))));
 
 		// hide groups, categories, and items with empty mods, groups, and categories respectively
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.modsByCategory.forEach(modsForCategory =>
 				modsForCategory.modsByGroup.forEach(modsForGroup =>
-					modsForGroup.setVisible(modsForGroup.getVisible() && modsForGroup.mods.some(mod => mod.getVisible())))));
+					modsForGroup.setVisible(modsForGroup.getVisible() &&
+						modsForGroup.mods.some(mod => mod.getVisible())))));
 
 		modsByItem.forEach(modsForItem =>
 			modsForItem.modsByCategory.forEach(modsForCategory =>
-				modsForCategory.setVisible(modsForCategory.getVisible() && modsForCategory.modsByGroup.some(modsForGroup => modsForGroup.getVisible()))));
+				modsForCategory.setVisible(modsForCategory.getVisible() &&
+					modsForCategory.modsByGroup.some(modsForGroup => modsForGroup.getVisible()))));
 
 		modsByItem.forEach(modsForItem =>
-			modsForItem.setVisible(modsForItem.getVisible() && modsForItem.modsByCategory.some(modsForCategory => modsForCategory.getVisible())));
+			modsForItem.setVisible(modsForItem.getVisible() &&
+				modsForItem.modsByCategory.some(modsForCategory => modsForCategory.getVisible())));
 
 		// update weights
 		modsByItem.forEach(modsForItem =>
 			modsForItem.modsByCategory.forEach(modsForCategory =>
 				modsForCategory.modsByGroup.forEach(modsForGroup => {
 					let sumWeights = modsForGroup.mods.reduce((sum, mod) => {
-						mod.$('.output-mod-field-weight').textContent = weightTracker.getText(modsForItem.item, mod.suffix, mod.weight);
+						mod.$('.output-mod-field-weight').textContent =
+							weightTracker.getText(modsForItem.item, mod.suffix, mod.weight);
 						return sum + mod.weight;
 					}, 0);
-					modsForGroup.$('.output-group-summary-field-weight').textContent = weightTracker.getText(modsForItem.item, modsForGroup.suffix, sumWeights);
+					modsForGroup.$('.output-group-summary-field-weight').textContent =
+						weightTracker.getText(modsForItem.item, modsForGroup.suffix, sumWeights);
 				})));
 
 		await sleep(10);
@@ -366,7 +390,8 @@
 			return;
 
 		$('#mod-group-count-div').classList.toggle('limited', modGroupLimit && modGroupCount > 300);
-		$('#mod-group-showing-count').textContent = modGroupLimit ? Math.min(modGroupCount, 300) : modGroupCount;
+		$('#mod-group-showing-count').textContent =
+			modGroupLimit ? Math.min(modGroupCount, 300) : modGroupCount;
 		$('#mod-group-available-count').textContent = modGroupCount;
 		modsByItem.setVisible(true);
 	};

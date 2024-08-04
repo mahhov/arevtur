@@ -40,7 +40,8 @@
 		lastQueryParams.forEach((queryParam, i) =>
 			queryParam.getItemsStream((text, ratio) => {
 				progressRatios[i] = ratio;
-				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) / progressRatios.length;
+				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) /
+					progressRatios.length;
 				$('x-results').updateItemsProgress(avgProgressRatio);
 			}, $('x-inputs').pobApi).forEach(items => {
 				$('x-results').joinItems(items);

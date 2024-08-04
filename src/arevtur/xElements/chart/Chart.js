@@ -151,7 +151,8 @@ customElements.define(name, class Chart extends XElement {
 			} else {
 				points.forEach(p => {
 					let {x, y} = this.coordToPixel(p.x, p.y);
-					this.ctx[fill ? 'fillRect' : 'strokeRect'](x - size / 2, y - size / 2, size, size);
+					this.ctx[fill ? 'fillRect' : 'strokeRect'](x - size / 2, y - size / 2, size,
+						size);
 				});
 			}
 		});

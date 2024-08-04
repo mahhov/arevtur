@@ -30,14 +30,16 @@ class PobApi extends CustomOsScript {
 				console.log(out);
 				out.split('.>')
 					.map(split => split.split('<.')[1])
-					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
+					.filter((_, i, a) => i !== a.length -
+						1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
 					.forEach(split => this.pendingResponses.shift().resolve(split));
 			}
 		});
 	}
 
 	spawnProcess(pobPath) {
-		// e.g. /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
+		// e.g.
+		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
 		return spawn(
 			'luajit',
 			[path.join(__dirname, './pobApi.lua')],
@@ -60,7 +62,8 @@ class PobApi extends CustomOsScript {
 	}
 
 	set build(path) {
-		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of
+		// Building/Builds/cobra lash.xml'
 		this.build_ = path;
 		this.send('build', path);
 	}
@@ -88,11 +91,13 @@ class PobApi extends CustomOsScript {
 			.replace(/\([^)]*\)/g, '') // remove '(...)'
 			.replace(/total/gi, '') // remove 'total'
 			.replace(/increased .*damage/i, 'increased damage') // inc damage
-			.replace(/% (?!increased)(.* speed)/i, (_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
+			.replace(/% (?!increased)(.* speed)/i,
+				(_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
 			.replace(/\s+/g, ' ') // clean up whitespace
 			.trim();
 		this.send('mod', cleanItemMod, pobType);
-		return this.awaitResponse.then(text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
+		return this.awaitResponse.then(
+			text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
 	}
 
 	async generateQuery(type = undefined, maxPrice = 10) {
@@ -100,7 +105,8 @@ class PobApi extends CustomOsScript {
 		if (!pobType)
 			return;
 		// todo figure out how to get resist stats in PoB
-		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life, this.valueParams_.resist, this.valueParams_.dps);
+		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life,
+			this.valueParams_.resist, this.valueParams_.dps);
 		return this.awaitResponse;
 	}
 
