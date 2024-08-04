@@ -19,7 +19,7 @@ class ItemsData {
 
 	clear() {
 		this.items = [];
-		this.bestBoundItems_ = []; // top
+		this.bestBoundItems = [];
 	}
 
 	set valueHandler(name) {
@@ -53,7 +53,7 @@ class ItemsData {
 		// update bestBoundItems
 		let minPriceFound = Infinity;
 		// ordered top right to bottom left
-		this.bestBoundItems_ = this.items
+		this.bestBoundItems = this.items
 			.filter(item => {
 				if (item.evalPrice >= minPriceFound)
 					return false;
@@ -81,10 +81,6 @@ class ItemsData {
 			this.y(item) < maxValue &&
 			item.evalPrice > minPrice &&
 			item.evalPrice < maxPrice);
-	}
-
-	get bestBoundItems() {
-		return this.bestBoundItems_.filter(item => !item.selected);
 	}
 
 	get selectedItems() {
