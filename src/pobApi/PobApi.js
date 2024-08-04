@@ -27,7 +27,7 @@ class PobApi extends CustomOsScript {
 			if (err)
 				console.error(err);
 			if (out) {
-				// console.log(out);
+				console.log(out);
 				out.split('.>')
 					.map(split => split.split('<.')[1])
 					.filter((_, i, a) => i !== a.length - 1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
@@ -77,6 +77,7 @@ class PobApi extends CustomOsScript {
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
 		// todo allow sorting items by pob value
 		// todo don't rerun pob for weight changes
+		// todo send mods' middle values to pob eval
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return {value: 0, text: ''};
@@ -99,7 +100,7 @@ class PobApi extends CustomOsScript {
 		if (!pobType)
 			return;
 		// todo figure out how to get resist stats in PoB
-		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life, this.valueParams_.dps);
+		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life, this.valueParams_.resist, this.valueParams_.dps);
 		return this.awaitResponse;
 	}
 
@@ -173,3 +174,5 @@ class PobApi extends CustomOsScript {
 }
 
 module.exports = PobApi;
+
+// todo annotate clipboard item

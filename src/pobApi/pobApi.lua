@@ -32,6 +32,7 @@ function FakeTooltip:AddSeparator()
 end
 
 function getArgs(input)
+    -- parses a string, e.g. '<x> <3> <4>', into array of strings
     args = {}
     for arg in input:gmatch('<(.-)>') do
         table.insert(args, arg)
@@ -49,13 +50,13 @@ end
 
 -- core
 
-table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
 respond('ready')
 
 while true do
     local input = io.read()
     local args = getArgs(input)
     local cmd = args[1]
+
     if cmd == 'exit' then
         os.exit()
     elseif cmd == 'build' then
@@ -63,31 +64,19 @@ while true do
         loadBuildFromXML(readFile(args[2]))
     elseif cmd == 'item' then
         -- args[2] is item text
+        -- given item text, see what swapping it in, replacing the currently equipped item of that
+        -- type would do for the build
         local itemText = args[2]:gsub([[\n]], "\n")
         local item = new('Item', itemText)
         item:BuildModList()
         local tooltip = FakeTooltip:new()
         build.itemsTab:AddItemTooltip(tooltip, item)
         respond(tooltip.text)
-    elseif cmd == 'mod-old' then
-        -- args[2] is mod, e.g. '+100 evasion'
-        itemText = [[
-            Item Class: Helmets
-            Rarity: Rare
-            Havoc Dome
-            Noble Tricorne
-        ]] .. args[2]
-        table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
-        local item = new('Item', itemText)
-        local calcFunc = build.calcsTab:GetMiscCalculator()
-        local outputBase = calcFunc({}, {})
-        local outputNew = calcFunc({ repSlotName = 'x', repItem = item }, {})
-        local tooltip = FakeTooltip:new()
-        build:AddStatComparesToTooltip(tooltip, outputBase, outputNew, "")
-        respond(tooltip.text)
     elseif cmd == 'mod' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is mod, e.g. '+100 evasion'
+        -- given a mod and item type, see what adding that mod to the currently equipped item of
+        -- that type would do for the build
         local slots = build.itemsTab.slots
         local slot = slots[args[3]]
         local equippedItem = build.itemsTab.items[slot.selItemId]
@@ -98,43 +87,53 @@ while true do
     elseif cmd == 'generateQuery' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is max price, e.g. '10'
-        -- args[4] is life weight, e.g. '1'
-        -- args[5] is DPS weight, e.g. '1'
-        local fakeQueryTab = { pbLeagueRealName = '', itemsTab = build.itemsTab }
-        local tradeQueryGenerator = new("TradeQueryGenerator", fakeQueryTab)
-        local slot = build.itemsTab.slots[args[2]]
-        local context = { slotTbl = {} }
-        local statWeights = {
-            { stat = 'Effective Hit Pool', label = '', weightMult = args[4] },
-            { stat = 'FullDPS',            label = '', weightMult = args[5] },
-            --{ stat = '"FireResist"',             label = '', weightMult = 0 },
-            --{ stat = '"FireResistOverCap"',      label = '', weightMult = 0 },
-            --{ stat = '"ColdResist"',             label = '', weightMult = 0 },
-            --{ stat = '"ColdResistOverCap"',      label = '', weightMult = 0 },
-            --{ stat = '"LightningResist"',        label = '', weightMult = 0 },
-            --{ stat = '"LightningResistOverCap"', label = '', weightMult = 0 },
-            --{ stat = '"ChaosResist"',            label = '', weightMult = 0 },
-            --{ stat = '"ChaosResistOverCap"',     label = '', weightMult = 0 },
+        -- args[4] is total EPH weight, e.g. '1'
+        -- args[5] is total resist weight, e.g. '1'
+        -- args[6] is full DPS weight, e.g. '1'
+        -- given an item type and other params, generate a search query for replacing the currently
+        -- equipped item of that type
+
+        local itemsTab = build.itemsTab
+        local tradeQuery = itemsTab.tradeQuery
+        tradeQuery:PriceItem()
+        local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
+
+        tradeQuery.statSortSelectionList = {
+            { stat = 'TotalEHP',             weightMult = tonumber(args[4]) },
+            { stat = 'ChaosResistTotal',     weightMult = tonumber(args[5]) },
+            { stat = 'LightningResistTotal', weightMult = tonumber(args[5]) },
+            { stat = 'ColdResistTotal',      weightMult = tonumber(args[5]) },
+            { stat = 'FireResistTotal',      weightMult = tonumber(args[5]) },
+            { stat = 'FullDPS',              weightMult = tonumber(args[6]) },
+        }
+
+        -- TradeQueryClass:PriceItemRowDisplay
+        local slot = itemsTab.slots[args[2]]
+        tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
+            tradeQuery.statSortSelectionList, function(context, query, errMsg)
+                print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
+                respond(query)
+                print(urlEncode(query))
+            end)
+
+        -- TradeQueryGeneratorClass:RequestQuery execute
+        local eldritchModSlots = {
+            ["Body Armour"] = true,
+            ["Helmet"] = true,
+            ["Gloves"] = true,
+            ["Boots"] = true
         }
         local options = {
             includeCorrupted = true,
-            includeSynthesis = false,
-            includeEldritch = false,
-            includeScourge = false,
-            includeTalisman = true,
+            includeEldritch = eldritchModSlots[slot.slotName] == true,
+            includeTalisman = slot.slotName == 'Amulet',
             influence1 = 1,
             influence2 = 1,
             maxPrice = tonumber(args[3]),
-            maxPriceType = nil,
-            statWeights = statWeights,
+            statWeights = tradeQuery.statSortSelectionList,
         }
-        tradeQueryGenerator:RequestQuery(slot, context, statWeights, function(context, query, errMsg)
-            if errMsg then
-                io.write(errMsg)
-            end
-            respond(query)
-        end)
         tradeQueryGenerator:StartQuery(slot, options)
-        tradeQueryGenerator:OnFrame(slot, options)
+        tradeQueryGenerator:OnFrame()
+        -- todo jewels and abyss jewels, see TradeQueryClass:PriceItemRowDisplay
     end
 end

@@ -31,6 +31,19 @@ function FakeTooltip:AddSeparator()
   self.text = self.text .. '\n'
 end
 
+function dump(o)
+  if type(o) == 'table' then
+    local s = '{ '
+    for k, v in pairs(o) do
+      if type(k) ~= 'number' then k = '"' .. k .. '"' end
+      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+    end
+    return s .. '} '
+  else
+    return tostring(o)
+  end
+end
+
 -- our loop
 
 --table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
@@ -43,33 +56,42 @@ buildXml = readFile(buildXmlFile)
 loadBuildFromXML(buildXml)
 
 
+
+
+-- ITEM SWAP - given item text, see what swapping it in would do for the build
+
 --local itemText = [[
---Item Class: Helmets
+--Item Class: Belts
 --Rarity: Rare
---Havoc Dome
---Noble Tricorne
-----------
---Evasion Rating: 421 (augmented)
+--Demon Clasp
+--Vanguard Belt
 ----------
 --Requirements:
---Level: 48
---Dex: 99
+--Level: 78
 ----------
---Sockets: G
+--Item Level: 86
 ----------
---Item Level: 70
+--+320 to Armour and Evasion Rating (implicit)
 ----------
---+10 to maximum Life
+--+37 to Strength
+--+520 to Armour
+--+113 to maximum Life
+--30% increased Stun Duration on Enemies
+--22% increased Stun and Block Recovery
+--Flasks applied to you have 11% increased Effect
 --]]
---
 --local item = new('Item', itemText)
 --item:BuildModList()
 --local tooltip = FakeTooltip:new()
 --build.itemsTab:AddItemTooltip(tooltip, item)
-----io.write(tooltip.text .. '::end::')
-----io.flush()
---
---
+--io.write(tooltip.text .. '::end::')
+--io.flush()
+
+
+
+
+-- MOD ON SLOT X - given a mod, see what adding that mod new fake item, i.e. not replacing a currently equipped item,  would do for the build
+
 --local value = "+100 to maximum Life"
 --local type = 'Amulet'
 --itemText = [[
@@ -92,7 +114,12 @@ loadBuildFromXML(buildXml)
 ----io.write(tooltip.text .. '::end::')
 ----io.flush()
 --
---
+
+
+
+
+-- MOD ON AMULET - given a mod and item type, see what adding that mod to the currently equipped item of that type would do for the build
+
 --local arg1 = '+100 intelligence'
 --local arg2 = 'Amulet'
 --local slots = build.itemsTab.slots
@@ -105,32 +132,69 @@ loadBuildFromXML(buildXml)
 --io.write(tooltip.text .. '::end::')
 --io.flush()
 
-local arg1 = 'Belt'
-local arg2 = '10'
-local fakeQueryTab = { pbLeagueRealName = '', itemsTab = build.itemsTab }
-local tradeQueryGenerator = new("TradeQueryGenerator", fakeQueryTab)
-local slot = build.itemsTab.slots[arg1]
-local context = { slotTbl = {} }
-local statWeights = {
-  { stat = 'FullDPS',            label = 'FullDPS label',            weightMult = .5 },
-  { stat = 'Effective Hit Pool', label = 'Effective Hit Pool label', weightMult = 1 },
+
+
+-- TRADE - given an item type and other params, generate a search query for replacing the currently equipped item of that type
+
+local arg2 = 'Belt' -- item type
+local arg3 = '10'   -- max price
+local arg4 = '1'    -- total EPH weight
+local arg5 = '1'    -- total resist weight
+local arg6 = '.5'   -- full DPS weight
+
+local itemsTab = build.itemsTab
+local tradeQuery = itemsTab.tradeQuery
+tradeQuery:PriceItem()
+local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
+
+print(dump(tradeQuery.slotTables))
+
+tradeQuery.statSortSelectionList = {
+  { stat = 'TotalEHP',             weightMult = tonumber(arg4) },
+  { stat = 'ChaosResistTotal',     weightMult = tonumber(arg5) },
+  { stat = 'LightningResistTotal', weightMult = tonumber(arg5) },
+  { stat = 'ColdResistTotal',      weightMult = tonumber(arg5) },
+  { stat = 'FireResistTotal',      weightMult = tonumber(arg5) },
+  { stat = 'FullDPS',              weightMult = tonumber(arg6) },
+}
+
+-- TradeQueryClass:PriceItemRowDisplay
+local slot = itemsTab.slots[arg2]
+
+local row_idx = 10
+local slotTbl = tradeQuery.slotTables[row_idx]
+local slot = slotTbl.nodeId and itemsTab.sockets[slotTbl.nodeId] or
+    slotTbl.slotName and
+    (itemsTab.slots[slotTbl.slotName] or slotTbl.fullName and itemsTab.slots[slotTbl.fullName]) -- fullName for Abyssal Sockets
+
+tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
+  tradeQuery.statSortSelectionList, function(context, query, errMsg)
+    print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
+    print(query)
+    print('debug')
+    print(tradeQueryGenerator.calcContext.options.includeCorrupted)
+    print(dump(tradeQueryGenerator.alreadyWeightedMods))
+    print('')
+    print(dump(tradeQueryGenerator.modWeights))
+  end)
+
+-- TradeQueryGeneratorClass:RequestQuery execute
+local eldritchModSlots = {
+  ["Body Armour"] = true,
+  ["Helmet"] = true,
+  ["Gloves"] = true,
+  ["Boots"] = true
 }
 local options = {
-  includeCorrupted = true,
-  includeSynthesis = false,
-  includeEldritch = false,
-  includeScourge = false,
-  includeTalisman = true,
+  includeCorrupted = true, -- this is being ignored
+  includeEldritch = eldritchModSlots[slot.slotName] == true,
+  includeTalisman = slot.slotName == 'Amulet',
   influence1 = 1,
   influence2 = 1,
-  maxPrice = tonumber(arg2),
-  maxPriceType = nil,
-  statWeights = statWeights,
+  maxPrice = tonumber(arg3),
+  statWeights = tradeQuery.statSortSelectionList,
 }
-tradeQueryGenerator:RequestQuery(slot, context, statWeights, function(context, query, errMsg)
-  io.write('done')
-  io.write(query)
-  io.flush()
-end)
+print(dump(options))
 tradeQueryGenerator:StartQuery(slot, options)
-tradeQueryGenerator:OnFrame(slot, options)
+tradeQueryGenerator:OnFrame()
+-- todo jewels and abyss jewels, see TradeQueryClass:PriceItemRowDisplay
