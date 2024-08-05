@@ -3,7 +3,8 @@ const ApiConstants = require('./ApiConstants');
 class ItemData {
 	// Since constructors can't be async, we use a static async creator.
 	// todo make the async fields promises so we can use a constructor
-	static async create(league, affixValueShift, queryDefenseProperties, priceShifts, pobApi, tradeApiItemData) {
+	static async create(league, affixValueShift, queryDefenseProperties, priceShifts, pobApi,
+	                    tradeApiItemData) {
 		let sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
 			a[v.group] = a[v.group] || [];
 			a[v.group].push(v.sColour);
@@ -22,7 +23,7 @@ class ItemData {
 					tradeApiItemData.item.extended[responseName] || 0])
 				.filter(([_, value]) => value);
 		let pseudoMods = tradeApiItemData.item.pseudoMods || [];
-		let valueDetails = {
+		let evalValueDetails = {
 			affixes: affixValueShift,
 			defenses: ItemData.evalDefensePropertiesValue(defenseProperties,
 				queryDefenseProperties),
@@ -43,27 +44,25 @@ class ItemData {
 			itemLevel: tradeApiItemData.item.ilvl,
 			corrupted: tradeApiItemData.item.corrupted,
 			influences: Object.keys(tradeApiItemData.item.influences || {}),
-			sockets: sockets,
-			affixes: affixes,
+			sockets,
+			affixes,
 			defenseProperties: defenseProperties.map(nameValue => nameValue.join(' ')),
 			enchantMods: tradeApiItemData.item.enchantMods || [],
 			implicitMods: tradeApiItemData.item.implicitMods || [],
 			explicitMods: tradeApiItemData.item.explicitMods || [],
 			craftedMods: tradeApiItemData.item.craftedMods || [],
-			pseudoMods: pseudoMods,
+			pseudoMods,
 			accountText:
 				`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`,
 			whisper: tradeApiItemData.listing.whisper,
 			date: tradeApiItemData.listing.indexed,
 			note: tradeApiItemData.item.note,
-			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
-			// todo rename evalValueDetails
-			valueDetails: valueDetails,
-			// todo rename price
-			evalPrice: await ItemData.evalPrice(league, priceDetails),
-			priceDetails: priceDetails,
-			valueBuild: valueBuild,
-			text: text,
+			evalValue: Object.values(evalValueDetails).reduce((sum, v) => sum + v),
+			evalValueDetails,
+			price: await ItemData.price(league, priceDetails),
+			priceDetails,
+			valueBuild,
+			text,
 			debug: tradeApiItemData,
 		};
 		let itemData = new ItemData();
@@ -85,7 +84,7 @@ class ItemData {
 		return Number(pseudoSum.substring(5));
 	}
 
-	static async evalPrice(league, {currency: currencyId, count, shifts}) {
+	static async price(league, {currency: currencyId, count, shifts}) {
 		let currencyPrices = (await ApiConstants.constants.currencyPrices(league))[currencyId];
 		if (currencyPrices)
 			return currencyPrices * count +

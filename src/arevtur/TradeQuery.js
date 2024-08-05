@@ -124,7 +124,7 @@ class TradeQueryParams {
 			do {
 				let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.evalValue));
 				let maxValue = Math.max(...items.map(itemData => itemData.evalValue));
-				let minModValue = Math.min(...items.map(item => item.valueDetails.mods));
+				let minModValue = Math.min(...items.map(item => item.evalValueDetails.mods));
 				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) /
 					defenseProperty[1].weight;
 

@@ -40,28 +40,28 @@ class ItemsData {
 				if (copies[0] !== v)
 					return false;
 				v.evalValue = Math.max(...copies.map(vv => vv.evalValue));
-				v.evalPrice = Math.min(...copies.map(vv => vv.evalPrice));
+				v.price = Math.min(...copies.map(vv => vv.price));
 				// todo is it ok to take the max of each, or should the values of the max-sum be
 				// taken?
-				v.valueDetails = Object.fromEntries(Object.keys(v.valueDetails).map(
+				v.evalValueDetails = Object.fromEntries(Object.keys(v.evalValueDetails).map(
 					valueKey => [valueKey,
-						Math.max(...copies.map(copy => copy.valueDetails[valueKey]))]));
+						Math.max(...copies.map(copy => copy.evalValueDetails[valueKey]))]));
 				return true;
 			})
 			// high to low values, low to high prices
-			.sort((a, b) => this.y(b) - this.y(a) || a.evalPrice - b.evalPrice);
+			.sort((a, b) => this.y(b) - this.y(a) || a.price - b.price);
 
 		// todo use actual max price query param instead of maximum price of items
-		this.maxPrice = Math.max(...this.items.map(item => item.evalPrice));
+		this.maxPrice = Math.max(...this.items.map(item => item.price));
 
 		// update bestBoundItems
 		let minPriceFound = Infinity;
 		// ordered top right to bottom left
 		this.bestBoundItems = this.items
 			.filter(item => {
-				if (item.evalPrice >= minPriceFound)
+				if (item.price >= minPriceFound)
 					return false;
-				minPriceFound = item.evalPrice;
+				minPriceFound = item.price;
 				return true;
 			});
 	}
@@ -83,8 +83,8 @@ class ItemsData {
 		return this.items.findIndex(item =>
 			this.y(item) > minValue &&
 			this.y(item) < maxValue &&
-			item.evalPrice > minPrice &&
-			item.evalPrice < maxPrice);
+			item.price > minPrice &&
+			item.price < maxPrice);
 	}
 
 	get selectedItems() {
@@ -99,7 +99,7 @@ class ItemsData {
 		let path = this.bestBoundItems.flatMap((item, i, a) =>
 			[{
 				...item,
-				evalPrice: i ? a[i - 1].evalPrice : this.maxPrice,
+				price: i ? a[i - 1].price : this.maxPrice,
 			}, item]);
 		return this.itemsToPoints(path);
 	}
@@ -109,7 +109,7 @@ class ItemsData {
 	}
 
 	itemsToPoints(items) {
-		return items.map(item => ({x: item.evalPrice, y: this.y(item)}));
+		return items.map(item => ({x: item.price, y: this.y(item)}));
 	}
 }
 
