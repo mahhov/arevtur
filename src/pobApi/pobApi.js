@@ -142,10 +142,6 @@ class PobApi extends Emitter {
 			this.valueParams_.resist, this.valueParams_.dps);
 	}
 
-	static async getPobType(type = undefined) {
-		return ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
-	}
-
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
 		itemText = PobApi.clean(itemText);
 
@@ -218,6 +214,10 @@ class PobApi extends Emitter {
 			value: PobApi.round(diff.unscaledValue * valueScale, 3),
 			text: summaryText,
 		};
+	}
+
+	static async getPobType(type = undefined) {
+		return ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
 	}
 
 	static clean(outString) {

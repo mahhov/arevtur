@@ -69,7 +69,7 @@ while true do
         -- args[2] is item text
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
-        local itemText = args[2]:gsub([[\n]], "\n")
+        local itemText = args[2]:gsub([[\n]], '\n')
         local item = new('Item', itemText)
         item:BuildModList()
         local tooltip = FakeTooltip:new()
@@ -82,11 +82,15 @@ while true do
         -- that type would do for the build
         local slots = build.itemsTab.slots
         local slot = slots[args[3]]
-        local equippedItem = build.itemsTab.items[slot.selItemId]
-        local newItem = new('Item', equippedItem.raw .. '\n' .. args[2])
-        local tooltip = FakeTooltip:new()
-        build.itemsTab:AddItemTooltip(tooltip, newItem)
-        respond(tooltip.text)
+        if slot then
+            local equippedItem = build.itemsTab.items[slot.selItemId]
+            local newItem = new('Item', equippedItem.raw .. '\n' .. args[2])
+            local tooltip = FakeTooltip:new()
+            build.itemsTab:AddItemTooltip(tooltip, newItem)
+            respond(tooltip.text)
+        else
+            respond('Individual mod weights aren\'t supported on this item type')
+        end
     elseif cmd == 'generateQuery' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is max price, e.g. '10'
@@ -111,7 +115,14 @@ while true do
         }
 
         -- TradeQueryClass:PriceItemRowDisplay
-        local slot = itemsTab.slots[args[2]]
+        local jewelNodeId
+        for nodeId, slot in pairs(itemsTab.sockets) do
+            if not slot.inactive then
+                jewelNodeId = nodeId
+                break
+            end
+        end
+        local slot = itemsTab.slots[args[2]] or itemsTab.sockets[jewelNodeId]
         tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
             tradeQuery.statSortSelectionList, function(context, query, errMsg)
                 respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
@@ -120,10 +131,15 @@ while true do
 
         -- TradeQueryGeneratorClass:RequestQuery execute
         local eldritchModSlots = {
-            ["Body Armour"] = true,
-            ["Helmet"] = true,
-            ["Gloves"] = true,
-            ["Boots"] = true
+            ['Body Armour'] = true,
+            ['Helmet'] = true,
+            ['Gloves'] = true,
+            ['Boots'] = true
+        }
+        local jewelTypes = {
+            ['Jewel Any'] = 'Any',
+            ['jewel Base'] = 'Base',
+            ['jewel Abyss'] = 'Abyss',
         }
         local options = {
             includeCorrupted = true,
@@ -133,6 +149,7 @@ while true do
             influence2 = 1,
             maxPrice = tonumber(args[3]),
             statWeights = tradeQuery.statSortSelectionList,
+            jewelType = jewelTypes[args[2]],
         }
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()

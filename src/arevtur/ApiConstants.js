@@ -173,6 +173,9 @@ const POB_TYPES = {
 	'armour.boots': 'Boots',
 	'accessory.ring': 'Ring 1',
 	'accessory.belt': 'Belt',
+	'jewel': 'Jewel Any',
+	'jewel.base': 'jewel Base',
+	'jewel.abyss': 'jewel Abyss',
 };
 
 module.exports = {

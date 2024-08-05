@@ -98,7 +98,7 @@ loadBuildFromXML(buildXml)
 
 -- MOD ON SLOT X - given a mod, see what adding that mod new fake item, i.e. not replacing a currently equipped item,  would do for the build
 
---local value = "+100 to maximum Life"
+--local value = '+100 to maximum Life'
 --local type = 'Amulet'
 --itemText = [[
 --Item Class: Helmets
@@ -116,7 +116,7 @@ loadBuildFromXML(buildXml)
 --local outputBase = calcFunc({}, {})
 --local outputNew = calcFunc({ repSlotName = 'x', repItem = item }, {})
 --local tooltip = FakeTooltip:new()
---build:AddStatComparesToTooltip(tooltip, outputBase, outputNew, "")
+--build:AddStatComparesToTooltip(tooltip, outputBase, outputNew, '')
 ----io.write(tooltip.text .. '::end::')
 ----io.flush()
 --
@@ -142,8 +142,8 @@ loadBuildFromXML(buildXml)
 
 -- TRADE - given an item type and other params, generate a search query for replacing the currently equipped item of that type
 
-local arg2 = 'Jewel 49684' -- item type
---local arg2 = 'Belt' -- item type
+local arg2 = 'Jewel Any' -- item type
+--local arg2 = 'Weapon 1' -- item type
 local arg3 = '10'          -- max price
 local arg4 = '1'           -- total EPH weight
 local arg5 = '1'           -- total resist weight
@@ -154,7 +154,7 @@ local tradeQuery = itemsTab.tradeQuery
 tradeQuery:PriceItem()
 local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 
-print(dump(tradeQuery.slotTables))
+--print(dump(tradeQuery.slotTables))
 
 tradeQuery.statSortSelectionList = {
   { stat = 'TotalEHP',             weightMult = tonumber(arg4) },
@@ -166,17 +166,15 @@ tradeQuery.statSortSelectionList = {
 }
 
 -- TradeQueryClass:PriceItemRowDisplay
-local slot = itemsTab.slots[arg2]
-
-for k, v in pairs(itemsTab.slots) do
-  print(k)
+local jewelNodeId
+for nodeId, slot in pairs(itemsTab.sockets) do
+  if not slot.inactive then
+    jewelNodeId = nodeId
+    break
+  end
 end
 
-local row_idx = 10
-local slotTbl = tradeQuery.slotTables[row_idx]
-local slot = slotTbl.nodeId and itemsTab.sockets[slotTbl.nodeId] or
-    slotTbl.slotName and
-    (itemsTab.slots[slotTbl.slotName] or slotTbl.fullName and itemsTab.slots[slotTbl.fullName]) -- fullName for Abyssal Sockets
+local slot = itemsTab.slots[arg2] or itemsTab.sockets[jewelNodeId]
 
 tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
   tradeQuery.statSortSelectionList, function(context, query, errMsg)
@@ -191,10 +189,15 @@ tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
 
 -- TradeQueryGeneratorClass:RequestQuery execute
 local eldritchModSlots = {
-  ["Body Armour"] = true,
-  ["Helmet"] = true,
-  ["Gloves"] = true,
-  ["Boots"] = true
+  ['Body Armour'] = true,
+  ['Helmet'] = true,
+  ['Gloves'] = true,
+  ['Boots'] = true
+}
+local jewelTypes = {
+  ['Jewel Any'] = 'Any',
+  ['jewel Base'] = 'Base',
+  ['jewel Abyss'] = 'Abyss',
 }
 local options = {
   includeCorrupted = true, -- this is being ignored
@@ -204,8 +207,9 @@ local options = {
   influence2 = 1,
   maxPrice = tonumber(arg3),
   statWeights = tradeQuery.statSortSelectionList,
+  jewelType =  jewelTypes[arg2],
 }
-print(dump(options))
+--print(dump(options))
 tradeQueryGenerator:StartQuery(slot, options)
 tradeQueryGenerator:OnFrame()
 
