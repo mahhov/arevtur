@@ -2,54 +2,69 @@ const path = require('path');
 const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
 const ApiConstants = require('../arevtur/ApiConstants');
+const Emitter = require('../Emitter');
 
-class PobApi extends CustomOsScript {
+class Script extends CustomOsScript {
 	constructor(pobPath) {
 		super(pobPath);
+	}
+
+	spawnProcess(pobPath) {
+		return spawn(
+			'luajit',
+			[path.join(__dirname, './pobApi.lua')],
+			{cwd: pobPath});
+	}
+}
+
+class PobApi extends Emitter {
+	constructor() {
+		super();
+		this.script = null;
+		this.build_ = null;
 		this.valueParams = {
 			life: 0,
 			resist: 0,
 			dps: 0,
 		};
 		this.pendingResponses = [];
-		this.readyPromise = this.awaitResponse;
-		this.addListener(({out, err, exit}) => {
-			if (exit) {
-				// todo turn pob status red on crash and only restart if user clicks pob red icon
-				console.error('PobApi process exited, starting new process');
-				this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
-				this.pendingResponses = [];
-				this.restartProcess();
-				this.readyPromise = this.awaitResponse;
-				if (this.build_)
-					this.build = this.build_;
-			}
-			if (err)
-				console.error(err);
-			if (out) {
-				// console.log(out);
-				out.split('.>')
-					.map(split => split.split('<.')[1])
-					.filter((_, i, a) => i !== a.length -
-						1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
-					.forEach(split => this.pendingResponses.shift().resolve(split));
-			}
-		});
 	}
 
-	spawnProcess(pobPath) {
-		// e.g.
-		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
-		return spawn(
-			'luajit',
-			[path.join(__dirname, './pobApi.lua')],
-			{cwd: pobPath});
+	onScriptResponse({out, err, exit}) {
+		if (exit) {
+			// todo turn pob status red on crash and only restart if user clicks pob red icon
+			console.error('PobApi process exited, starting new process');
+			this.emit('not-ready');
+			this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
+			this.pendingResponses = [];
+			this.script.restartProcess();
+			this.build = this.build_;
+			this.awaitResponse.then(() => {
+				this.emit('change');
+				this.emit('ready');
+			});
+		}
+		if (err)
+			console.error(err);
+		if (out) {
+			console.log('pobApi.lua: ', out.slice(0, 100));
+			out.split('.>')
+				.map(split => split.split('<.')[1])
+				.filter((_, i, a) => i !== a.length -
+					1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
+				.forEach(split => this.pendingResponses.shift().resolve(split));
+			if (!this.pendingResponses.length)
+				this.emit('ready');
+		}
 	}
 
 	send(...args) {
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		console.log('PobApi sending:', text);
-		return super.send(text);
+		if (this.script) {
+			this.emit('busy');
+			this.script.send(text);
+		}
 	}
 
 	get awaitResponse() {
@@ -57,15 +72,24 @@ class PobApi extends CustomOsScript {
 		return this.pendingResponses[this.pendingResponses.length - 1];
 	}
 
-	get ready() {
-		return this.readyPromise;
+	set pobPath(path) {
+		// e.g.
+		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
+		this.script = new Script(path);
+		this.script.addListener(response => this.onScriptResponse(response));
+		this.build = this.build_;
+		this.emit('change');
 	}
 
 	set build(path) {
 		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of
 		// Building/Builds/cobra lash.xml'
 		this.build_ = path;
-		this.send('build', path);
+		if (path) {
+			this.send('build', path);
+			this.awaitResponse;
+			this.emit('change');
+		}
 	}
 
 	set valueParams(valueParams) {
@@ -79,10 +103,11 @@ class PobApi extends CustomOsScript {
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = true) {
 		// todo don't rerun pob for weight changes [high]
-		// todo use mods' median values instead of pluginNumber = 100
+		// todo use mods' median values instead of pluginNumber = 100 [high]
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return {value: 0, text: ''};
+		// todo is this cleaning necessary? does it cause inaccuracies? [high]
 		let cleanItemMod = raw ? itemMod : itemMod
 			.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
 			.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
@@ -177,6 +202,7 @@ class PobApi extends CustomOsScript {
 	}
 }
 
-module.exports = PobApi;
+// singleton
+module.exports = new PobApi();
 
 // todo annotate clipboard item

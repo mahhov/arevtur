@@ -50,7 +50,7 @@ end
 
 -- core
 
-respond('ready')
+respond('ready', true)
 
 while true do
     local input = io.read()
@@ -62,6 +62,7 @@ while true do
     elseif cmd == 'build' then
         -- args[2] is build xml path
         loadBuildFromXML(readFile(args[2]))
+        respond('build loaded')
     elseif cmd == 'item' then
         -- args[2] is item text
         -- given item text, see what swapping it in, replacing the currently equipped item of that
@@ -111,9 +112,8 @@ while true do
         local slot = itemsTab.slots[args[2]]
         tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
             tradeQuery.statSortSelectionList, function(context, query, errMsg)
-                print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
+                respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
                 respond(query)
-                print(urlEncode(query))
             end)
 
         -- TradeQueryGeneratorClass:RequestQuery execute
@@ -135,6 +135,8 @@ while true do
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()
         -- todo jewels and abyss jewels, see TradeQueryClass:PriceItemRowDisplay [high]
-        -- todo allow picking mod sets, e.g. talisman, corrupted, influence
+        -- todo allow picking mod sets, e.g. talisman, corrupted, influence [high]
+        -- todo json args [high]
+        -- todo test speed of echo [high]
     end
 end

@@ -99,10 +99,10 @@ class TradeQueryParams {
 		};
 	}
 
-	getItemsStream(progressCallback, pobApi = null) {
+	getItemsStream(progressCallback) {
 		this.stopObj = {};
 		let stream = new Stream();
-		this.writeItemsToStream(stream, progressCallback, pobApi)
+		this.writeItemsToStream(stream, progressCallback)
 			.then(() => stream.done());
 		return stream;
 	}
@@ -111,9 +111,8 @@ class TradeQueryParams {
 		this.stopObj.stop = true;
 	}
 
-	async writeItemsToStream(stream, progressCallback, pobApi) {
-		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback,
-			pobApi);
+	async writeItemsToStream(stream, progressCallback) {
+		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback);
 
 		// todo this doesn't work for hybrid (e.g. es + evasion) bases
 		let defenseProperty = Object.entries(this.defenseProperties)
@@ -135,7 +134,7 @@ class TradeQueryParams {
 				let overrides = this.overrideDefenseProperty(defenseProperty[0],
 					minDefensePropertyValue);
 				let query = this.getQuery(overrides);
-				newItems = await this.queryAndParseItems(query, stream, progressCallback, pobApi);
+				newItems = await this.queryAndParseItems(query, stream, progressCallback);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);
 		}
@@ -143,7 +142,7 @@ class TradeQueryParams {
 		return items;
 	}
 
-	async queryAndParseItems(query, stream, progressCallback, pobApi) {
+	async queryAndParseItems(query, stream, progressCallback) {
 		// todo more selective try/catch
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
@@ -177,7 +176,7 @@ class TradeQueryParams {
 					(1 + ++receivedCount) / (requestGroups.length + 1));
 				let items = await Promise.all(data2.result.map(
 					async itemData => await ItemData.create(this.league, this.affixValueShift,
-						this.defenseProperties, this.priceShifts, pobApi, itemData)));
+						this.defenseProperties, this.priceShifts, itemData)));
 				stream.write(items);
 				return items;
 			});

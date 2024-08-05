@@ -8,6 +8,7 @@ const {
 	affixPropertyTuples,
 	influenceProperties,
 } = require('./Properties');
+const pobApi = require('../../../pobApi/pobApi');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -65,9 +66,7 @@ customElements.define(name, class extends XElement {
 			this.updateQueryParams();
 		});
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
-			if (!this.lastPobApi)
-				return;
-			let queryString = await this.lastPobApi.generateQuery(this.type, this.price);
+			let queryString = await pobApi.generateQuery(this.type, this.price);
 			let query = JSON.parse(queryString);
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(query);
 			await this.loadQueryParams(unifiedQueryParams);
@@ -267,7 +266,6 @@ customElements.define(name, class extends XElement {
 			queryProperty.remove();
 			this.updateQueryParams();
 		});
-		queryProperty.refreshBuild(this.lastPobApi);
 		return queryProperty;
 	};
 
@@ -277,12 +275,9 @@ customElements.define(name, class extends XElement {
 		this.emit('change');
 	}
 
-	refreshBuild(pobApi = this.lastPobApi) {
-		this.lastPobApi = pobApi;
+	refreshBuild() {
 		this.$$('#query-properties-list x-query-property')
-			.forEach(queryProperty => queryProperty.refreshBuild(pobApi));
-		if (!pobApi)
-			return;
+			.forEach(queryProperty => queryProperty.refreshBuild());
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
 			this[buildValue] = summary.value;

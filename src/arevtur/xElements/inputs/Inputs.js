@@ -4,6 +4,7 @@ const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
 const {TradeQueryImport} = require('../../TradeQuery');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
+const pobApi = require('../../../pobApi/pobApi');
 
 let timestamp = () => {
 	let date = new Date();
@@ -50,12 +51,18 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#reload-button').addEventListener('click', () => window.location.reload());
 
-		this.$('#input-build').addEventListener('refreshing', e =>
+		// todo listen to pob api [high]
+		// todo use orange when query in progress [high]
+		pobApi.addListener('not-ready', () =>
 			this.$('#loaded-pob-status').classList.remove('valid'));
-		this.$('#input-build').addEventListener('refresh', e => {
+		pobApi.addListener('busy', () =>
+			this.$('#loaded-pob-status').classList.add('busy'));
+		pobApi.addListener('ready', () => {
 			this.$('#loaded-pob-status').classList.add('valid');
-			this.$('#input-trade-params').refreshBuild(e.detail);
+			this.$('#loaded-pob-status').classList.remove('busy');
 		});
+		pobApi.addListener('change', () =>
+			this.$('#input-trade-params').refreshBuild());
 
 		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
 			let tradeQueryImport = new TradeQueryImport(this.$('#session-id-input').value,
@@ -126,7 +133,6 @@ customElements.define(name, class Inputs extends XElement {
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(
 			this.inputSets[this.inputSetIndex].tradeQueryParams, this.sharedWeightEntries);
 		await this.$('#input-trade-params').loadQueryParams(unifiedQueryParams);
-		this.$('#input-trade-params').refreshBuild(this.pobApi);
 	}
 
 	inputSetIndexFromEl(inputSetEl) {
@@ -188,9 +194,5 @@ customElements.define(name, class Inputs extends XElement {
 					.fromStorageQueryParams(inputSet.tradeQueryParams, this.sharedWeightEntries)
 					.toTradeQueryParams(league, sessionId, overridePrice,
 						fatedConnectionsProphecyPrice));
-	}
-
-	get pobApi() {
-		return this.$('#input-build').pobApi;
 	}
 });

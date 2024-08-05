@@ -33,6 +33,12 @@ body {
 	background: var(--valid-back);
 }
 
+.busy {
+	color: var(--busy-primary);
+	border-color: var(--busy-primary);
+	background: var(--busy-back);
+}
+
 :focus {
 	outline: 0;
 	border-color: var(--interactable-focus-border);

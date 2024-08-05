@@ -11,18 +11,8 @@
 		margin-left: 15px;
 	}
 
-	#weights input,
-	#demo-mod-value {
+	#weights input {
 		width: 60px;
-	}
-
-	#demo-mod-property {
-		width: 300px;
-	}
-
-	#demo-mod {
-		/* todo add toggle to show/hide for debugging */
-		display: none;
 	}
 </style>
 
@@ -43,14 +33,5 @@
 			damage
 			<input id="damage-weight" min="0" type="number">
 		</label>
-	</span>
-	<span id="demo-mod">
-		<x-autocomplete-input free-form="true" id="demo-mod-type"
-		                      placeholder="input a type here"></x-autocomplete-input>
-		<x-autocomplete-input free-form="true" id="demo-mod-property"
-		                      placeholder="input a mod here"></x-autocomplete-input>
-		<input id="demo-mod-value" min="0" placeholder="100" type="number">
-		<input id="demo-mod-raw" type="checkbox">
-		<span id="demo-mod-weight"></span>
 	</span>
 </span>

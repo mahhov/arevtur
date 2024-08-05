@@ -24,11 +24,13 @@
 	--non-interactable-border: #888;
 	--non-interactable-fill: #c8c8c8;
 
-	/* invalid & valid */
-	--invalid-primary: black;
-	--invalid-back: #fdd5d5;
-	--valid-primary: black;
-	--valid-back: #aaffaa;
+	/* invalid, valid, & busy */
+	--invalid-primary: hsl(0, 100%, 13%);
+	--invalid-back: hsl(0, 100%, 83%);
+	--valid-primary: hsl(120, 100%, 13%);
+	--valid-back: hsl(120, 100%, 83%);
+	--busy-primary: hsl(32, 100%, 13%);
+	--busy-back: hsl(32, 100%, 83%);
 
 	/* colored text */
 	--colored-text-orange: lch(65 230 80);
@@ -64,12 +66,13 @@
 	--non-interactable-border: #667;
 	--non-interactable-fill: #40586f;
 
-	/* invalid & valid */
-	--invalid-primary: #f65;
-	--invalid-back: #400;
-	--valid-primary: white;
-	--valid-back: #070;
+	/* invalid, valid, & busy */
+	--invalid-primary: hsl(0, 100%, 70%);
+	--invalid-back: hsl(0, 100%, 13%);
+	--valid-primary: hsl(120, 100%, 70%);
+	--valid-back: hsl(120, 100%, 13%);
+	--busy-primary: hsl(32, 100%, 70%);
+	--busy-back: hsl(32, 100%, 13%);
 
-	/* colored text */
-	/* inherit */
+	/* colored text are inherited */
 }

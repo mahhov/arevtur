@@ -37,17 +37,16 @@
 		cancelQueries();
 		lastTradeQueryParams = tradeQueryParams;
 		let progressRatios = tradeQueryParams.map(_ => 0);
-		tradeQueryParams.forEach((queryParam, i) =>
-			queryParam.getItemsStream((text, ratio) => {
-				console.log('progress', text, ratio);
-				progressRatios[i] = ratio;
-				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) /
-					progressRatios.length;
-				$('x-results').updateItemsProgress(avgProgressRatio);
-			}, $('x-inputs').pobApi).forEach(items => {
-				$('x-results').joinItems(items);
-				$('x-results').renderItemsData();
-			}));
+		tradeQueryParams
+			.forEach((queryParam, i) =>
+				queryParam.getItemsStream((text, ratio) => {
+					console.log('progress', text, ratio);
+					progressRatios[i] = ratio;
+					let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) /
+						progressRatios.length;
+					$('x-results').updateItemsProgress(avgProgressRatio);
+				})
+					.forEach(items => $('x-results').joinItems(items)));
 	};
 
 	let cancelQueries = () => {

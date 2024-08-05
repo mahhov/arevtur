@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const pobApi = require('../../../pobApi/pobApi');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -98,10 +99,7 @@ customElements.define(name, class extends XElement {
 		this.$('#property').focus();
 	}
 
-	async refreshBuild(pobApi = this.lastPobApi) {
-		this.lastPobApi = pobApi;
-		if (!pobApi)
-			return;
+	async refreshBuild() {
 		let summary = await pobApi.evalItemModSummary(this.type, this.property, 100);
 		this.buildValue = summary.value;
 		this.buildValueTooltip = summary.text;

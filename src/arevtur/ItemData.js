@@ -1,10 +1,11 @@
 const ApiConstants = require('./ApiConstants');
+const pobApi = require('../pobApi/pobApi');
 
 class ItemData {
 	// Since constructors can't be async, we use a static async creator.
 	// todo make the async fields promises so we can use a constructor. But how? The item's would
 	//   be hard to use without the async price and build value computed.
-	static async create(league, affixValueShift, queryDefenseProperties, priceShifts, pobApi,
+	static async create(league, affixValueShift, queryDefenseProperties, priceShifts,
 	                    tradeApiItemData) {
 		let sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
 			a[v.group] = a[v.group] || [];
@@ -31,7 +32,7 @@ class ItemData {
 			mods: ItemData.evalValue(pseudoMods),
 		};
 		let text = ItemData.decode64(tradeApiItemData.item.extended.text);
-		let valueBuild = await pobApi?.evalItem(text) || null;
+		let valueBuild = await pobApi.evalItem(text) || null;
 		let priceDetails = {
 			count: tradeApiItemData.listing.price.amount,
 			currency: tradeApiItemData.listing.price.currency,
