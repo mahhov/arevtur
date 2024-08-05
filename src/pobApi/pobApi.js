@@ -119,16 +119,16 @@ class PobApi extends Emitter {
 			return Promise.reject();
 		// todo is this cleaning necessary? does it cause inaccuracies? [high]
 		let cleanItemMod = raw ? itemMod : itemMod
-			.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
-			.replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
-			.replace(/#/g, pluginNumber) // pluginNumber
-			.replace(/\([^)]*\)/g, '') // remove '(...)'
-			.replace(/total/gi, '') // remove 'total'
-			.replace(/increased .*damage/i, 'increased damage') // inc damage
-			.replace(/% (?!increased)(.* speed)/i,
-				(_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
-			.replace(/\s+/g, ' ') // clean up whitespace
-			.trim();
+			// .replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
+			// .replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
+			.replace(/#/g, pluginNumber); // pluginNumber
+		// .replace(/\([^)]*\)/g, '') // remove '(...)'
+		// .replace(/total/gi, '') // remove 'total'
+		// .replace(/increased .*damage/i, 'increased damage') // inc damage
+		// .replace(/% (?!increased)(.* speed)/i,
+		// 	(_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
+		// .replace(/\s+/g, ' ') // clean up whitespace
+		// .trim();
 		return this.send(true, 'mod', cleanItemMod, pobType)
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
 	}
@@ -150,48 +150,71 @@ class PobApi extends Emitter {
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
 		let flatLifeRegex = /([+-][\d,]+) total life/i;
-		let anyResistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) res(?:\.|istance)/i;
+		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
+		let anyDiffResistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) res(?:\.|istance)/i;
 		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
 
-		let effectiveHitPool = Number(itemText.match(effectiveHitPoolRegex)?.[1]) || 0;
-		let flatLife = Number(itemText.match(flatLifeRegex)?.[1].replace(/,/g, '')) || 0;
-		let totalResist = itemText
-			.match(new RegExp(anyResistRegex, 'gi'))
-			?.reduce((sum, m) => sum + Number(m.match(anyResistRegex)[1]), 0) || 0;
-		let fullDps = Number(itemText.match(fullDpsRegex)?.[1]) || 0;
+		if (!itemText.split('Equipping this item').slice(1).forEach)
+			console.error(itemText);
 
-		let unscaledValue =
-			effectiveHitPool * this.valueParams_.life +
-			totalResist * this.valueParams_.resist +
-			fullDps * this.valueParams_.dps;
+		let diffs = itemText.split(/(?=equipping this item)/i).slice(1).map(diffText => {
+			let equippingText = diffText.match(/equipping this item.*/i)[0];
+			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
+			let flatLife = Number(diffText.match(flatLifeRegex)?.[1].replace(/,/g, '')) || 0;
+			let totalResist = diffText
+				.match(new RegExp(anyDiffResistRegex, 'gi'))
+				?.reduce((sum, m) => sum + Number(m.match(anyDiffResistRegex)[1]), 0) || 0;
+			let fullDps = Number(diffText.match(fullDpsRegex)?.[1]) || 0;
+			let unscaledValue =
+				effectiveHitPool * this.valueParams_.life +
+				totalResist * this.valueParams_.resist +
+				fullDps * this.valueParams_.dps;
+
+			return {
+				equippingText,
+				effectiveHitPool,
+				flatLife,
+				totalResist,
+				fullDps,
+				unscaledValue,
+			};
+		});
+
+		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue);
 
 		let summaryText = [
 			textPrefix ? `@bold,green ${textPrefix}` : '',
 			textPrefix ? '-'.repeat(30) : '',
+			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
+			diff.effectiveHitPool ? `@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
+			diff.flatLife ? `@bold,blue Flat Life ${diff.flatLife}` : '',
+			diff.totalResist ? `@bold,orange Total Resist ${diff.totalResist}` : '',
+			diff.fullDps ? `@bold,red Full DPS ${diff.fullDps}%` : '',
+			`@bold,green Value ${PobApi.round(diff.unscaledValue, 3)}`,
+			'-'.repeat(30),
 			...itemText.split('\n').map(itemTextLine => {
-				if (itemTextLine && itemTextLine === textPrefix)
+				if (textPrefix && itemTextLine === textPrefix)
 					return `@bold,green ${itemTextLine}`;
 				if (itemTextLine.match(effectiveHitPoolRegex))
 					return `@bold,blue ${itemTextLine}`;
 				if (itemTextLine.match(flatLifeRegex))
 					return `@bold,blue ${itemTextLine}`;
-				if (itemTextLine.match(anyResistRegex))
+				if (itemTextLine.match(anyItemResistRegex))
+					return `@bold,orange ${itemTextLine}`;
+				if (itemTextLine.match(anyDiffResistRegex))
 					return `@bold,orange ${itemTextLine}`;
 				if (itemTextLine.match(fullDpsRegex))
 					return `@bold,red ${itemTextLine}`;
+				if (itemTextLine.match(/^equipping this item/i))
+					return `@bold,green ${itemTextLine}`;
+				if (itemTextLine.match(/^tip: /i))
+					return null;
 				return itemTextLine;
 			}),
-			'-'.repeat(30),
-			effectiveHitPool ? `@blue,bold Effective Hit Pool ${effectiveHitPool}%` : '',
-			flatLife ? `@blue,bold Flat Life ${flatLife}` : '',
-			totalResist ? `@orange,bold Total Resist ${totalResist}` : '',
-			fullDps ? `@red,bold Full DPS ${fullDps}%` : '',
-			`@green,bold Value ${PobApi.round(unscaledValue, 3)}`,
 		].filter(v => v).join('\n');
 
 		return {
-			unscaledValue: PobApi.round(unscaledValue, 3),
-			value: PobApi.round(unscaledValue * valueScale, 3),
+			value: PobApi.round(diff.unscaledValue * valueScale, 3),
 			text: summaryText,
 		};
 	}
@@ -204,6 +227,19 @@ class PobApi extends Emitter {
 			.trim();
 	}
 
+	static mapMax(array, handler) {
+		let maxI = 0;
+		let max = -Infinity;
+		array.forEach((value, i) => {
+			let map = handler(value);
+			if (map > max) {
+				maxI = i;
+				max = map;
+			}
+		});
+		return array[maxI];
+	}
+
 	static round(number, precision) {
 		let m = 10 ** precision;
 		return Math.round(number * m) / m;
@@ -214,4 +250,3 @@ class PobApi extends Emitter {
 module.exports = new PobApi();
 
 // todo annotate clipboard item
-// todo make work when multiple 'Equipping this item' [high]

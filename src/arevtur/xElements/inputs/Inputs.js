@@ -51,8 +51,6 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#reload-button').addEventListener('click', () => window.location.reload());
 
-		// todo listen to pob api [high]
-		// todo use orange when query in progress [high]
 		pobApi.addListener('not-ready', () =>
 			this.$('#loaded-pob-status').classList.remove('valid'));
 		pobApi.addListener('busy', () =>
