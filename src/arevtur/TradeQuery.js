@@ -3,6 +3,7 @@ const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
 const Stream = require('./Stream');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
+const ItemData = require('./ItemData');
 
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');
@@ -114,14 +115,15 @@ class TradeQueryParams {
 		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback,
 			pobApi);
 
+		// todo this doesn't work for hybrid (e.g. es + evasion) bases
 		let defenseProperty = Object.entries(this.defenseProperties)
 			.find(([_, {weight}]) => weight);
 		if (defenseProperty) {
 			let newItems = items;
 			let lastMinDefensePropertyValue = 0;
 			do {
-				let newItemsMinValue = Math.min(...newItems.map(({evalValue}) => evalValue));
-				let maxValue = Math.max(...items.map(({evalValue}) => evalValue));
+				let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.evalValue));
+				let maxValue = Math.max(...items.map(itemData => itemData.evalValue));
 				let minModValue = Math.min(...items.map(item => item.valueDetails.mods));
 				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) /
 					defenseProperty[1].weight;
@@ -163,16 +165,19 @@ class TradeQueryParams {
 			let promises = requestGroups.map(async (requestGroup, i) => {
 				let tradeQueryParams = {
 					query: data.id,
-					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes,
-						ApiConstants.SHORT_PROPERTIES.flatLife],
+					'pseudos[]': [
+						ApiConstants.SHORT_PROPERTIES.totalEleRes,
+						ApiConstants.SHORT_PROPERTIES.flatLife,
+					],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
 				let response2 = await rlrGet(endpoint2, tradeQueryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`,
 					(1 + ++receivedCount) / (requestGroups.length + 1));
-				let items = await Promise.all(
-					data2.result.map(async itemData => await this.parseItem(itemData, pobApi)));
+				let items = await Promise.all(data2.result.map(
+					async itemData => await ItemData.create(this.league, this.affixValueShift,
+						this.defenseProperties, this.priceShifts, pobApi, itemData)));
 				stream.write(items);
 				return items;
 			});
@@ -184,94 +189,6 @@ class TradeQueryParams {
 			return [];
 		}
 	}
-
-	async parseItem(itemData, pobApi) {
-		let sockets = (itemData.item.sockets || []).reduce((a, v) => {
-			a[v.group] = a[v.group] || [];
-			a[v.group].push(v.sColour);
-			return a;
-		}, []);
-		let extendedExplicitMods = itemData.item.extended.mods?.explicit || [];
-		let affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
-			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
-		let defenseProperties =
-			[
-				['ar', 'armour'],
-				['ev', 'evasion'],
-				['es', 'energyShield'],
-			].map(
-				([responseName, fullName]) => [fullName, itemData.item.extended[responseName] || 0])
-				.filter(([_, value]) => value);
-		let pseudoMods = itemData.item.pseudoMods || [];
-		let valueDetails = {
-			affixes: this.affixValueShift,
-			defenses: TradeQueryParams.evalDefensePropertiesValue(defenseProperties,
-				this.defenseProperties),
-			mods: TradeQueryParams.evalValue(pseudoMods),
-		};
-		let text = TradeQueryParams.decode64(itemData.item.extended.text);
-		let valueBuild = await pobApi?.evalItem(text) || null;
-		let priceDetails = {
-			count: itemData.listing.price.amount,
-			currency: itemData.listing.price.currency,
-			shifts: this.priceShifts,
-		};
-
-		return {
-			id: itemData.id,
-			name: itemData.item.name,
-			type: itemData.item.typeLine,
-			itemLevel: itemData.item.ilvl,
-			corrupted: itemData.item.corrupted,
-			influences: Object.keys(itemData.item.influences || {}),
-			sockets,
-			affixes,
-			defenseProperties: defenseProperties.map(nameValue => nameValue.join(' ')),
-			enchantMods: itemData.item.enchantMods || [],
-			implicitMods: itemData.item.implicitMods || [],
-			explicitMods: itemData.item.explicitMods || [],
-			craftedMods: itemData.item.craftedMods || [],
-			pseudoMods,
-			accountText: `${itemData.listing.account.name} > ${itemData.listing.account.lastCharacterName}`,
-			whisper: itemData.listing.whisper,
-			date: itemData.listing.indexed,
-			note: itemData.item.note,
-			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
-			valueDetails,
-			valueBuild,
-			evalPrice: await TradeQueryParams.evalPrice(this.league, priceDetails),
-			priceDetails,
-			text,
-			debug: itemData,
-		};
-	}
-
-	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
-		return itemDefenseProperties
-			.map(([name, value]) => value * queryDefenseProperties[name].weight)
-			.reduce((sum, v) => sum + v, 0);
-	}
-
-	static evalValue(pseudoMods) {
-		let pseudoSumI = pseudoMods.findIndex(mod => mod.startsWith('Sum: '));
-		if (pseudoSumI === -1)
-			return 0;
-		let [pseudoSum] = pseudoMods.splice(pseudoSumI, 1);
-		return Number(pseudoSum.substring(5));
-	}
-
-	static async evalPrice(league, {currency: currencyId, count, shifts}) {
-		let currencyPrices = (await ApiConstants.constants.currencyPrices(league))[currencyId];
-		if (currencyPrices)
-			return currencyPrices * count +
-				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
-		console.warn('Missing currency', currencyId);
-		return -1;
-	}
-
-	static decode64(string64) {
-		return Buffer.from(string64, 'base64').toString();
-	};
 }
 
 class TradeQueryImport {

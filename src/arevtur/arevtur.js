@@ -3,6 +3,8 @@ const {ipcMain, dialog} = require('electron');
 const ElectronWindow = require('../services/ElectronWindow');
 
 let window = new ElectronWindow('Arevtur', path.resolve(__dirname, 'arevtur.html'));
+window.showView();
+window.showDevTools();
 
 // todo this should be made generic for all windows
 ipcMain.handle('open-dialog', async (event, arg) =>

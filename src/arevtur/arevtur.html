@@ -39,6 +39,7 @@
 		let progressRatios = tradeQueryParams.map(_ => 0);
 		tradeQueryParams.forEach((queryParam, i) =>
 			queryParam.getItemsStream((text, ratio) => {
+				console.log('progress', text, ratio);
 				progressRatios[i] = ratio;
 				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) /
 					progressRatios.length;

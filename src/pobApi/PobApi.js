@@ -27,7 +27,7 @@ class PobApi extends CustomOsScript {
 			if (err)
 				console.error(err);
 			if (out) {
-				console.log(out);
+				// console.log(out);
 				out.split('.>')
 					.map(split => split.split('<.')[1])
 					.filter((_, i, a) => i !== a.length -
