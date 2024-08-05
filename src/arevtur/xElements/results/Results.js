@@ -20,7 +20,7 @@ customElements.define(name, class Inputs extends XElement {
 			ItemsData.valueHandlers.map(entry => entry.name);
 		this.$('#sort-build-value-input').tooltips =
 			ItemsData.valueHandlers.map(entry => entry.description);
-		this.$('#sort-build-value-input').value = this.itemsData.valueHandler.name;
+		this.$('#sort-build-value-input').value = ItemsData.valueHandlers[0].name;
 		this.$('#sort-build-value-input').addEventListener('change', () => {
 			this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
 			this.renderItemsData(false, true);

@@ -64,7 +64,7 @@ customElements.define(name, class extends XElement {
 			this.offline = this.$('#offline-check').checked;
 			this.updateQueryParams();
 		});
-		this.$('#pob-import-button').addEventListener('click', async () => {
+		this.$('#build-import-for-type-button').addEventListener('click', async () => {
 			if (!this.lastPobApi)
 				return;
 			let queryString = await this.lastPobApi.generateQuery(this.type, this.price);
