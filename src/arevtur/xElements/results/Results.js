@@ -26,7 +26,6 @@ customElements.define(name, class Inputs extends XElement {
 			this.renderItemsData(false, true);
 		});
 
-		// todo add global shortcut ctrl+enter to search [high]
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
 				this.$('#search-input').focus();

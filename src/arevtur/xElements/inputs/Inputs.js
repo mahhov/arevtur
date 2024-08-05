@@ -84,11 +84,17 @@ customElements.define(name, class Inputs extends XElement {
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
 			this.store();
 		});
+
 		this.$('#input-trade-params').addEventListener('change', () => {
 			this.inputSets[this.inputSetIndex].tradeQueryParams =
 				this.$('#input-trade-params').tradeQueryParams;
 			this.sharedWeightEntries = this.$('#input-trade-params').sharedWeightEntries;
 			this.store();
+		});
+
+		document.addEventListener('keydown', e => {
+			if (e.key === 'Enter' && e.ctrlKey)
+				this.emit('submit', {add: false});
 		});
 		this.$('#submit-button')
 			.addEventListener('click', e => this.emit('submit', {add: e.ctrlKey}));
