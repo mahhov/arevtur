@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
-const {QueryImport} = require('../../DataFetcher');
+const {TradeQueryImport} = require('../../DataFetcher');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 
 let timestamp = () => {
@@ -58,11 +58,16 @@ customElements.define(name, class Inputs extends XElement {
 		});
 
 		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
-			let queryImport = new QueryImport(this.$('#session-id-input').value, e.detail);
-			let apiQueryParams = await queryImport.getApiQueryParams();
+			let tradeQueryImport = new TradeQueryImport(this.$('#session-id-input').value,
+				e.detail);
+			let apiQueryParams = await tradeQueryImport.getApiQueryParams();
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
 			this.inputSets.push(
-				{name: `imported ${timestamp()}}`, active: false, queryParams: unifiedQueryParams});
+				{
+					name: `imported ${timestamp()}}`,
+					active: false,
+					tradeQueryParams: unifiedQueryParams,
+				});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1);
 			this.store();
@@ -80,8 +85,8 @@ customElements.define(name, class Inputs extends XElement {
 			this.store();
 		});
 		this.$('#input-trade-params').addEventListener('change', () => {
-			this.inputSets[this.inputSetIndex].queryParams =
-				this.$('#input-trade-params').queryParams;
+			this.inputSets[this.inputSetIndex].tradeQueryParams =
+				this.$('#input-trade-params').tradeQueryParams;
 			this.sharedWeightEntries = this.$('#input-trade-params').sharedWeightEntries;
 			this.store();
 		});
@@ -113,7 +118,7 @@ customElements.define(name, class Inputs extends XElement {
 		// todo propagating to both elements and js objects is cumbersome
 		indexSetEls[this.inputSetIndex].selected = true;
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(
-			this.inputSets[this.inputSetIndex].queryParams, this.sharedWeightEntries);
+			this.inputSets[this.inputSetIndex].tradeQueryParams, this.sharedWeightEntries);
 		await this.$('#input-trade-params').loadQueryParams(unifiedQueryParams);
 		this.$('#input-trade-params').refreshBuild(this.pobApi);
 	}
@@ -164,7 +169,7 @@ customElements.define(name, class Inputs extends XElement {
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
 	}
 
-	async getQueryParamsDatas(overridePrice = null) {
+	async getTradeQueryParams(overridePrice = null) {
 		let currencyPrices = await ApiConstants.constants.currencyPrices(
 			configForRenderer.config.league);
 		let fatedConnectionsProphecyPrice = currencyPrices['fatedConnectionsProphecy'];
@@ -174,8 +179,8 @@ customElements.define(name, class Inputs extends XElement {
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet =>
 				UnifiedQueryParams
-					.fromStorageQueryParams(inputSet.queryParams, this.sharedWeightEntries)
-					.toDataFetcherQueryParamsDatas(league, sessionId, overridePrice,
+					.fromStorageQueryParams(inputSet.tradeQueryParams, this.sharedWeightEntries)
+					.toDataFetcherTradeQueryParams(league, sessionId, overridePrice,
 						fatedConnectionsProphecyPrice));
 	}
 

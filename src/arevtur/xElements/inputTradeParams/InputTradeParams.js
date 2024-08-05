@@ -113,7 +113,7 @@ customElements.define(name, class extends XElement {
 				this.$('#query-properties-list > :focus-within + x-query-property').focus();
 		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
-		this.queryParams = {};
+		this.tradeQueryParams = {};
 	}
 
 	set name(value) {
@@ -203,11 +203,11 @@ customElements.define(name, class extends XElement {
 		this.$('#influence-input').valuesAsArray = value;
 	}
 
-	async loadQueryParams(queryParams) {
-		await queryParams.toInputTradeQueryParams(this);
+	async loadQueryParams(tradeQueryParams) {
+		await tradeQueryParams.toInputTradeQueryParams(this);
 		this.addQueryProperty();
-		this.queryParams = queryParams;
-		this.sharedWeightEntries = queryParams.sharedWeightEntries;
+		this.tradeQueryParams = tradeQueryParams;
+		this.sharedWeightEntries = tradeQueryParams.sharedWeightEntries;
 	}
 
 	checkProperties() {
@@ -272,8 +272,8 @@ customElements.define(name, class extends XElement {
 	};
 
 	async updateQueryParams() {
-		this.queryParams = await UnifiedQueryParams.fromInputTradeQueryParams(this);
-		this.sharedWeightEntries = this.queryParams.sharedWeightEntries;
+		this.tradeQueryParams = await UnifiedQueryParams.fromInputTradeQueryParams(this);
+		this.sharedWeightEntries = this.tradeQueryParams.sharedWeightEntries;
 		this.emit('change');
 	}
 

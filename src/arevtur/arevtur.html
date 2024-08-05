@@ -29,15 +29,15 @@
 </div>
 
 <script>
-	const {QueryParams} = require('./DataFetcher');
+	const {TradeQueryParams} = require('./DataFetcher');
 	const $ = document.querySelector.bind(document);
 
-	let lastQueryParams;
-	let submitQueries = async queryParamsDatas => {
+	let lastTradeQueryParams;
+	let submitQueries = async tradeQueryParams => {
 		cancelQueries();
-		lastQueryParams = queryParamsDatas.map(data => new QueryParams(data));
-		let progressRatios = lastQueryParams.map(_ => 0);
-		lastQueryParams.forEach((queryParam, i) =>
+		lastTradeQueryParams = tradeQueryParams;
+		let progressRatios = tradeQueryParams.map(_ => 0);
+		tradeQueryParams.forEach((queryParam, i) =>
 			queryParam.getItemsStream((text, ratio) => {
 				progressRatios[i] = ratio;
 				let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) /
@@ -50,20 +50,20 @@
 	};
 
 	let cancelQueries = () => {
-		lastQueryParams?.forEach(queryParam => queryParam.stop());
-		lastQueryParams = null;
+		lastTradeQueryParams?.forEach(queryParam => queryParam.stop());
+		lastTradeQueryParams = null;
 	};
 
 	$('x-inputs').addEventListener('submit', async e => {
 		if (!e.detail.add)
 			$('x-results').clearItems();
-		submitQueries(await $('x-inputs').getQueryParamsDatas());
+		submitQueries(await $('x-inputs').getTradeQueryParams());
 	});
 
 	$('x-inputs').addEventListener('cancel', cancelQueries);
 
 	$('x-results').addEventListener('submit', async e =>
-		submitQueries(await $('x-inputs').getQueryParamsDatas(e.detail.overridePrice)));
+		submitQueries(await $('x-inputs').getTradeQueryParams(e.detail.overridePrice)));
 
 	// todo
 	// assume quality 0%

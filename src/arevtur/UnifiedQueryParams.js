@@ -146,7 +146,7 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	toDataFetcherQueryParamsDatas(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
+	toDataFetcherTradeQueryParams(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
 		let maxPrice = overridePrice !== null ? overridePrice : this.maxPrice;
 		let weights = Object.fromEntries([...this.weightEntries, ...this.sharedWeightEntries]);
 		let ands = Object.fromEntries(this.andEntries);
@@ -212,11 +212,11 @@ class UnifiedQueryParams {
 						queries.push(queryO);
 					}));
 
-		return queries;
+		return queries.map(query => new TradeQueryParams(query));
 	}
 
-	static toApiQueryParams(dataFetcherQueryParams, overrides = {}) {
-		let overridden = {...dataFetcherQueryParams, ...overrides};
+	static toApiQueryParams(tradeQueryParams, overrides = {}) {
+		let overridden = {...tradeQueryParams, ...overrides};
 
 		let weightFilters = Object.entries(overridden.weights).map(([property, weight]) => ({
 			id: property,

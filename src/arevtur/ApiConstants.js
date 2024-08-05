@@ -103,8 +103,8 @@ class Constants {
 				return [id, price];
 			});
 
-		tuples.push(['fatedConnectionsProphecy', 750]); // todo use the price for 1500 fuse bench
-		                                                // craft
+		// todo use the price for 1500 fuse bench craft
+		tuples.push(['fatedConnectionsProphecy', 750]);
 		tuples.push(['chaos', 1]);
 		return Object.fromEntries(tuples);
 		/* {alt: .125, ...} */

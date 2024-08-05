@@ -25,10 +25,10 @@ let getRateLimitHeaders = responseHeaders => {
 let rlrGetQueue = new RateLimitedRetryQueue(667 * 1.2, [5000, 15000, 60000]);
 let rlrPostQueue = new RateLimitedRetryQueue(1500 * 1.2, [5000, 15000, 60000]);
 
-let rlrGet = (endpoint, queryParams, headers, stopObj) => rlrGetQueue.add(async () => {
+let rlrGet = (endpoint, tradeQueryParams, headers, stopObj) => rlrGetQueue.add(async () => {
 	if (stopObj.stop)
 		return;
-	let g = await get(endpoint, queryParams, headers);
+	let g = await get(endpoint, tradeQueryParams, headers);
 	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(g.response.headers)[0]);
 	console.log('got, made requests', rateLimitStr);
 	return g;
@@ -43,8 +43,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
-// todo rename to TradeQuery
-class QueryParams {
+class TradeQueryParams {
 	constructor(data) {
 		this.league = data.league || 'Standard';
 		this.sessionId = data.sessionId || '';
@@ -147,7 +146,7 @@ class QueryParams {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
-			let headers = QueryParams.createRequestHeader(this.sessionId);
+			let headers = TradeQueryParams.createRequestHeader(this.sessionId);
 			progressCallback('Initial query.', 0);
 			console.log('initial query', query);
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
@@ -162,13 +161,13 @@ class QueryParams {
 
 			let receivedCount = 0;
 			let promises = requestGroups.map(async (requestGroup, i) => {
-				let queryParams = {
+				let tradeQueryParams = {
 					query: data.id,
 					'pseudos[]': [ApiConstants.SHORT_PROPERTIES.totalEleRes,
 						ApiConstants.SHORT_PROPERTIES.flatLife],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let response2 = await rlrGet(endpoint2, queryParams, headers, this.stopObj);
+				let response2 = await rlrGet(endpoint2, tradeQueryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				progressCallback(`Received grouped item query # ${i}.`,
 					(1 + ++receivedCount) / (requestGroups.length + 1));
@@ -206,11 +205,11 @@ class QueryParams {
 		let pseudoMods = itemData.item.pseudoMods || [];
 		let valueDetails = {
 			affixes: this.affixValueShift,
-			defenses: QueryParams.evalDefensePropertiesValue(defenseProperties,
+			defenses: TradeQueryParams.evalDefensePropertiesValue(defenseProperties,
 				this.defenseProperties),
-			mods: QueryParams.evalValue(pseudoMods),
+			mods: TradeQueryParams.evalValue(pseudoMods),
 		};
-		let text = QueryParams.decode64(itemData.item.extended.text);
+		let text = TradeQueryParams.decode64(itemData.item.extended.text);
 		let valueBuild = await pobApi?.evalItem(text) || null;
 		let priceDetails = {
 			count: itemData.listing.price.amount,
@@ -240,7 +239,7 @@ class QueryParams {
 			evalValue: Object.values(valueDetails).reduce((sum, v) => sum + v),
 			valueDetails,
 			valueBuild,
-			evalPrice: await QueryParams.evalPrice(this.league, priceDetails),
+			evalPrice: await TradeQueryParams.evalPrice(this.league, priceDetails),
 			priceDetails,
 			text,
 			debug: itemData,
@@ -275,8 +274,7 @@ class QueryParams {
 	};
 }
 
-// todo rename to TradeQueryImport
-class QueryImport {
+class TradeQueryImport {
 	constructor(sessionId, tradeSearchUrl) {
 		this.sessionId = sessionId;
 		this.tradeSearchUrl = tradeSearchUrl;
@@ -284,7 +282,7 @@ class QueryImport {
 
 	async getApiQueryParams() {
 		let response = await get(this.tradeSearchUrl, {},
-			QueryParams.createRequestHeader(this.sessionId));
+			TradeQueryParams.createRequestHeader(this.sessionId));
 		// todo use 'api' path for easier parsing; e.g.
 		//  pathofexile.com/api/trade/search/Settlers/kD3Y6MjF5 gives JSON, whereas
 		//  pathofexile.com    /trade/search/Settlers/kD3Y6MjF5 gives HTML
@@ -297,4 +295,4 @@ class QueryImport {
 	}
 }
 
-module.exports = {QueryParams, QueryImport};
+module.exports = {TradeQueryParams, TradeQueryImport};
