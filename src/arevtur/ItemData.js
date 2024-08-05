@@ -32,7 +32,8 @@ class ItemData {
 			mods: ItemData.evalValue(pseudoMods),
 		};
 		let text = ItemData.decode64(tradeApiItemData.item.extended.text);
-		let valueBuild = await pobApi.evalItem(text) || null;
+		let valueBuildPromise = pobApi.evalItem(text);
+		valueBuildPromise.then(resolved => valueBuildPromise.resolved = resolved);
 		let priceDetails = {
 			count: tradeApiItemData.listing.price.amount,
 			currency: tradeApiItemData.listing.price.currency,
@@ -63,7 +64,7 @@ class ItemData {
 			evalValueDetails,
 			price: await ItemData.price(league, priceDetails),
 			priceDetails,
-			valueBuild,
+			valueBuildPromise,
 			text,
 			debug: tradeApiItemData,
 		};

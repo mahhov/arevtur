@@ -74,8 +74,10 @@ customElements.define(name, class extends XElement {
 			.filter(([_, value]) => value);
 		this.$('#value-expanded-text').textContent = expandedValues.length > 1 ?
 			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
-		this.$('#value-build').text = itemData.valueBuild?.value;
-		this.$('#value-build').tooltip = itemData.valueBuild?.text;
+		itemData.valueBuildPromise.then(valueBuild => {
+			this.$('#value-build').text = valueBuild.value;
+			this.$('#value-build').tooltip = valueBuild.text;
+		});
 		this.$('#price-text').textContent = round(itemData.price);
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
 			.map(([name, value]) => ` + ${name} (${round(value)} chaos)`);

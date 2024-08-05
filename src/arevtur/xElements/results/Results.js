@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ItemsData = require('../../ItemsData');
 const Searcher = require('../../Searcher');
-const testItems = require('./testItems');
+const Debouncer = require('../../../Debouncer');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
@@ -15,6 +15,8 @@ customElements.define(name, class Inputs extends XElement {
 
 	connectedCallback() {
 		this.itemsData = new ItemsData();
+		let debouncer = new Debouncer(() => this.renderItemsData(), 200);
+		this.itemsData.addListener('change', () => debouncer.request());
 
 		this.$('#sort-build-value-input').autocompletes =
 			ItemsData.valueHandlers.map(entry => entry.name);
@@ -22,12 +24,12 @@ customElements.define(name, class Inputs extends XElement {
 			ItemsData.valueHandlers.map(entry => entry.description);
 		this.$('#sort-build-value-input').addEventListener('change', () => {
 			localStorage.setItem('results-sort', this.$('#sort-build-value-input').value);
-			this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
+			this.itemsData.setValueHandlerByName(this.$('#sort-build-value-input').value);
 			this.renderItemsData(false, true);
 		});
 		this.$('#sort-build-value-input').value =
 			localStorage.getItem('results-sort') || ItemsData.valueHandlers[0].name;
-		this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
+		this.itemsData.setValueHandlerByName(this.$('#sort-build-value-input').value);
 
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
@@ -55,10 +57,6 @@ customElements.define(name, class Inputs extends XElement {
 			this.itemsData.hoverItem(itemIndex);
 			this.renderItemsData(true);
 		});
-
-		// debugging only
-		this.itemsData.join(testItems);
-		this.renderItemsData(false, true);
 	}
 
 	clearItems() {
@@ -83,10 +81,11 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	renderItemsDataList() {
-		this.$('#results-count').textContent = this.itemsData.length;
+		this.$('#results-count').textContent =
+			this.itemsData.shownItems.length + ' / ' + this.itemsData.allItems.length;
 
 		XElement.clearChildren(this.$('#results-list'));
-		this.itemsData.items.forEach((itemData, i) => {
+		this.itemsData.shownItems.forEach((itemData, i) => {
 			let itemListing = document.createElement('x-item-listing');
 			this.$('#results-list').appendChild(itemListing);
 			itemListing.addEventListener('select', () => {
@@ -106,10 +105,10 @@ customElements.define(name, class Inputs extends XElement {
 
 	renderItemsDataListBackgroundsOnly() {
 		[...this.$('#results-list').children].forEach((el, i) => {
-			if (i >= this.itemsData.items.length)
+			if (i >= this.itemsData.shownItems.length)
 				return;
-			el.selected = this.itemsData.items[i].selected;
-			el.hovered = this.itemsData.items[i].hovered;
+			el.selected = this.itemsData.shownItems[i].selected;
+			el.hovered = this.itemsData.shownItems[i].hovered;
 		});
 	}
 
@@ -129,7 +128,7 @@ customElements.define(name, class Inputs extends XElement {
 				cssPropertyValueColor: '--interactable-primary',
 				fill: true,
 				size: 4,
-				points: this.itemsData.itemsToPoints(this.itemsData.items),
+				points: this.itemsData.itemsToPoints(this.itemsData.shownItems),
 			}, {
 				cssPropertyValueColor: '--alternate-primary',
 				fill: true,

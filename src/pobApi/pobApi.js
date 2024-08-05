@@ -44,8 +44,8 @@ class PobApi extends Emitter {
 		if (err)
 			console.error(err);
 		if (out) {
-			console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
-				this.pendingResponses.length);
+			// console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
+			// 	this.pendingResponses.length);
 			out.split('.>')
 				.map(split => split.split('<.')[1])
 				.filter((_, i, a) => i !== a.length -
@@ -62,7 +62,7 @@ class PobApi extends Emitter {
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		if (this.cache[text])
 			return this.cache[text];
-		console.log('PobApi sending:', text, 'new queue:', this.pendingResponses.length + 1);
+		// console.log('PobApi sending:', text, 'new queue:', this.pendingResponses.length + 1);
 		this.emit('busy');
 		this.script.send(text);
 		let promise = new XPromise();
