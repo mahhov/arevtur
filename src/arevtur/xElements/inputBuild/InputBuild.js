@@ -39,15 +39,12 @@ customElements.define(name, class InputBuild extends XElement {
 		[this.$('#life-weight'), this.$('#resist-weight'), this.$('#damage-weight')]
 			.forEach(weight => weight.addEventListener('input', () => {
 				this.updateStore();
-				pobApi.valueParams = {
-					life: Number(this.$('#life-weight').value) || 0,
-					resist: Number(this.$('#resist-weight').value) || 0,
-					dps: Number(this.$('#damage-weight').value) || 0,
-				};
+				this.updateParamValues();
 			}));
 
 		this.updatePob();
 		this.updateBuild();
+		this.updateParamValues();
 	}
 
 	get store() {
@@ -75,6 +72,14 @@ customElements.define(name, class InputBuild extends XElement {
 
 	updateBuild() {
 		pobApi.build = this.$('#build-path').path;
+	}
+
+	updateParamValues() {
+		pobApi.valueParams = {
+			life: Number(this.$('#life-weight').value) || 0,
+			resist: Number(this.$('#resist-weight').value) || 0,
+			dps: Number(this.$('#damage-weight').value) || 0,
+		};
 	}
 
 	static get defaultPobPath() {

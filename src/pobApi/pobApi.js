@@ -96,6 +96,7 @@ class PobApi extends Emitter {
 
 	set valueParams(valueParams) {
 		this.valueParams_ = valueParams;
+		this.emit('change');
 	}
 
 	evalItem(item) {
@@ -103,7 +104,7 @@ class PobApi extends Emitter {
 		return this.awaitResponse.then(text => this.parseItemTooltip(text));
 	}
 
-	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = true) {
+	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
 		// todo don't rerun pob for weight changes [high]
 		// todo use mods' median values instead of pluginNumber = 100 [high]
 		let pobType = await PobApi.getPobType(type);
@@ -208,3 +209,5 @@ class PobApi extends Emitter {
 module.exports = new PobApi();
 
 // todo annotate clipboard item
+// todo make work when multiple 'Equipping this item' [high]
+// todo cache [high]
