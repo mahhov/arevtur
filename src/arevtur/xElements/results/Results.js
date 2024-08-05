@@ -20,11 +20,14 @@ customElements.define(name, class Inputs extends XElement {
 			ItemsData.valueHandlers.map(entry => entry.name);
 		this.$('#sort-build-value-input').tooltips =
 			ItemsData.valueHandlers.map(entry => entry.description);
-		this.$('#sort-build-value-input').value = ItemsData.valueHandlers[0].name;
 		this.$('#sort-build-value-input').addEventListener('change', () => {
+			localStorage.setItem('results-sort', this.$('#sort-build-value-input').value);
 			this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
 			this.renderItemsData(false, true);
 		});
+		this.$('#sort-build-value-input').value =
+			localStorage.getItem('results-sort') || ItemsData.valueHandlers[0].name;
+		this.itemsData.valueHandler = this.$('#sort-build-value-input').value;
 
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
