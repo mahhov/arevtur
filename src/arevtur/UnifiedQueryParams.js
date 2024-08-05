@@ -114,7 +114,7 @@ class UnifiedQueryParams {
 				})))).filter(({propertyId}) => propertyId);
 
 		// todo make shared entries more similar to unshared entries so that they can be processed
-		// similarly
+		//  similarly
 		let sharedWeightEntries = propertyEntries
 			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
 			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
@@ -309,8 +309,8 @@ class UnifiedQueryParams {
 			type: filters?.type_filters?.filters?.category?.option || '',
 			minValue: weightedStats?.value?.min || 0,
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 1,
-			offline: apiQueryParams?.query.status !== 'online' &&
-				apiQueryParams?.query.status.option !== 'online',
+			offline: apiQueryParams?.query?.status !== 'online' &&
+				apiQueryParams?.query?.status?.option !== 'online',
 			// defenseProperties
 			// affixProperties
 			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,

@@ -277,19 +277,16 @@ class TradeQueryParams {
 class TradeQueryImport {
 	constructor(sessionId, tradeSearchUrl) {
 		this.sessionId = sessionId;
-		this.tradeSearchUrl = tradeSearchUrl;
+		this.tradeSearchUrl = tradeSearchUrl.replace('.com/trade', '.com/api/trade');
 	}
 
 	async getApiQueryParams() {
 		let response = await get(this.tradeSearchUrl, {},
 			TradeQueryParams.createRequestHeader(this.sessionId));
-		// todo use 'api' path for easier parsing; e.g.
-		//  pathofexile.com/api/trade/search/Settlers/kD3Y6MjF5 gives JSON, whereas
-		//  pathofexile.com    /trade/search/Settlers/kD3Y6MjF5 gives HTML
-		let jsonString = response.string.match(/require.*main.*t\(\{((.|\n)*?)\}\);/)[1];
-		let obj = JSON.parse(`{${jsonString}}`);
+		let jsonString = response.string;
+		let {query} = JSON.parse(jsonString);
 		return {
-			query: obj.state,
+			query,
 			sort: {'statgroup.0': 'desc'},
 		};
 	}
