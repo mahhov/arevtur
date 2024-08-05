@@ -37,9 +37,9 @@ class PobApi extends Emitter {
 			console.error('PobApi process exited, starting new process');
 			this.emit('not-ready');
 			this.script.restartProcess();
-			this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
-			this.pendingResponses = [];
+			this.reset();
 			this.refreshBuild();
+			this.emit('change');
 		}
 		if (err)
 			console.error(err);
@@ -62,7 +62,7 @@ class PobApi extends Emitter {
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		if (this.cache[text])
 			return this.cache[text];
-		// console.log('PobApi sending:', text, 'new queue:', this.pendingResponses.length + 1);
+		console.log('PobApi sending:', text, 'new queue:', this.pendingResponses.length + 1);
 		this.emit('busy');
 		this.script.send(text);
 		let promise = new XPromise();
@@ -77,8 +77,7 @@ class PobApi extends Emitter {
 		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
 		this.script = new Script(path);
 		this.script.addListener(response => this.onScriptResponse(response));
-		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
-		this.pendingResponses = [];
+		this.reset();
 		this.refreshBuild();
 		this.emit('change');
 	}
@@ -88,16 +87,20 @@ class PobApi extends Emitter {
 		// Building/Builds/cobra lash.xml'
 		this.build_ = path;
 		if (path) {
-			this.send(false, 'build', path).then(() => {
-				this.cache = {};
-				this.emit('change');
-				this.emit('ready');
-			});
+			this.reset();
+			this.send(false, 'build', path).then(() => this.emit('ready'));
+			this.emit('change');
 		}
 	}
 
 	refreshBuild() {
 		this.build = this.build_;
+	}
+
+	reset() {
+		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
+		this.pendingResponses = [];
+		this.cache = {};
 	}
 
 	set valueParams(valueParams) {
