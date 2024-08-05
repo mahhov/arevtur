@@ -32,6 +32,8 @@ class ItemsData {
 	}
 
 	join(items) {
+		// todo don't wait for pob values to show if sorting by eval [high]
+		// todo don't wait for all pob values to show if sorting by pob value [high]
 		// update items
 		this.items = this.items.concat(items)
 			.filter((v, i, a) => {

@@ -52,6 +52,7 @@ customElements.define(name, class extends XElement {
 		this.$('#type-input').addEventListener('change', () => {
 			this.type = this.$('#type-input').value;
 			this.updateQueryParams();
+			this.refreshBuild(false);
 		});
 		this.$('#min-value-input').addEventListener('change', () => {
 			this.minValue = this.$('#min-value-input').value;
@@ -278,9 +279,10 @@ customElements.define(name, class extends XElement {
 		this.emit('change');
 	}
 
-	refreshBuild() {
-		this.$$('#query-properties-list x-query-property')
-			.forEach(queryProperty => queryProperty.refreshBuild());
+	refreshBuild(propagate = true) {
+		if (propagate)
+			this.$$('#query-properties-list x-query-property')
+				.forEach(queryProperty => queryProperty.refreshBuild());
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			try {
 				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);

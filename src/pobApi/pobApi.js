@@ -44,7 +44,8 @@ class PobApi extends Emitter {
 		if (err)
 			console.error(err);
 		if (out) {
-			console.log('pobApi.lua: ', out.slice(0, 100), this.pendingResponses.length);
+			console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
+				this.pendingResponses.length);
 			out.split('.>')
 				.map(split => split.split('<.')[1])
 				.filter((_, i, a) => i !== a.length -
@@ -58,13 +59,10 @@ class PobApi extends Emitter {
 	send(cache, ...args) {
 		if (!this.script)
 			return Promise.reject();
-
 		let text = args.map(arg => `<${arg}>`).join(' ');
-		console.log('PobApi sending:', text, this.pendingResponses.length);
-
 		if (this.cache[text])
 			return this.cache[text];
-
+		console.log('PobApi sending:', text, 'new queue:', this.pendingResponses.length + 1);
 		this.emit('busy');
 		this.script.send(text);
 		let promise = new XPromise();
@@ -117,7 +115,7 @@ class PobApi extends Emitter {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return Promise.reject();
-		// todo is this cleaning necessary? does it cause inaccuracies? [high]
+		// todo is this cleaning necessary? does it cause inaccuracies?
 		let cleanItemMod = raw ? itemMod : itemMod
 			// .replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
 			// .replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
