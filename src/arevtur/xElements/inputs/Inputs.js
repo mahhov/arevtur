@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
-const {TradeQueryImport} = require('../../DataFetcher');
+const {TradeQueryImport} = require('../../TradeQuery');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 
 let timestamp = () => {
@@ -180,7 +180,7 @@ customElements.define(name, class Inputs extends XElement {
 			.flatMap(inputSet =>
 				UnifiedQueryParams
 					.fromStorageQueryParams(inputSet.tradeQueryParams, this.sharedWeightEntries)
-					.toDataFetcherTradeQueryParams(league, sessionId, overridePrice,
+					.toTradeQueryParams(league, sessionId, overridePrice,
 						fatedConnectionsProphecyPrice));
 	}
 

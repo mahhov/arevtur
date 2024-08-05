@@ -146,7 +146,7 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	toDataFetcherTradeQueryParams(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
+	toTradeQueryParams(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
 		let maxPrice = overridePrice !== null ? overridePrice : this.maxPrice;
 		let weights = Object.fromEntries([...this.weightEntries, ...this.sharedWeightEntries]);
 		let ands = Object.fromEntries(this.andEntries);

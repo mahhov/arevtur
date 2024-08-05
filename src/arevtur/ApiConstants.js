@@ -1,5 +1,5 @@
 const {httpRequest} = require('js-desktop-base');
-const ServicesDataFetcher = require('../services/DataFetcher');
+const dataFetcher = require('../services/DataFetcher');
 
 // Without a non-empty user-agent header, PoE will return 403.
 let get = endpoint => httpRequest.get(endpoint, {}, {'User-Agent': '_'});
@@ -88,8 +88,8 @@ class Constants {
 	}
 
 	async initCurrencies(league) {
-		let currencyPrices = ServicesDataFetcher.getData(
-			ServicesDataFetcher.endpointsByLeague.CURRENCY(league));
+		let currencyPrices = dataFetcher.getData(
+			dataFetcher.endpointsByLeague.CURRENCY(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
 		staticDataStr = await staticDataStr;
