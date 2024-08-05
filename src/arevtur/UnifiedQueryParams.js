@@ -16,6 +16,9 @@ let deepCopy = obj => {
 		.map(([k, v]) => [k, deepCopy(v)]));
 };
 
+let pruneIfEmptyFilters = obj =>
+	Object.values(obj.filters).length ? obj : undefined;
+
 class UnifiedQueryParams {
 	name = '';
 	type = '';
@@ -267,7 +270,7 @@ class UnifiedQueryParams {
 						type: 'not',
 						filters: notFilters,
 					},
-				],
+				].map(pruneIfEmptyFilters).filter(v => v),
 				filters: {
 					type_filters: {filters: typeFilters},
 					trade_filters: {
@@ -275,13 +278,12 @@ class UnifiedQueryParams {
 							price: {max: overridden.maxPrice},
 						},
 					},
-					socket_filters: {
+					socket_filters: overridden.linked ? {
 						filters: {
 							links: {min: 6},
 						},
-						disabled: !overridden.linked,
-					},
-					armour_filters: {
+					} : undefined,
+					armour_filters: pruneIfEmptyFilters({
 						filters: {
 							ar: overridden.defenseProperties.armour.min ?
 								{min: overridden.defenseProperties.armour.min} : undefined,
@@ -290,12 +292,13 @@ class UnifiedQueryParams {
 							es: overridden.defenseProperties.energyShield.min ?
 								{min: overridden.defenseProperties.energyShield.min} : undefined,
 						},
-					},
-					misc_filters: {filters: miscFilters},
+					}),
+					misc_filters: pruneIfEmptyFilters({filters: miscFilters}),
 				},
 			},
 			sort,
-		};
+		}
+			;
 	}
 
 	static fromApiQueryParams(apiQueryParams) {
