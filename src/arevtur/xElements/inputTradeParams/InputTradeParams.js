@@ -66,6 +66,8 @@ customElements.define(name, class extends XElement {
 			this.offline = this.$('#offline-check').checked;
 			this.updateQueryParams();
 		});
+		// todo slow async stuff probably breaks stuff if the user interacts with the UI before the
+		//  query returns.
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
 			try {
 				let queryString = await pobApi.generateQuery(this.type, this.price);

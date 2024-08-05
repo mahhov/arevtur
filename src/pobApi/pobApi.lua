@@ -153,7 +153,7 @@ while true do
         }
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()
-        -- todo jewels and abyss jewels, see TradeQueryClass:PriceItemRowDisplay [high]
+        -- todo abyss jewels, see TradeQueryClass:PriceItemRowDisplay [high]
         -- todo allow picking mod sets, e.g. talisman, corrupted, influence [high]
         -- todo json args
     end
