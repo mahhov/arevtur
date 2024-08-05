@@ -77,10 +77,9 @@ class PobApi extends CustomOsScript {
 		return this.awaitResponse.then(text => this.parseItemTooltip(text));
 	}
 
-	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
-		// todo allow sorting items by pob value
-		// todo don't rerun pob for weight changes
-		// todo send mods' middle values to pob eval
+	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = true) {
+		// todo don't rerun pob for weight changes [high]
+		// todo use mods' median values instead of pluginNumber = 100
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return {value: 0, text: ''};
@@ -104,7 +103,6 @@ class PobApi extends CustomOsScript {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return;
-		// todo figure out how to get resist stats in PoB
 		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life,
 			this.valueParams_.resist, this.valueParams_.dps);
 		return this.awaitResponse;

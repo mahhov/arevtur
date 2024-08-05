@@ -197,4 +197,3 @@ local options = {
 print(dump(options))
 tradeQueryGenerator:StartQuery(slot, options)
 tradeQueryGenerator:OnFrame()
--- todo jewels and abyss jewels, see TradeQueryClass:PriceItemRowDisplay

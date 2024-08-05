@@ -34,8 +34,6 @@ customElements.define(name, class extends XElement {
 			this.weight = this.$('#weight').value;
 			this.emit('change');
 		});
-		// todo allow build filter type that don't affect trade query but help obtain build weight
-		//  hints
 		this.$('#filter').autocompletes =
 			['weight', 'and', 'not', 'conditional prefix', 'conditional suffix'];
 		this.$('#filter').addEventListener('change', () => {
