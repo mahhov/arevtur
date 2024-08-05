@@ -57,7 +57,9 @@ while true do
     local args = getArgs(input)
     local cmd = args[1]
 
-    if cmd == 'exit' then
+    if cmd == 'echo' then
+        respond('echo')
+    elseif cmd == 'exit' then
         os.exit()
     elseif cmd == 'build' then
         -- args[2] is build xml path

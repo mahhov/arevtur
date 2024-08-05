@@ -28,6 +28,7 @@ class PobApi extends Emitter {
 			dps: 0,
 		};
 		this.pendingResponses = [];
+		this.cache = {};
 	}
 
 	onScriptResponse({out, err, exit}) {
@@ -35,8 +36,6 @@ class PobApi extends Emitter {
 			// todo turn pob status red on crash and only restart if user clicks pob red icon
 			console.error('PobApi process exited, starting new process');
 			this.emit('not-ready');
-			this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
-			this.pendingResponses = [];
 			this.script.restartProcess();
 			this.refreshBuild();
 		}
@@ -54,18 +53,23 @@ class PobApi extends Emitter {
 		}
 	}
 
-	send(...args) {
+	send(cache, ...args) {
+		if (!this.script)
+			return Promise.reject();
+
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		console.log('PobApi sending:', text);
-		if (this.script) {
-			this.emit('busy');
-			this.script.send(text);
-		}
-	}
 
-	get awaitResponse() {
-		this.pendingResponses.push(new XPromise);
-		return this.pendingResponses[this.pendingResponses.length - 1];
+		if (this.cache[text])
+			return this.cache[text];
+
+		this.emit('busy');
+		this.script.send(text);
+		let promise = new XPromise();
+		if (cache)
+			this.cache[text] = promise;
+		this.pendingResponses.push(promise);
+		return promise;
 	}
 
 	set pobPath(path) {
@@ -82,8 +86,10 @@ class PobApi extends Emitter {
 		// Building/Builds/cobra lash.xml'
 		this.build_ = path;
 		if (path) {
-			this.send('build', path);
-			this.awaitResponse.then(() => {
+			this.send(false, 'build', path).then(() => {
+				this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
+				this.pendingResponses = [];
+				this.cache = {};
 				this.emit('change');
 				this.emit('ready');
 			});
@@ -100,12 +106,11 @@ class PobApi extends Emitter {
 	}
 
 	evalItem(item) {
-		this.send('item', item.replace(/[\n\r]+/g, ' \\n '));
-		return this.awaitResponse.then(text => this.parseItemTooltip(text));
+		return this.send(true, 'item', item.replace(/[\n\r]+/g, ' \\n '))
+			.then(text => this.parseItemTooltip(text));
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
-		// todo don't rerun pob for weight changes [high]
 		// todo use mods' median values instead of pluginNumber = 100 [high]
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
@@ -122,18 +127,16 @@ class PobApi extends Emitter {
 				(_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
 			.replace(/\s+/g, ' ') // clean up whitespace
 			.trim();
-		this.send('mod', cleanItemMod, pobType);
-		return this.awaitResponse.then(
-			text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
+		return this.send(true, 'mod', cleanItemMod, pobType)
+			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
 	}
 
 	async generateQuery(type = undefined, maxPrice = 10) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return;
-		this.send('generateQuery', pobType, maxPrice, this.valueParams_.life,
+		return this.send(true, 'generateQuery', pobType, maxPrice, this.valueParams_.life,
 			this.valueParams_.resist, this.valueParams_.dps);
-		return this.awaitResponse;
 	}
 
 	static async getPobType(type = undefined) {
@@ -210,4 +213,3 @@ module.exports = new PobApi();
 
 // todo annotate clipboard item
 // todo make work when multiple 'Equipping this item' [high]
-// todo cache [high]
