@@ -44,6 +44,12 @@ function dump(o)
   end
 end
 
+function printKeys(o)
+  for k, v in pairs(o) do
+    print(k)
+  end
+end
+
 -- our loop
 
 --table.insert(build.itemsTab.orderedSlots, { slotName = 'x' })
@@ -137,6 +143,7 @@ loadBuildFromXML(buildXml)
 -- TRADE - given an item type and other params, generate a search query for replacing the currently equipped item of that type
 
 local arg2 = 'Jewel 49684' -- item type
+--local arg2 = 'Belt' -- item type
 local arg3 = '10'          -- max price
 local arg4 = '1'           -- total EPH weight
 local arg5 = '1'           -- total resist weight
@@ -201,3 +208,10 @@ local options = {
 print(dump(options))
 tradeQueryGenerator:StartQuery(slot, options)
 tradeQueryGenerator:OnFrame()
+
+--print('')
+--print('')
+--print('')
+--print('mods')
+--print(dump(tradeQueryGenerator.modData.Explicit['1269_TwoHandLightningDamageWeaponPrefixAndFlat']))
+--print(dump(tradeQueryGenerator.modData.Explicit))

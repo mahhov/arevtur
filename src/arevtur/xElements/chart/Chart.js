@@ -60,8 +60,8 @@ customElements.define(name, class Chart extends XElement {
 			this.resetRange();
 		});
 
+		this.pointSets_ = [];
 		this.resetRange();
-		this.pointSets = [];
 	}
 
 	set width(value) {
