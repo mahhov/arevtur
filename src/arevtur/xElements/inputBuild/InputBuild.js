@@ -35,7 +35,7 @@ customElements.define(name, class InputBuild extends XElement {
 			this.updateStore();
 			this.updateBuild();
 		});
-		// this.$('#refresh').addEventListener('click', () => ); todo xxx
+		this.$('#refresh').addEventListener('click', () => pobApi.refreshBuild());
 		[this.$('#life-weight'), this.$('#resist-weight'), this.$('#damage-weight')]
 			.forEach(weight => weight.addEventListener('input', () => {
 				this.updateStore();

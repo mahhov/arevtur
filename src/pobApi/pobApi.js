@@ -38,11 +38,7 @@ class PobApi extends Emitter {
 			this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
 			this.pendingResponses = [];
 			this.script.restartProcess();
-			this.build = this.build_;
-			this.awaitResponse.then(() => {
-				this.emit('change');
-				this.emit('ready');
-			});
+			this.refreshBuild();
 		}
 		if (err)
 			console.error(err);
@@ -77,7 +73,7 @@ class PobApi extends Emitter {
 		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
 		this.script = new Script(path);
 		this.script.addListener(response => this.onScriptResponse(response));
-		this.build = this.build_;
+		this.refreshBuild();
 		this.emit('change');
 	}
 
@@ -87,9 +83,15 @@ class PobApi extends Emitter {
 		this.build_ = path;
 		if (path) {
 			this.send('build', path);
-			this.awaitResponse;
-			this.emit('change');
+			this.awaitResponse.then(() => {
+				this.emit('change');
+				this.emit('ready');
+			});
 		}
+	}
+
+	refreshBuild() {
+		this.build = this.build_;
 	}
 
 	set valueParams(valueParams) {
