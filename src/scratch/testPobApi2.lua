@@ -136,11 +136,11 @@ loadBuildFromXML(buildXml)
 
 -- TRADE - given an item type and other params, generate a search query for replacing the currently equipped item of that type
 
-local arg2 = 'Belt' -- item type
-local arg3 = '10'   -- max price
-local arg4 = '1'    -- total EPH weight
-local arg5 = '1'    -- total resist weight
-local arg6 = '.5'   -- full DPS weight
+local arg2 = 'Jewel 49684' -- item type
+local arg3 = '10'          -- max price
+local arg4 = '1'           -- total EPH weight
+local arg5 = '1'           -- total resist weight
+local arg6 = '.5'          -- full DPS weight
 
 local itemsTab = build.itemsTab
 local tradeQuery = itemsTab.tradeQuery
@@ -161,6 +161,10 @@ tradeQuery.statSortSelectionList = {
 -- TradeQueryClass:PriceItemRowDisplay
 local slot = itemsTab.slots[arg2]
 
+for k, v in pairs(itemsTab.slots) do
+  print(k)
+end
+
 local row_idx = 10
 local slotTbl = tradeQuery.slotTables[row_idx]
 local slot = slotTbl.nodeId and itemsTab.sockets[slotTbl.nodeId] or
@@ -171,11 +175,11 @@ tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
   tradeQuery.statSortSelectionList, function(context, query, errMsg)
     print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
     print(query)
-    print('debug')
-    print(tradeQueryGenerator.calcContext.options.includeCorrupted)
-    print(dump(tradeQueryGenerator.alreadyWeightedMods))
-    print('')
-    print(dump(tradeQueryGenerator.modWeights))
+    --print('debug')
+    --print(tradeQueryGenerator.calcContext.options.includeCorrupted)
+    --print(dump(tradeQueryGenerator.alreadyWeightedMods))
+    --print('')
+    --print(dump(tradeQueryGenerator.modWeights))
   end)
 
 -- TradeQueryGeneratorClass:RequestQuery execute
