@@ -139,6 +139,5 @@ while true do
         -- todo jewels and abyss jewels, see TradeQueryClass:PriceItemRowDisplay [high]
         -- todo allow picking mod sets, e.g. talisman, corrupted, influence [high]
         -- todo json args [high]
-        -- todo test speed of echo [high]
     end
 end

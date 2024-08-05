@@ -37,12 +37,14 @@ class PobApi extends Emitter {
 			console.error('PobApi process exited, starting new process');
 			this.emit('not-ready');
 			this.script.restartProcess();
+			this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
+			this.pendingResponses = [];
 			this.refreshBuild();
 		}
 		if (err)
 			console.error(err);
 		if (out) {
-			console.log('pobApi.lua: ', out.slice(0, 100));
+			console.log('pobApi.lua: ', out.slice(0, 100), this.pendingResponses.length);
 			out.split('.>')
 				.map(split => split.split('<.')[1])
 				.filter((_, i, a) => i !== a.length -
@@ -58,7 +60,7 @@ class PobApi extends Emitter {
 			return Promise.reject();
 
 		let text = args.map(arg => `<${arg}>`).join(' ');
-		console.log('PobApi sending:', text);
+		console.log('PobApi sending:', text, this.pendingResponses.length);
 
 		if (this.cache[text])
 			return this.cache[text];
@@ -77,6 +79,8 @@ class PobApi extends Emitter {
 		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
 		this.script = new Script(path);
 		this.script.addListener(response => this.onScriptResponse(response));
+		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
+		this.pendingResponses = [];
 		this.refreshBuild();
 		this.emit('change');
 	}
@@ -87,8 +91,6 @@ class PobApi extends Emitter {
 		this.build_ = path;
 		if (path) {
 			this.send(false, 'build', path).then(() => {
-				this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
-				this.pendingResponses = [];
 				this.cache = {};
 				this.emit('change');
 				this.emit('ready');
@@ -114,7 +116,7 @@ class PobApi extends Emitter {
 		// todo use mods' median values instead of pluginNumber = 100 [high]
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
-			return {value: 0, text: ''};
+			return Promise.reject();
 		// todo is this cleaning necessary? does it cause inaccuracies? [high]
 		let cleanItemMod = raw ? itemMod : itemMod
 			.replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
@@ -134,7 +136,7 @@ class PobApi extends Emitter {
 	async generateQuery(type = undefined, maxPrice = 10) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
-			return;
+			return Promise.reject();
 		return this.send(true, 'generateQuery', pobType, maxPrice, this.valueParams_.life,
 			this.valueParams_.resist, this.valueParams_.dps);
 	}

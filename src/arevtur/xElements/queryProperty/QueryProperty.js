@@ -100,8 +100,11 @@ customElements.define(name, class extends XElement {
 	}
 
 	async refreshBuild() {
-		let summary = await pobApi.evalItemModSummary(this.type, this.property, 100);
-		this.buildValue = summary.value;
-		this.buildValueTooltip = summary.text;
+		try {
+			let summary = await pobApi.evalItemModSummary(this.type, this.property, 100);
+			this.buildValue = summary.value;
+			this.buildValueTooltip = summary.text;
+		} catch (e) {
+		}
 	}
 });

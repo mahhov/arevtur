@@ -66,11 +66,14 @@ customElements.define(name, class extends XElement {
 			this.updateQueryParams();
 		});
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
-			let queryString = await pobApi.generateQuery(this.type, this.price);
-			let query = JSON.parse(queryString);
-			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(query);
-			await this.loadQueryParams(unifiedQueryParams);
-			this.updateQueryParams();
+			try {
+				let queryString = await pobApi.generateQuery(this.type, this.price);
+				let query = JSON.parse(queryString);
+				let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(query);
+				await this.loadQueryParams(unifiedQueryParams);
+				this.updateQueryParams();
+			} catch (e) {
+			}
 		});
 		[...defensePropertyTuples, ...affixPropertyTuples]
 			.forEach(([property, query]) => {
@@ -279,9 +282,12 @@ customElements.define(name, class extends XElement {
 		this.$$('#query-properties-list x-query-property')
 			.forEach(queryProperty => queryProperty.refreshBuild());
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
-			let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
-			this[buildValue] = summary.value;
-			this[buildValue + 'Tooltip'] = summary.text;
+			try {
+				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
+				this[buildValue] = summary.value;
+				this[buildValue + 'Tooltip'] = summary.text;
+			} catch (e) {
+			}
 		});
 	}
 });
