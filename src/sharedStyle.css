@@ -39,6 +39,10 @@ body {
 	background: var(--busy-back);
 }
 
+.hidden {
+	display: none;
+}
+
 :focus {
 	outline: 0;
 	border-color: var(--interactable-focus-border);
