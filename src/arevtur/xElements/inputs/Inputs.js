@@ -88,10 +88,11 @@ customElements.define(name, class Inputs extends XElement {
 			this.store();
 		});
 
-		this.$('#input-trade-params').addEventListener('change', () => {
-			this.inputSets[this.inputSetIndex].tradeQueryParams =
-				this.$('#input-trade-params').tradeQueryParams;
-			this.sharedWeightEntries = this.$('#input-trade-params').sharedWeightEntries;
+		this.$('#input-trade-params').addEventListener('change', async () => {
+			let unifiedQueryParams = await this.$('#input-trade-params').unifiedQueryParams;
+			// todo rename to unifiedQueryParams
+			this.inputSets[this.inputSetIndex].tradeQueryParams = unifiedQueryParams;
+			this.sharedWeightEntries = unifiedQueryParams.sharedWeightEntries;
 			this.store();
 		});
 

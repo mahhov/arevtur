@@ -46,26 +46,26 @@ customElements.define(name, class extends XElement {
 			this.$('#name-input').autocompletes = itemTexts);
 		this.$('#name-input').addEventListener('change', () => {
 			this.name = this.$('#name-input').value;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		ApiConstants.constants.typeTexts().then(typeTexts =>
 			this.$('#type-input').autocompletes = typeTexts);
 		this.$('#type-input').addEventListener('change', () => {
 			this.type = this.$('#type-input').value;
-			this.updateQueryParams();
+			this.emit('change');
 			this.refreshBuild(false);
 		});
 		this.$('#min-value-input').addEventListener('change', () => {
 			this.minValue = this.$('#min-value-input').value;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		this.$('#price-input').addEventListener('change', () => {
 			this.price = this.$('#price-input').value;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		this.$('#offline-check').addEventListener('change', () => {
 			this.offline = this.$('#offline-check').checked;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		// todo slow async stuff probably breaks stuff if the user interacts with the UI before the
 		//  query returns.
@@ -83,32 +83,32 @@ customElements.define(name, class extends XElement {
 			.forEach(([property, query]) => {
 				this.$(query).addEventListener('change', () => {
 					this[property] = this.$(query).value;
-					this.updateQueryParams();
+					this.emit('change');
 				});
 			});
 		defenseBuildValueTuples
 			.forEach(([buildValue, query, property]) => {
 				this.$(query).addEventListener('click', () => {
 					this[property] = this[buildValue];
-					this.updateQueryParams();
+					this.emit('change');
 				});
 			});
 		this.$('#linked-check').addEventListener('change', () => {
 			this.linked = this.$('#linked-check').checked;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		this.$('#uncorrupted-check').addEventListener('change', () => {
 			this.uncorrupted = this.$('#uncorrupted-check').checked;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		this.$('#non-unique-check').addEventListener('change', () => {
 			this.nonUnique = this.$('#non-unique-check').checked;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		this.$('#influence-input').autocompletes = influenceProperties;
 		this.$('#influence-input').addEventListener('change', () => {
 			this.influences = this.$('#influence-input').valuesAsArray;
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		document.addEventListener('keydown', e => {
 			if (e.key === 'g' && e.ctrlKey)
@@ -117,7 +117,7 @@ customElements.define(name, class extends XElement {
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
 		this.tradeQueryParams = {};
@@ -223,7 +223,7 @@ customElements.define(name, class extends XElement {
 			this.propagateLockedWeights();
 			this.checkProperties();
 			this.applySearch();
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		queryProperty.addEventListener('lock-change', () => {
 			if (!queryProperty.locked)
@@ -233,19 +233,19 @@ customElements.define(name, class extends XElement {
 			queryProperty.weight = queryProperty.previousSibling.weight;
 			this.propagateLockedWeights();
 			this.checkProperties();
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		queryProperty.addEventListener('share-change', () => {
 			this.checkProperties();
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		queryProperty.addEventListener('enable-change', () => {
 			this.checkProperties();
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		queryProperty.addEventListener('remove', () => {
 			queryProperty.remove();
-			this.updateQueryParams();
+			this.emit('change');
 		});
 		return queryProperty;
 	};
@@ -292,21 +292,16 @@ customElements.define(name, class extends XElement {
 	}
 
 	async loadQueryParams(unifiedQueryParams) {
-		console.log('loading', unifiedQueryParams.weightEntries[0]);
 		await unifiedQueryParams.toInputTradeQueryParams(this);
 		this.addQueryProperty();
 		this.propagateLockedWeights();
 		this.checkProperties();
 		this.applySearch();
-		await this.updateQueryParams();
+		this.emit('change');
 	}
 
-	// todo remove this function
-	async updateQueryParams() {
-		// todo rename this.tradeQueryParams to unifiedQueryParams
-		this.tradeQueryParams = await UnifiedQueryParams.fromInputTradeQueryParams(this);
-		this.sharedWeightEntries = this.tradeQueryParams.sharedWeightEntries;
-		this.emit('change');
+	get unifiedQueryParams() {
+		return UnifiedQueryParams.fromInputTradeQueryParams(this);
 	}
 
 	refreshBuild(propagate = true) {
