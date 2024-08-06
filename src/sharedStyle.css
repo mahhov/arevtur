@@ -40,7 +40,7 @@ body {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 :focus {
@@ -97,7 +97,6 @@ progress::-webkit-progress-value {
 
 .pob {
 	outline: 1px var(--colored-text-red) solid;
-	outline: 1px var(--colored-text-cyan) solid;
 }
 
 /* todo checkbox styling */

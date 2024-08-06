@@ -275,7 +275,7 @@ customElements.define(name, class extends XElement {
 	applySearch() {
 		let searcher = new Searcher(this.$('#search-input').value, false);
 		[...this.$('#query-properties-list').children].forEach(queryProperty => {
-			let match = searcher.test([queryProperty.property]);
+			let match = this.$('#search-input').value && searcher.test([queryProperty.property]);
 			queryProperty.classList.toggle('search-highlighted', match);
 		});
 	}
@@ -296,7 +296,7 @@ customElements.define(name, class extends XElement {
 	refreshBuild(propagate = true) {
 		if (propagate)
 			this.$$('#query-properties-list x-query-property')
-				.forEach(queryProperty => queryProperty.type = value);
+				.forEach(queryProperty => queryProperty.type = this.type);
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			try {
 				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
