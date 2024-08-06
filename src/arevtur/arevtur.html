@@ -29,9 +29,14 @@
 	}
 
 	/* in horizontal view, split 1000px/the-rest */
+	:root.horizontal {
+		x-inputs {
+			flex: 0 0 1000px;
+		}
 
-	:root.horizontal x-inputs {
-		flex: 0 0 1000px;
+		x-results {
+			flex-grow: 1;
+		}
 	}
 </style>
 
