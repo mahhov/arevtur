@@ -50,7 +50,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('input', () => this.store());
 
-		this.$('#reload-button').addEventListener('click', () => window.location.reload());
+		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
 
 		pobApi.addListener('not-ready', () =>
 			this.$('#loaded-pob-status').classList.remove('valid'));
@@ -99,6 +99,8 @@ customElements.define(name, class Inputs extends XElement {
 		document.addEventListener('keydown', e => {
 			if (e.key === 'Enter' && e.ctrlKey)
 				this.emit('submit', {add: false});
+			if (e.key === 'r' && e.ctrlKey)
+				window.location.reload();
 		});
 		this.$('#submit-button')
 			.addEventListener('click', e => this.emit('submit', {add: e.ctrlKey}));
