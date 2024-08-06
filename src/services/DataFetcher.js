@@ -29,6 +29,7 @@ let getEndpointsByLeague = () => {
 		OIL: genEndpointByLeague(ITEM, 'Oil'),
 		BEAST: genEndpointByLeague(ITEM, 'Beast'),
 		DELIRIUM_ORB: genEndpointByLeague(ITEM, 'DeliriumOrb'),
+		OMENS: genEndpointByLeague(ITEM, 'Omen'),
 	};
 };
 

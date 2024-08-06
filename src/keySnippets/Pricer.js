@@ -294,6 +294,12 @@ class DeliriumOrbPricer extends Pricer {
 	}
 }
 
+class OmensPricer extends Pricer {
+	constructor() {
+		super('Currency', [DataFetcher.endpointsByLeague.OMENS]);
+	}
+}
+
 let pricers = stream().write(
 	new UniquePricer(),
 	new CurrencyPricer(),
@@ -310,6 +316,7 @@ let pricers = stream().write(
 	new OilPricer(),
 	new BeastPricer(),
 	new DeliriumOrbPricer(),
+	new OmensPricer(),
 );
 
 let getPrice = async (text) => {
