@@ -30,7 +30,7 @@ const queryPropertyFilters = [
 	['weightEntries', 'weight', true],
 	['andEntries', 'and', true],
 	['notEntries', 'not'],
-	['conditionalPrefixEntries', 'conditional prefix', true],
+	['conditionalPrefixEntries', 'conditional prefix', true], // todo [high] allow sending conditional affix to pob
 	['conditionalSuffixEntries', 'conditional suffix', true],
 ];
 

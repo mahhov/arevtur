@@ -59,8 +59,6 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-pob-status').classList.add('valid');
 			this.$('#loaded-pob-status').classList.remove('busy');
 		});
-		pobApi.addListener('change', () =>
-			this.$('#input-trade-params').refreshBuild());
 
 		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
 			let tradeQueryImport = new TradeQueryImport(this.$('#session-id-input').value,

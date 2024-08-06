@@ -121,6 +121,8 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
 		this.tradeQueryParams = {};
+
+		pobApi.addListener('change', () => this.refreshBuild());
 	}
 
 	set name(value) {

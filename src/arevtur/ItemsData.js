@@ -1,4 +1,6 @@
 const Emitter = require('../Emitter');
+const pobApi = require('../pobApi/pobApi');
+
 
 class ItemsData extends Emitter {
 	static valueHandlers = [
@@ -22,17 +24,22 @@ class ItemsData extends Emitter {
 		super();
 		this.clear();
 		this.valueHandler = ItemsData.valueHandlers[0];
+		pobApi.addListener('change', () => this.refresh());
 	}
 
 	clear() {
 		this.allItems = [];
 	}
 
-	set valueHandler(valueHandler) {
-		this.valueHandler_ = valueHandler;
+	refresh() {
 		let items = this.allItems;
 		this.clear();
 		this.join(items);
+	}
+
+	set valueHandler(valueHandler) {
+		this.valueHandler_ = valueHandler;
+		this.refresh();
 	}
 
 	setValueHandlerByName(name) {

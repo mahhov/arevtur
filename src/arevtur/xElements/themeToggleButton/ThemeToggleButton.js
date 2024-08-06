@@ -18,6 +18,3 @@ customElements.define(name, class extends XElement {
 			document.documentElement.classList.toggle('dark', config.darkTheme));
 	}
 });
-
-// todo add side by side view button [high]
-
