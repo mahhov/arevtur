@@ -2,7 +2,7 @@ local _, _, scriptPath = string.find(arg[0], '(.+[/\\]).-')
 package.path = package.path .. ';../runtime/lua/?.lua'
 package.path = package.path .. ';../?.lua'
 require('HeadlessWrapper')
-
+local dkjson = require 'dkjson'
 
 local function readFile(path)
   local fileHandle = io.open(path, 'r')
@@ -142,12 +142,13 @@ loadBuildFromXML(buildXml)
 
 -- TRADE - given an item type and other params, generate a search query for replacing the currently equipped item of that type
 
+
 local arg2 = 'Jewel Any' -- item type
---local arg2 = 'Weapon 1' -- item type
-local arg3 = '10'          -- max price
-local arg4 = '1'           -- total EPH weight
-local arg5 = '1'           -- total resist weight
-local arg6 = '.5'          -- full DPS weight
+local arg2 = 'Weapon 1'  -- item type
+local arg3 = '10'        -- max price
+local arg4 = '1'         -- total EPH weight
+local arg5 = '1'         -- total resist weight
+local arg6 = '.5'        -- full DPS weight
 
 local itemsTab = build.itemsTab
 local tradeQuery = itemsTab.tradeQuery
@@ -183,8 +184,10 @@ tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
     --print('debug')
     --print(tradeQueryGenerator.calcContext.options.includeCorrupted)
     --print(dump(tradeQueryGenerator.alreadyWeightedMods))
-    --print('')
-    --print(dump(tradeQueryGenerator.modWeights))
+    print('')
+    print(dump(tradeQueryGenerator.modWeights))
+    print('')
+    print(dkjson.encode(tradeQueryGenerator.modWeights))
   end)
 
 -- TradeQueryGeneratorClass:RequestQuery execute
@@ -207,7 +210,7 @@ local options = {
   influence2 = 1,
   maxPrice = tonumber(arg3),
   statWeights = tradeQuery.statSortSelectionList,
-  jewelType =  jewelTypes[arg2],
+  jewelType = jewelTypes[arg2],
 }
 --print(dump(options))
 tradeQueryGenerator:StartQuery(slot, options)

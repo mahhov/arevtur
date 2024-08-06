@@ -320,9 +320,8 @@ class UnifiedQueryParams {
 			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,
 			nonUnique: filters?.type_filters?.filters?.rarity?.option === 'nonunique' || false,
 			// influences
-			weightEntries: weightedStats?.filters
-				?.map(entry => [entry?.id, entry?.value?.weight, false])
-				?.sort((entry1, entry2) => entry2?.[1] - entry1?.[1]) || [],
+			weightEntries: weightedStats?.filters?.map(
+				entry => [entry?.id, entry?.value?.weight, false]) || [],
 			andEntries: andStats?.filters?.map(entry => [entry?.id, entry?.value?.min, false]) ||
 				[],
 			notEntries: notStats?.filters?.map(entry => entry?.id) || [],

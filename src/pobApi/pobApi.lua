@@ -153,9 +153,8 @@ while true do
         }
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()
-        -- todo abyss jewels, see TradeQueryClass:PriceItemRowDisplay [high]
         -- todo replace weakest or empty jewel slot instead of 1st jewel slot
-        -- todo allow picking mod sets, e.g. talisman, corrupted, influence
+        -- todo allow picking mod sets, e.g. talisman, corrupted, influence, eldritch
         -- todo json args
     end
 end
