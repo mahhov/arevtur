@@ -8,7 +8,8 @@ const pobApi = require('../../../pobApi/pobApi');
 
 let timestamp = () => {
 	let date = new Date();
-	return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
+	return date.toLocaleDateString();
+	// return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
 };
 
 customElements.define(name, class Inputs extends XElement {
@@ -67,9 +68,9 @@ customElements.define(name, class Inputs extends XElement {
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
 			this.inputSets.push(
 				{
-					name: `imported ${timestamp()}}`,
+					name: `untitled ${timestamp()}}`,
 					active: false,
-					tradeQueryParams: unifiedQueryParams,
+					unifiedQueryParams,
 				});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1);
@@ -90,8 +91,7 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#input-trade-params').addEventListener('change', async () => {
 			let unifiedQueryParams = await this.$('#input-trade-params').unifiedQueryParams;
-			// todo rename to unifiedQueryParams
-			this.inputSets[this.inputSetIndex].tradeQueryParams = unifiedQueryParams;
+			this.inputSets[this.inputSetIndex].unifiedQueryParams = unifiedQueryParams;
 			this.sharedWeightEntries = unifiedQueryParams.sharedWeightEntries;
 			this.store();
 		});
@@ -127,7 +127,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.inputSets[this.inputSetIndex].active = true;
 		indexSetEls[this.inputSetIndex].selected = true;
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(
-			this.inputSets[this.inputSetIndex].tradeQueryParams, this.sharedWeightEntries);
+			this.inputSets[this.inputSetIndex].unifiedQueryParams, this.sharedWeightEntries);
 		await this.$('#input-trade-params').loadQueryParams(unifiedQueryParams);
 	}
 
@@ -187,7 +187,7 @@ customElements.define(name, class Inputs extends XElement {
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet =>
 				UnifiedQueryParams
-					.fromStorageQueryParams(inputSet.tradeQueryParams, this.sharedWeightEntries)
+					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
 					.toTradeQueryParams(league, sessionId, overridePrice,
 						fatedConnectionsProphecyPrice));
 	}
