@@ -129,8 +129,7 @@ customElements.define(name, class extends XElement {
 
 	set type(value) {
 		this.$('#type-input').value = value;
-		this.$$('#query-properties-list x-query-property').forEach(queryProperty =>
-			queryProperty.type = value);
+		this.refreshBuild();
 	}
 
 	set minValue(value) {
@@ -297,7 +296,7 @@ customElements.define(name, class extends XElement {
 	refreshBuild(propagate = true) {
 		if (propagate)
 			this.$$('#query-properties-list x-query-property')
-				.forEach(queryProperty => queryProperty.refreshBuild());
+				.forEach(queryProperty => queryProperty.type = value);
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			try {
 				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 200);
