@@ -110,6 +110,8 @@ customElements.define(name, class extends XElement {
 
 	async refreshBuild() {
 		try {
+			this.buildValue = '';
+			this.buildValueTooltip = '';
 			let summary = await pobApi.evalItemModSummary(this.type, this.property, 100);
 			this.buildValue = summary.value;
 			this.buildValueTooltip = summary.text;
