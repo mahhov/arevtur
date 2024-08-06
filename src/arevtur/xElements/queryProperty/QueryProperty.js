@@ -2,6 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const pobApi = require('../../../pobApi/pobApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
+const ApiConstants = require('../../ApiConstants');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -113,9 +114,11 @@ customElements.define(name, class extends XElement {
 		try {
 			this.buildValue = '';
 			this.buildValueTooltip = '';
-			let summary = await pobApi.evalItemModSummary(this.type, this.property, 100);
-			this.buildValue = summary.value;
-			this.buildValueTooltip = summary.text;
+			let modWeights = await pobApi.generateQuery(this.type);
+			let unifiedQueryParams = UnifiedQueryParams.fromModWeights({}, modWeights);
+			let propertyId = await ApiConstants.constants.propertyTextToId(this.property);
+			this.buildValue =
+				unifiedQueryParams.weightEntries.find(entry => entry[0] === propertyId)[1];
 		} catch (e) {
 		}
 	}
