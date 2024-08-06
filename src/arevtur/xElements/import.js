@@ -12,4 +12,4 @@ require('./multiSelectLined/MultiSelectLined');
 require('./pathSelect/PathSelect');
 require('./queryProperty/QueryProperty');
 require('./results/Results');
-require('./themeToggleButton/ThemeToggleButton');
+require('./configToggleButton/ConfigToggleButton');

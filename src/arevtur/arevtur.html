@@ -8,8 +8,11 @@
 
 	.container {
 		display: flex;
-		flex-direction: column;
 		flex: 1
+	}
+
+	:root:not(.horizontal) .container {
+		flex-direction: column;
 	}
 
 	x-results {
