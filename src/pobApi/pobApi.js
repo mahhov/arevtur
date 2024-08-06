@@ -118,20 +118,23 @@ class PobApi extends Emitter {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return Promise.reject();
-		// todo is this cleaning necessary? does it cause inaccuracies?
-		let cleanItemMod = raw ? itemMod : itemMod
-			// .replace(/^#(?!%)/, `+${pluginNumber}`) // prepend '+' if no '%' after '#'
-			// .replace(/^\+#%/, `${pluginNumber}%`) // remove '+' if '%' after '#'
-			.replace(/#/g, pluginNumber); // pluginNumber
-		// .replace(/\([^)]*\)/g, '') // remove '(...)'
-		// .replace(/total/gi, '') // remove 'total'
-		// .replace(/increased .*damage/i, 'increased damage') // inc damage
-		// .replace(/% (?!increased)(.* speed)/i,
-		// 	(_, m) => `% increased ${m}`) // add 'increased' to '% .* speed'
-		// .replace(/\s+/g, ' ') // clean up whitespace
-		// .trim();
-		return this.send(true, 'mod', cleanItemMod, pobType)
-			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, cleanItemMod));
+
+		// not all pseudo mods are mapped; handles the ones with 'total' in their text
+		if (itemMod.toLowerCase().endsWith('(pseudo)'))
+			itemMod = itemMod
+				// '+#% total to * Resistance (pseudo)' -> '+#% to * Resistance (pseudo)'
+				.replace(/total (to .* resistance)/i, '$1')
+				// '+#% total Resistance (pseudo)' -> '+#% to chaos Resistance (pseudo)'
+				.replace(/total resistance/i, 'to chaos resistance')
+				// '+#% total Attack Speed (pseudo)' -> '#% increased Attack Speed (pseudo)'
+				.replace(/\+#% total (.*) speed/i, '#% increased $1 speed')
+				// '+# total to * (pseudo)' -> '+# to * (pseudo)'
+				// e.g. strength, max life, phys dmg, spell crit, gem level
+				.replace(/total/i, '');
+
+		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
+		return this.send(true, 'mod', itemMod, pobType)
+			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, itemMod));
 	}
 
 	async generateQuery(type = undefined, maxPrice = 10) {
