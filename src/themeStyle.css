@@ -51,7 +51,7 @@
 
 	/* areas that need to be distinguished e.g. inputs or outputs */
 	--area-primary: white;
-	--area-back: #222;
+	--area-back: #111;
 
 	/* section headers */
 	--header-primary: white;
@@ -60,9 +60,9 @@
 	/* interactable elements e.g buttons or inputs */
 	--interactable-primary: white;
 	--interactable-back: black;
-	--interactable-border: #222;
-	--interactable-hover-back: #444;
-	--interactable-active-back: #888;
+	--interactable-border: #232;
+	--interactable-hover-back: #333;
+	--interactable-active-back: #555;
 	--interactable-focus-border: #73b4e6;
 
 	/* non interactable elements that need to stand out e.g. progress bar */
