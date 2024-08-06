@@ -19,9 +19,9 @@ customElements.define(name, class InputBuild extends XElement {
 		let store = this.store;
 		this.$('#pob-path').path = store.pobPath || '';
 		this.$('#build-path').path = store.buildPath || '';
-		this.$('#life-weight').value = store.lifeWeight || 1;
-		this.$('#resist-weight').value = store.resistWeight || 1;
-		this.$('#damage-weight').value = store.damageWeight || 1;
+		this.$('#life-weight').value = store.lifeWeight || .5;
+		this.$('#resist-weight').value = store.resistWeight || .1;
+		this.$('#damage-weight').value = store.damageWeight || .25;
 
 		InputBuild.defaultPobPath.each(path =>
 			this.$('#pob-path').defaultPath = path);
