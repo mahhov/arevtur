@@ -60,6 +60,19 @@ customElements.define(name, class Chart extends XElement {
 			this.resetRange();
 		});
 
+		this.$('#help-tooltip').text = 'help?';
+		this.$('#help-tooltip').tooltip = [
+			'lmb drag to pan',
+			'mouse wheel to scale',
+			// 'rmb drag to scale',
+			// 'shift+lmb drag to scale',
+			'double lmb to recenter',
+			'shift+double lmb to recenter while including origin',
+			// todo ctrl+lmb is running bad query. it's probably even harder to fix with build
+			// sorting. 'ctrl+lmb to query at the min-value and max-price corresponding to the
+			// cursor\'s position',
+		].join('\n');
+
 		this.pointSets_ = [];
 		this.resetRange();
 	}

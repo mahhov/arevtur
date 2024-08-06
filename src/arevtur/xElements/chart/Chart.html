@@ -9,25 +9,14 @@
 		margin-top: 15px;
 	}
 
-	label {
+	.section :not(:first-child) {
 		margin-left: 15px;
 	}
 </style>
 
 <canvas class="interactable"></canvas>
 <div class="section">
-	<button id="refocus-button">refocus</button>
-	<label>always refocus: <input id="always-refocus-check" type="checkbox"></label>
-</div>
-<div class="section">
-	<div><span class="alternate">left button drag</span> to pan</div>
-	<div><span class="alternate">mouse wheel</span> to scale</div>
-	<div><span class="alternate">right button drag</span> to scale</div>
-	<div><span class="alternate">shift + left button drag</span> to scale</div>
-	<div><span class="alternate">double left button click</span> to refocus</div>
-	<div><span class="alternate">shift + double left button click</span> to refocus with origin
-	</div>
-	<div><span class="alternate">ctrl + click</span> to submit a query at the min-value and
-		max-price corresponding to the cursor's position
-	</div>
+	<button id="refocus-button">recenter</button>
+	<label>always recenter: <input id="always-refocus-check" type="checkbox"></label>
+	<x-tooltip-button id="help-tooltip"></x-tooltip-button>
 </div>
