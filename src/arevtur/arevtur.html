@@ -8,17 +8,30 @@
 
 	.container {
 		display: flex;
-		flex: 1
-	}
-
-	:root:not(.horizontal) .container {
-		flex-direction: column;
-	}
-
-	x-results {
-		margin-top: 15px;
 		flex: 1;
-		flex-basis: 0;
+		gap: 15px;
+	}
+
+	x-inputs, x-results {
+		padding: 10px;
+		overflow: hidden;
+	}
+
+	/* in vertical view, split 50%/50%, while allowing the results to grow if inputs don't need all the space */
+	:root:not(.horizontal) {
+		.container {
+			flex-direction: column;
+		}
+
+		x-results {
+			flex: 1 0 50%;
+		}
+	}
+
+	/* in horizontal view, split 1000px/the-rest */
+
+	:root.horizontal x-inputs {
+		flex: 0 0 1000px;
 	}
 </style>
 
@@ -27,8 +40,8 @@
 </script>
 
 <div class="container">
-	<x-inputs></x-inputs>
-	<x-results></x-results>
+	<x-inputs class="area"></x-inputs>
+	<x-results class="area"></x-results>
 </div>
 
 <script>

@@ -99,7 +99,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValue(value) {
-		this.$('#build-value').text = value;
+		this.$('#build-value').text = value && Math.round(Number(value) * 1000) / 1000;
 	}
 
 	set buildValueTooltip(value) {

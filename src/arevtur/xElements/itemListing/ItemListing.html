@@ -2,7 +2,7 @@
 	@import '../sharedStyle.css';
 
 	:host {
-		display: block;
+		display: inline-block;
 		padding: 5px;
 		border: 1px solid var(--interactable-border);
 	}
@@ -13,10 +13,6 @@
 
 	:host(.hovered) {
 		background: var(--area-back);
-	}
-
-	:host > div:not(:first-of-type) {
-		margin-top: 10px;
 	}
 
 	/* todo colors should be theme responsive */

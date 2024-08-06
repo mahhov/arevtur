@@ -1,8 +1,10 @@
 <style>
 	@import '../sharedStyle.css';
 
-	#container {
-		padding: 10px;
+	:host {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
 	}
 
 	.loaded-status {
@@ -13,53 +15,49 @@
 		float: right;
 	}
 
-	#container > *:not(:first-child) {
-		margin-top: 15px;
-		display: block;
-	}
-
 	#input-set-list x-input-set.dragging {
 		outline: 1px solid var(--interactable-focus-border);
 	}
+
+	#input-trade-params {
+		flex: 1;
+		overflow: auto;
+	}
 </style>
 
-<div class="area" id="container">
-	<div>
-		<div>
-			<x-autocomplete-input id="league-input" placeholder="league"
-			                      size="4"></x-autocomplete-input>
-			<input id="session-id-input" placeholder="session id">
-			<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
-			<span class="loaded-status invalid" id="loaded-types-status">Types</span>
-			<span class="loaded-status invalid" id="loaded-properties-status">Properties</span>
-			<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
-			<span class="loaded-status invalid" id="loaded-items-status">Items</span>
-			<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
-			<span class="right">
-				<button id="reload-button">Refresh</button>
-				<x-config-toggle-button config-key="viewHorizontal"
-				                        text="Horizontal"></x-config-toggle-button>
-				<x-config-toggle-button config-key="darkTheme" text="Dark"></x-theme-toggle-button>
-			</span>
-		</div>
+<div>
+	<x-autocomplete-input id="league-input" placeholder="league"
+	                      size="4"></x-autocomplete-input>
+	<input id="session-id-input" placeholder="session id">
+	<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
+	<span class="loaded-status invalid" id="loaded-types-status">Types</span>
+	<span class="loaded-status invalid" id="loaded-properties-status">Properties</span>
+	<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
+	<span class="loaded-status invalid" id="loaded-items-status">Items</span>
+	<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
+	<span class="right">
+		<button id="reload-button">Refresh</button>
+		<x-config-toggle-button config-key="viewHorizontal"
+		                        text="Horizontal"></x-config-toggle-button>
+		<x-config-toggle-button config-key="darkTheme" text="Dark"></x-theme-toggle-button>
+	</span>
+</div>
+
+<x-input-build id="input-build"></x-input-build>
+
+<div>
+	<x-input-import-trade-search-url
+			id="input-import-trade-search-url"></x-input-import-trade-search-url>
+	<div id="input-set-container">
+		<x-arrangable-list id="input-set-list"></x-arrangable-list>
+		<button id="add-input-set-button">add</button>
 	</div>
+</div>
 
-	<x-input-build id="input-build"></x-input-build>
+<x-input-trade-params id="input-trade-params"></x-input-trade-params>
 
-	<div>
-		<x-input-import-trade-search-url
-				id="input-import-trade-search-url"></x-input-import-trade-search-url>
-		<div id="input-set-container">
-			<x-arrangable-list id="input-set-list"></x-arrangable-list>
-			<button id="add-input-set-button">add</button>
-		</div>
-	</div>
-
-	<x-input-trade-params id="input-trade-params"></x-input-trade-params>
-
-	<div id="query-buttons">
-		<button id="submit-button" title="ctrl+enter">submit</button>
-		<button id="cancel-button">cancel</button>
-		<button id="hide-button">hide</button>
-	</div>
+<div id="query-buttons">
+	<button id="submit-button" title="ctrl+enter">submit</button>
+	<button id="cancel-button">cancel</button>
+	<button id="hide-button">hide</button>
 </div>

@@ -4,16 +4,13 @@
 	:host {
 		display: flex;
 		flex-direction: column;
-		overflow: hidden;
+		gap: 15px;
 	}
 
 	#top-row {
 		display: flex;
 		align-items: center;
-	}
-
-	#top-row > :not(:first-child) {
-		margin-left: 15px
+		gap: 15px;
 	}
 
 	#results-count {
@@ -24,43 +21,26 @@
 		flex: 1;
 	}
 
-	#center {
-		display: flex;
-		flex-grow: 1;
-		overflow: hidden;
-		margin-top: 15px;
-	}
-
-	#left {
-		flex: 1;
-		padding-right: 5px;
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-	}
-
 	progress[value="1"] {
 		display: none;
 	}
 
 	#results-progress-bar {
-		margin-bottom: 15px;
+		width: 100%;
 	}
 
-	#results-list {
+	.scroll {
 		overflow: auto;
-		flex-grow: 1;
-		flex-basis: 0;
-		display: flex;
-		flex-wrap: wrap;
+	}
+
+	#results-chart {
+		position: sticky;
+		top: 0;
+		float: right;
 	}
 
 	#results-list x-item-listing.search-hidden {
 		display: none;
-	}
-
-	#results-chart {
-		margin-left: 15px;
 	}
 </style>
 
@@ -72,12 +52,11 @@
 		<input id="search-input" placeholder="search (e.g. energyshield, !evasion, !armour)"
 		       title="ctrl+f">
 	</div>
+	<progress id="results-progress-bar" max="1" value="1"></progress>
 </div>
-<div id="center">
-	<div id="left">
-		<progress id="results-progress-bar" max="1" value="1"></progress>
-		<div id="results-list"></div>
-	</div>
+
+<div class="scroll">
 	<x-chart axis-label-x="Chaos" axis-label-y="Weighted Value" height="600" id="results-chart"
 	         width="600"></x-chart>
+	<div id="results-list"></div>
 </div>
