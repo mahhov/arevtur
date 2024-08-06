@@ -1,15 +1,15 @@
 require('./arrangableList/ArrangableList');
 require('./autocompleteInput/AutocompleteInput');
 require('./chart/Chart');
+require('./configToggleButton/ConfigToggleButton');
 require('./inputBuild/InputBuild');
 require('./inputImportTradeSearchUrl/InputImportTradeSearchUrl');
 require('./inputSet/InputSet');
 require('./inputTradeParams/InputTradeParams');
 require('./inputs/Inputs');
-require('./itemInfo/ItemInfo');
 require('./itemListing/ItemListing');
 require('./multiSelectLined/MultiSelectLined');
 require('./pathSelect/PathSelect');
 require('./queryProperty/QueryProperty');
 require('./results/Results');
-require('./configToggleButton/ConfigToggleButton');
+require('./tooltipButton/TooltipButton');
