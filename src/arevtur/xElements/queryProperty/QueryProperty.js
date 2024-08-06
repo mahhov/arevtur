@@ -1,6 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const pobApi = require('../../../pobApi/pobApi');
+const UnifiedQueryParams = require('../../UnifiedQueryParams');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {

@@ -94,10 +94,9 @@ while true do
         end
     elseif cmd == 'generateQuery' then
         -- args[2] is type, e.g. 'Amulet'
-        -- args[3] is max price, e.g. '10'
-        -- args[4] is total EPH weight, e.g. '1'
-        -- args[5] is total resist weight, e.g. '1'
-        -- args[6] is full DPS weight, e.g. '1'
+        -- args[3] is total EPH weight, e.g. '1'
+        -- args[4] is total resist weight, e.g. '1'
+        -- args[5] is full DPS weight, e.g. '1'
         -- given an item type and other params, generate a search query for replacing the currently
         -- equipped item of that type
 
@@ -107,12 +106,12 @@ while true do
         local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 
         tradeQuery.statSortSelectionList = {
-            { stat = 'TotalEHP',             weightMult = tonumber(args[4]) },
-            { stat = 'ChaosResistTotal',     weightMult = tonumber(args[5]) },
-            { stat = 'LightningResistTotal', weightMult = tonumber(args[5]) },
-            { stat = 'ColdResistTotal',      weightMult = tonumber(args[5]) },
-            { stat = 'FireResistTotal',      weightMult = tonumber(args[5]) },
-            { stat = 'FullDPS',              weightMult = tonumber(args[6]) },
+            { stat = 'TotalEHP',             weightMult = tonumber(args[3]) },
+            { stat = 'ChaosResistTotal',     weightMult = tonumber(args[4]) },
+            { stat = 'LightningResistTotal', weightMult = tonumber(args[4]) },
+            { stat = 'ColdResistTotal',      weightMult = tonumber(args[4]) },
+            { stat = 'FireResistTotal',      weightMult = tonumber(args[4]) },
+            { stat = 'FullDPS',              weightMult = tonumber(args[5]) },
         }
 
         -- TradeQueryClass:PriceItemRowDisplay
@@ -148,7 +147,7 @@ while true do
             includeTalisman = slot.slotName == 'Amulet',
             influence1 = 1,
             influence2 = 1,
-            maxPrice = tonumber(args[3]),
+            maxPrice = 1,
             statWeights = tradeQuery.statSortSelectionList,
             jewelType = jewelTypes[args[2]],
         }

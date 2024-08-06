@@ -71,8 +71,7 @@ customElements.define(name, class extends XElement {
 		//  query returns.
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
 			try {
-				let modWeightsString = await pobApi.generateQuery(this.type, this.price);
-				let modWeights = JSON.parse(modWeightsString);
+				let modWeights = await pobApi.generateQuery(this.type);
 				let unifiedQueryParams = UnifiedQueryParams.fromModWeights(
 					await UnifiedQueryParams.fromInputTradeQueryParams(this), modWeights);
 				await this.loadQueryParams(unifiedQueryParams);
