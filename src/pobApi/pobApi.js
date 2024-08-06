@@ -88,7 +88,7 @@ class PobApi extends Emitter {
 		this.build_ = path;
 		if (path) {
 			this.reset();
-			this.send(false, 'build', path).then(() => this.emit('ready'));
+			this.send(false, 'build', path);
 			this.emit('change');
 		}
 	}
@@ -137,12 +137,13 @@ class PobApi extends Emitter {
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, itemMod));
 	}
 
+	// todo rename to getModWeights
 	async generateQuery(type = undefined) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return Promise.reject();
 		return this.send(true, 'generateQuery', pobType, this.valueParams_.life,
-			this.valueParams_.resist, this.valueParams_.dps);
+			this.valueParams_.resist, this.valueParams_.dps).then(JSON.parse);
 	}
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
