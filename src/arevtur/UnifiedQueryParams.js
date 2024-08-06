@@ -333,6 +333,14 @@ class UnifiedQueryParams {
 		Object.assign(unifiedQueryParams, data);
 		return unifiedQueryParams;
 	}
+
+	static fromModWeights(baseUnifiedQueryParams, modWeights) {
+		let unifiedQueryParams = new UnifiedQueryParams()
+		Object.assign(unifiedQueryParams, deepCopy(baseUnifiedQueryParams))
+		unifiedQueryParams.weightEntries = modWeights.map(modWeight => // (propertyId, weight, locked)[]
+			[modWeight.tradeModId, modWeight.weight * (modWeight.invert ? -1 : 1), false]);
+		return unifiedQueryParams;
+	}
 }
 
 module.exports = UnifiedQueryParams;

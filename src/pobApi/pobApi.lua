@@ -1,6 +1,7 @@
 package.path = package.path .. ';../runtime/lua/?.lua'
 package.path = package.path .. ';../?.lua'
 require('HeadlessWrapper')
+local dkjson = require 'dkjson'
 
 -- infra
 
@@ -126,7 +127,7 @@ while true do
         tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
             tradeQuery.statSortSelectionList, function(context, query, errMsg)
                 respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
-                respond(query)
+                respond(dkjson.encode(tradeQueryGenerator.modWeights))
             end)
 
         -- TradeQueryGeneratorClass:RequestQuery execute
