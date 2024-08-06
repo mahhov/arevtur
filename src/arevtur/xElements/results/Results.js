@@ -142,10 +142,8 @@ customElements.define(name, class Inputs extends XElement {
 
 	applySearch() {
 		let searcher = new Searcher(this.$('#search-input').value, false);
-
 		[...this.$('#results-list').children].forEach(itemListing => {
-			let searchTexts = itemListing.searchTexts;
-			let match = searcher.test(searchTexts);
+			let match = searcher.test(itemListing.searchTexts);
 			itemListing.classList.toggle('search-hidden', !match);
 		});
 	}

@@ -21,6 +21,14 @@
 		outline: 1px solid var(--interactable-focus-border);
 	}
 
+	#query-properties-list x-query-property.search-highlighted {
+		outline: 1px solid var(--interactable-focus-border);
+	}
+
+	#search-input {
+		width: 400px;
+	}
+
 	label:not(:first-child),
 	x-multi-select-lined {
 		margin-left: 15px;
@@ -78,6 +86,7 @@
 	<label>Non unique<input id="non-unique-check" type="checkbox"></label>
 	<x-multi-select-lined id="influence-input" placeholder="Add influences"></x-multi-select-lined>
 </div>
+<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
 <x-arrangable-list id="query-properties-list"></x-arrangable-list>
 <div>
 	<button id="add-property-button">add</button>

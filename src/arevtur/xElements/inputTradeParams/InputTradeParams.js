@@ -9,6 +9,7 @@ const {
 	influenceProperties,
 } = require('./Properties');
 const pobApi = require('../../../pobApi/pobApi');
+const Searcher = require('../../Searcher');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -109,13 +110,14 @@ customElements.define(name, class extends XElement {
 			this.influences = this.$('#influence-input').valuesAsArray;
 			this.updateQueryParams();
 		});
+		document.addEventListener('keydown', e => {
+			if (e.key === 'g' && e.ctrlKey)
+				this.$('#search-input').focus();
+		});
+		this.$('#search-input').addEventListener('input', () => this.applySearch());
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
 			this.updateQueryParams();
-		});
-		this.$('#query-properties-list').addEventListener('keydown', e => {
-			if (e.key === 'Enter' && e.shiftKey)
-				this.$('#query-properties-list > :focus-within + x-query-property').focus();
 		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
 		this.tradeQueryParams = {};
@@ -208,11 +210,48 @@ customElements.define(name, class extends XElement {
 		this.$('#influence-input').valuesAsArray = value;
 	}
 
-	async loadQueryParams(tradeQueryParams) {
-		await tradeQueryParams.toInputTradeQueryParams(this);
-		this.addQueryProperty();
-		this.tradeQueryParams = tradeQueryParams;
-		this.sharedWeightEntries = tradeQueryParams.sharedWeightEntries;
+	addQueryProperty() {
+		let queryProperty = document.createElement('x-query-property');
+		queryProperty.type = this.type;
+		ApiConstants.constants.propertyTexts()
+			.then(propertyTexts => queryProperty.properties = propertyTexts);
+		queryProperty.slot = 'list';
+		this.$('#query-properties-list').appendChild(queryProperty);
+		queryProperty.addEventListener('change', () => {
+			this.propagateLockedWeights(queryProperty);
+			this.checkProperties();
+			this.applySearch();
+			this.updateQueryParams();
+		});
+		queryProperty.addEventListener('lock-change', () => {
+			if (!queryProperty.locked)
+				return;
+			if (!queryProperty.previousSibling)
+				return queryProperty.locked = false;
+			queryProperty.weight = queryProperty.previousSibling.weight;
+			this.propagateLockedWeights(queryProperty);
+			this.checkProperties();
+			this.applySearch();
+			this.updateQueryParams();
+		});
+		queryProperty.addEventListener('share-change', () => {
+			this.checkProperties();
+			this.applySearch();
+			this.updateQueryParams();
+		});
+		queryProperty.addEventListener('remove', () => {
+			queryProperty.remove();
+			this.updateQueryParams();
+		});
+		return queryProperty;
+	};
+
+	propagateLockedWeights(queryProperty) {
+		let next = queryProperty.nextSibling;
+		while (next && next.locked) {
+			next.weight = queryProperty.weight;
+			next = next.nextSibling;
+		}
 	}
 
 	checkProperties() {
@@ -234,46 +273,20 @@ customElements.define(name, class extends XElement {
 			this.addQueryProperty();
 	}
 
-	propagateLockedWeights(queryProperty) {
-		let next = queryProperty.nextSibling;
-		while (next && next.locked) {
-			next.weight = queryProperty.weight;
-			next = next.nextSibling;
-		}
+	applySearch() {
+		let searcher = new Searcher(this.$('#search-input').value, false);
+		[...this.$('#query-properties-list').children].forEach(queryProperty => {
+			let match = searcher.test([queryProperty.property]);
+			queryProperty.classList.toggle('search-highlighted', match);
+		});
 	}
 
-	addQueryProperty() {
-		let queryProperty = document.createElement('x-query-property');
-		queryProperty.type = this.type;
-		ApiConstants.constants.propertyTexts()
-			.then(propertyTexts => queryProperty.properties = propertyTexts);
-		queryProperty.slot = 'list';
-		this.$('#query-properties-list').appendChild(queryProperty);
-		queryProperty.addEventListener('change', () => {
-			this.propagateLockedWeights(queryProperty);
-			this.checkProperties();
-			this.updateQueryParams();
-		});
-		queryProperty.addEventListener('lock-change', () => {
-			if (!queryProperty.locked)
-				return;
-			if (!queryProperty.previousSibling)
-				return queryProperty.locked = false;
-			queryProperty.weight = queryProperty.previousSibling.weight;
-			this.propagateLockedWeights(queryProperty);
-			this.checkProperties();
-			this.updateQueryParams();
-		});
-		queryProperty.addEventListener('share-change', () => {
-			this.checkProperties();
-			this.updateQueryParams();
-		});
-		queryProperty.addEventListener('remove', () => {
-			queryProperty.remove();
-			this.updateQueryParams();
-		});
-		return queryProperty;
-	};
+	async loadQueryParams(tradeQueryParams) {
+		await tradeQueryParams.toInputTradeQueryParams(this);
+		this.addQueryProperty();
+		this.tradeQueryParams = tradeQueryParams;
+		this.sharedWeightEntries = tradeQueryParams.sharedWeightEntries;
+	}
 
 	async updateQueryParams() {
 		this.tradeQueryParams = await UnifiedQueryParams.fromInputTradeQueryParams(this);
