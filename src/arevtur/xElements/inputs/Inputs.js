@@ -124,7 +124,6 @@ customElements.define(name, class Inputs extends XElement {
 		indexSetEls.forEach(indexSetEl => indexSetEl.selected = false);
 		indexSetEls[this.inputSetIndex].active = true;
 		this.inputSets[this.inputSetIndex].active = true;
-		// todo propagating to both elements and js objects is cumbersome
 		indexSetEls[this.inputSetIndex].selected = true;
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(
 			this.inputSets[this.inputSetIndex].tradeQueryParams, this.sharedWeightEntries);

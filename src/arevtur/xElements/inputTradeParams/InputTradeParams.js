@@ -76,7 +76,6 @@ customElements.define(name, class extends XElement {
 				let unifiedQueryParams = UnifiedQueryParams.fromModWeights(
 					await UnifiedQueryParams.fromInputTradeQueryParams(this), modWeights);
 				await this.loadQueryParams(unifiedQueryParams);
-				this.updateQueryParams();
 			} catch (e) {
 			}
 		});
@@ -217,10 +216,11 @@ customElements.define(name, class extends XElement {
 		queryProperty.type = this.type;
 		ApiConstants.constants.propertyTexts()
 			.then(propertyTexts => queryProperty.properties = propertyTexts);
+		queryProperty.enabled = true;
 		queryProperty.slot = 'list';
 		this.$('#query-properties-list').appendChild(queryProperty);
 		queryProperty.addEventListener('change', () => {
-			this.propagateLockedWeights(queryProperty);
+			this.propagateLockedWeights();
 			this.checkProperties();
 			this.applySearch();
 			this.updateQueryParams();
@@ -231,14 +231,16 @@ customElements.define(name, class extends XElement {
 			if (!queryProperty.previousSibling)
 				return queryProperty.locked = false;
 			queryProperty.weight = queryProperty.previousSibling.weight;
-			this.propagateLockedWeights(queryProperty);
+			this.propagateLockedWeights();
 			this.checkProperties();
-			this.applySearch();
 			this.updateQueryParams();
 		});
 		queryProperty.addEventListener('share-change', () => {
 			this.checkProperties();
-			this.applySearch();
+			this.updateQueryParams();
+		});
+		queryProperty.addEventListener('enable-change', () => {
+			this.checkProperties();
 			this.updateQueryParams();
 		});
 		queryProperty.addEventListener('remove', () => {
@@ -248,16 +250,16 @@ customElements.define(name, class extends XElement {
 		return queryProperty;
 	};
 
-	propagateLockedWeights(queryProperty) {
-		let next = queryProperty.nextSibling;
-		while (next && next.locked) {
-			next.weight = queryProperty.weight;
-			next = next.nextSibling;
-		}
+	propagateLockedWeights() {
+		let queryProperties = this.$$('#query-properties-list x-query-property');
+		queryProperties.forEach((queryProperty, i, a) => {
+			if (queryProperty.locked && i < a.length)
+				a[i + 1].weight = queryProperty.weight;
+		});
 	}
 
 	checkProperties() {
-		let queryProperties = this.$$('#query-properties-list x-query-property');
+		let queryProperties = [...this.$$('#query-properties-list x-query-property')];
 
 		// check locked checkboxes
 		queryProperties.forEach(queryProperty =>
@@ -269,6 +271,12 @@ customElements.define(name, class extends XElement {
 		// check shared checkboxes
 		queryProperties.forEach(queryProperty =>
 			queryProperty.shared = queryProperty.shared && queryProperty.filter === 'weight');
+
+		// check enabled checkboxes
+		queryProperties
+			.filter(queryProperty => queryProperty.enabled)
+			.slice(35)
+			.forEach(queryProperty => queryProperty.enabled = false);
 
 		// check if last input is empty
 		if (this.$('#query-properties-list').lastChild.property)
@@ -283,14 +291,19 @@ customElements.define(name, class extends XElement {
 		});
 	}
 
-	async loadQueryParams(tradeQueryParams) {
-		await tradeQueryParams.toInputTradeQueryParams(this);
+	async loadQueryParams(unifiedQueryParams) {
+		console.log('loading', unifiedQueryParams.weightEntries[0]);
+		await unifiedQueryParams.toInputTradeQueryParams(this);
 		this.addQueryProperty();
-		this.tradeQueryParams = tradeQueryParams;
-		this.sharedWeightEntries = tradeQueryParams.sharedWeightEntries;
+		this.propagateLockedWeights();
+		this.checkProperties();
+		this.applySearch();
+		await this.updateQueryParams();
 	}
 
+	// todo remove this function
 	async updateQueryParams() {
+		// todo rename this.tradeQueryParams to unifiedQueryParams
 		this.tradeQueryParams = await UnifiedQueryParams.fromInputTradeQueryParams(this);
 		this.sharedWeightEntries = this.tradeQueryParams.sharedWeightEntries;
 		this.emit('change');

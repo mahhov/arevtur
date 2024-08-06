@@ -11,6 +11,7 @@ customElements.define(name, class extends XElement {
 			filter: {},
 			locked: {boolean: true},
 			shared: {boolean: true},
+			enabled: {boolean: true},
 			buildValue: {},
 			buildValueTooltip: {},
 		};
@@ -49,6 +50,10 @@ customElements.define(name, class extends XElement {
 			this.shared = this.$('#shared').checked;
 			this.emit('share-change');
 		});
+		this.$('#enabled').addEventListener('input', () => {
+			this.enabled = this.$('#enabled').checked;
+			this.emit('enable-change');
+		});
 		this.$('#remove').addEventListener('click', () => this.emit('remove'));
 		this.$('#build-value').addEventListener('click', () => {
 			this.weight = this.buildValue;
@@ -85,6 +90,10 @@ customElements.define(name, class extends XElement {
 
 	set shared(value) {
 		this.$('#shared').checked = value;
+	}
+
+	set enabled(value) {
+		this.$('#enabled').checked = value;
 	}
 
 	set buildValue(value) {

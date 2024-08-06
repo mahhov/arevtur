@@ -31,12 +31,12 @@ class UnifiedQueryParams {
 	uncorrupted = false;
 	nonUnique = false;
 	influences = [];
-	weightEntries = [];            // (propertyId, weight, locked)[]
-	andEntries = [];               // (propertyId, weight, locked)[]
-	notEntries = [];               // (propertyId)[]
-	conditionalPrefixEntries = []; // (propertyId, weight, locked)[]
-	conditionalSuffixEntries = []; // (propertyId, weight, locked)[]
-	sharedWeightEntries = [];
+	weightEntries = [];            // (propertyId, weight, locked, enabled)[]
+	andEntries = [];               // (propertyId, weight, locked, enabled)[]
+	notEntries = [];               // (propertyId, enabled)[]
+	conditionalPrefixEntries = []; // (propertyId, weight, locked, enabled)[]
+	conditionalSuffixEntries = []; // (propertyId, weight, locked, enabled)[]
+	sharedWeightEntries = [];      // (propertyId, weight, locked, enabled)[]
 
 	constructor() {
 		defensePropertyTuples.forEach(([property]) =>
@@ -72,25 +72,37 @@ class UnifiedQueryParams {
 		inputElement.influences = this.influences ?
 			influenceProperties.map(influence => this.influences.includes(influence)) : [];
 		XElement.clearChildren(inputElement.$('#query-properties-list'));
-		this.sharedWeightEntries.forEach(async ([property, weight, locked]) => {
+		this.sharedWeightEntries.map(async ([property, weight, locked, enabled]) => {
 			let queryProperty = inputElement.addQueryProperty();
 			queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
 			queryProperty.weight = weight;
 			queryProperty.filter = 'weight';
 			queryProperty.locked = locked;
 			queryProperty.shared = true;
+			queryProperty.enabled = enabled;
 		});
 
-		queryPropertyFilters.forEach(([key, filter, hasWeight]) =>
-			this[key].forEach(async ([property, weight, locked]) => {
-				let queryProperty = inputElement.addQueryProperty();
-				queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
-				queryProperty.filter = filter;
-				if (hasWeight) {
+		queryPropertyFilters.forEach(([key, filter, hasWeight]) => {
+			if (hasWeight)
+				this[key].forEach(async ([property, weight, locked, enabled]) => {
+					let queryProperty = inputElement.addQueryProperty();
+					queryProperty.property =
+						await ApiConstants.constants.propertyIdToText(property);
+					queryProperty.filter = filter;
 					queryProperty.weight = weight;
 					queryProperty.locked = locked;
-				}
-			}));
+					queryProperty.enabled = enabled;
+				});
+			else
+				this[key].forEach(async ([property, enabled]) => {
+					let queryProperty = inputElement.addQueryProperty();
+					queryProperty.property =
+						await ApiConstants.constants.propertyIdToText(property);
+					queryProperty.filter = filter;
+					queryProperty.enabled = enabled;
+				});
+		});
+		await ApiConstants.constants.properties;
 	}
 
 	static async fromInputTradeQueryParams(inputElement) {
@@ -114,20 +126,20 @@ class UnifiedQueryParams {
 					filter: queryProperty.filter,
 					locked: queryProperty.locked,
 					shared: queryProperty.shared,
+					enabled: queryProperty.enabled,
 				})))).filter(({propertyId}) => propertyId);
 
-		// todo make shared entries more similar to unshared entries so that they can be processed
-		//  similarly
 		let sharedWeightEntries = propertyEntries
 			.filter(entry => entry.filter === 'weight' && entry.weight && entry.shared)
-			.map(entry => [entry.propertyId, entry.weight, entry.locked]);
+			.map(entry => [entry.propertyId, entry.weight, entry.locked, entry.shared]);
 		let unsharedEntries = Object.fromEntries(
 			queryPropertyFilters.map(([key, filter, hasWeight]) => {
 				let entries = propertyEntries
-					.filter(entry => entry.filter === filter && (entry.weight || !hasWeight) &&
-						!entry.shared)
-					.map(entry => hasWeight ? [entry.propertyId, entry.weight, entry.locked] :
-						[entry.propertyId]);
+					.filter(entry =>
+						entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
+					.map(entry => hasWeight ?
+						[entry.propertyId, entry.weight, entry.locked, entry.enabled] :
+						[entry.propertyId, entry.shared, entry.enabled]);
 				return [key, entries];
 			}));
 
@@ -151,9 +163,10 @@ class UnifiedQueryParams {
 
 	toTradeQueryParams(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
 		let maxPrice = overridePrice !== null ? overridePrice : this.maxPrice;
-		let weights = Object.fromEntries([...this.weightEntries, ...this.sharedWeightEntries]);
-		let ands = Object.fromEntries(this.andEntries);
-		let nots = Object.fromEntries(this.notEntries);
+		let weights = Object.fromEntries(
+			[...this.weightEntries, ...this.sharedWeightEntries].filter(entry => entry.enabled));
+		let ands = Object.fromEntries(this.andEntries.filter(entry => entry.enabled));
+		let nots = Object.fromEntries(this.notEntries.filter(entry => entry.enabled));
 
 		let queries = [];
 
@@ -320,11 +333,12 @@ class UnifiedQueryParams {
 			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,
 			nonUnique: filters?.type_filters?.filters?.rarity?.option === 'nonunique' || false,
 			// influences
-			weightEntries: weightedStats?.filters?.map(
-				entry => [entry?.id, entry?.value?.weight, false]) || [],
-			andEntries: andStats?.filters?.map(entry => [entry?.id, entry?.value?.min, false]) ||
-				[],
-			notEntries: notStats?.filters?.map(entry => entry?.id) || [],
+			weightEntries: weightedStats?.filters
+				?.map(entry => [entry?.id, entry?.value?.weight, false, true]) || [],
+			andEntries: andStats?.filters
+				?.map(entry => [entry?.id, entry?.value?.min, false, true]) || [],
+			notEntries: notStats?.filters
+				?.map(entry => [entry?.id, true]) || [],
 			// conditionalPrefixEntries
 			// conditionalSuffixEntries
 			// sharedWeightEntries
@@ -335,10 +349,10 @@ class UnifiedQueryParams {
 	}
 
 	static fromModWeights(baseUnifiedQueryParams, modWeights) {
-		let unifiedQueryParams = new UnifiedQueryParams()
-		Object.assign(unifiedQueryParams, deepCopy(baseUnifiedQueryParams))
-		unifiedQueryParams.weightEntries = modWeights.map(modWeight => // (propertyId, weight, locked)[]
-			[modWeight.tradeModId, modWeight.weight * (modWeight.invert ? -1 : 1), false]);
+		let unifiedQueryParams = new UnifiedQueryParams();
+		Object.assign(unifiedQueryParams, deepCopy(baseUnifiedQueryParams));
+		unifiedQueryParams.weightEntries = modWeights.map(modWeight =>
+			[modWeight.tradeModId, modWeight.weight * (modWeight.invert ? -1 : 1), false, true]);
 		return unifiedQueryParams;
 	}
 }
