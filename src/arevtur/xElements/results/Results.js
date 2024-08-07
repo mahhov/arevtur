@@ -59,7 +59,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.renderItemsData(true);
 		});
 
-		testData(this);
+		// testData(this);
 	}
 
 	clearItems() {

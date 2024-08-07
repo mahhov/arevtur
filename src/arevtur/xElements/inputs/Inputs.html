@@ -5,6 +5,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 15px;
+		position: relative;
 	}
 
 	.loaded-status {
@@ -12,7 +13,10 @@
 	}
 
 	.right {
-		float: right;
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: inherit;
 	}
 
 	#input-set-list x-input-set.dragging {
@@ -25,30 +29,27 @@
 	}
 </style>
 
-<div>
-	<span class="maximized-hidden">
-		<x-autocomplete-input id="league-input" placeholder="league"
-		                      size="4"></x-autocomplete-input>
-		<input id="session-id-input" placeholder="session id">
-		<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
-		<span class="loaded-status invalid" id="loaded-types-status">Types</span>
-		<span class="loaded-status invalid" id="loaded-properties-status">Properties</span>
-		<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
-		<span class="loaded-status invalid" id="loaded-items-status">Items</span>
-		<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
-	</span>
-
-	<span class="right">
-		<button id="refresh-button" title="Refresh (ctrl+r)">⟳</button>
-		<x-config-toggle-button config-key="viewMaximize" text="🗖"
-		                        title="Maximize (ctrl+m)"></x-config-toggle-button>
-		<x-config-toggle-button config-key="viewHorizontal"
-		                        text="⏥" title="Horizontal (ctrl+h)"
-		                        class="maximized-hidden"></x-config-toggle-button>
-		<x-config-toggle-button config-key="darkTheme" text="☽"
-		                        title="Dark (ctrl+d)"></x-config-toggle-button>
-	</span>
+<div class="maximized-hidden">
+	<x-autocomplete-input id="league-input" placeholder="league"
+	                      size="4"></x-autocomplete-input>
+	<input id="session-id-input" placeholder="session id">
+	<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
+	<span class="loaded-status invalid" id="loaded-types-status">Types</span>
+	<span class="loaded-status invalid" id="loaded-properties-status">Properties</span>
+	<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
+	<span class="loaded-status invalid" id="loaded-items-status">Items</span>
+	<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
 </div>
+
+<span class="right">
+	<button id="refresh-button" title="Refresh (ctrl+r)">⟳</button>
+	<x-config-toggle-button config-key="viewMaximize" text="🗖"
+	                        title="Maximize (ctrl+m)"></x-config-toggle-button>
+	<x-config-toggle-button config-key="viewHorizontal" text="⏥" title="Horizontal (ctrl+h)"
+	                        class="maximized-hidden"></x-config-toggle-button>
+	<x-config-toggle-button config-key="darkTheme" text="☽"
+	                        title="Dark (ctrl+d)"></x-config-toggle-button>
+</span>
 
 <x-input-build id="input-build"></x-input-build>
 
