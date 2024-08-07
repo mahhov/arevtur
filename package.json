@@ -1,11 +1,11 @@
 {
   "name": "poe-pricer",
-  "version": "4.5.0",
+  "version": "6.0.0",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "build-dev": "electron-builder . -c.compression=store",
-    "build-dev-windows": "electron-builder -lw",
+    "build-dev-windows": "electron-builder -lw --category Game",
     "clean-build": "rm -rf dist-linux; electron-builder .",
     "ship": "git push && build --win -p always"
   },
@@ -31,7 +31,7 @@
     "url": "https://github.com/mahhov/poe-pricer/issues"
   },
   "homepage": "https://github.com/mahhov/poe-pricer#readme",
-  "description": "",
+  "description": "Trading tool for Path of Exile",
   "build": {
     "asar": false,
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
