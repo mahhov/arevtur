@@ -32,15 +32,21 @@
 	.scroll {
 		flex: 1;
 		overflow: auto;
-		display: flex;
-		flex-wrap: wrap;
-		position: relative;
+
+		display: grid;
+		grid-template-columns: repeat(auto-fit, 350px);
+		align-items: end;
+		grid-auto-flow: dense;
+		align-content: start;
+
+		scroll-padding-top: 600px; /* height of chart */
 	}
 
 	#results-chart {
 		position: sticky;
 		top: 0;
-		width: 100%;
+		grid-column: span 2 / -1;
+		margin-left: auto;
 	}
 
 	#results-list {

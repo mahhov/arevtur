@@ -47,7 +47,8 @@ customElements.define(name, class Inputs extends XElement {
 			if (itemIndex !== -1) {
 				this.itemsData.selectItem(itemIndex);
 				this.renderItemsData(true);
-				this.$('#results-list').children[itemIndex].scrollIntoView({block: 'nearest'});
+				this.$('#results-list').children[itemIndex].scrollIntoView(
+					{behavior: 'smooth', block: 'nearest'});
 			}
 		});
 
