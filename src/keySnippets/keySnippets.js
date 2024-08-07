@@ -8,7 +8,6 @@ const {clipboard: electronClipboard} = require('electron');
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
 
-// todo key sending seems to hang the machine
 let slashType = (name = 'hideout') =>
 	keySender.strings([keySender.TYPE, '{enter}/' + name + '{enter}']);
 
@@ -28,6 +27,15 @@ let displayPreferences = async () => {
 		await viewHandle.showPreferences();
 };
 
+let priceClipboard = async read => {
+	if (!read || !await windowCheck())
+		return;
+	console.log('clipboard', read);
+	let priceLines = await Pricer.getPrice(read);
+	console.log('priceLines', priceLines);
+	await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
+};
+
 let windowCheck = async () => !config.config.restrictToPoeWindow ||
 	(await frontWindowTitle.get()).out.trim() === 'Path of Exile';
 
@@ -42,21 +50,16 @@ let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 
 let init = () => {
 	console.log('init start');
+	// todo key sending seems to hang my machine
 	// addPoeShortcutListener('h', () => slashType('hideout'));
 	// addPoeShortcutListener('k', () => slashType('kingsmarch'));
-	// addPoeShortcutListener('g', displayGemQualityArbitrage);
+	keyHook.addShortcut('{ctrl}', 'c', () => priceClipboard(electronClipboard.readText()));
+	addPoeShortcutListener('g', displayGemQualityArbitrage);
 	addPoeShortcutListener('p', displayPreferences, true);
 
 	setTimeout(() => {
 		electronClipboard.clear();
-		clipboard.addListener(async read => {
-			if (!read || !await windowCheck())
-				return;
-			console.log('clipboard', read);
-			let priceLines = await Pricer.getPrice(read);
-			console.log('priceLines', priceLines);
-			await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
-		});
+		clipboard.addListener(priceClipboard);
 		console.log('clipboard ready');
 	}, 500);
 
