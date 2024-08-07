@@ -83,6 +83,7 @@ customElements.define(name, class InputBuild extends XElement {
 	}
 
 	static get defaultPobPath() {
+		// todo do we need to try/catch this?
 		return stream().write(
 			`${process.env.ProgramData}`,
 			`${process.env.APPDATA}`,

@@ -11,16 +11,20 @@ class Config {
 		} catch (e) {
 			// For the first run, config.json won't exist. This is expected and ok.
 			this.config = {
-				league: 'Harvest',
+				league: 'Standard',
 				restrictToPoeWindow: true,
-				darkTheme: false,
+				darkTheme: true,
+				viewHorizontal: true,
+				viewMaximize: false,
 			};
 		}
 
 		ipcMain.handle('config-change', (event, newConfig) => {
 			Object.assign(this.config, newConfig);
 			this.sendConfigChange();
-			fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2));
+			fs.mkdir(appData.basePath, {recursive: true})
+				.then(() => fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2)))
+				.catch(e => console.error('Failed to save config', appData.configPath, e));
 		});
 
 		ipcMain.handle('listen-config-change', event => {
