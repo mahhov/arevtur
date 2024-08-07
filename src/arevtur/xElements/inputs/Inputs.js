@@ -105,8 +105,6 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#submit-button')
 			.addEventListener('click', e => this.emit('submit', {add: e.ctrlKey}));
 		this.$('#cancel-button').addEventListener('click', e => this.emit('cancel'));
-		this.$('#hide-button').addEventListener('click',
-			e => this.$('#input-trade-params').classList.toggle('hidden'));
 
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
