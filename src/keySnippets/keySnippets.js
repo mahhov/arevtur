@@ -8,6 +8,7 @@ const pobApi = require('../pobApi/pobApi');
 
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
+// todo make these configurable
 pobApi.pobPath =
 	'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src';
 pobApi.build =
@@ -42,11 +43,27 @@ let priceClipboard = async itemText => {
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
 	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
 	await viewHandle.showTexts([
-		...pricerOutput,
-		'-'.repeat(30),
-		pobOutput.value,
-		...pobOutput.text.split('\n'),
-	].map(text => ({text})), 3000);
+		...pricerOutput.map(text => ({text})),
+		{text: '-'.repeat(30)},
+		...pobOutput.text
+			.split('\n')
+			.map(line => {
+				let m = line.match(/@[\w,]+/)?.[0] || '';
+				let textColor = '#000';
+				if (m.includes('orange'))
+					textColor = 'orange';
+				if (m.includes('red'))
+					textColor = 'red';
+				if (m.includes('green'))
+					textColor = 'green';
+				if (m.includes('blue'))
+					textColor = 'blue';
+				return {
+					text: line.replace(m, ''),
+					textColor,
+				};
+			}),
+	], 3000);
 };
 
 let windowCheck = async () => !config.config.restrictToPoeWindow ||
