@@ -108,7 +108,7 @@ Can search for item defense (i.e. armour, ES, and evasion) with weights.
 
 #### Starting the app
 
-When you run POE Pricer, a `$` icon will appear in your system tray at the bottom right of your screen.
+When you run Arevtur, a `$` icon will appear in your system tray at the bottom right of your screen.
 Right click the icon to open the context menu and select `Arevtur` to open the app.
 
 #### Setting up the session ID

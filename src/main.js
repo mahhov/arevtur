@@ -5,13 +5,13 @@ const keySnippet = require('./keySnippets/keySnippets');
 let windows = [
 	// require('./updateCheck/updateCheck'), // todo why is this failing
 	require('./arevtur/arevtur'),
-	require('./modViewer/modViewer'),
+	// require('./modViewer/modViewer'), // todo either remove or get it working
 ];
 
 keySnippet.init();
 
 let trayIcon = path.join(__dirname, '../resources/icons/fa-dollar-sign-solid-256.png');
-TrayHelper.createExitTray(trayIcon, 'Poe Pricer', [
+TrayHelper.createExitTray(trayIcon, 'Arevtur', [
 	...keySnippet.trayOptions,
 	...windows.flatMap(w => w.trayOptions),
 	{type: 'separator'},

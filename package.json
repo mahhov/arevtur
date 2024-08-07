@@ -1,13 +1,11 @@
 {
-  "name": "poe-pricer",
+  "name": "arevtur",
   "version": "6.0.0",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build-dev": "electron-builder . -c.compression=store",
-    "build-dev-windows": "electron-builder -lw --category Game",
-    "clean-build": "rm -rf dist-linux; electron-builder .",
-    "ship": "git push && build --win -p always"
+    "build": "electron-builder -lw --category Game",
+    "ship": "git push && build -p always"
   },
   "author": "mahhov1",
   "license": "ISC",
@@ -25,12 +23,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mahhov/poe-pricer.git"
+    "url": "git+https://github.com/mahhov/arevtur.git"
   },
   "bugs": {
-    "url": "https://github.com/mahhov/poe-pricer/issues"
+    "url": "https://github.com/mahhov/arevtur/issues"
   },
-  "homepage": "https://github.com/mahhov/poe-pricer#readme",
+  "homepage": "https://github.com/mahhov/arevtur#readme",
   "description": "Trading tool for Path of Exile",
   "build": {
     "asar": false,
