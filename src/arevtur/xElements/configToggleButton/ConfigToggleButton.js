@@ -14,7 +14,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('button').addEventListener('click', () => toggle(this.key));
+		this.$('button').addEventListener('click', () => toggle(this.configKey));
 	}
 
 	set text(text) {
