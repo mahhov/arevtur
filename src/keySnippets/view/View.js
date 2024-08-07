@@ -1,3 +1,4 @@
+const os = require('os');
 const {ipcRenderer: ipc, shell} = require('electron');
 const {configForRenderer} = require('../../services/configForRenderer');
 const appData = require('../../services/appData');
@@ -95,7 +96,9 @@ $('#preferences-league').addEventListener('input', () =>
 $('#preferences-restrict-window').addEventListener('input', () =>
 	configForRenderer.config = {restrictToPoeWindow: $('#preferences-restrict-window').checked});
 
-$('#preferences-open').addEventListener('click', () =>
-	shell.openExternal(appData.basePath));
+$('#preferences-open').addEventListener('click', () => {
+	let path = (os.platform() === 'linux' ? 'file:' : '') + appData.basePath;
+	shell.openExternal(path);
+});
 
 // todo lot of duplicate code with clipboardManager/view/View.html
