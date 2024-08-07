@@ -86,3 +86,13 @@
 	--colored-text-background-red: lch(25 40 0);
 	--colored-text-background-blue: lch(25 40 290);
 }
+
+:root:not(.maximize) {
+	--maximize-shown-display: none !important;
+	--maximize-hidden-display: '';
+}
+
+:root.maximize {
+	--maximize-shown-display: '';
+	--maximize-hidden-display: none !important;
+}

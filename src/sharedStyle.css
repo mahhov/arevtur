@@ -99,4 +99,12 @@ progress::-webkit-progress-value {
 	outline: 1px var(--colored-text-red) solid;
 }
 
+.maximize-shown {
+	display: var(--maximize-shown-display);
+}
+
+.maximized-hidden {
+	display: var(--maximize-hidden-display);
+}
+
 /* todo checkbox styling */
