@@ -151,5 +151,3 @@ customElements.define(name, class Inputs extends XElement {
 		});
 	}
 });
-
-// todo [high] query ignoring max price

@@ -17,7 +17,7 @@ let deepCopy = obj => {
 };
 
 let pruneIfEmptyFilters = obj =>
-	Object.values(obj.filters).length ? obj : undefined;
+	Object.values(obj.filters).filter(v => v !== undefined).length ? obj : undefined;
 
 class UnifiedQueryParams {
 	name = '';
@@ -164,9 +164,9 @@ class UnifiedQueryParams {
 	toTradeQueryParams(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
 		let maxPrice = overridePrice !== null ? overridePrice : this.maxPrice;
 		let weights = Object.fromEntries(
-			[...this.weightEntries, ...this.sharedWeightEntries].filter(entry => entry.enabled));
-		let ands = Object.fromEntries(this.andEntries.filter(entry => entry.enabled));
-		let nots = Object.fromEntries(this.notEntries.filter(entry => entry.enabled));
+			[...this.weightEntries, ...this.sharedWeightEntries].filter(entry => entry[3]));
+		let ands = Object.fromEntries(this.andEntries.filter(entry => entry[3]));
+		let nots = Object.fromEntries(this.notEntries.filter(entry => entry[1]));
 
 		let queries = [];
 
@@ -310,8 +310,7 @@ class UnifiedQueryParams {
 				},
 			},
 			sort,
-		}
-			;
+		};
 	}
 
 	static fromApiQueryParams(apiQueryParams) {
