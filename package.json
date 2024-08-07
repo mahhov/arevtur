@@ -4,10 +4,9 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "start-ts": "cp -rT src lib && npx tsc --project tsconfig.json && electron .",
-    "test": "cp -rT src lib && npx tsc --project tsconfig.json && electron lib/src/test.js",
     "build-dev": "electron-builder . -c.compression=store",
-    "clean-build": "rm -rf dist; electron-builder .",
+    "build-dev-windows": "electron-builder -lw",
+    "clean-build": "rm -rf dist-linux; electron-builder .",
     "ship": "git push && build --win -p always"
   },
   "author": "mahhov1",
@@ -15,13 +14,13 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bs-better-stream": "^1.9.5",
-    "electron": "^31.3.1",
     "electron-updater": "^6.2.1",
     "env-paths": "^2.2.0",
     "js-desktop-base": "^5.4.5",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {
+    "electron": "^31.3.1",
     "electron-builder": "^20.44.4"
   },
   "repository": {

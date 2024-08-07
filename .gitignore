@@ -1,5 +1,6 @@
 .idea
 node_modules
 dist
+dist-linux
 *.iml
 lib
