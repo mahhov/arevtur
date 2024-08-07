@@ -1,0 +1,62 @@
+<style>
+
+	body {
+		background-color: black;
+		color: white;
+	}
+
+	.container div {
+		display: inline-block;
+		width: 300px;
+		height: 300px;
+		overflow: hidden;
+		margin: 5px;
+
+		--color: oklch(var(--l) var(--c) var(--h));
+		outline: 1px solid var(--color);
+		color: var(--color);
+	}
+</style>
+
+<input id="l" placeholder="l" type="number" value=".5" min="0" max="1" step=".1" title="0-1">
+<input id="c" placeholder="c" type="number" value=".2" min="0" max="1" step=".1" title="0-.4">
+<div id="textDivs" class="container"></div>
+
+<script>
+	let $ = q => document.querySelector(q);
+
+	let refresh = () => {
+		let l = $('#l').value;
+		let c = $('#c').value;
+		let textDivs = $('#textDivs');
+		while (textDivs.firstChild)
+			textDivs.removeChild(textDivs.firstChild);
+		for (let h = 0; h < 360; h += 20) {
+			let div = document.createElement('div');
+			textDivs.appendChild(div);
+			div.style.setProperty('--l', l);
+			div.style.setProperty('--c', c);
+			div.style.setProperty('--h', h);
+			div.textContent = [
+				'8 size=111 MB',
+				'url=https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-win32-x64.zip',
+				'• downloaded duration=12.597s',
+				'url=https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-win32-x64.zip',
+				'• asar using is disabled — it is strongly not recommended solution=enable asar and use',
+				'asarUnpack to unpack files that must be externally available',
+				'• downloading parts=1 size=5.6 MB',
+				'url=https://github.com/electron-userland/electron-builder-binaries/releases/download/winCodeSign-2.4.0/winCodeSign-2.4.0.7z',
+				'• downloaded duration=1.652s',
+				'url=https://github.com/electron-userland/electron-builder-binaries/releases/download/winCodeSign-2.4.0/winCodeSign-2.4.0.7z',
+				'⨯ wine is required, please see https://electron.build/multi-platform-build#linux',
+			].join('\n');
+		}
+	};
+
+	[
+		$('#l'),
+		$('#c'),
+	].forEach(el => el.addEventListener('input', refresh));
+
+	refresh();
+</script>
