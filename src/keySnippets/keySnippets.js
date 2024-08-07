@@ -4,9 +4,15 @@ const {config} = require('../services/config');
 const Pricer = require('./Pricer');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
+const pobApi = require('../pobApi/pobApi');
 
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
+pobApi.pobPath =
+	'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src';
+pobApi.build =
+	'/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml';
+pobApi.valueParams = {life: .5, resist: .1, dps: .25};
 
 let slashType = (name = 'hideout') =>
 	keySender.strings([keySender.TYPE, '{enter}/' + name + '{enter}']);
@@ -27,13 +33,20 @@ let displayPreferences = async () => {
 		await viewHandle.showPreferences();
 };
 
-let priceClipboard = async read => {
-	if (!read || !await windowCheck())
+let priceClipboard = async itemText => {
+	if (!itemText || !await windowCheck())
 		return;
-	console.log('clipboard', read);
-	let priceLines = await Pricer.getPrice(read);
-	console.log('priceLines', priceLines);
-	await viewHandle.showTexts(priceLines.map(text => ({text})), 3000);
+	console.log('clipboard', itemText);
+	let pricerOutput = Pricer.getPrice(itemText).catch(e => []);
+	let pobOutput = pobApi.evalItem(itemText).catch(e => []);
+	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
+	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
+	await viewHandle.showTexts([
+		...pricerOutput,
+		'-'.repeat(30),
+		pobOutput.value,
+		...pobOutput.text.split('\n'),
+	].map(text => ({text})), 3000);
 };
 
 let windowCheck = async () => !config.config.restrictToPoeWindow ||
