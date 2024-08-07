@@ -1,16 +1,17 @@
 <style>
 	@import '../sharedStyle.css';
 
+	:host {
+		display: contents;
+	}
+
 	.container {
 		display: inline-block;
+		outline: inherit;
 	}
 
 	.container:has(button:empty) {
 		display: none;
-	}
-
-	.relative {
-		position: relative;
 	}
 
 	#tooltip {
@@ -50,8 +51,6 @@
 </style>
 
 <div class="container">
-	<button class="pob" id="button"></button>
-	<div class="relative">
-		<div id="tooltip"></div>
-	</div>
+	<button id="button"></button>
+	<div id="tooltip"></div>
 </div>

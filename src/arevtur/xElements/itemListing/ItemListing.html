@@ -3,11 +3,11 @@
 
 	:host {
 		display: inline-block;
+		width: 350px;
+		height: 450px;
+		overflow: auto;
 		border: 1px solid var(--interactable-border);
-		max-width: 350px;
-		padding: 10px 10px 10px 30px;
-		text-indent: -20px;
-		margin: 2px;
+		padding: 10px;
 	}
 
 	:host(.selected) {
@@ -95,7 +95,7 @@
 <div>
 	<div>
 		<span class="value">Value: <span id="value-text"></span></span>
-		<x-tooltip-button id="value-build"></x-tooltip-button>
+		<x-tooltip-button id="value-build" class="pob"></x-tooltip-button>
 		<button id="copy-item-button">Copy item</button>
 	</div>
 	<div class="expanded" id="value-expanded-text"></div>

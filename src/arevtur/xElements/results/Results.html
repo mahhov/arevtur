@@ -32,12 +32,19 @@
 	.scroll {
 		flex: 1;
 		overflow: auto;
+		display: flex;
+		flex-wrap: wrap;
+		position: relative;
 	}
 
 	#results-chart {
 		position: sticky;
 		top: 0;
-		float: right;
+		width: 100%;
+	}
+
+	#results-list {
+		display: contents;
 	}
 
 	x-item-listing.search-hidden {
