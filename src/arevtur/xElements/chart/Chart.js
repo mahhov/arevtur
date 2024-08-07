@@ -28,7 +28,6 @@ customElements.define(name, class Chart extends XElement {
 			if (!this.mouseDown)
 				return;
 			this.dragged = true;
-			this.$('#always-refocus-check').checked = false;
 			if (e.buttons & 1 && !e.shiftKey)
 				this.panRange(e.offsetX - this.mouseDown.x, e.offsetY - this.mouseDown.y);
 			else if (e.buttons & 2 || e.shiftKey)
@@ -48,17 +47,11 @@ customElements.define(name, class Chart extends XElement {
 			this.resetRange(e.shiftKey);
 		});
 		this.$('canvas').addEventListener('wheel', e => {
-			this.$('#always-refocus-check').checked = false;
 			let d = e.deltaY / 10;
 			this.zoomRange(-d, d);
 		});
 
-		this.$('#always-refocus-check').checked = localStorage.getItem('chart-always-refocus');
 		this.$('#refocus-button').addEventListener('click', () => this.resetRange());
-		this.$('#always-refocus-check').addEventListener('input', () => {
-			this.saveAutoRefocus();
-			this.resetRange();
-		});
 
 		this.$('#help-tooltip').text = 'help?';
 		this.$('#help-tooltip').tooltip = [
@@ -95,10 +88,7 @@ customElements.define(name, class Chart extends XElement {
 
 	set pointSets(value) {
 		this.pointSets_ = value;
-		if (this.$('#always-refocus-check').checked)
-			this.resetRange();
-		else
-			this.draw();
+		this.draw();
 	}
 
 	resetRange(zeroMins = false) {
@@ -235,10 +225,6 @@ customElements.define(name, class Chart extends XElement {
 			x: x === Infinity ? this.width : (x - this.minX) / this.deltaX * this.width,
 			y: y === Infinity ? 0 : (1 - (y - this.minY) / this.deltaY) * this.height,
 		};
-	}
-
-	saveAutoRefocus() {
-		localStorage.setItem('chart-always-refocus', this.$('#always-refocus-check').checked);
 	}
 
 	static getRange(values, zeroMin = false, buffer = .1) {

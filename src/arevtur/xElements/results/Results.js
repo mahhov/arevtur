@@ -65,7 +65,7 @@ customElements.define(name, class Inputs extends XElement {
 
 	joinItems(items) {
 		this.itemsData.join(items);
-		this.renderItemsData();
+		this.renderItemsData(false, true);
 	}
 
 	updateItemsProgress(ratio) {
@@ -148,3 +148,7 @@ customElements.define(name, class Inputs extends XElement {
 		});
 	}
 });
+
+// todo [high] hover colors blend with background
+// todo [high] scrolling chart also scrolls results underneath
+// todo [high] query ignoring max price

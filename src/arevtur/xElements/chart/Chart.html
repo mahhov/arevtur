@@ -1,22 +1,28 @@
 <style>
 	@import '../sharedStyle.css';
 
+	:host {
+		position: relative;
+	}
+
 	canvas {
 		display: block;
 	}
 
 	.section {
-		margin-top: 15px;
+		position: absolute;
+		top: 5px;
+		left: 5px;
 	}
 
 	.section :not(:first-child) {
-		margin-left: 15px;
+		margin-left: 5px;
 	}
 </style>
 
 <canvas class="interactable"></canvas>
 <div class="section">
-	<button id="refocus-button">recenter</button>
-	<label>always recenter: <input id="always-refocus-check" type="checkbox"></label>
+	<!-- todo make this not-pink like for POE-->
 	<x-tooltip-button id="help-tooltip"></x-tooltip-button>
+	<button id="refocus-button">recenter</button>
 </div>
