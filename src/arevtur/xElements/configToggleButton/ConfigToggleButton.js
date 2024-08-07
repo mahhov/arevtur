@@ -2,6 +2,8 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 
+let toggle = key => configForRenderer.config = {[key]: !configForRenderer.config[key]};
+
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {configKey: {}, text: {}};
@@ -12,8 +14,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('button').addEventListener('click', () => configForRenderer.config =
-			{[this.configKey]: !configForRenderer.config[this.configKey]});
+		this.$('button').addEventListener('click', () => toggle(this.key));
 	}
 
 	set text(text) {
@@ -21,9 +22,19 @@ customElements.define(name, class extends XElement {
 	}
 });
 
+document.addEventListener('keydown', e => {
+	if (e.key === 'm' && e.ctrlKey)
+		toggle('viewMaximize');
+	if (e.key === 'h' && e.ctrlKey)
+		toggle('viewHorizontal');
+	if (e.key === 'd' && e.ctrlKey)
+		toggle('darkTheme');
+});
+
 configForRenderer.listenConfigChange(config => {
 	// undefined 2nd param would cause an actual toggle rather than removing the class
 	document.documentElement.classList.toggle('maximize', config.viewMaximize || false);
-	document.documentElement.classList.toggle('horizontal', config.viewHorizontal || false);
+	document.documentElement.classList.toggle('horizontal',
+		!config.viewMaximize && config.viewHorizontal);
 	document.documentElement.classList.toggle('dark', config.darkTheme || false);
 });

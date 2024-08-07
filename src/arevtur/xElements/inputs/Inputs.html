@@ -26,27 +26,33 @@
 </style>
 
 <div>
-	<x-autocomplete-input id="league-input" placeholder="league"
-	                      size="4"></x-autocomplete-input>
-	<input id="session-id-input" placeholder="session id">
-	<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
-	<span class="loaded-status invalid" id="loaded-types-status">Types</span>
-	<span class="loaded-status invalid" id="loaded-properties-status">Properties</span>
-	<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
-	<span class="loaded-status invalid" id="loaded-items-status">Items</span>
-	<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
+	<span class="maximized-hidden">
+		<x-autocomplete-input id="league-input" placeholder="league"
+		                      size="4"></x-autocomplete-input>
+		<input id="session-id-input" placeholder="session id">
+		<span class="loaded-status invalid" id="loaded-leagues-status">Leagues</span>
+		<span class="loaded-status invalid" id="loaded-types-status">Types</span>
+		<span class="loaded-status invalid" id="loaded-properties-status">Properties</span>
+		<span class="loaded-status invalid" id="loaded-currencies-status">Currencies</span>
+		<span class="loaded-status invalid" id="loaded-items-status">Items</span>
+		<span class="loaded-status invalid" id="loaded-pob-status">PoB Integration</span>
+	</span>
+
 	<span class="right">
-		<button id="refresh-button">Refresh</button>
-		<x-config-toggle-button config-key="viewMaximize" text="Maximize"></x-config-toggle-button>
+		<button id="refresh-button" title="Refresh (ctrl+r)">⟳</button>
+		<x-config-toggle-button config-key="viewMaximize" text="🗖"
+		                        title="Maximize (ctrl+m)"></x-config-toggle-button>
 		<x-config-toggle-button config-key="viewHorizontal"
-		                        text="Horizontal"></x-config-toggle-button>
-		<x-config-toggle-button config-key="darkTheme" text="Dark"></x-theme-toggle-button>
+		                        text="⏥" title="Horizontal (ctrl+h)"
+		                        class="maximized-hidden"></x-config-toggle-button>
+		<x-config-toggle-button config-key="darkTheme" text="☽"
+		                        title="Dark (ctrl+d)"></x-config-toggle-button>
 	</span>
 </div>
 
 <x-input-build id="input-build"></x-input-build>
 
-<div>
+<div class="maximized-hidden">
 	<x-input-import-trade-search-url
 			id="input-import-trade-search-url"></x-input-import-trade-search-url>
 	<div id="input-set-container">
@@ -55,9 +61,9 @@
 	</div>
 </div>
 
-<x-input-trade-params id="input-trade-params"></x-input-trade-params>
+<x-input-trade-params id="input-trade-params" class="maximized-hidden"></x-input-trade-params>
 
-<div id="query-buttons">
+<div id="query-buttons" class="maximized-hidden">
 	<button id="submit-button" title="ctrl+enter">submit</button>
 	<button id="cancel-button">cancel</button>
 	<button id="hide-button">hide</button>

@@ -28,9 +28,11 @@
 </style>
 
 <span class="container pob">
-	<x-path-select directory id="pob-path" placeholder="Select PoB Path"></x-path-select>
-	<x-path-select extension="xml" id="build-path" placeholder="Select PoB Build"></x-path-select>
-	<button id="refresh">Refresh Build</button>
+	<x-path-select class="maximized-hidden" directory id="pob-path"
+	               placeholder="Select PoB Path"></x-path-select>
+	<x-path-select class="maximized-hidden" extension="xml" id="build-path"
+	               placeholder="Select PoB Build"></x-path-select>
+	<button id="refresh" class="maximized-hidden">Refresh Build</button>
 	<span id="weights">Weights:
 		<label>
 			life
