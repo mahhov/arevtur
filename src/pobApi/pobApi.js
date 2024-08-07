@@ -114,7 +114,6 @@ class PobApi extends Emitter {
 	}
 
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
-		// todo use mods' median values instead of pluginNumber = 100 [high]
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return Promise.reject();

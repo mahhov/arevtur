@@ -8,11 +8,15 @@
 	}
 
 	:host(.selected) {
-		background: var(--interactable-hover-back);
+		background: var(--interactable-active-back);
 	}
 
 	:host(.hovered) {
-		background: var(--area-back);
+		background: var(--interactable-hover-back);
+	}
+
+	:host {
+		background-color: var(--interactable-back);
 	}
 
 	/* todo colors should be theme responsive */

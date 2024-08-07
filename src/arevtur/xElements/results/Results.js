@@ -3,6 +3,7 @@ const {template, name} = importUtil(__filename);
 const ItemsData = require('../../ItemsData');
 const Searcher = require('../../Searcher');
 const Debouncer = require('../../../Debouncer');
+const testData = require('./testData');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
@@ -57,6 +58,8 @@ customElements.define(name, class Inputs extends XElement {
 			this.itemsData.hoverItem(itemIndex);
 			this.renderItemsData(true);
 		});
+
+		// testData(this);
 	}
 
 	clearItems() {
@@ -149,6 +152,5 @@ customElements.define(name, class Inputs extends XElement {
 	}
 });
 
-// todo [high] hover colors blend with background
 // todo [high] scrolling chart also scrolls results underneath
 // todo [high] query ignoring max price
