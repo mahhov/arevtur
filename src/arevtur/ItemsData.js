@@ -1,4 +1,4 @@
-const Emitter = require('../Emitter');
+const Emitter = require('../util/Emitter');
 const pobApi = require('../pobApi/pobApi');
 
 

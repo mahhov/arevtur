@@ -2,7 +2,7 @@ const path = require('path');
 const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
 const ApiConstants = require('../arevtur/ApiConstants');
-const Emitter = require('../Emitter');
+const Emitter = require('../util/Emitter');
 
 class Script extends CustomOsScript {
 	constructor(pobPath) {

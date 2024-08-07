@@ -16,15 +16,13 @@
     "axios": "^0.19.2",
     "bs-better-stream": "^1.9.5",
     "electron": "^31.3.1",
-    "electron-updater": "^4.3.1",
+    "electron-updater": "^6.2.1",
     "env-paths": "^2.2.0",
-    "google-oauth2-x": "^1.1.2",
     "js-desktop-base": "^5.4.5",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {
-    "electron-builder": "^20.44.4",
-    "typescript": "^5.5.4"
+    "electron-builder": "^20.44.4"
   },
   "repository": {
     "type": "git",

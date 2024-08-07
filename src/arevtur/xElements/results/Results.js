@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ItemsData = require('../../ItemsData');
 const Searcher = require('../../Searcher');
-const Debouncer = require('../../../Debouncer');
+const Debouncer = require('../../../util/Debouncer');
 const testData = require('./testData');
 
 customElements.define(name, class Inputs extends XElement {
