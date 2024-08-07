@@ -21,7 +21,7 @@ customElements.define(name, class Chart extends XElement {
 			this.dragged = false;
 			if (!e.ctrlKey)
 				this.mouseDown = {x: e.offsetX, y: e.offsetY};
-			e.preventDefault();
+			e.preventDefault(); // todo is this needed
 		});
 		this.$('canvas').addEventListener('mousemove', e => {
 			this.emit('hover', this.pixelToCoord(e.offsetX, e.offsetY));
@@ -49,6 +49,7 @@ customElements.define(name, class Chart extends XElement {
 		this.$('canvas').addEventListener('wheel', e => {
 			let d = e.deltaY / 10;
 			this.zoomRange(-d, d);
+			e.preventDefault(); // don't scroll below items
 		});
 
 		this.$('#refocus-button').addEventListener('click', () => this.resetRange());

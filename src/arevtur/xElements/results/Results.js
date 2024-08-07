@@ -59,7 +59,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.renderItemsData(true);
 		});
 
-		// testData(this);
+		testData(this);
 	}
 
 	clearItems() {
@@ -152,5 +152,4 @@ customElements.define(name, class Inputs extends XElement {
 	}
 });
 
-// todo [high] scrolling chart also scrolls results underneath
 // todo [high] query ignoring max price
