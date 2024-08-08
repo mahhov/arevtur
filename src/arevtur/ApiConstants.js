@@ -1,19 +1,33 @@
-const {httpRequest} = require('js-desktop-base');
+const {httpRequest, XPromise} = require('js-desktop-base');
 const dataFetcher = require('../services/DataFetcher');
 
 // Without a non-empty user-agent header, PoE will return 403.
 let get = endpoint => httpRequest.get(endpoint, {}, {'User-Agent': '_'});
 
+let duration3hours = 3 * 60 * 60 * 1000;
+let retry = handler => {
+	let lastRequest;
+	let promise;
+	return () => {
+		if (!promise || promise.error || performance.now() - lastRequest > duration3hours) {
+			lastRequest = performance.now();
+			console.log('new request');
+			promise = new XPromise(handler());
+		}
+		return promise;
+	};
+};
+
+
 class Constants {
-	constructor() {
-		this.leagues = this.initLeagues();
-		this.types = this.initTypes();
-		this.properties = this.initProperties();
-		this.currencies = {};
-		this.items = this.initItems();
+
+	// leagues
+
+	get leagues() {
+		return (this.leagues_ ||= retry(Constants.initLeagues))();
 	}
 
-	async initLeagues() {
+	static async initLeagues() {
 		let response = await get('https://api.pathofexile.com/leagues');
 		return JSON.parse(response.string)
 			.filter(league => !league.rules.some(rule => rule.id === 'NoParties'))
@@ -23,7 +37,13 @@ class Constants {
 		*/
 	}
 
-	async initTypes() {
+	// types
+
+	get types() {
+		return (this.types_ ||= retry(Constants.initTypes))();
+	}
+
+	static async initTypes() {
 		let response = await get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js');
 		let str = response.string.match(/return(.*)}\)\);/)[1];
 		let cleanStr = str
@@ -59,7 +79,13 @@ class Constants {
 		return types.find(type => type.id === id)?.text;
 	}
 
-	async initProperties() {
+	// properties
+
+	get properties() {
+		return (this.properties_ ||= retry(Constants.initProperties))();
+	}
+
+	static async initProperties() {
 		let response = await get('https://www.pathofexile.com/api/trade/data/stats');
 		return JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
@@ -87,7 +113,9 @@ class Constants {
 		return properties.find(property => property.id === id)?.text;
 	}
 
-	async initCurrencies(league) {
+	// currencies
+
+	static async initCurrencies(league) {
 		let currencyPrices = dataFetcher.getData(
 			dataFetcher.endpointsByLeague.CURRENCY(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
@@ -111,12 +139,17 @@ class Constants {
 	}
 
 	currencyPrices(league) {
-		// todo consider expiring cache to keep currencies updated even if the apps been running a
-		// while
-		return this.currencies[league] = this.currencies[league] || this.initCurrencies(league);
+		this.currencyPrices_ ||= {};
+		return (this.currencyPrices_[league] ||= retry(() => Constants.initCurrencies(league)))();
 	}
 
-	async initItems() {
+	// items
+
+	get items() {
+		return (this.items_ ||= retry(Constants.initItems))();
+	}
+
+	static async initItems() {
 		let response = await get('https://www.pathofexile.com/api/trade/data/items');
 		return JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
