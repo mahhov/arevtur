@@ -16,6 +16,13 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.tooltips = [];
 		this.size = this.size || 10;
 
+
+		this.addEventListener('blur', () => {
+			let optionEl = this.$('select').options[0];
+			if (optionEl)
+				this.internalSetValue(optionEl.value, optionEl.title, true);
+		});
+
 		this.$('input').addEventListener('focus', () => this.updateAutocompletes(true));
 		this.$('input').addEventListener('change',
 			() => this.internalSetValue(this.$('input').value, '', true));
@@ -38,6 +45,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				return;
 			e.preventDefault();
 		});
+
 		this.$('select').addEventListener('keydown', e => {
 			if (e.key === 'Enter') {
 				let optionEl = this.$('select').selectedOptions[0];
