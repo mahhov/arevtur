@@ -53,7 +53,6 @@ customElements.define(name, class extends XElement {
 		this.$('#type-input').addEventListener('change', () => {
 			this.type = this.$('#type-input').value;
 			this.emit('change');
-			this.refreshBuild(false);
 		});
 		this.$('#min-value-input').addEventListener('change', () => {
 			this.minValue = this.$('#min-value-input').value;
@@ -119,7 +118,6 @@ customElements.define(name, class extends XElement {
 			this.emit('change');
 		});
 		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
-		this.tradeQueryParams = {};
 
 		pobApi.addListener('change', () => this.refreshBuild());
 	}
@@ -130,6 +128,7 @@ customElements.define(name, class extends XElement {
 
 	set type(value) {
 		this.$('#type-input').value = value;
+		this.$$('#query-properties-list x-query-property')
 			.forEach(queryProperty => queryProperty.type = this.type);
 		this.refreshBuild();
 	}
@@ -304,10 +303,7 @@ customElements.define(name, class extends XElement {
 		return UnifiedQueryParams.fromInputTradeQueryParams(this);
 	}
 
-	refreshBuild(propagate = true) {
-		if (propagate)
-			this.$$('#query-properties-list x-query-property')
-				.forEach(queryProperty => queryProperty.type = this.type);
+	refreshBuild() {
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			try {
 				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 400);
