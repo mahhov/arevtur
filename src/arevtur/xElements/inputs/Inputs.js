@@ -54,9 +54,9 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
 
 		pobApi.addListener('not-ready', () =>
-			this.$('#loaded-pob-status').classList.remove('valid'));
+			this.$('#loaded-pob-status').classList.remove('valid', 'busy'));
 		pobApi.addListener('busy', () =>
-			this.$('#loaded-pob-status').classList.add('busy'));
+			this.$('#loaded-pob-status').classList.add('valid', 'busy'));
 		pobApi.addListener('ready', () => {
 			this.$('#loaded-pob-status').classList.add('valid');
 			this.$('#loaded-pob-status').classList.remove('busy');

@@ -49,6 +49,13 @@ function respond(response, debug)
     io.flush()
 end
 
+local defaultItem = { raw = [[
+                        Item Class: Amulets
+                        Rarity: Rare
+                        Empyrean Collar
+                        Citrine Amulet
+                    ]] }
+
 -- core
 
 respond('ready', true)
@@ -84,7 +91,7 @@ while true do
         local slots = build.itemsTab.slots
         local slot = slots[args[3]]
         if slot then
-            local equippedItem = build.itemsTab.items[slot.selItemId]
+            local equippedItem = build.itemsTab.items[slot.selItemId] -- or defaultItem
             local newItem = new('Item', equippedItem.raw .. '\n' .. args[2])
             local tooltip = FakeTooltip:new()
             build.itemsTab:AddItemTooltip(tooltip, newItem)

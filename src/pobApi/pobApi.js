@@ -29,36 +29,42 @@ class PobApi extends Emitter {
 		};
 		this.pendingResponses = [];
 		this.cache = {};
+		this.crashCount = 0;
 	}
 
 	onScriptResponse({out, err, exit}) {
-		if (exit) {
-			// todo turn pob status red on crash and only restart if user clicks pob red icon
-			console.error('PobApi process exited, starting new process');
-			this.emit('not-ready');
-			this.script.restartProcess();
-			this.reset();
-			this.refreshBuild();
-			this.emit('change');
+		if (err || exit) {
+			this.crashCount++;
+			this.onError(err || 'PobApi crash');
 		}
-		if (err)
-			console.error(err);
 		if (out) {
 			// console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
 			// 	this.pendingResponses.length);
-			out.split('.>')
+			let resolves = out.split('.>')
 				.map(split => split.split('<.')[1])
-				.filter((_, i, a) => i !== a.length -
-					1) // filter trailing element; e.g. 'a,b,'.split(',') === ['a', 'b', '']
-				.forEach(split => this.pendingResponses.shift().resolve(split));
+				.filter(v => v); // last value after split will be empty
+			if (resolves.filter(resolve => resolve !== 'build loaded').length)
+				this.crashCount = 0;
+			resolves.forEach(resolve => this.pendingResponses.shift().resolve(resolve));
 			if (!this.pendingResponses.length)
 				this.emit('ready');
 		}
 	}
 
+	onError(e) {
+		console.error(e);
+		console.error('PobApi process errored, starting new process', this.crashCount);
+		this.emit('not-ready');
+		if (this.crashCount < 3) {
+			this.script.restartProcess();
+			this.refreshBuild();
+		}
+	}
+
 	send(cache, ...args) {
-		if (!this.script)
-			return Promise.reject();
+		if (!this.script || !this.build_)
+			return Promise.reject(
+				'Ignoring PoB requests until script and build paths have been set');
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		if (this.cache[text])
 			return this.cache[text];
@@ -75,32 +81,37 @@ class PobApi extends Emitter {
 	set pobPath(path) {
 		// e.g.
 		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
+		this.pobPath_ = path;
+		this.crashCount = 0;
 		this.script = new Script(path);
 		this.script.addListener(response => this.onScriptResponse(response));
-		this.reset();
 		this.refreshBuild();
-		this.emit('change');
 	}
 
 	set build(path) {
+		// calling this with ongoing requests will crash if the ongoing requests are resolved (i.e.
+		// if lua hasn't crashed), because the requests' pendingResponses entry will be cleared. If
+		// necessary, we can either restart the script here to abandon the ongoing lua responses,
+		// or we can be smarter about clearing pendingResponses on crash instead of on new build.
+		if (path !== this.build_)
+			this.crashCount = 0;
 		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of
 		// Building/Builds/cobra lash.xml'
 		this.build_ = path;
-		if (path) {
-			this.reset();
-			this.send(false, 'build', path);
-			this.emit('change');
-		}
+		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject(
+			'PoBApi new build set, existing requests are stale'));
+		this.pendingResponses = [];
+		this.cache = {};
+		this.send(false, 'build', path);
+		this.emit('change');
+	}
+
+	restartAndRefreshBuild() {
+		this.pobPath = this.pobPath_;
 	}
 
 	refreshBuild() {
 		this.build = this.build_;
-	}
-
-	reset() {
-		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject());
-		this.pendingResponses = [];
-		this.cache = {};
 	}
 
 	set valueParams(valueParams) {
@@ -116,7 +127,7 @@ class PobApi extends Emitter {
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
-			return Promise.reject();
+			return Promise.reject('PoB evalItemModSummary missing type or mod');
 
 		// not all pseudo mods are mapped; handles the ones with 'total' in their text
 		if (itemMod.toLowerCase().endsWith('(pseudo)'))
@@ -140,7 +151,7 @@ class PobApi extends Emitter {
 	async generateQuery(type = undefined) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
-			return Promise.reject();
+			return Promise.reject('PoB generateQuery missing type');
 		return this.send(true, 'generateQuery', pobType, this.valueParams_.life,
 			this.valueParams_.resist, this.valueParams_.dps).then(JSON.parse);
 	}
