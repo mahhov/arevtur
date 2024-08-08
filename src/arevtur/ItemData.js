@@ -50,6 +50,7 @@ class ItemData {
 			sockets,
 			affixes,
 			defenseProperties: defenseProperties.map(nameValue => nameValue.join(' ')),
+			fracturedMods: tradeApiItemData.item.fracturedMods || [],
 			enchantMods: tradeApiItemData.item.enchantMods || [],
 			implicitMods: tradeApiItemData.item.implicitMods || [],
 			explicitMods: tradeApiItemData.item.explicitMods || [],
@@ -58,6 +59,8 @@ class ItemData {
 			accountText:
 				`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`,
 			whisper: tradeApiItemData.listing.whisper,
+			// todo add a config, if enabled, do direct whisper
+			directWhisper: tradeApiItemData.listing.whisper_token,
 			date: tradeApiItemData.listing.indexed,
 			note: tradeApiItemData.item.note,
 			evalValue: Object.values(evalValueDetails).reduce((sum, v) => sum + v),

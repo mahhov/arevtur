@@ -122,6 +122,7 @@ customElements.define(name, class extends XElement {
 		pobApi.addListener('change', () => this.refreshBuild());
 	}
 
+	// todo not being loaded initially
 	set name(value) {
 		this.$('#name-input').value = value;
 	}

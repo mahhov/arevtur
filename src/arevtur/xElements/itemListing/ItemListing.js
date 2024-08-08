@@ -12,6 +12,7 @@ const listTuples = [
 	['#defense-list', 'defenseProperties'],
 	['#enchant-list', 'enchantMods'],
 	['#implicit-list', 'implicitMods'],
+	['#fractured-list', 'fracturedMods'],
 	['#explicit-list', 'explicitMods'],
 	['#crafted-list', 'craftedMods'],
 	['#pseudo-list', 'pseudoMods'],
