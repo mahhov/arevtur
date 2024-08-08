@@ -12,7 +12,7 @@ let viewHandle = new ViewHandle();
 pobApi.pobPath =
 	'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src';
 pobApi.build =
-	'/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml';
+	'~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml';
 pobApi.valueParams = {life: .5, resist: .1, dps: .25};
 
 let slashType = (name = 'hideout') =>

@@ -5,49 +5,49 @@ require('HeadlessWrapper')
 local dkjson = require 'dkjson'
 
 local function readFile(path)
-  local fileHandle = io.open(path, 'r')
-  if not fileHandle then return nil end
-  local fileText = fileHandle:read('*a')
-  fileHandle:close()
-  return fileText
+    local fileHandle = io.open(path, 'r')
+    if not fileHandle then return nil end
+    local fileText = fileHandle:read('*a')
+    fileHandle:close()
+    return fileText
 end
 
 FakeTooltip = {
-  text = ''
+    text = ''
 }
 
 function FakeTooltip:new()
-  o = {}
-  setmetatable(o, self)
-  self.__index = self
-  return o
+    o = {}
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
 
 function FakeTooltip:AddLine(_, text)
-  self.text = self.text .. text .. '\n'
+    self.text = self.text .. text .. '\n'
 end
 
 function FakeTooltip:AddSeparator()
-  self.text = self.text .. '\n'
+    self.text = self.text .. '\n'
 end
 
 function dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k, v in pairs(o) do
-      if type(k) ~= 'number' then k = '"' .. k .. '"' end
-      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+    if type(o) == 'table' then
+        local s = '{ '
+        for k, v in pairs(o) do
+            if type(k) ~= 'number' then k = '"' .. k .. '"' end
+            s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+        end
+        return s .. '} '
+    else
+        return tostring(o)
     end
-    return s .. '} '
-  else
-    return tostring(o)
-  end
 end
 
 function printKeys(o)
-  for k, v in pairs(o) do
-    print(k)
-  end
+    for k, v in pairs(o) do
+        print(k)
+    end
 end
 
 -- our loop
@@ -57,7 +57,7 @@ end
 --io.flush()
 
 buildXmlFile =
-'/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+'~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
 buildXml = readFile(buildXmlFile)
 loadBuildFromXML(buildXml)
 
@@ -158,59 +158,59 @@ local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 --print(dump(tradeQuery.slotTables))
 
 tradeQuery.statSortSelectionList = {
-  { stat = 'TotalEHP',             weightMult = tonumber(arg4) },
-  { stat = 'ChaosResistTotal',     weightMult = tonumber(arg5) },
-  { stat = 'LightningResistTotal', weightMult = tonumber(arg5) },
-  { stat = 'ColdResistTotal',      weightMult = tonumber(arg5) },
-  { stat = 'FireResistTotal',      weightMult = tonumber(arg5) },
-  { stat = 'FullDPS',              weightMult = tonumber(arg6) },
+    { stat = 'TotalEHP',             weightMult = tonumber(arg4) },
+    { stat = 'ChaosResistTotal',     weightMult = tonumber(arg5) },
+    { stat = 'LightningResistTotal', weightMult = tonumber(arg5) },
+    { stat = 'ColdResistTotal',      weightMult = tonumber(arg5) },
+    { stat = 'FireResistTotal',      weightMult = tonumber(arg5) },
+    { stat = 'FullDPS',              weightMult = tonumber(arg6) },
 }
 
 -- TradeQueryClass:PriceItemRowDisplay
 local jewelNodeId
 for nodeId, slot in pairs(itemsTab.sockets) do
-  if not slot.inactive then
-    jewelNodeId = nodeId
-    break
-  end
+    if not slot.inactive then
+        jewelNodeId = nodeId
+        break
+    end
 end
 
 local slot = itemsTab.slots[arg2] or itemsTab.sockets[jewelNodeId]
 
 tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
-  tradeQuery.statSortSelectionList, function(context, query, errMsg)
-    print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
-    print(query)
-    --print('debug')
-    --print(tradeQueryGenerator.calcContext.options.includeCorrupted)
-    --print(dump(tradeQueryGenerator.alreadyWeightedMods))
-    print('')
-    print(dump(tradeQueryGenerator.modWeights))
-    print('')
-    print(dkjson.encode(tradeQueryGenerator.modWeights))
-  end)
+    tradeQuery.statSortSelectionList, function(context, query, errMsg)
+        print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
+        print(query)
+        --print('debug')
+        --print(tradeQueryGenerator.calcContext.options.includeCorrupted)
+        --print(dump(tradeQueryGenerator.alreadyWeightedMods))
+        print('')
+        print(dump(tradeQueryGenerator.modWeights))
+        print('')
+        print(dkjson.encode(tradeQueryGenerator.modWeights))
+    end)
 
 -- TradeQueryGeneratorClass:RequestQuery execute
 local eldritchModSlots = {
-  ['Body Armour'] = true,
-  ['Helmet'] = true,
-  ['Gloves'] = true,
-  ['Boots'] = true
+    ['Body Armour'] = true,
+    ['Helmet'] = true,
+    ['Gloves'] = true,
+    ['Boots'] = true
 }
 local jewelTypes = {
-  ['Jewel Any'] = 'Any',
-  ['jewel Base'] = 'Base',
-  ['jewel Abyss'] = 'Abyss',
+    ['Jewel Any'] = 'Any',
+    ['jewel Base'] = 'Base',
+    ['jewel Abyss'] = 'Abyss',
 }
 local options = {
-  includeCorrupted = true, -- this is being ignored
-  includeEldritch = eldritchModSlots[slot.slotName] == true,
-  includeTalisman = slot.slotName == 'Amulet',
-  influence1 = 1,
-  influence2 = 1,
-  maxPrice = tonumber(arg3),
-  statWeights = tradeQuery.statSortSelectionList,
-  jewelType = jewelTypes[arg2],
+    includeCorrupted = true, -- this is being ignored
+    includeEldritch = eldritchModSlots[slot.slotName] == true,
+    includeTalisman = slot.slotName == 'Amulet',
+    influence1 = 1,
+    influence2 = 1,
+    maxPrice = tonumber(arg3),
+    statWeights = tradeQuery.statSortSelectionList,
+    jewelType = jewelTypes[arg2],
 }
 --print(dump(options))
 tradeQueryGenerator:StartQuery(slot, options)
