@@ -44,6 +44,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
+// todo rename to ApiTradeQuery to be consistent with UnifiedQueryParams naming
 class TradeQueryParams {
 	constructor(data) {
 		this.league = data.league || 'Standard';
