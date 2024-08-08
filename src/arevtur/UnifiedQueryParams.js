@@ -161,7 +161,7 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	toTradeQueryParams(league, sessionId, overridePrice, fatedConnectionsProphecyPrice) {
+	toTradeQueryParams(league, sessionId, overridePrice, manual6LinkName, manual6LinkPrice) {
 		let maxPrice = overridePrice !== null ? overridePrice : this.maxPrice;
 		let weights = Object.fromEntries(
 			[...this.weightEntries, ...this.sharedWeightEntries].filter(entry => entry[3]));
@@ -187,46 +187,53 @@ class UnifiedQueryParams {
 			weights: weights,
 			ands: ands,
 			nots: nots,
+			affixValueShift: 0,
+			priceShifts: {},
 		};
 
-		let linkedOptions = [false,
-			this.linked && maxPrice > fatedConnectionsProphecyPrice ? true : null];
-		let affixOptions = [
+		let linkedOptions = [
+			// query with the intended links
 			false,
+			// query unlinked + uncorrupted items
+			this.linked && maxPrice > manual6LinkPrice ? true : null,
+		].filter(v => v !== null);
+		let affixOptions = [
+			// query without affixes
+			false,
+			// query items with a craftable prefix
 			this.affixProperties.prefix ? ['prefix'] : null,
+			// query items with a craftable suffix
 			this.affixProperties.suffix ? ['suffix'] : null,
+			// query items with specific craftable prefixes
 			...this.conditionalPrefixEntries.map(
 				([propertyId, weight]) => ['prefix', propertyId, weight]),
+			// query items with specific craftable suffixes
 			...this.conditionalSuffixEntries.map(
 				([propertyId, weight]) => ['suffix', propertyId, weight]),
-		];
+		].filter(v => v !== null);
 
-		linkedOptions
-			.filter(lo => lo !== null)
-			.forEach(lo =>
-				affixOptions
-					.filter(ao => ao !== null)
-					.forEach(ao => {
-						let queryO = deepCopy(query);
-						if (lo) {
-							queryO.linked = false;
-							queryO.uncorrupted = true;
-							queryO.maxPrice -= fatedConnectionsProphecyPrice;
-							queryO.priceShifts.fatedConnections = fatedConnectionsProphecyPrice;
-						}
-						if (ao) {
-							queryO.affixProperties[ao[0]] = true;
-							queryO.uncorrupted = true;
-							queryO.uncrafted = true;
-							if (ao.length === 1)
-								queryO.affixValueShift += this.affixProperties[ao[0]];
-							else {
-								queryO.nots[ao[1]] = undefined;
-								queryO.affixValueShift += ao[2];
-							}
-						}
-						queries.push(queryO);
-					}));
+		// cross product all combinations of linking and craftable affixes
+		linkedOptions.forEach(lo => affixOptions.forEach(ao => {
+			let queryO = deepCopy(query);
+			if (lo) {
+				queryO.linked = false;
+				queryO.uncorrupted = true;
+				queryO.maxPrice -= manual6LinkPrice;
+				queryO.priceShifts[manual6LinkName] = manual6LinkPrice;
+			}
+			if (ao) {
+				queryO.affixProperties[ao[0]] = true;
+				queryO.uncorrupted = true;
+				queryO.uncrafted = true;
+				if (ao.length === 1)
+					queryO.affixValueShift += this.affixProperties[ao[0]];
+				else {
+					queryO.nots[ao[1]] = undefined;
+					queryO.affixValueShift += ao[2];
+				}
+			}
+			queries.push(queryO);
+		}));
 
 		return queries.map(query => new TradeQueryParams(query));
 	}

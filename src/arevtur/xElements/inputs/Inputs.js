@@ -5,6 +5,7 @@ const ApiConstants = require('../../ApiConstants');
 const {TradeQueryImport} = require('../../TradeQuery');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../pobApi/pobApi');
+const util = require('../../../util/util');
 
 let timestamp = () => {
 	let date = new Date();
@@ -181,7 +182,13 @@ customElements.define(name, class Inputs extends XElement {
 	async getTradeQueryParams(overridePrice = null) {
 		let currencyPrices = await ApiConstants.constants.currencyPrices(
 			configForRenderer.config.league);
-		let fatedConnectionsProphecyPrice = currencyPrices['fatedConnectionsProphecy'];
+		let manual6LinkOptions = [
+			['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],
+			['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft],
+		];
+		let manual6LinkCheapestOption = manual6LinkOptions[
+			util.minIndex(manual6LinkOptions.map(v => v[1]))];
+
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
 		return this.inputSets
@@ -190,6 +197,6 @@ customElements.define(name, class Inputs extends XElement {
 				UnifiedQueryParams
 					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
 					.toTradeQueryParams(league, sessionId, overridePrice,
-						fatedConnectionsProphecyPrice));
+						manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
 	}
 });

@@ -54,6 +54,7 @@ class Constants {
 			.find(({id}) => id === 'type_filters').filters
 			.find(({id}) => id === 'category').option.options;
 		types.find(({id}) => id === 'armour.chest').text += ' chest';
+		// todo type 'any' is failing trade api
 		return types;
 		/*
 			[{
