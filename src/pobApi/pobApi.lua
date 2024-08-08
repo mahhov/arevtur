@@ -91,7 +91,7 @@ while true do
         local slots = build.itemsTab.slots
         local slot = slots[args[3]]
         if slot then
-            local equippedItem = build.itemsTab.items[slot.selItemId] -- or defaultItem
+            local equippedItem = build.itemsTab.items[slot.selItemId] or defaultItem
             local newItem = new('Item', equippedItem.raw .. '\n' .. args[2])
             local tooltip = FakeTooltip:new()
             build.itemsTab:AddItemTooltip(tooltip, newItem)

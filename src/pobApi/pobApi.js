@@ -20,26 +20,61 @@ class Script extends CustomOsScript {
 class PobApi extends Emitter {
 	constructor() {
 		super();
-		this.script = null;
-		this.build_ = null;
 		this.valueParams = {
 			life: 0,
 			resist: 0,
 			dps: 0,
 		};
 		this.pendingResponses = [];
-		this.cache = {};
 		this.crashCount = 0;
 	}
 
+	restart() {
+		this.clear();
+		if (!this.pobPath_ || !this.build_)
+			return;
+		this.script = new Script(this.pobPath_);
+		this.script.addListener(response => this.onScriptResponse(response));
+		this.send(false, 'build', this.build_);
+		this.emit('change');
+	}
+
+	clear() {
+		this.script = null;
+		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject(
+			'PoBApi cleared, existing requests are stale'));
+		this.pendingResponses = [];
+		this.cache = {};
+	}
+
+	set pobPath(path) {
+		// e.g.
+		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
+		if (this.pobPath_ !== path)
+			this.crashCount = 0;
+		this.pobPath_ = path;
+		this.restart();
+	}
+
+	set build(path) {
+		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of
+		// Building/Builds/cobra lash.xml'
+		if (this.build_ !== path)
+			this.crashCount = 0;
+		this.build_ = path;
+		this.restart();
+	}
+
 	onScriptResponse({out, err, exit}) {
-		if (err || exit) {
+		if (exit) {
 			this.crashCount++;
-			this.onError(err || 'PobApi crash');
+			this.onError('PobApi crash');
 		}
+		if (exit)
+			this.onError(err);
 		if (out) {
-			// console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
-			// 	this.pendingResponses.length);
+			console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
+				this.pendingResponses.length);
 			let resolves = out.split('.>')
 				.map(split => split.split('<.')[1])
 				.filter(v => v); // last value after split will be empty
@@ -55,16 +90,15 @@ class PobApi extends Emitter {
 		console.error(e);
 		console.error('PobApi process errored, starting new process', this.crashCount);
 		this.emit('not-ready');
-		if (this.crashCount < 3) {
-			this.script.restartProcess();
-			this.refreshBuild();
-		}
+		if (this.crashCount < 3)
+			this.restart();
+		else
+			this.clear();
 	}
 
 	send(cache, ...args) {
-		if (!this.script || !this.build_)
-			return Promise.reject(
-				'Ignoring PoB requests until script and build paths have been set');
+		if (!this.script)
+			return Promise.reject('Ignoring PoB requests until script has started');
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		if (this.cache[text])
 			return this.cache[text];
@@ -76,42 +110,6 @@ class PobApi extends Emitter {
 			this.cache[text] = promise;
 		this.pendingResponses.push(promise);
 		return promise;
-	}
-
-	set pobPath(path) {
-		// e.g.
-		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
-		this.pobPath_ = path;
-		this.crashCount = 0;
-		this.script = new Script(path);
-		this.script.addListener(response => this.onScriptResponse(response));
-		this.refreshBuild();
-	}
-
-	set build(path) {
-		// calling this with ongoing requests will crash if the ongoing requests are resolved (i.e.
-		// if lua hasn't crashed), because the requests' pendingResponses entry will be cleared. If
-		// necessary, we can either restart the script here to abandon the ongoing lua responses,
-		// or we can be smarter about clearing pendingResponses on crash instead of on new build.
-		if (path !== this.build_)
-			this.crashCount = 0;
-		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of
-		// Building/Builds/cobra lash.xml'
-		this.build_ = path;
-		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject(
-			'PoBApi new build set, existing requests are stale'));
-		this.pendingResponses = [];
-		this.cache = {};
-		this.send(false, 'build', path);
-		this.emit('change');
-	}
-
-	restartAndRefreshBuild() {
-		this.pobPath = this.pobPath_;
-	}
-
-	refreshBuild() {
-		this.build = this.build_;
 	}
 
 	set valueParams(valueParams) {

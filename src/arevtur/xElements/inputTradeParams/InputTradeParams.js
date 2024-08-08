@@ -130,6 +130,7 @@ customElements.define(name, class extends XElement {
 
 	set type(value) {
 		this.$('#type-input').value = value;
+			.forEach(queryProperty => queryProperty.type = this.type);
 		this.refreshBuild();
 	}
 
