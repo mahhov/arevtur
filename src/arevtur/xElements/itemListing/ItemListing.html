@@ -2,11 +2,14 @@
 	@import '../sharedStyle.css';
 
 	:host {
-		display: inline-block;
 		height: 450px;
-		overflow: auto;
-		border: 1px solid var(--interactable-border);
 		padding: 10px;
+		border: 1px solid var(--interactable-border);
+		background-color: var(--interactable-back);
+
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
 	}
 
 	:host(.selected) {
@@ -17,8 +20,13 @@
 		background: var(--interactable-hover-back);
 	}
 
-	:host {
-		background-color: var(--interactable-back);
+	.scroll {
+		overflow: auto;
+		flex: 1 1 0;
+	}
+
+	.pane {
+		flex: 0 0;
 	}
 
 	#corrupted-text {
@@ -68,37 +76,39 @@
 	}
 </style>
 
-<div>
-	<div id="name-text"></div>
+<div class="scroll">
 	<div>
-		<span id="type-text"></span>
-		<span id="item-level-text"></span>
+		<div id="name-text"></div>
+		<div>
+			<span id="type-text"></span>
+			<span id="item-level-text"></span>
+		</div>
+	</div>
+	<div>
+		<div id="corrupted-text">corrupted</div>
+		<div id="influence-list"></div>
+	</div>
+	<div id="sockets-list"></div>
+	<div>
+		<div>P <span id="prefixes-text"></span></div>
+		<div>S <span id="suffixes-text"></span></div>
+		<div class="value">Affix value: <span id="affix-value-text"></span></div>
+	</div>
+	<div id="defense-container">
+		<div id="defense-list"></div>
+		<div class="value">Defense value: <span id="defense-value-text"></span></div>
+	</div>
+	<div id="enchant-list"></div>
+	<div id="implicit-list"></div>
+	<div id="fractured-list"></div>
+	<div id="explicit-list"></div>
+	<div id="crafted-list"></div>
+	<div id="pseudo-container">
+		<div id="pseudo-list"></div>
+		<div class="value">Mod value: <span id="weight-value-text"></span></div>
 	</div>
 </div>
-<div>
-	<div id="corrupted-text">corrupted</div>
-	<div id="influence-list"></div>
-</div>
-<div id="sockets-list"></div>
-<div>
-	<div>P <span id="prefixes-text"></span></div>
-	<div>S <span id="suffixes-text"></span></div>
-	<div class="value">Affix value: <span id="affix-value-text"></span></div>
-</div>
-<div id="defense-container">
-	<div id="defense-list"></div>
-	<div class="value">Defense value: <span id="defense-value-text"></span></div>
-</div>
-<div id="enchant-list"></div>
-<div id="implicit-list"></div>
-<div id="fractured-list"></div>
-<div id="explicit-list"></div>
-<div id="crafted-list"></div>
-<div id="pseudo-container">
-	<div id="pseudo-list"></div>
-	<div class="value">Mod value: <span id="weight-value-text"></span></div>
-</div>
-<div>
+<div class="pane">
 	<div>
 		<span class="value">Value: <span id="value-text"></span></span>
 		<x-tooltip-button id="value-build" class="pob"></x-tooltip-button>
