@@ -35,7 +35,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#league-input').autocompletes = leagues);
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
-		// todo try catch JSON.parse
+		// todo[high] try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
@@ -171,7 +171,7 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	store() {
-		// todo league gets reset sometimes
+		// todo[high] league gets reset sometimes
 		configForRenderer.config = {'league': this.$('#league-input').value};
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
 		localStorage.setItem('input-set-index', this.inputSetIndex);

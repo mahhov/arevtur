@@ -14,7 +14,7 @@ class Config {
 				league: 'Standard',
 				restrictToPoeWindow: true,
 				darkTheme: true,
-				// todo these 2 should use local storage, see git branch configButton
+				// todo[high] these 2 should use local storage, see git branch configButton
 				viewHorizontal: true,
 				viewMaximize: false,
 			};

@@ -44,7 +44,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
-// todo rename to ApiTradeQuery to be consistent with UnifiedQueryParams naming
+// todo[medium] rename to ApiTradeQuery to be consistent with UnifiedQueryParams naming
 class TradeQueryParams {
 	constructor(data) {
 		this.league = data.league || 'Standard';
@@ -115,7 +115,7 @@ class TradeQueryParams {
 	async writeItemsToStream(stream, progressCallback) {
 		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback);
 
-		// todo this doesn't work for hybrid (e.g. es + evasion) bases
+		// todo[medium] this doesn't work for hybrid (e.g. es + evasion) bases
 		let defenseProperty = Object.entries(this.defenseProperties)
 			.find(([_, {weight}]) => weight);
 		if (defenseProperty) {
@@ -144,7 +144,7 @@ class TradeQueryParams {
 	}
 
 	async queryAndParseItems(query, stream, progressCallback) {
-		// todo more selective try/catch
+		// todo[medium] more selective try/catch
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;

@@ -68,7 +68,7 @@ let getUncachedModsByItem = () => {
 		'cn=Helmet&tags=str_int_armour',
 		'cn=Helmet&tags=dex_int_armour',
 		'cn=Quiver',
-		'cn=Shield&tags=str_armour,str_shield', // todo shields
+		'cn=Shield&tags=str_armour,str_shield', // todo[low] shields
 		'cn=LifeFlask',
 		'cn=ManaFlask',
 		'cn=HybridFlask',

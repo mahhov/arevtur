@@ -8,7 +8,7 @@ window.showView();
 if (appData.isDev)
 	window.showDevTools();
 
-// todo this should be made generic for all windows
+// todo[low] this should be made generic for all windows
 ipcMain.handle('open-dialog', async (event, arg) =>
 	dialog.showOpenDialog(await window.window, arg));
 

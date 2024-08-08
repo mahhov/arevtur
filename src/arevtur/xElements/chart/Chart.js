@@ -21,7 +21,7 @@ customElements.define(name, class Chart extends XElement {
 			this.dragged = false;
 			if (!e.ctrlKey)
 				this.mouseDown = {x: e.offsetX, y: e.offsetY};
-			e.preventDefault(); // todo is this needed
+			e.preventDefault(); // todo[low] is this needed
 		});
 		this.$('canvas').addEventListener('mousemove', e => {
 			this.emit('hover', this.pixelToCoord(e.offsetX, e.offsetY));
@@ -62,9 +62,9 @@ customElements.define(name, class Chart extends XElement {
 			// 'shift+lmb drag to scale',
 			'double lmb to recenter',
 			'shift+double lmb to recenter while including origin',
-			// todo ctrl+lmb is running bad query. it's probably even harder to fix with build
-			// sorting. 'ctrl+lmb to query at the min-value and max-price corresponding to the
-			// cursor\'s position',
+			// todo[low] ctrl+lmb is running bad query. it's probably even harder to fix with build
+			//  sorting. 'ctrl+lmb to query at the min-value and max-price corresponding to the
+			//  cursor's position',
 		].join('\n');
 
 		this.pointSets_ = [];

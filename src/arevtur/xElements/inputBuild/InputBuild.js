@@ -83,7 +83,8 @@ customElements.define(name, class InputBuild extends XElement {
 	}
 
 	static get defaultPobPath() {
-		// todo do we need to try/catch this?
+		// todo[medium] do we need to try/catch this?
+		// todo[high] are these paths still correct? add linux paths
 		return stream().write(
 			`${process.env.ProgramData}`,
 			`${process.env.APPDATA}`,

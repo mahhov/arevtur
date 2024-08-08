@@ -86,9 +86,8 @@
 	$('x-results').addEventListener('submit', async e =>
 		submitQueries(await $('x-inputs').getTradeQueryParams(e.detail.overridePrice)));
 
-	// todo
-	//   assume quality 0%
-	//   items sometimes coming back without pseudo mod 'Sum: '
-	//   make UI easier to understand and add tooltips
-	//   catch JSON and pob and https request failures
+	// todo[low] assume quality 0%
+	// todo[low] items sometimes coming back without pseudo mod 'Sum: '
+	// todo[medium] make UI easier to understand and add tooltips
+	// todo[medium] catch JSON and pob and https request failures
 </script>

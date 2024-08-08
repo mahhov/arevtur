@@ -145,7 +145,7 @@ class PobApi extends Emitter {
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, itemMod));
 	}
 
-	// todo rename to getModWeights
+	// todo[high] rename to getModWeights
 	async generateQuery(type = undefined) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
@@ -261,5 +261,3 @@ class PobApi extends Emitter {
 
 // singleton
 module.exports = new PobApi();
-
-// todo annotate clipboard item

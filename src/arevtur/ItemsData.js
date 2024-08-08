@@ -62,8 +62,8 @@ class ItemsData extends Emitter {
 					return false;
 				v.evalValue = Math.max(...copies.map(vv => vv.evalValue));
 				v.price = Math.min(...copies.map(vv => vv.price));
-				// todo is it ok to take the max of each, or should the values of the max-sum be
-				//  taken?
+				// todo[low] is it ok to take the max of each, or should the values of the max-sum
+				//  be taken?
 				v.evalValueDetails = Object.fromEntries(Object.keys(v.evalValueDetails).map(
 					valueKey => [valueKey,
 						Math.max(...copies.map(copy => copy.evalValueDetails[valueKey]))]));

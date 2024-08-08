@@ -100,5 +100,3 @@ $('#preferences-open').addEventListener('click', () => {
 	let path = (os.platform() === 'linux' ? 'file:' : '') + appData.basePath;
 	shell.openExternal(path);
 });
-
-// todo lot of duplicate code with clipboardManager/view/View.html

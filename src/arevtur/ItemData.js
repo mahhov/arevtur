@@ -3,8 +3,8 @@ const pobApi = require('../pobApi/pobApi');
 
 class ItemData {
 	// Since constructors can't be async, we use a static async creator.
-	// todo make the async fields promises so we can use a constructor. But how? The item's would
-	//   be hard to use without the async price and build value computed.
+	// todo[low] make the async fields promises so we can use a constructor. But how? The item's
+	//  would be hard to use without the async price and build value computed.
 	static async create(league, affixValueShift, queryDefenseProperties, priceShifts,
 	                    tradeApiItemData) {
 		let sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
@@ -59,7 +59,7 @@ class ItemData {
 			accountText:
 				`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`,
 			whisper: tradeApiItemData.listing.whisper,
-			// todo add a config, if enabled, do direct whisper
+			// todo[medium] add a config, if enabled, do direct whisper
 			directWhisper: tradeApiItemData.listing.whisper_token,
 			date: tradeApiItemData.listing.indexed,
 			note: tradeApiItemData.item.note,

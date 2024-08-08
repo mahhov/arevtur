@@ -66,8 +66,8 @@ customElements.define(name, class extends XElement {
 			this.offline = this.$('#offline-check').checked;
 			this.emit('change');
 		});
-		// todo slow async stuff probably breaks stuff if the user interacts with the UI before the
-		//  query returns.
+		// todo[high] slow async stuff probably breaks stuff if the user interacts with the UI
+		//  before the query returns.
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
 			try {
 				let modWeights = await pobApi.generateQuery(this.type);
@@ -122,7 +122,7 @@ customElements.define(name, class extends XElement {
 		pobApi.addListener('change', () => this.refreshBuild());
 	}
 
-	// todo not being loaded initially
+	// todo[high] not being loaded initially
 	set name(value) {
 		this.$('#name-input').value = value;
 	}

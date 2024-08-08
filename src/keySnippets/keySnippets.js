@@ -8,7 +8,7 @@ const pobApi = require('../pobApi/pobApi');
 
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
-// todo make these configurable
+// todo[high] make these configurable
 pobApi.pobPath =
 	'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src';
 pobApi.build =
@@ -51,7 +51,7 @@ let priceClipboard = async itemText => {
 				let m = line.match(/@[\w,]+/)?.[0] || '';
 				let textColor = '#000';
 				if (m.includes('orange'))
-					textColor = 'orange'; // todo use colors consistent with themeStyle.css
+					textColor = 'orange'; // todo[high] use colors consistent with themeStyle.css
 				if (m.includes('red'))
 					textColor = 'red';
 				if (m.includes('green'))
@@ -80,7 +80,7 @@ let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 
 let init = () => {
 	console.log('init start');
-	// todo key sending seems to hang my machine
+	// todo[low] key sending seems to freeze the machine on linux. does it work on windows?
 	// addPoeShortcutListener('h', () => slashType('hideout'));
 	// addPoeShortcutListener('k', () => slashType('kingsmarch'));
 	keyHook.addShortcut('{ctrl}', 'c', () => priceClipboard(electronClipboard.readText()));
