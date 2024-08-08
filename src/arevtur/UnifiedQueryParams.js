@@ -259,7 +259,8 @@ class UnifiedQueryParams {
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_suffix_mods'});
 
 		let typeFilters = {};
-		typeFilters.category = {option: overridden.type};
+		if (overridden.type)
+			typeFilters.category = {option: overridden.type};
 		if (overridden.nonUnique)
 			typeFilters.rarity = {option: 'nonunique'};
 
@@ -292,7 +293,7 @@ class UnifiedQueryParams {
 					},
 				].map(pruneIfEmptyFilters).filter(v => v),
 				filters: {
-					type_filters: {filters: typeFilters},
+					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
 					trade_filters: {
 						filters: {
 							price: {max: overridden.maxPrice},
