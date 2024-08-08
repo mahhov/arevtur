@@ -5,8 +5,8 @@ let getEndpointsByLeague = () => {
 	const ITEM = `itemoverview`;
 	const CURRENCY = `currencyoverview`;
 
-	let genEndpointByLeague = (prefix,
-	                           type) => league => `${BASE}/${prefix}?league=${league}&type=${type}`;
+	let genEndpointByLeague = (prefix, type) =>
+		league => `${BASE}/${prefix}?league=${league}&type=${type}`;
 
 	return {
 		GEM: genEndpointByLeague(ITEM, 'SkillGem'),

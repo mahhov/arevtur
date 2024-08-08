@@ -11,7 +11,6 @@ let retry = handler => {
 	return () => {
 		if (!promise || promise.error || performance.now() - lastRequest > duration3hours) {
 			lastRequest = performance.now();
-			console.log('new request');
 			promise = new XPromise(handler());
 		}
 		return promise;
@@ -118,9 +117,11 @@ class Constants {
 	static async initCurrencies(league) {
 		let currencyPrices = dataFetcher.getData(
 			dataFetcher.endpointsByLeague.CURRENCY(league));
+		let beastPrices = dataFetcher.getData(dataFetcher.endpointsByLeague.BEAST(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
 		staticDataStr = await staticDataStr;
+		beastPrices = await beastPrices;
 
 		let tuples = JSON.parse(staticDataStr.string).result
 			.find(({id}) => id === 'Currency').entries
@@ -131,10 +132,13 @@ class Constants {
 				return [id, price];
 			});
 
-		// todo use the price for 1500 fuse bench craft
-		tuples.push(['fatedConnectionsProphecy', 750]);
-		tuples.push(['chaos', 1]);
-		return Object.fromEntries(tuples);
+		let currencies = Object.fromEntries(tuples);
+		currencies.fuse6LinkBenchCraft = currencies['fusing'] * 1500;
+		currencies.theBlackMorrigan6LinkBeastCraft = beastPrices.lines
+			.find(line => line.name === 'Black Mórrigan')
+			.chaosValue;
+		currencies.chaos = 1;
+		return currencies;
 		/* {alt: .125, ...} */
 	}
 
