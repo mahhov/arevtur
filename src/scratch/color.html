@@ -11,19 +11,32 @@
 		height: 300px;
 		overflow: hidden;
 		margin: 5px;
-
 		--color: oklch(var(--l) var(--c) var(--h));
 		outline: 1px solid var(--color);
 		color: var(--color);
 	}
+
+	.container div.picked {
+		outline-width: 5px;
+	}
 </style>
 
-<input id="l" placeholder="l" type="number" value=".5" min="0" max="1" step=".1" title="0-1">
+<input id="l" placeholder="l" type="number" value=".75" min="0" max="1" step=".1" title="0-1">
 <input id="c" placeholder="c" type="number" value=".2" min="0" max="1" step=".1" title="0-.4">
 <div id="textDivs" class="container"></div>
 
 <script>
 	let $ = q => document.querySelector(q);
+
+	let picked = [
+		10,
+		50,
+		90,
+		130,
+		180,
+		240,
+		340,
+	];
 
 	let refresh = () => {
 		let l = $('#l').value;
@@ -31,13 +44,17 @@
 		let textDivs = $('#textDivs');
 		while (textDivs.firstChild)
 			textDivs.removeChild(textDivs.firstChild);
-		for (let h = 0; h < 360; h += 20) {
+		for (let h = 0; h < 360; h += 10) {
 			let div = document.createElement('div');
+			if (picked.includes(h))
+				div.classList.add('picked');
 			textDivs.appendChild(div);
 			div.style.setProperty('--l', l);
 			div.style.setProperty('--c', c);
 			div.style.setProperty('--h', h);
 			div.textContent = [
+				h,
+				'.'.repeat(30),
 				'8 size=111 MB',
 				'url=https://github.com/electron/electron/releases/download/v31.3.1/electron-v31.3.1-win32-x64.zip',
 				'• downloaded duration=12.597s',
@@ -49,7 +66,7 @@
 				'• downloaded duration=1.652s',
 				'url=https://github.com/electron-userland/electron-builder-binaries/releases/download/winCodeSign-2.4.0/winCodeSign-2.4.0.7z',
 				'⨯ wine is required, please see https://electron.build/multi-platform-build#linux',
-			].join('\n');
+			];
 		}
 	};
 

@@ -51,7 +51,7 @@ let priceClipboard = async itemText => {
 				let m = line.match(/@[\w,]+/)?.[0] || '';
 				let textColor = '#000';
 				if (m.includes('orange'))
-					textColor = 'orange';
+					textColor = 'orange'; // todo use colors consistent with themeStyle.css
 				if (m.includes('red'))
 					textColor = 'red';
 				if (m.includes('green'))

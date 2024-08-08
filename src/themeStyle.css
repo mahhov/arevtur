@@ -32,12 +32,14 @@
 	--busy-primary: hsl(32, 100%, 13%);
 	--busy-back: hsl(32, 100%, 83%);
 
-	/* colored text */
-	--colored-text-orange: lch(65 230 80);
-	--colored-text-red: lch(65 230 0);
-	--colored-text-green: lch(65 230 120);
-	--colored-text-blue: lch(65 230 290);
-	/*--colored-text-cyan: lch(77.25% 40.67 208.98);*/
+	/* colored text  */
+	--colored-text-red: oklch(.75 .2 10);
+	--colored-text-orange: oklch(.75 .2 50);
+	--colored-text-gold: oklch(.75 .2 90);
+	--colored-text-green: oklch(0.75 0.2 130);
+	--colored-text-light-green: oklch(.75 .2 180);
+	--colored-text-blue: oklch(0.75 0.2 240);
+	--colored-text-pink: oklch(.75 .2 340);
 
 	/* colored text backgrounds */
 	--colored-text-background-orange: lch(85 40 80);
