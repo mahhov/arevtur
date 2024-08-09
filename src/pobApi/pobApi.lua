@@ -49,12 +49,14 @@ function respond(response, debug)
     io.flush()
 end
 
-local defaultItem = { raw = [[
+local defaultItem = {
+    raw = [[
                         Item Class: Amulets
                         Rarity: Rare
                         Empyrean Collar
                         Citrine Amulet
-                    ]] }
+                    ]]
+}
 
 -- core
 

@@ -68,12 +68,16 @@ class PobApi extends Emitter {
 	}
 
 	onScriptResponse({out, err, exit}) {
-		if (exit) {
+		// Assume all exits are preceded by an err. We can't respond to both err and exit,
+		// otherwise, we'll restart twice for most cases.
+		// if (exit) {
+		// 	this.crashCount++;
+		// 	this.onError('PobApi crash');
+		// }
+		if (err) {
 			this.crashCount++;
-			this.onError('PobApi crash');
-		}
-		if (exit)
 			this.onError(err);
+		}
 		if (out) {
 			console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
 				this.pendingResponses.length);
@@ -263,3 +267,5 @@ class PobApi extends Emitter {
 
 // singleton
 module.exports = new PobApi();
+
+// todo[high] allow configs ignoring ES and excluding resists from effective health

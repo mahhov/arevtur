@@ -317,6 +317,9 @@ let pricers = stream().write(
 	new BeastPricer(),
 	new DeliriumOrbPricer(),
 	new OmensPricer(),
+	// todo[high] blighted maps and anything else new since 2020
+	// todo[high] divine vessel
+	// todo[high] unliked items are printing 'undefined' instead of '0 links'
 );
 
 let getPrice = async (text) => {

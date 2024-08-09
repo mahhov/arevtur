@@ -86,9 +86,9 @@ customElements.define(name, class InputBuild extends XElement {
 		// todo[medium] do we need to try/catch this?
 		// todo[high] are these paths still correct? add linux paths
 		return stream().write(
-			`${process.env.ProgramData}`,
-			`${process.env.APPDATA}`,
-			`${process.env.HOMEPATH}/Downloads`,
+			`${process.env.ProgramData}`, // openarl
+			`${process.env.APPDATA}`, // community
+			`${process.env.HOMEPATH}/Downloads`, // standalone
 		)
 			.map(dir => ({dir, entries: fs.readdir(dir, {withFileTypes: true})}))
 			.waitOnOrdered('entries', true)

@@ -39,12 +39,14 @@ let priceClipboard = async itemText => {
 		return;
 	console.log('clipboard', itemText);
 	let pricerOutput = Pricer.getPrice(itemText).catch(e => []);
-	let pobOutput = pobApi.evalItem(itemText).catch(e => []);
+	let pobOutput = pobApi.evalItem(itemText).catch(e => ({text: ''}));
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
 	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
 	await viewHandle.showTexts([
 		...pricerOutput.map(text => ({text})),
-		{text: '-'.repeat(30)},
+		pobOutput.text ? {text: '-'.repeat(30)} : null,
+		// todo[high] skip pob tooltips for non-equip-able items
+		// todo[high] add config to enable/disable pob tooltips
 		...pobOutput.text
 			.split('\n')
 			.map(line => {
@@ -63,7 +65,7 @@ let priceClipboard = async itemText => {
 					textColor,
 				};
 			}),
-	], 3000);
+	].filter(v => v), 3000); // todo[high] add config to set display duration
 };
 
 let windowCheck = async () => !config.config.restrictToPoeWindow ||
@@ -75,7 +77,7 @@ let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 		if (ignoreWindow || await windowCheck())
 			handler();
 		else
-			console.log('POE window not focused.');
+			console.log('PoE window not focused.');
 	});
 
 let init = () => {
@@ -83,16 +85,12 @@ let init = () => {
 	// todo[low] key sending seems to freeze the machine on linux. does it work on windows?
 	// addPoeShortcutListener('h', () => slashType('hideout'));
 	// addPoeShortcutListener('k', () => slashType('kingsmarch'));
-	keyHook.addShortcut('{ctrl}', 'c', () => priceClipboard(electronClipboard.readText()));
+	keyHook.addShortcut('{ctrl}', 'c', async () => {
+		await new Promise(r => setTimeout(r, 100));
+		priceClipboard(electronClipboard.readText());
+	});
 	addPoeShortcutListener('g', displayGemQualityArbitrage);
 	addPoeShortcutListener('p', displayPreferences, true);
-
-	setTimeout(() => {
-		electronClipboard.clear();
-		clipboard.addListener(priceClipboard);
-		console.log('clipboard ready');
-	}, 500);
-
 	console.log('init done');
 };
 
@@ -100,3 +98,8 @@ module.exports = {
 	trayOptions: [{label: 'Preferences', click: displayPreferences}],
 	init,
 };
+
+// todo[high] a way to restart PoB for clipboard without having to open preferences. maybe set
+//  automatic restart count to 1 and do an explicit restart with each request if needed
+
+// todo[medium] estimate price of item mods
