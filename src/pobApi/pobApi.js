@@ -11,7 +11,7 @@ class Script extends CustomOsScript {
 
 	spawnProcess(pobPath) {
 		return spawn(
-			// todo[high] package luajit or source it relative to pobPath; don't assume user has it
+			// todo[blocking] package luajit or source it relative to pobPath; don't assume user has it
 			//  downloaded globally
 			'luajit',
 			[path.join(__dirname, './pobApi.lua')],

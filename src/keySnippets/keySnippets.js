@@ -8,7 +8,7 @@ const pobApi = require('../pobApi/pobApi');
 
 let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
-// todo[high] make these configurable
+// todo[blocking] make these configurable
 pobApi.pobPath =
 	'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src';
 pobApi.build =
@@ -46,7 +46,7 @@ let priceClipboard = async itemText => {
 		...pricerOutput.map(text => ({text})),
 		pobOutput.text ? {text: '-'.repeat(30)} : null,
 		// todo[high] skip pob tooltips for non-equip-able items
-		// todo[high] add config to enable/disable pob tooltips
+		// todo[blocking] add config to enable/disable pob tooltips
 		...pobOutput.text
 			.split('\n')
 			.map(line => {
