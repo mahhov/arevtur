@@ -85,6 +85,15 @@ customElements.define(name, class InputBuild extends XElement {
 	static get defaultPobPath() {
 		// todo[medium] do we need to try/catch this?
 		// todo[high] are these paths still correct? add linux paths
+
+		// default linux:
+		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src/
+		// ~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/
+
+		// default windows:
+		// %APPDATA%/Path of Building Community...?
+		// ??
+
 		return stream().write(
 			`${process.env.ProgramData}`, // openarl
 			`${process.env.APPDATA}`, // community
