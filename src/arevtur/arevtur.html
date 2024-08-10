@@ -50,7 +50,10 @@
 </div>
 
 <script>
+	const {webFrame} = require('electron');
 	const {TradeQueryParams} = require('./TradeQuery');
+	import {clamp} from '../util/util';
+
 	const $ = document.querySelector.bind(document);
 
 	let lastTradeQueryParams;
@@ -86,8 +89,18 @@
 	$('x-results').addEventListener('submit', async e =>
 		submitQueries(await $('x-inputs').getTradeQueryParams(e.detail.overridePrice)));
 
+	document.addEventListener('wheel', e => {
+		if (!e.ctrlKey)
+			return;
+		let sign = e.deltaY < 0 ? 1 : -1;
+		let factor = clamp(webFrame.getZoomLevel() + sign, -8, 0);
+		webFrame.setZoomLevel(factor);
+	});
+
 	// todo[low] assume quality 0%
 	// todo[low] items sometimes coming back without pseudo mod 'Sum: '
 	// todo[medium] make UI easier to understand and add tooltips
 	// todo[medium] catch JSON and pob and https request failures
+	// todo[blocking] build popup not displaying
+	// todo[high] surface errors to users
 </script>
