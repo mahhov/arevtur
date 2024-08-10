@@ -1,11 +1,12 @@
 const {ipcMain} = require('electron');
 const fs = require('fs').promises;
 const appData = require('./appData');
+const Emitter = require('../util/Emitter');
 
 // keeps config in sync between windows
-class Config {
+class Config extends Emitter {
 	constructor() {
-		this.configChangeListeners = [];
+		super();
 		try {
 			this.config = require(appData.configPath);
 		} catch (e) {
@@ -17,27 +18,25 @@ class Config {
 				// todo[high] these 2 should use local storage, see git branch configButton
 				viewHorizontal: true,
 				viewMaximize: false,
+				pobBuildPath: '',
 			};
 		}
 
-		ipcMain.handle('config-change', (event, newConfig) => {
+		ipcMain.handle('config-change', async (event, newConfig) => {
 			Object.assign(this.config, newConfig);
-			this.sendConfigChange();
-			fs.mkdir(appData.basePath, {recursive: true})
-				.then(() => fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2)))
-				.catch(e => console.error('Failed to save config', appData.configPath, e));
+			this.emit('change', this.config);
+			try {
+				await fs.mkdir(appData.basePath, {recursive: true});
+				await fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2));
+			} catch (e) {
+				console.error('Failed to save config', appData.configPath, e);
+			}
 		});
 
 		ipcMain.handle('listen-config-change', event => {
-			this.configChangeListeners.push(event.sender);
-			if (this.config)
-				this.sendConfigChange([event.sender]);
+			this.addListener('change', config => event.sender.send('config-changed', config));
+			event.sender.send('config-changed', this.config);
 		});
-	}
-
-	sendConfigChange(listeners = this.configChangeListeners) {
-		this.configChangeListeners.forEach(
-			listener => listener.send('config-changed', this.config));
 	}
 }
 

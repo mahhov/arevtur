@@ -12,8 +12,7 @@ customElements.define(name, class Chart extends XElement {
 	}
 
 	connectedCallback() {
-		configForRenderer.listenConfigChange(config =>
-			this.draw());
+		configForRenderer.addListener('change', config => this.draw());
 
 		this.ctx = this.$('canvas').getContext('2d');
 

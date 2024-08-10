@@ -31,7 +31,7 @@ document.addEventListener('keydown', e => {
 		toggle('darkTheme');
 });
 
-configForRenderer.listenConfigChange(config => {
+configForRenderer.addListener('change', config => {
 	// undefined 2nd param would cause an actual toggle rather than removing the class
 	document.documentElement.classList.toggle('maximize', config.viewMaximize || false);
 	document.documentElement.classList.toggle('horizontal',

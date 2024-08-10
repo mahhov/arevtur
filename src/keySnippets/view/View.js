@@ -79,20 +79,16 @@ document.body.addEventListener('keydown', ({code}) => {
 	}
 });
 
-window.addEventListener('blur', () =>
-	ipcSend({name: 'close'}));
+window.addEventListener('blur', () => ipcSend({name: 'close'}));
+document.body.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
 
-document.body.addEventListener('mousedown', () =>
-	ipcSend({name: 'prevent-close'}));
-
-configForRenderer.listenConfigChange(config => {
-	$('#preferences-league').value = config.league;
+configForRenderer.addListener('change', () => {
+	$('#preferences-league').value = configForRenderer.config.league;
 	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
 });
 
 $('#preferences-league').addEventListener('input', () =>
 	configForRenderer.config = {league: $('#preferences-league').value});
-
 $('#preferences-restrict-window').addEventListener('input', () =>
 	configForRenderer.config = {restrictToPoeWindow: $('#preferences-restrict-window').checked});
 

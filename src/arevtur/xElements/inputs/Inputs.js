@@ -23,13 +23,8 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	connectedCallback() {
-		configForRenderer.listenConfigChange(async config => {
-			this.$('#league-input').value = config.league;
-			this.$('#loaded-currencies-status').classList.remove('valid');
-			await ApiConstants.constants.currencyPrices(config.league);
-			if (config.league === configForRenderer.config.league)
-				this.$('#loaded-currencies-status').classList.add('valid');
-		});
+		configForRenderer.addListener('change', config => this.onConfigChange(config));
+		this.onConfigChange(configForRenderer.config);
 
 		ApiConstants.constants.leagues.then(leagues =>
 			this.$('#league-input').autocompletes = leagues);
@@ -53,6 +48,8 @@ customElements.define(name, class Inputs extends XElement {
 
 		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
 
+		// todo[medium] likewise use busy for other status chips to differentiate between loading
+		//  and failed
 		pobApi.addListener('not-ready', () =>
 			this.$('#loaded-pob-status').classList.remove('valid', 'busy'));
 		pobApi.addListener('busy', () =>
@@ -113,6 +110,14 @@ customElements.define(name, class Inputs extends XElement {
 			inputSetEl.active = inputSet.active;
 		});
 		this.setInputSetIndex(this.inputSetIndex);
+	}
+
+	async onConfigChange(config) {
+		this.$('#league-input').value = config.league;
+		this.$('#loaded-currencies-status').classList.remove('valid');
+		await ApiConstants.constants.currencyPrices(config.league);
+		if (config.league === configForRenderer.config.league)
+			this.$('#loaded-currencies-status').classList.add('valid');
 	}
 
 	async setInputSetIndex(index, fromEl = null, exclusive = true) {

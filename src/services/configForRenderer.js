@@ -1,13 +1,14 @@
 const {ipcRenderer} = require('electron');
+const Emitter = require('../util/Emitter');
 
-class ConfigForRenderer {
+class ConfigForRenderer extends Emitter {
 	constructor() {
+		super();
 		ipcRenderer.on('config-changed', (event, config) => {
 			this.config_ = config;
-			this.listeners.forEach(handle => handle(this.config_));
+			this.emit('change', config);
 		});
 		ipcRenderer.invoke('listen-config-change');
-		this.listeners = [];
 	}
 
 	get config() {
@@ -19,10 +20,8 @@ class ConfigForRenderer {
 		ipcRenderer.invoke('config-change', newConfig);
 	}
 
-	listenConfigChange(handle) {
-		this.listeners.push(handle);
-		if (this.config_)
-			handle(this.config_);
+	addListener(event, handler) {
+		super.addListener(event, handler);
 	}
 }
 
