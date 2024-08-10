@@ -10,7 +10,7 @@ module.exports = {
 		'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src' :
 		path.resolve(process.env.APPDATA, 'Path of Building Community'),
 	defaultPobBuildsPath: os.platform() === 'linux' ?
-		path.resolve(require('os').homedir(),
+		path.resolve(os.homedir(),
 			'/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/') :
-		path.resolve(require('os').homedir(), 'Documents/Path of Building'),
+		path.resolve(os.homedir(), 'Documents/Path of Building'),
 };

@@ -37,7 +37,7 @@ let displayPreferences = async () => {
 let priceClipboard = async itemText => {
 	if (!itemText || !await windowCheck())
 		return;
-	console.log('clipboard', itemText);
+	console.log('clipboard', itemText.slice(0, 100));
 	let pricerOutput = Pricer.getPrice(itemText).catch(e => []);
 	let pobOutput = pobApi.evalItem(itemText).catch(e => ({text: ''}));
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);

@@ -1,4 +1,5 @@
 const path = require('path');
+const os = require('os');
 const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
 const ApiConstants = require('../arevtur/ApiConstants');
@@ -10,10 +11,10 @@ class Script extends CustomOsScript {
 	}
 
 	spawnProcess(pobPath) {
+		// todo[blocking] verify works on windows
+		let luajit = os.platform() === 'linux' ? 'luajit' : 'luajit.exe';
 		return spawn(
-			// todo[blocking] package luajit or source it relative to pobPath; don't assume user has it
-			//  downloaded globally
-			'luajit',
+			path.resolve(path.join(__dirname, luajit)),
 			[path.join(__dirname, './pobApi.lua')],
 			{cwd: pobPath});
 	}
