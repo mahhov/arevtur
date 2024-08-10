@@ -1,5 +1,12 @@
-package.path = package.path .. ';../runtime/lua/?.lua'
-package.path = package.path .. ';../?.lua'
+-- windows
+local _, _, scriptPath = string.find(arg[0], '(.+[/\\]).-')
+package.path = package.path .. ';' .. scriptPath .. '?.lua' -- HeadlessWrapper
+package.path = package.path .. ';' .. './lua/?.lua' -- xml
+
+-- linux
+package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno
+package.path = package.path .. ';../?.lua' -- xml
+
 require('HeadlessWrapper')
 local dkjson = require 'dkjson'
 
@@ -7,7 +14,9 @@ local dkjson = require 'dkjson'
 
 local function readFile(path)
     local fileHandle = io.open(path, 'r')
-    if not fileHandle then return nil end
+    if not fileHandle then
+        return nil
+    end
     local fileText = fileHandle:read('*a')
     fileHandle:close()
     return fileText
@@ -69,12 +78,15 @@ while true do
 
     if cmd == 'echo' then
         respond('echo')
+
     elseif cmd == 'exit' then
         os.exit()
+
     elseif cmd == 'build' then
         -- args[2] is build xml path
         loadBuildFromXML(readFile(args[2]))
         respond('build loaded')
+
     elseif cmd == 'item' then
         -- args[2] is item text
         -- given item text, see what swapping it in, replacing the currently equipped item of that
@@ -85,6 +97,7 @@ while true do
         local tooltip = FakeTooltip:new()
         build.itemsTab:AddItemTooltip(tooltip, item)
         respond(tooltip.text)
+
     elseif cmd == 'mod' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is mod, e.g. '+100 evasion'
@@ -101,6 +114,7 @@ while true do
         else
             respond('Individual mod weights aren\'t supported on this item type')
         end
+
     elseif cmd == 'generateQuery' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is total EPH weight, e.g. '1'
@@ -115,12 +129,12 @@ while true do
         local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 
         tradeQuery.statSortSelectionList = {
-            { stat = 'TotalEHP',             weightMult = tonumber(args[3]) },
-            { stat = 'ChaosResistTotal',     weightMult = tonumber(args[4]) },
+            { stat = 'TotalEHP', weightMult = tonumber(args[3]) },
+            { stat = 'ChaosResistTotal', weightMult = tonumber(args[4]) },
             { stat = 'LightningResistTotal', weightMult = tonumber(args[4]) },
-            { stat = 'ColdResistTotal',      weightMult = tonumber(args[4]) },
-            { stat = 'FireResistTotal',      weightMult = tonumber(args[4]) },
-            { stat = 'FullDPS',              weightMult = tonumber(args[5]) },
+            { stat = 'ColdResistTotal', weightMult = tonumber(args[4]) },
+            { stat = 'FireResistTotal', weightMult = tonumber(args[4]) },
+            { stat = 'FullDPS', weightMult = tonumber(args[5]) },
         }
 
         -- TradeQueryClass:PriceItemRowDisplay
@@ -133,10 +147,10 @@ while true do
         end
         local slot = itemsTab.slots[args[2]] or itemsTab.sockets[jewelNodeId]
         tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
-            tradeQuery.statSortSelectionList, function(context, query, errMsg)
-                respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
-                respond(dkjson.encode(tradeQueryGenerator.modWeights))
-            end)
+                tradeQuery.statSortSelectionList, function(context, query, errMsg)
+                    respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
+                    respond(dkjson.encode(tradeQueryGenerator.modWeights))
+                end)
 
         -- TradeQueryGeneratorClass:RequestQuery execute
         local eldritchModSlots = {

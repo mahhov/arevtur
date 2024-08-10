@@ -1,10 +1,7 @@
-const path = require('path');
-const fs = require('fs').promises;
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const stream = require('bs-better-stream');
-const ApiConstants = require('../../ApiConstants');
 const pobApi = require('../../../pobApi/pobApi');
+const appData = require('../../../services/appData');
 
 customElements.define(name, class InputBuild extends XElement {
 	static get attributeTypes() {
@@ -23,10 +20,8 @@ customElements.define(name, class InputBuild extends XElement {
 		this.$('#resist-weight').value = store.resistWeight || .1;
 		this.$('#damage-weight').value = store.damageWeight || .25;
 
-		InputBuild.defaultPobPath.each(path =>
-			this.$('#pob-path').defaultPath = path);
-		this.$('#build-path').defaultPath =
-			path.resolve(`${process.env.HOME}/Documents/Path of Building/Builds`);
+		this.$('#pob-path').defaultPath = appData.defaultPobPath;
+		this.$('#build-path').defaultPath = appData.defaultPobBuildsPath;
 		this.$('#pob-path').addEventListener('selected', () => {
 			this.updateStore();
 			this.updatePob();
@@ -80,30 +75,5 @@ customElements.define(name, class InputBuild extends XElement {
 			resist: Number(this.$('#resist-weight').value) || 0,
 			dps: Number(this.$('#damage-weight').value) || 0,
 		};
-	}
-
-	static get defaultPobPath() {
-		// todo[medium] do we need to try/catch this?
-		// todo[high] are these paths still correct? add linux paths
-
-		// default linux:
-		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src/
-		// ~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/
-
-		// default windows:
-		// %APPDATA%/Path of Building Community...?
-		// ??
-
-		return stream().write(
-			`${process.env.ProgramData}`, // openarl
-			`${process.env.APPDATA}`, // community
-			`${process.env.HOMEPATH}/Downloads`, // standalone
-		)
-			.map(dir => ({dir, entries: fs.readdir(dir, {withFileTypes: true})}))
-			.waitOnOrdered('entries', true)
-			.flattenOn('entries', 'entry')
-			.filter(({entry}) => entry.isDirectory() && entry.name.match(/path ?of ?building/i))
-			.filterCount(1)
-			.map(({dir, entry}) => path.resolve(dir, entry.name));
 	}
 });
