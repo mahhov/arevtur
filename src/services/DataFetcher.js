@@ -1,4 +1,5 @@
 const {httpRequest: {get}} = require('js-desktop-base');
+var querystring = require('querystring');
 
 let getEndpointsByLeague = () => {
 	const BASE = 'https://poe.ninja/api/data';
@@ -6,7 +7,7 @@ let getEndpointsByLeague = () => {
 	const CURRENCY = `currencyoverview`;
 
 	let genEndpointByLeague = (prefix, type) =>
-		league => `${BASE}/${prefix}?league=${league}&type=${type}`;
+		league => `${BASE}/${prefix}?${querystring.stringify({league, type})}`;
 
 	return {
 		GEM: genEndpointByLeague(ITEM, 'SkillGem'),
