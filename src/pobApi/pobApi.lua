@@ -91,12 +91,15 @@ while true do
         -- args[2] is item text
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
-        local itemText = args[2]:gsub([[\n]], '\n')
+        local itemText = args[2]:gsub([[\n]], '\n') -- replace escaped \\n with real \n
         local item = new('Item', itemText)
-        item:BuildModList()
-        local tooltip = FakeTooltip:new()
-        build.itemsTab:AddItemTooltip(tooltip, item)
-        respond(tooltip.text)
+        if item.base then
+            local tooltip = FakeTooltip:new()
+            build.itemsTab:AddItemTooltip(tooltip, item)
+            respond(tooltip.text)
+        else
+            respond('Item missing base type')
+        end
 
     elseif cmd == 'mod' then
         -- args[2] is type, e.g. 'Amulet'
@@ -179,5 +182,6 @@ while true do
         -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot
         -- todo[medium] allow picking mod sets, e.g. talisman, corrupted, influence, eldritch
         -- todo[low] json params
+        -- todo[low] make sure these all work for characters with empty slots
     end
 end

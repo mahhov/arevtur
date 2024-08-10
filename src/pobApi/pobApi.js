@@ -84,7 +84,7 @@ class PobApi extends Emitter {
 				this.pendingResponses.length);
 			let resolves = out.split('.>')
 				.map(split => split.split('<.')[1])
-				.filter(v => v); // last value after split will be empty
+				.filter(v => v !== undefined); // last value after split will be empty
 			if (resolves.filter(resolve => resolve !== 'build loaded').length)
 				this.crashCount = 0;
 			resolves.forEach(resolve => this.pendingResponses.shift().resolve(resolve));
@@ -125,6 +125,8 @@ class PobApi extends Emitter {
 	}
 
 	evalItem(item) {
+		if (!item.toLowerCase().includes('requirements:'))
+			return Promise.reject('Item missing requirements');
 		return this.send(true, 'item', item.replace(/[\n\r]+/g, ' \\n '))
 			.then(text => this.parseItemTooltip(text));
 	}
