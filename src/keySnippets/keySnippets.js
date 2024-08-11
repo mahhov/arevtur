@@ -39,9 +39,7 @@ let priceClipboard = async itemText => {
 	await viewHandle.showTexts([
 		...pricerOutput.map(text => ({text})),
 		pobOutput.text ? {text: '-'.repeat(30)} : null,
-		// todo[high] skip pob tooltips for non-equip-able items
-		// todo[blocking] add config to enable/disable pob tooltips
-		...pobOutput.text
+		...pobOutput.text ? pobOutput.text
 			.split('\n')
 			.map(line => {
 				let m = line.match(/@[\w,]+/)?.[0] || '';
@@ -58,7 +56,7 @@ let priceClipboard = async itemText => {
 					text: line.replace(m, ''),
 					textColor,
 				};
-			}),
+			}) : [],
 	].filter(v => v), 3000); // todo[high] add config to set display duration
 };
 
