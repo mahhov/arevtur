@@ -8,6 +8,10 @@ const Emitter = require('../util/Emitter');
 class Script extends CustomOsScript {
 	constructor(pobPath) {
 		super(pobPath);
+		this.pendingResponses = [];
+		this.cache = {};
+		this.addListener(response => this.onScriptResponse(response));
+		this.cleared = false;
 	}
 
 	spawnProcess(pobPath) {
@@ -18,116 +22,96 @@ class Script extends CustomOsScript {
 			[path.join(__dirname, './pobApi.lua')],
 			{cwd: pobPath});
 	}
+
+	onScriptResponse({out, err, exit}) {
+		if (exit || err) {
+			console.error('PobApi failed', err, exit);
+			this.clear();
+		}
+		if (out && !this.cleared)
+			out.split('.>')
+				.map(split => split.split('<.')[1])
+				.filter(v => v !== undefined) // last value after split will be undefined
+				.forEach(resolve => this.pendingResponses.shift().resolve(resolve));
+	}
+
+	send(...args) {
+		let text = args.map(arg => `<${arg}>`).join(' ');
+		if (this.cache[text])
+			return this.cache[text];
+		let promise = new XPromise();
+		this.cache[text] = promise;
+		this.pendingResponses.push(promise);
+		console.log('PoBApi sending', text);
+		super.send(text);
+		return promise;
+	}
+
+	clear() {
+		this.cleared = true;
+		this.pendingResponses.forEach(pendingResponse =>
+			pendingResponse.reject('PoBApi failed'));
+		this.pendingResponses = [];
+	}
 }
 
 class PobApi extends Emitter {
 	constructor() {
 		super();
-		this.valueParams = {
+		this.pobPath = '';
+		this.buildPath = '';
+		this.weights = {
 			life: 0,
 			resist: 0,
 			dps: 0,
 		};
-		this.pendingResponses = [];
-		this.crashCount = 0;
+		this.script = null;
+		// this.crashCount = 0;
+	}
+
+	setParams({
+		          pobPath = this.pobPath,
+		          buildPath = this.buildPath,
+		          weights = this.weights,
+	          } = {}) {
+		// todo[blocking] check weights too
+		if (pobPath === this.pobPath && buildPath === this.buildPath)
+			return;
+		//this.crashCount = 0;
+		this.pobPath = pobPath;
+		this.buildPath = buildPath;
+		this.weights = weights;
+		this.restart();
 	}
 
 	restart() {
-		this.clear();
-		if (!this.pobPath_ || !this.build_)
-			return;
-		this.script = new Script(this.pobPath_);
-		this.script.addListener(response => this.onScriptResponse(response));
-		this.send(false, 'build', this.build_);
+		this.script?.clear();
 		this.emit('change');
+		console.log('PobApi creating new script', this.pobPath, this.buildPath);
+		this.script = new Script(this.pobPath);
+		this.send('build', this.buildPath);
+		// todo[blocking] send weights
 	}
 
-	clear() {
-		this.script = null;
-		this.pendingResponses.forEach(pendingResponse => pendingResponse.reject(
-			'PoBApi cleared, existing requests are stale'));
-		this.pendingResponses = [];
-		this.cache = {};
-	}
-
-	set pobPath(path) {
-		// e.g.
-		// /var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src
-		if (this.pobPath_ !== path)
-			this.crashCount = 0;
-		this.pobPath_ = path;
-		this.restart();
-	}
-
-	set build(path) {
-		// e.g. '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of
-		// Building/Builds/cobra lash.xml'
-		if (this.build_ !== path)
-			this.crashCount = 0;
-		this.build_ = path;
-		this.restart();
-	}
-
-	onScriptResponse({out, err, exit}) {
-		// Assume all exits are preceded by an err. We can't respond to both err and exit,
-		// otherwise, we'll restart twice for most cases.
-		// if (exit) {
-		// 	this.crashCount++;
-		// 	this.onError('PobApi crash');
-		// }
-		if (err) {
-			this.crashCount++;
-			this.onError(err);
-		}
-		if (out) {
-			console.log('pobApi.lua: ', out.slice(0, 100), 'old remaining',
-				this.pendingResponses.length);
-			let resolves = out.split('.>')
-				.map(split => split.split('<.')[1])
-				.filter(v => v !== undefined); // last value after split will be empty
-			if (resolves.filter(resolve => resolve !== 'build loaded').length)
-				this.crashCount = 0;
-			resolves.forEach(resolve => this.pendingResponses.shift().resolve(resolve));
-			if (!this.pendingResponses.length)
-				this.emit('ready');
-		}
-	}
-
-	onError(e) {
-		console.error(e);
-		console.error('PobApi process errored, starting new process', this.crashCount);
-		this.emit('not-ready');
-		if (this.crashCount < 3)
-			this.restart();
-		else
-			this.clear();
-	}
-
-	send(cache, ...args) {
+	async send(...args) {
 		if (!this.script)
 			return Promise.reject('Ignoring PoB requests until script has started');
-		let text = args.map(arg => `<${arg}>`).join(' ');
-		if (this.cache[text])
-			return this.cache[text];
-		console.log('PobApi sending:', text, 'new queue:', this.pendingResponses.length + 1);
 		this.emit('busy');
-		this.script.send(text);
-		let promise = new XPromise();
-		if (cache)
-			this.cache[text] = promise;
-		this.pendingResponses.push(promise);
-		return promise;
-	}
-
-	set valueParams(valueParams) {
-		this.valueParams_ = valueParams;
-		this.emit('change');
+		let response = this.script.send(...args);
+		response
+			.then(() => {
+				if (!this.script.pendingResponses.length)
+					this.emit('ready');
+			})
+			.catch(() => this.emit('not-ready'));
+		// rejections are expected
+		return response.catch(() => '');
 	}
 
 	evalItem(item) {
 		if (!item.toLowerCase().includes('requirements:'))
 			return Promise.reject('Item missing requirements');
-		return this.send(true, 'item', item.replace(/[\n\r]+/g, ' \\n '))
+		return this.send('item', item.replace(/[\n\r]+/g, ' \\n '))
 			.then(text => this.parseItemTooltip(text));
 	}
 
@@ -150,7 +134,7 @@ class PobApi extends Emitter {
 				.replace(/total/i, '');
 
 		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
-		return this.send(true, 'mod', itemMod, pobType)
+		return this.send('mod', itemMod, pobType)
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, itemMod));
 	}
 
@@ -159,8 +143,8 @@ class PobApi extends Emitter {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return Promise.reject('PoB generateQuery missing type');
-		return this.send(true, 'generateQuery', pobType, this.valueParams_.life,
-			this.valueParams_.resist, this.valueParams_.dps).then(JSON.parse);
+		return this.send('generateQuery', pobType, this.weights.life,
+			this.weights.resist, this.weights.dps).then(JSON.parse);
 	}
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
@@ -184,9 +168,9 @@ class PobApi extends Emitter {
 				?.reduce((sum, m) => sum + Number(m.match(anyDiffResistRegex)[1]), 0) || 0;
 			let fullDps = Number(diffText.match(fullDpsRegex)?.[1]) || 0;
 			let unscaledValue =
-				effectiveHitPool * this.valueParams_.life +
-				totalResist * this.valueParams_.resist +
-				fullDps * this.valueParams_.dps;
+				effectiveHitPool * this.weights.life +
+				totalResist * this.weights.resist +
+				fullDps * this.weights.dps;
 
 			return {
 				equippingText,
@@ -272,3 +256,8 @@ class PobApi extends Emitter {
 module.exports = new PobApi();
 
 // todo[high] allow configs ignoring ES and excluding resists from effective health
+// todo[medium] failing when timeless jewel is equipped:
+//   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
+// back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
+// /Data/TimelessJewelData/GloriousVanity.bin
+

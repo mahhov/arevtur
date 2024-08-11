@@ -9,12 +9,10 @@ let windows = [
 	// require('./modViewer/modViewer'), // todo[low] either remove or get it working
 ];
 
-keySnippet.init();
-
 let trayIcon = path.join(__dirname, '../resources/icons/fa-dollar-sign-solid-256.png');
 TrayHelper.createExitTray(trayIcon, 'Arevtur', [
 	...keySnippet.trayOptions,
 	...windows.flatMap(w => w.trayOptions),
 	{type: 'separator'},
-	{label: `Dev`, click: () => windows.forEach(w => w.showDevTools())},
+	{label: `Dev console`, click: () => windows.forEach(w => w.showDevTools())},
 ]);

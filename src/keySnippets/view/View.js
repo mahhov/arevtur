@@ -82,15 +82,12 @@ document.body.addEventListener('keydown', ({code}) => {
 window.addEventListener('blur', () => ipcSend({name: 'close'}));
 document.body.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
 
-configForRenderer.addListener('change', () => {
-	$('#preferences-league').value = configForRenderer.config.league;
-	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
-});
-
-$('#preferences-league').addEventListener('input', () =>
-	configForRenderer.config = {league: $('#preferences-league').value});
+configForRenderer.addListener('change', () =>
+	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow);
 $('#preferences-restrict-window').addEventListener('input', () =>
 	configForRenderer.config = {restrictToPoeWindow: $('#preferences-restrict-window').checked});
+
+$('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
 
 $('#preferences-open').addEventListener('click', () => {
 	let path = (os.platform() === 'linux' ? 'file:' : '') + appData.basePath;

@@ -15,6 +15,8 @@ class ConfigForRenderer extends Emitter {
 		return this.config_;
 	}
 
+	// callers should do `.config = {x: y}` instead of `.config.x = y` in order to invoke this
+	// setter
 	set config(newConfig) {
 		// this.config_ will be updated in the on('config-change') callback
 		ipcRenderer.invoke('config-change', newConfig);

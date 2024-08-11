@@ -10,6 +10,7 @@
 
 	#text-container.hidden,
 	#table-container.hidden,
+		/* todo[high] rename dev-options-container */
 	#preferences-container.hidden {
 		display: none;
 	}
@@ -54,11 +55,16 @@
 <div id="text-container"></div>
 <div id="table-container"></div>
 <div id="preferences-container">
-	<div><input id="preferences-league"></div>
-	<div><label><input id="preferences-restrict-window" type="checkbox">Restrict PoE Window</label>
+	This is for developers.
+	<div>
+		<label><input id="preferences-restrict-window" type="checkbox">Restrict PoE Window</label>
 	</div>
 	<div>
-		<button id="preferences-open">Open</button>
+		<button id="reset-pob">Reset PoB</button>
+	</div>
+	<div>
+		<!-- todo[high] rename config-open -->
+		<button id="preferences-open">Open config file</button>
 	</div>
 </div>
 

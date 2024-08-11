@@ -2,29 +2,39 @@ const {ipcMain} = require('electron');
 const fs = require('fs').promises;
 const appData = require('./appData');
 const Emitter = require('../util/Emitter');
+const {deepMerge} = require('../util/util');
 
 // keeps config in sync between windows
 class Config extends Emitter {
 	constructor() {
 		super();
+		this.config = {
+			league: 'Standard',
+			restrictToPoeWindow: true,
+			darkTheme: true,
+			// todo[high] these 2 should use local storage, see git branch configButton
+			viewHorizontal: true,
+			viewMaximize: false,
+			buildParams: {
+				pobPath: '',
+				buildPath: '',
+				weights: {
+					life: .5,
+					resist: .1,
+					damage: .25,
+				},
+			},
+		};
 		try {
-			this.config = require(appData.configPath);
+			deepMerge(this.config, require(appData.configPath));
 		} catch (e) {
 			// For the first run, config.json won't exist. This is expected and ok.
-			this.config = {
-				league: 'Standard',
-				restrictToPoeWindow: true,
-				darkTheme: true,
-				// todo[high] these 2 should use local storage, see git branch configButton
-				viewHorizontal: true,
-				viewMaximize: false,
-				pobBuildPath: '',
-			};
 		}
 
 		ipcMain.handle('config-change', async (event, newConfig) => {
-			Object.assign(this.config, newConfig);
+			deepMerge(this.config, newConfig);
 			this.emit('change', this.config);
+			console.log('Updated config', JSON.stringify(this.config, 2, 2));
 			try {
 				await fs.mkdir(appData.basePath, {recursive: true});
 				await fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2));

@@ -1,5 +1,6 @@
 const path = require('path');
 const {ViewHandle: ViewHandleBase, ScreenMouse} = require('js-desktop-base');
+const pobApi = require('../../pobApi/pobApi');
 
 class ViewHandle extends ViewHandleBase {
 	constructor() {
@@ -24,6 +25,10 @@ class ViewHandle extends ViewHandleBase {
 				break;
 			case 'prevent-close':
 				clearInterval(this.timedHide);
+				break;
+			case 'reset-pob':
+				// todo[low] merge this file with keySnippet
+				pobApi.setParams();
 				break;
 			default:
 				console.error('Unknown window message:', message);

@@ -1,19 +1,13 @@
-const {ClipboardListener, keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
+const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./view/ViewHandle');
 const {config} = require('../services/config');
 const Pricer = require('./Pricer');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
 const pobApi = require('../pobApi/pobApi');
+const appData = require('../services/appData');
 
-let clipboard = new ClipboardListener();
 let viewHandle = new ViewHandle();
-// todo[blocking] make these configurable
-pobApi.pobPath =
-	'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src';
-pobApi.build =
-	'~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml';
-pobApi.valueParams = {life: .5, resist: .1, dps: .25};
 
 let slashType = (name = 'hideout') =>
 	keySender.strings([keySender.TYPE, '{enter}/' + name + '{enter}']);
@@ -27,7 +21,7 @@ let displayGemQualityArbitrage = async () => {
 	}
 };
 
-let displayPreferences = async () => {
+let displayDevOptions = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
 	else
@@ -81,7 +75,6 @@ let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 	});
 
 let init = () => {
-	console.log('init start');
 	// todo[low] key sending seems to freeze the machine on linux. does it work on windows?
 	// addPoeShortcutListener('h', () => slashType('hideout'));
 	// addPoeShortcutListener('k', () => slashType('kingsmarch'));
@@ -90,16 +83,23 @@ let init = () => {
 		priceClipboard(electronClipboard.readText());
 	});
 	addPoeShortcutListener('g', displayGemQualityArbitrage);
-	addPoeShortcutListener('p', displayPreferences, true);
-	console.log('init done');
+	if (appData.isDev)
+		addPoeShortcutListener('p', displayDevOptions, true);
+
+	setupPobApi();
+	config.addListener('change', config => setupPobApi());
 };
 
+let setupPobApi = () => pobApi.setParams(config.config.buildParams);
+
+init();
+
 module.exports = {
-	trayOptions: [{label: 'Preferences', click: displayPreferences}],
-	init,
+	trayOptions: appData.isDev ? [{label: 'Dev options', click: displayDevOptions}] : [],
 };
 
 // todo[high] a way to restart PoB for clipboard without having to open preferences. maybe set
 //  automatic restart count to 1 and do an explicit restart with each request if needed
 
 // todo[medium] estimate price of item mods
+// todo[high] generate search query for mods of selected item

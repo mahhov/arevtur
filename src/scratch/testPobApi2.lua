@@ -60,7 +60,8 @@ end
 --io.write('ready ::end::')
 --io.flush()
 
-buildXmlFile = '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+--buildXmlFile = '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+buildXmlFile = '/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
 buildXml = readFile(buildXmlFile)
 loadBuildFromXML(buildXml)
 
