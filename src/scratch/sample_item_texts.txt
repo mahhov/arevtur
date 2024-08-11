@@ -1,0 +1,209 @@
+Item Class: Stackable Currency\n
+Rarity: Currency\n
+Wailing Essence of Suffering\n
+--------\n
+Stack Size: 1/9\n
+--------\n
+Upgrades a normal item to rare with one guaranteed property\n
+Properties restricted to level 75 and below\n
+\n
+One Handed Weapon: Adds (20-26) to (40-46) Cold Damage to Spells\n
+Two Handed Weapon: Adds (30-40) to (59-69) Cold Damage to Spells\n
+Gloves: Adds (5-7) to (10-12) Cold Damage to Attacks\n
+Body Armour: (6-7)% chance to Avoid Cold Damage from Hits\n
+Shield: (6-7)% chance to Avoid Cold Damage from Hits\n
+Other Armour: (43-46)% chance to Avoid being Frozen\n
+Quiver: Adds (15-20) to (30-35) Cold Damage to Attacks\n
+Belt: (43-46)% chance to Avoid being Frozen\n
+Other Jewellery: Adds (10-13) to (20-24) Cold Damage to Attacks\n
+--------\n
+Right click this item then left click a normal item to apply it.\n
+
+
+
+Item Class: Helmets
+Rarity: Unique
+The Baron
+Close Helmet
+--------
+Armour: 147
+--------
+Requirements:
+Level: 26
+Str: 58
+--------
+Sockets: B-R-R R
+--------
+Item Level: 62
+--------
++2 to Level of Socketed Minion Gems
+Minions have 16% increased maximum Life
+Half of your Strength is added to your Minions
++1 to maximum number of Raised Zombies per 500 Strength
+With at least 1000 Strength, 1.69% of Damage dealt by your Raised Zombies is Leeched to you as Life
+--------
+"The Emperor's trusted surgeons are not the only ones who
+practice the darkdark artsarts. SomeSome of us are just more discreet."
+
+Item Class: OneOne Hand Axes
+Rarity: Unique
+Dyadus
+Infernal Axe
+--------
+One Handed Axe
+Physical Damage: 51-85
+Elemental Damage: 284-325 (augmented), 268-308 (augmented)
+Critical Strike Chance: 5.00%
+Attacks per Second: 1.50 (augmented)
+Weapon Range: 1.1 metres
+--------
+Requirements:
+Level: 69
+Str: 158 (unmet)
+Dex: 76
+--------
+Sockets: R
+--------
+Item Level: 71
+--------
+Adds 284 to 325 Fire Damage in Main Hand
+Adds 268 to 308 Cold Damage in Off Hand
+15% increased Attack Speed
+25% chance to Ignite when in Main Hand
+100% increased Damage with Ignite inflicted on Chilled Enemies
+Chill Enemies for 1 second on Hit with this Weapon when in Off Hand
+--------
+Born of love, forged in blood
+He burned as a torch in the blackest night
+She shone as ice in the winter sun
+Proudly, fiercely
+At their mother's side, forever.
+
+Item Class: Belts
+Rarity: Unique
+Pyroshock Clasp
+Leather Belt
+--------
+Requirements:
+Level: 43
+--------
+Item Level: 56
+--------
++39 to maximum Life (implicit)
+--------
++40 to Dexterity
++414 to Evasion Rating
+12% increased Duration of Elemental Ailments on Enemies
+Enemies Ignited by you have 14% of Physical Damage they deal converted to Fire
+Enemies Shocked by you have 14% of Physical Damage they deal converted to Lightning
+--------
+Teach a man to burn, and you'll be warm for the rest of his life.
+
+
+Item Class: Belts
+Rarity: Unique
+Ascent From Flesh
+Chain Belt
+--------
+Requirements:
+Level: 44
+--------
+Item Level: 70
+--------
++17 to maximum Energy Shield (implicit)
+--------
++300 to Evasion Rating
++78 to maximum Energy Shield
++11% to all Elemental Resistances
+You have Phasing if Energy Shield Recharge has started Recently
+30% increased Evasion Rating while Phasing
+10% increased Movement Speed while Phasing
+--------
+A single step forward
+Snap free from the prison
+Reborn into freedom eternal
+
+
+Item Class: Rings
+Rarity: Unique
+Mark of Submission
+Unset Ring
+--------
+Requirements:
+Level: 24
+--------
+Sockets: R
+--------
+Item Level: 71
+--------
+Has 1 Socket (implicit)
+--------
+Curse Enemies with Socketed Hex Curse Gem on Hit
+--------
+So great was the thaumaturgy of a bloodpriest's mark,
+that sacrifices soon welcomed their death.
+
+
+Item Class: Rings
+Rarity: Unique
+Unset Ring
+--------
+Sockets: R
+--------
+Item Level: 71
+--------
+Has 1 Socket (implicit)
+--------
+Unidentified
+
+
+Item Class: Two Hand Maces
+Rarity: Unique
+Kongor's Undying Rage
+Terror Maul
+--------
+Two Handed Mace
+Physical Damage: 155-486 (augmented)
+Critical Strike Chance: 8.10% (augmented)
+Attacks per Second: 1.15
+Weapon Range: 1.3 metres
+--------
+Requirements:
+Level: 67
+Str: 212 (unmet)
+--------
+Sockets: R R-R
+--------
+Item Level: 70
+--------
+25% chance to double Stun Duration (implicit)
+--------
+Adds 54 to 349 Physical Damage
+35% increased Critical Strike Chance
++16% to all Elemental Resistances
+Hits can't be Evaded
+Your Critical Strikes do not deal extra Damage
+You gain Onslaught for 4 seconds on Critical Strike
+--------
+Command like a king and nothing will stand in your way.
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Screaming Essence of Anger
+--------
+Stack Size: 1/9
+--------
+Upgrades a normal item to rare or reforges a rare item, guaranteeing one property
+
+Bow: Adds (110-150) to (223-260) Fire Damage
+Two Handed Melee Weapon: Adds (110-150) to (223-260) Fire Damage
+Other Weapon: Adds (59-81) to (120-140) Fire Damage
+Armour: (36-41)% to Fire Resistance
+Quiver: (36-41)% to Fire Resistance
+Belt: (36-41)% to Fire Resistance
+Other Jewellery: (23-26)% increased Fire Damage
+--------
+Right click this item then left click a normal or rare item to apply it.
+
+
