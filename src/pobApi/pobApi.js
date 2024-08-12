@@ -15,7 +15,6 @@ class Script extends CustomOsScript {
 	}
 
 	spawnProcess(pobPath) {
-		// todo[blocking] verify works on windows
 		let luajit = os.platform() === 'linux' ? 'luajit' : 'luajit.exe';
 		return spawn(
 			path.resolve(path.join(__dirname, luajit)),

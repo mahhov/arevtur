@@ -10,7 +10,10 @@ Checkout https://github.com/LuaJIT/LuaJIT
 - luajit - Compiled onlinux, luajit-2.1.1720049189
     - `make`
 - luajit.exe - Cross compiled on linux for windows
+    - `cd src`
     - `make HOST_CC="gcc -m32" CROSS=i686-w64-mingw32- TARGET_SYS=Windows`
+    - `cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libgcc_s_dw2-1.dll .`
+    - IDK if this is the 'proper' way to do it.
 
 # Integration
 
