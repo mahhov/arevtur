@@ -81,7 +81,7 @@
 	$('x-inputs').addEventListener('submit', async e => {
 		if (!e.detail.add)
 			$('x-results').clearItems();
-		submitQueries(await $('x-inputs').getTradeQueryParams());
+		submitQueries(await $('x-inputs').finalizeTradeQueryParams());
 	});
 
 	$('x-inputs').addEventListener('cancel', cancelQueries);

@@ -70,36 +70,36 @@ loadBuildFromXML(buildXml)
 
 -- ITEM SWAP - given item text, see what swapping it in would do for the build
 
-local itemText = [[
-Item Class: Rings
-Rarity: Unique
-Mark of Submission
-Unset Ring
---------
-Requirements:
-Level: 24
---------
-Sockets: R
---------
-Item Level: 71
---------
-Has 1 Socket (implicit)
---------
-Curse Enemies with Socketed Hex Curse Gem on Hit
---------
-So great was the thaumaturgy of a bloodpriest's mark,
-that sacrifices soon welcomed their death.
-]]
-local item = new('Item', itemText)
-if item.base then
-    print(' , ' .. item.baseName .. ' , ' .. item.name)
-    --item:BuildModList()
-    local tooltip = FakeTooltip:new()
-    build.itemsTab:AddItemTooltip(tooltip, item)
-    print(tooltip.text)
-else
-    print('item has no base')
-end
+--local itemText = [[
+--Item Class: Rings
+--Rarity: Unique
+--Mark of Submission
+--Unset Ring
+----------
+--Requirements:
+--Level: 24
+----------
+--Sockets: R
+----------
+--Item Level: 71
+----------
+--Has 1 Socket (implicit)
+----------
+--Curse Enemies with Socketed Hex Curse Gem on Hit
+----------
+--So great was the thaumaturgy of a bloodpriest's mark,
+--that sacrifices soon welcomed their death.
+--]]
+--local item = new('Item', itemText)
+--if item.base then
+--    print(' , ' .. item.baseName .. ' , ' .. item.name)
+--    --item:BuildModList()
+--    local tooltip = FakeTooltip:new()
+--    build.itemsTab:AddItemTooltip(tooltip, item)
+--    print(tooltip.text)
+--else
+--    print('item has no base')
+--end
 
 
 -- MOD ON SLOT X - given a mod, see what adding that mod new fake item, i.e. not replacing a currently equipped item,  would do for the build
@@ -148,79 +148,94 @@ end
 
 -- TRADE - given an item type and other params, generate a search query for replacing the currently equipped item of that type
 
+local s_format = string.format
+function urlEncode(str)
+    local charToHex = function(c)
+        return s_format("%%%02X", string.byte(c))
+    end
+    return str:gsub("([^%w_%-.~])", charToHex)
+end
 
---local arg2 = 'Jewel Any' -- item type
---local arg2 = 'Weapon 1'  -- item type
---local arg3 = '10'        -- max price
---local arg4 = '1'         -- total EPH weight
---local arg5 = '1'         -- total resist weight
---local arg6 = '.5'        -- full DPS weight
---
---local itemsTab = build.itemsTab
---local tradeQuery = itemsTab.tradeQuery
---tradeQuery:PriceItem()
---local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
---
-----print(dump(tradeQuery.slotTables))
---
---tradeQuery.statSortSelectionList = {
---    { stat = 'TotalEHP',             weightMult = tonumber(arg4) },
---    { stat = 'ChaosResistTotal',     weightMult = tonumber(arg5) },
---    { stat = 'LightningResistTotal', weightMult = tonumber(arg5) },
---    { stat = 'ColdResistTotal',      weightMult = tonumber(arg5) },
---    { stat = 'FireResistTotal',      weightMult = tonumber(arg5) },
---    { stat = 'FullDPS',              weightMult = tonumber(arg6) },
---}
---
----- TradeQueryClass:PriceItemRowDisplay
---local jewelNodeId
---for nodeId, slot in pairs(itemsTab.sockets) do
---    if not slot.inactive then
---        jewelNodeId = nodeId
---        break
---    end
---end
---
---local slot = itemsTab.slots[arg2] or itemsTab.sockets[jewelNodeId]
---
---tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
---    tradeQuery.statSortSelectionList, function(context, query, errMsg)
---        print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
---        print(query)
---        --print('debug')
---        --print(tradeQueryGenerator.calcContext.options.includeCorrupted)
---        --print(dump(tradeQueryGenerator.alreadyWeightedMods))
---        print('')
---        print(dump(tradeQueryGenerator.modWeights))
---        print('')
---        print(dkjson.encode(tradeQueryGenerator.modWeights))
---    end)
---
----- TradeQueryGeneratorClass:RequestQuery execute
---local eldritchModSlots = {
---    ['Body Armour'] = true,
---    ['Helmet'] = true,
---    ['Gloves'] = true,
---    ['Boots'] = true
---}
---local jewelTypes = {
---    ['Jewel Any'] = 'Any',
---    ['jewel Base'] = 'Base',
---    ['jewel Abyss'] = 'Abyss',
---}
---local options = {
---    includeCorrupted = true, -- this is being ignored
---    includeEldritch = eldritchModSlots[slot.slotName] == true,
---    includeTalisman = slot.slotName == 'Amulet',
---    influence1 = 1,
---    influence2 = 1,
---    maxPrice = tonumber(arg3),
---    statWeights = tradeQuery.statSortSelectionList,
---    jewelType = jewelTypes[arg2],
---}
-----print(dump(options))
---tradeQueryGenerator:StartQuery(slot, options)
---tradeQueryGenerator:OnFrame()
+local arg2 = 'Jewel Any' -- item type
+local arg2 = 'Weapon 1'  -- item type
+local arg3 = '10'        -- max price
+local arg4 = '1'         -- total EPH weight
+local arg5 = '1'         -- total resist weight
+local arg6 = '.5'        -- full DPS weight
+
+local itemsTab = build.itemsTab
+local tradeQuery = itemsTab.tradeQuery
+tradeQuery:PriceItem()
+local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
+
+print(tradeQuery.pbRealm .. ' <realm league> ' )
+
+--print(dump(tradeQuery.slotTables))
+
+tradeQuery.statSortSelectionList = {
+    { stat = 'TotalEHP', weightMult = tonumber(arg4) },
+    { stat = 'ChaosResistTotal', weightMult = tonumber(arg5) },
+    { stat = 'LightningResistTotal', weightMult = tonumber(arg5) },
+    { stat = 'ColdResistTotal', weightMult = tonumber(arg5) },
+    { stat = 'FireResistTotal', weightMult = tonumber(arg5) },
+    { stat = 'FullDPS', weightMult = tonumber(arg6) },
+}
+
+-- TradeQueryClass:PriceItemRowDisplay
+local jewelNodeId
+for nodeId, slot in pairs(itemsTab.sockets) do
+    if not slot.inactive then
+        jewelNodeId = nodeId
+        break
+    end
+end
+
+local slot = itemsTab.slots[arg2] or itemsTab.sockets[jewelNodeId]
+
+tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
+        tradeQuery.statSortSelectionList, function(context, query, errMsg)
+            --print('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
+            print('\n\n query: ' .. query)
+
+            local url = tradeQuery.tradeQueryRequests:buildUrl(tradeQuery.hostName .. "trade/search", tradeQuery.pbRealm, 'Settlers')
+            url = url .. "?q=" .. urlEncode(query)
+
+            print('\n\n url: ' .. url)
+
+            --print('debug')
+            --print(tradeQueryGenerator.calcContext.options.includeCorrupted)
+            --print(dump(tradeQueryGenerator.alreadyWeightedMods))
+            --print('')
+            --print(dump(tradeQueryGenerator.modWeights))
+            --print('')
+            --print(dkjson.encode(tradeQueryGenerator.modWeights))
+        end)
+
+-- TradeQueryGeneratorClass:RequestQuery execute
+local eldritchModSlots = {
+    ['Body Armour'] = true,
+    ['Helmet'] = true,
+    ['Gloves'] = true,
+    ['Boots'] = true
+}
+local jewelTypes = {
+    ['Jewel Any'] = 'Any',
+    ['jewel Base'] = 'Base',
+    ['jewel Abyss'] = 'Abyss',
+}
+local options = {
+    includeCorrupted = true, -- this is being ignored
+    includeEldritch = eldritchModSlots[slot.slotName] == true,
+    includeTalisman = slot.slotName == 'Amulet',
+    influence1 = 1,
+    influence2 = 1,
+    maxPrice = tonumber(arg3),
+    statWeights = tradeQuery.statSortSelectionList,
+    jewelType = jewelTypes[arg2],
+}
+--print(dump(options))
+tradeQueryGenerator:StartQuery(slot, options)
+tradeQueryGenerator:OnFrame()
 
 --print('')
 --print('')

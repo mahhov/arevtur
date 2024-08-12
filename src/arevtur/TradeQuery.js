@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
 const ApiConstants = require('./ApiConstants');
@@ -44,7 +45,6 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
-// todo[medium] rename to ApiTradeQuery to be consistent with UnifiedQueryParams naming
 class TradeQueryParams {
 	constructor(data) {
 		this.league = data.league || 'Standard';
@@ -188,6 +188,14 @@ class TradeQueryParams {
 			console.warn('ERROR', e);
 			return [];
 		}
+	}
+
+	get apiHtmlUrl() {
+		const api = 'https://www.pathofexile.com/trade';
+		let endpoint = `${api}/search/${this.league}`;
+		let queryParams = {q: JSON.stringify(this.getQuery())};
+		let queryParamsString = querystring.stringify(queryParams);
+		return `${endpoint}?${queryParamsString}`;
 	}
 }
 
