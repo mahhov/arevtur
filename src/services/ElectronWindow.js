@@ -6,7 +6,7 @@ const {appReadyPromise} = require('js-desktop-base');
 app.allowRendererProcessReuse = false;
 
 class ElectronWindow {
-	constructor(name, htmlPath, width = 1800, height = 1000) {
+	constructor(name, htmlPath, width = 10000, height = 10000) {
 		this.name = name;
 
 		this.window = appReadyPromise.then(() => {
