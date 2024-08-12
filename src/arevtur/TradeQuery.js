@@ -210,3 +210,8 @@ class TradeQueryImport {
 }
 
 module.exports = {TradeQueryParams, TradeQueryImport};
+
+// todo[blocking] why is amulet search returning 191 items
+// todo[blocking] why is amulet + curse search returning 5 items
+// todo[blocking] mod value is 0 for some items when they clearly have resists
+// todo[blocking] add resist mod when importing from pob

@@ -3,28 +3,13 @@ const fs = require('fs').promises;
 const appData = require('./appData');
 const Emitter = require('../util/Emitter');
 const {deepMerge} = require('../util/util');
+const defaultConfig = require('./defaultConfig.json');
 
 // keeps config in sync between windows
 class Config extends Emitter {
 	constructor() {
 		super();
-		this.config = {
-			league: 'Standard',
-			restrictToPoeWindow: true,
-			darkTheme: true,
-			// todo[high] these 2 should use local storage, see git branch configButton
-			viewHorizontal: true,
-			viewMaximize: false,
-			buildParams: {
-				pobPath: '',
-				buildPath: '',
-				weights: {
-					life: .5,
-					resist: .1,
-					damage: .25,
-				},
-			},
-		};
+		this.config = defaultConfig;
 		try {
 			deepMerge(this.config, require(appData.configPath));
 		} catch (e) {
@@ -50,4 +35,6 @@ class Config extends Emitter {
 	}
 }
 
-module.exports = {config: new Config()};
+module.exports = {config: new Config(), defaultConfig};
+
+// todo[high] viewHorizontal & viewMaximize should use local storage, see git branch configButton

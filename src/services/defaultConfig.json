@@ -1,0 +1,16 @@
+{
+  "league": "Standard",
+  "restrictToPoeWindow": true,
+  "darkTheme": true,
+  "viewHorizontal": true,
+  "viewMaximize": false,
+  "buildParams": {
+    "pobPath": "",
+    "buildPath": "",
+    "weights": {
+      "life": 0.5,
+      "resist": 0.1,
+      "damage": 0.25
+    }
+  }
+}

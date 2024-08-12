@@ -1,9 +1,11 @@
 const {ipcRenderer} = require('electron');
 const Emitter = require('../util/Emitter');
+const defaultConfig = require('./defaultConfig.json');
 
 class ConfigForRenderer extends Emitter {
 	constructor() {
 		super();
+		this.config_ = defaultConfig;
 		ipcRenderer.on('config-changed', (event, config) => {
 			this.config_ = config;
 			this.emit('change', config);
