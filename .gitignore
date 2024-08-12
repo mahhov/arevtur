@@ -4,3 +4,4 @@ dist
 dist-linux
 *.iml
 lib
+git_token

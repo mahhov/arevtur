@@ -4,9 +4,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "clean-build": "rm -rf dist && electron-builder -lw",
-    "build": "electron-builder -lw",
-    "ship": "git push && rm -rf dist && build -p always"
+    "ship": ". ./git_token && git push && rm -rf dist && build -lwp always"
   },
   "author": "mahhov1",
   "license": "ISC",

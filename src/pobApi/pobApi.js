@@ -74,7 +74,6 @@ class PobApi extends Emitter {
 		          buildPath = this.buildPath,
 		          weights = this.weights,
 	          } = {}) {
-		// todo[blocking] check weights too
 		if (pobPath === this.pobPath && buildPath === this.buildPath)
 			return;
 		//this.crashCount = 0;
@@ -90,7 +89,6 @@ class PobApi extends Emitter {
 		console.log('PobApi creating new script', this.pobPath, this.buildPath);
 		this.script = new Script(this.pobPath);
 		this.send('build', this.buildPath);
-		// todo[blocking] send weights
 	}
 
 	async send(...args) {
