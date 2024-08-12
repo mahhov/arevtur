@@ -108,8 +108,9 @@ class PobApi extends Emitter {
 	}
 
 	evalItem(item) {
-		if (!item.toLowerCase().includes('requirements:'))
-			return Promise.reject('Item missing requirements');
+		if (!item.toLowerCase().includes('requirements:') &&
+			!item.toLowerCase().includes('sockets:'))
+			return Promise.reject('Item missing requirements & sockets');
 		return this.send('item', item.replace(/[\n\r]+/g, ' \\n '))
 			.then(text => this.parseItemTooltip(text));
 	}
