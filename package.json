@@ -4,8 +4,9 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder -lw --category Game",
-    "ship": "git push && build -p always"
+    "clean-build": "rm -rf dist && electron-builder -lw",
+    "build": "electron-builder -lw",
+    "ship": "git push && rm -rf dist && build -p always"
   },
   "author": "mahhov1",
   "license": "ISC",

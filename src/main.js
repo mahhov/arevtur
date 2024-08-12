@@ -4,7 +4,7 @@ require('./services/config');
 const keySnippet = require('./keySnippets/keySnippets');
 let windows = [
 	// todo[blocking] this doesn't seem to be working on linux. does it work on windows?
-	// require('./updateCheck/updateCheck'),
+	require('./updateCheck/updateCheck'),
 	require('./arevtur/arevtur'),
 	// require('./modViewer/modViewer'), // todo[low] either remove or get it working
 ];
