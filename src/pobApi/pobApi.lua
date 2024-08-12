@@ -7,8 +7,20 @@ package.path = package.path .. ';' .. './lua/?.lua' -- xml
 package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno
 package.path = package.path .. ';../?.lua' -- xml
 
+function respond(response, debug)
+    if not debug then
+        response = '<.' .. response .. '.>'
+    end
+    io.write(response .. '\n')
+    io.flush()
+end
+
+respond('script started', true)
+
 require('HeadlessWrapper')
+respond('HeadlessWrapper loaded', true)
 local dkjson = require 'dkjson'
+respond('dkjson loaded', true)
 
 -- infra
 
@@ -50,14 +62,6 @@ function getArgs(input)
     return args
 end
 
-function respond(response, debug)
-    if not debug then
-        response = '<.' .. response .. '.>'
-    end
-    io.write(response .. '\n')
-    io.flush()
-end
-
 local defaultItem = {
     raw = [[
                         Item Class: Amulets
@@ -75,6 +79,7 @@ while true do
     local input = io.read()
     local args = getArgs(input)
     local cmd = args[1]
+    respond('received command ' .. cmd, true)
 
     if cmd == 'echo' then
         respond('echo')

@@ -25,9 +25,11 @@ class Script extends CustomOsScript {
 
 	onScriptResponse({out, err, exit}) {
 		if (exit || err) {
-			console.error('PobApi failed', err, exit);
+			console.error('PobApi failed:', err, exit);
 			this.clear();
+			return;
 		}
+		console.log('PobApi response:', out);
 		if (out && !this.cleared)
 			out.split('.>')
 				.map(split => split.split('<.')[1])
