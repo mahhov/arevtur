@@ -1,10 +1,10 @@
 const path = require('path');
 const os = require('os');
-const envPaths = require('env-paths')('arevtur');
+const envPaths = require('env-paths')('arevtur', {suffix: ''});
 
 module.exports = {
-	basePath: envPaths.data,
-	configPath: path.resolve(envPaths.data, 'config.json'),
+	basePath: envPaths.config,
+	configPath: path.resolve(envPaths.config, 'config.json'),
 	isDev: !!process.env.npm_command,
 	defaultPobPath: os.platform() === 'linux' ?
 		'/var/lib/flatpak/app/community.pathofbuilding.PathOfBuilding/current/active/files/pathofbuilding/src' :
