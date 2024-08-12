@@ -15,7 +15,6 @@ customElements.define(name, class extends XElement {
 			shared: {boolean: true},
 			enabled: {boolean: true},
 			buildValue: {},
-			buildValueTooltip: {},
 		};
 	}
 
@@ -104,10 +103,6 @@ customElements.define(name, class extends XElement {
 		this.$('#build-value').text = value && Math.round(Number(value) * 1000) / 1000;
 	}
 
-	set buildValueTooltip(value) {
-		this.$('#build-value').tooltip = value;
-	}
-
 	focus() {
 		this.$('#property').focus();
 	}
@@ -115,7 +110,6 @@ customElements.define(name, class extends XElement {
 	async refreshBuild() {
 		try {
 			this.buildValue = '';
-			this.buildValueTooltip = '';
 			let modWeights = await pobApi.generateQuery(this.type);
 			let unifiedQueryParams = UnifiedQueryParams.fromModWeights({}, modWeights);
 			let propertyId = await ApiConstants.constants.propertyTextToId(this.property);

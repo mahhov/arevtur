@@ -65,6 +65,3 @@ customElements.define(name, class InputBuild extends XElement {
 		};
 	}
 });
-
-// todo[blocking] when clearing build, new build values that are now 0 don't overwrite old build
-//  values
