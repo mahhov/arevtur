@@ -152,3 +152,5 @@ customElements.define(name, class Inputs extends XElement {
 		});
 	}
 });
+
+// todo[high] refresh results when build weights change

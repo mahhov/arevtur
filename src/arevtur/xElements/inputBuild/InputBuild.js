@@ -42,6 +42,7 @@ customElements.define(name, class InputBuild extends XElement {
 		this.$('#life-weight').value = buildParams.weights.life || 0;
 		this.$('#resist-weight').value = buildParams.weights.resist || 0;
 		this.$('#damage-weight').value = buildParams.weights.damage || 0;
+		// todo[high] allow custom weights
 		this.updatePob();
 	}
 
