@@ -219,11 +219,6 @@ class TradeQueryImport {
 
 module.exports = {TradeQueryParams, TradeQueryImport};
 
-// todo[blocking] mod value is 0 for some items when they clearly have resists
-// todo[blocking] add resist mod when importing from pob
-// todo[blocking] long hang when switching to a set with many query properties
-// todo[blocking] different trade results than pob
-// todo[blocking] min value being ignored
 // todo[blocking] when receiving 0 items, results aren't cleared
 // todo[blocking] query for claw returns 0 prefix/suffix
 // todo[high] query property highlighting is hard to distinguish
