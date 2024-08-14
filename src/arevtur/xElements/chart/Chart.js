@@ -121,7 +121,7 @@ customElements.define(name, class Chart extends XElement {
 
 	verifyRange() {
 		this.minX = Math.max(this.minX, -this.deltaX / 10);
-		this.minY = Math.max(this.minY, -this.deltaY / 10);
+		this.minY = Math.max(this.minY, -10 - this.deltaY / 10);
 	}
 
 	draw() {
