@@ -78,13 +78,12 @@ class PobApi extends Emitter {
 		          buildPath = this.buildPath,
 		          weights = this.weights,
 	          } = {}) {
-		if (pobPath === this.pobPath && buildPath === this.buildPath)
-			return;
-		//this.crashCount = 0;
-		this.pobPath = pobPath;
-		this.buildPath = buildPath;
+		if (pobPath !== this.pobPath || buildPath !== this.buildPath) {
+			this.pobPath = pobPath;
+			this.buildPath = buildPath;
+			this.restart();
+		}
 		this.weights = weights;
-		this.restart();
 	}
 
 	restart() {
