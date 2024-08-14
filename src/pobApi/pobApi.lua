@@ -136,7 +136,7 @@ while true do
             respond('Individual mod weights aren\'t supported on this item type')
         end
 
-    elseif cmd == 'generateQuery' then
+    elseif cmd == 'getModWeights' then
         -- args[2] is type, e.g. 'Amulet'
         -- args[3] is total EPH weight, e.g. '1'
         -- args[4] is total resist weight, e.g. '1'

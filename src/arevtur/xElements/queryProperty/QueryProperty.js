@@ -111,7 +111,7 @@ customElements.define(name, class extends XElement {
 	async refreshBuild() {
 		try {
 			this.buildValue = '';
-			let modWeights = await pobApi.generateQuery(this.type);
+			let modWeights = await pobApi.getModWeights(this.type);
 			let unifiedQueryParams = UnifiedQueryParams.fromModWeights({}, modWeights);
 			let propertyId = await ApiConstants.constants.propertyTextToId(this.property);
 			this.buildValue =
