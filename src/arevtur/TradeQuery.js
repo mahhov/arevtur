@@ -221,5 +221,4 @@ module.exports = {TradeQueryParams, TradeQueryImport};
 
 // todo[high] query property highlighting is hard to distinguish
 // todo[high] merge all resist mods when importing
-// todo[high] attribute weights for PoB
-// todo[high] ctrl+enter while input is focused and changed will use stale value
+// todo[blocking] ctrl+enter while input is focused and changed will use stale value

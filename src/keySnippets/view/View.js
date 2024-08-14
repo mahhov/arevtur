@@ -76,7 +76,7 @@ $('#preferences-restrict-window').addEventListener('input', () =>
 
 $('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
 
-$('#preferences-open').addEventListener('click', () => {
+$('#open-config').addEventListener('click', () => {
 	let path = (os.platform() === 'linux' ? 'file:' : '') + appData.basePath;
 	shell.openExternal(path);
 });
