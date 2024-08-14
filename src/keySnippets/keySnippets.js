@@ -36,32 +36,21 @@ let priceClipboard = async itemText => {
 	let pobOutput = pobApi.evalItem(itemText).catch(e => ({text: ''}));
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
 	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
-	await viewHandle.showTexts([
-		...pricerOutput.map(text => ({text})),
-		pobOutput.text ? {text: '-'.repeat(30)} : null,
-		...pobOutput.text ? pobOutput.text
-			.split('\n')
-			.map(line => {
-				let m = line.match(/@[\w,]+/)?.[0] || '';
-				let textColor = '#000';
-				if (m.includes('orange'))
-					textColor = 'orange'; // todo[high] use colors consistent with themeStyle.css
-				if (m.includes('red'))
-					textColor = 'red';
-				if (m.includes('green'))
-					textColor = 'green';
-				if (m.includes('blue'))
-					textColor = 'blue';
-				return {
-					text: line.replace(m, ''),
-					textColor,
-				};
-			}) : [],
-	].filter(v => v), 3000); // todo[high] add config to set display duration
+	await viewHandle.showText([
+		...pricerOutput,
+		pobOutput.text ? '-'.repeat(30) : null,
+		pobOutput.text || null,
+	].filter(v => v).join('\n'), 0);
+	// todo[high] add config to set display duration
+	// todo[high] add shortcuts to lock/dismiss display
 };
 
-let windowCheck = async () => !config.config.restrictToPoeWindow ||
-	(await frontWindowTitle.get()).out.trim() === 'Path of Exile';
+let windowCheck = async () => {
+	if (!config.config.restrictToPoeWindow)
+		return true;
+	let title = (await frontWindowTitle.get()).out.toLowerCase().trim();
+	return ['path of exile', 'arevtur'].includes(title);
+};
 
 let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {

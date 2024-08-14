@@ -10,8 +10,8 @@ const $c = document.createElement.bind(document);
 
 ipc.on('window-command', (_, command) => {
 	switch (command.name) {
-		case 'setTexts':
-			updateTexts(command.texts);
+		case 'setText':
+			updateText(command.text);
 			setVisibleContainer($('#text-container'));
 			break;
 		case 'setTable':
@@ -21,25 +21,41 @@ ipc.on('window-command', (_, command) => {
 		case 'showPreferences':
 			setVisibleContainer($('#preferences-container'));
 			break;
+		case 'open':
+			break;
 		default:
 			console.error('Unknown window command:', command);
 	}
 });
 
-let updateTexts = texts => {
+let updateText = text => {
 	let container = $('#text-container');
 	while (container.firstChild)
 		container.firstChild.remove();
 
-	texts.forEach(({text, textColor = '#000', backColor = '#fff'}) => {
-		let lineTextEl = $c('span');
-		lineTextEl.textContent = text;
-		lineTextEl.style.color = textColor;
-		lineTextEl.style.backgroundColor = backColor;
-		let lineEl = $c('div');
-		lineEl.appendChild(lineTextEl);
-		container.appendChild(lineEl);
-	});
+	let addSpan = (classes = []) => {
+		let span = $c('span');
+		span.classList.add(...classes);
+		container.appendChild(span);
+		return span;
+	};
+
+	// todo[blocking] export to shared util
+	let span;
+	text
+		.split(/(@[-\w,]+ |\n)/)
+		.filter(v => v)
+		.forEach(term => {
+			if (term[0] === '@') {
+				span = addSpan(term.slice(1, -1).split(','));
+				return;
+			}
+			if (term === '\n')
+				span = addSpan();
+			else if (!span)
+				span = addSpan();
+			span.textContent += term;
+		});
 };
 
 let updateTable = rows => {
@@ -70,20 +86,19 @@ let setVisibleContainer = container => {
 	].forEach(c => c.classList.toggle('hidden', c !== container));
 };
 
-document.body.addEventListener('keydown', ({code}) => {
-	switch (code) {
-		case 'Enter':
-		case 'Escape':
+document.addEventListener('keydown', ({code}) => {
+	switch (code.toLowerCase()) {
+		case 'enter':
+		case 'escape':
+		case 'space':
 			ipcSend({name: 'close'});
 			break;
 	}
 });
 
 window.addEventListener('blur', () => ipcSend({name: 'close'}));
-document.body.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
+document.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
 
-configForRenderer.addListener('change', () =>
-	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow);
 $('#preferences-restrict-window').addEventListener('input', () =>
 	configForRenderer.config = {restrictToPoeWindow: $('#preferences-restrict-window').checked});
 
@@ -92,4 +107,9 @@ $('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
 $('#preferences-open').addEventListener('click', () => {
 	let path = (os.platform() === 'linux' ? 'file:' : '') + appData.basePath;
 	shell.openExternal(path);
+});
+
+configForRenderer.addListener('change', config => {
+	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
+	document.documentElement.classList.toggle('dark', config.darkTheme);
 });

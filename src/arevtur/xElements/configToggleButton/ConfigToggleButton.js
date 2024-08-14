@@ -32,9 +32,8 @@ document.addEventListener('keydown', e => {
 });
 
 configForRenderer.addListener('change', config => {
-	// undefined 2nd param would cause an actual toggle rather than removing the class
-	document.documentElement.classList.toggle('maximize', config.viewMaximize || false);
+	document.documentElement.classList.toggle('maximize', config.viewMaximize);
 	document.documentElement.classList.toggle('horizontal',
 		!config.viewMaximize && config.viewHorizontal);
-	document.documentElement.classList.toggle('dark', config.darkTheme || false);
+	document.documentElement.classList.toggle('dark', config.darkTheme);
 });

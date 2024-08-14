@@ -96,7 +96,7 @@ progress::-webkit-progress-value {
 }
 
 .pob {
-	outline: 1px var(--colored-text-red) solid;
+	outline: 1px var(--colored-text-pink) solid;
 }
 
 .maximize-shown {
@@ -105,6 +105,38 @@ progress::-webkit-progress-value {
 
 .maximized-hidden {
 	display: var(--maximize-hidden-display);
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.red {
+	color: var(--colored-text-red);
+}
+
+.orange {
+	color: var(--colored-text-orange);
+}
+
+.gold {
+	color: var(--colored-text-gold);
+}
+
+.green {
+	color: var(--colored-text-green);
+}
+
+.light-green {
+	color: var(--colored-text-light-green);
+}
+
+.blue {
+	color: var(--colored-text-blue);
+}
+
+.pink {
+	color: var(--colored-text-pink);
 }
 
 /* todo[medium] checkbox styling */

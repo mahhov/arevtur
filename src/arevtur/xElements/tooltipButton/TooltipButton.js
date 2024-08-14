@@ -25,11 +25,11 @@ customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 		this.clearChildren('#tooltip');
 		let span;
 		value
-			.split(/(@[-\w,]+|\n)/)
+			.split(/(@[-\w,]+ |\n)/)
 			.filter(v => v)
 			.forEach(term => {
 				if (term[0] === '@') {
-					span = this.addTooltipSpan(term.slice(1).split(','));
+					span = this.addTooltipSpan(term.slice(1, -1).split(','));
 					return;
 				}
 				if (term === '\n')

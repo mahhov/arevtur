@@ -1,11 +1,11 @@
 <style>
-	@import '../sharedStyle.css';
+	@import '../../themeStyle.css';
+	@import '../../sharedStyle.css';
 
 	body {
 		border: 1px solid;
 		margin: 0;
 		padding: 10px;
-		font-family: sans-serif;
 	}
 
 	#text-container.hidden,
@@ -16,22 +16,9 @@
 	}
 
 	#text-container {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-	}
-
-	#text-container div {
-		flex-basis: 0;
-		flex-grow: 1;
-		display: flex;
-		align-items: center;
-	}
-
-	#text-container div span {
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		overflow: hidden;
+		white-space: pre;
+		overflow: auto;
+		text-wrap: wrap;
 	}
 
 	#table-container {

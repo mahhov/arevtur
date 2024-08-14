@@ -16,6 +16,11 @@ class ViewHandle extends ViewHandleBase {
 				contextIsolation: false,
 			},
 		}, path.join(__dirname, './View.html'));
+
+		this.window.then(window => window.on('close', e => {
+			e.preventDefault();
+			window.hide();
+		}));
 	}
 
 	onMessage(message) {
@@ -48,8 +53,8 @@ class ViewHandle extends ViewHandleBase {
 		await this.validateOnScreen();
 	}
 
-	async showTexts(texts, duration) {
-		this.showCommand('setTexts', {texts}, duration, 300, texts.length);
+	async showText(text, duration) {
+		this.showCommand('setText', {text}, duration, 300, Math.min(text.split('\n').length, 20));
 	}
 
 	async showTable(rows, duration) {
