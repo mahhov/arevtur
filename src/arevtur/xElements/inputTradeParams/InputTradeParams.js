@@ -147,7 +147,6 @@ customElements.define(name, class extends XElement {
 			this.checkProperties();
 			this.emit('change');
 		});
-		this.$('#add-property-button').addEventListener('click', () => this.addQueryProperty());
 
 		pobApi.addListener('change', () => this.refreshBuild());
 	}
