@@ -1,5 +1,5 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
-const dataFetcher = require('../services/DataFetcher');
+const poeNinjaApi = require('../services/poeNinjaApi');
 
 // Without a non-empty user-agent header, PoE will return 403.
 let get = endpoint => httpRequest.get(endpoint, {}, {'User-Agent': '_'});
@@ -115,9 +115,9 @@ class Constants {
 	// currencies
 
 	static async initCurrencies(league) {
-		let currencyPrices = dataFetcher.getData(
-			dataFetcher.endpointsByLeague.CURRENCY(league));
-		let beastPrices = dataFetcher.getData(dataFetcher.endpointsByLeague.BEAST(league));
+		let currencyPrices = poeNinjaApi.getData(
+			poeNinjaApi.endpointsByLeague.CURRENCY(league));
+		let beastPrices = poeNinjaApi.getData(poeNinjaApi.endpointsByLeague.BEAST(league));
 		let staticDataStr = get('https://www.pathofexile.com/api/trade/data/static');
 		currencyPrices = await currencyPrices;
 		staticDataStr = await staticDataStr;

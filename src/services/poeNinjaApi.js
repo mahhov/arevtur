@@ -56,7 +56,6 @@ let getData = endpoint => {
 		});
 };
 
-// todo[low] rename file to PoeNinjaApi.js
 module.exports = {endpointsByLeague, getData};
 
 // axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() *
