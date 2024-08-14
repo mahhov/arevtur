@@ -85,7 +85,14 @@
 	<label>Non unique<input id="non-unique-check" type="checkbox"></label>
 	<x-multi-select-lined id="influence-input" placeholder="Add influences"></x-multi-select-lined>
 </div>
-<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
+<div>
+	<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
+	<!-- todo[medium] make this generic drop search matched items-->
+	<button id="drop-implicit-mods-button">Drop Implicits</button>
+	<!-- todo[medium] also allow merging attributes, dmg,  and other common pseudo mods-->
+	<button id="merge-resist-mods-button">Merge Resists</button>
+	<button id="enable-all-mods-button">Enable All</button>
+</div>
 <x-arrangable-list id="query-properties-list"></x-arrangable-list>
 <div>
 	<button id="add-property-button">add</button>

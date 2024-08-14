@@ -113,6 +113,36 @@ customElements.define(name, class extends XElement {
 				this.$('#search-input').focus();
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
+		this.$('#drop-implicit-mods-button').addEventListener('click', () => {
+			[...this.$('#query-properties-list').children].forEach(queryProperty => {
+				if (queryProperty.property.includes('(implicit)'))
+					queryProperty.remove();
+			});
+		});
+		this.$('#merge-resist-mods-button').addEventListener('click', () => {
+			let maxWeight = 0;
+			[...this.$('#query-properties-list').children].forEach(queryProperty => {
+				if (queryProperty.property.match(/\+#% to .* resistances? \(explicit\)/i)) {
+					maxWeight = Math.max(queryProperty.weight, maxWeight);
+					queryProperty.remove();
+				}
+			});
+			if (maxWeight) {
+				let queryProperty = this.addQueryProperty();
+				queryProperty.property = '+#% total Resistance (pseudo)';
+				queryProperty.weight = maxWeight;
+			}
+			this.propagateLockedWeights();
+			this.checkProperties(); // todo[medium] remove null 0 properties
+			this.applySearch();
+			this.emit('change');
+		});
+		this.$('#enable-all-mods-button').addEventListener('click', () => {
+			[...this.$('#query-properties-list').children].forEach(
+				queryProperty => queryProperty.enabled = true);
+			this.checkProperties();
+			this.emit('change');
+		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
 			this.emit('change');
