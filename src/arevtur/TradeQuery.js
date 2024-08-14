@@ -219,11 +219,14 @@ class TradeQueryImport {
 
 module.exports = {TradeQueryParams, TradeQueryImport};
 
-// todo[blocking] why is amulet search returning 191 items
-// todo[blocking] why is amulet + curse search returning 5 items
 // todo[blocking] mod value is 0 for some items when they clearly have resists
 // todo[blocking] add resist mod when importing from pob
 // todo[blocking] long hang when switching to a set with many query properties
 // todo[blocking] different trade results than pob
 // todo[blocking] min value being ignored
 // todo[blocking] when receiving 0 items, results aren't cleared
+// todo[blocking] query for claw returns 0 prefix/suffix
+// todo[high] query property highlighting is hard to distinguish
+// todo[high] merge all resist mods when importing
+// todo[high] attribute weights for PoB
+// todo[high] ctrl+enter while input is focused and changed will use stale value

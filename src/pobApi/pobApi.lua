@@ -37,18 +37,15 @@ end
 FakeTooltip = {
     text = ''
 }
-
 function FakeTooltip:new()
     o = {}
     setmetatable(o, self)
     self.__index = self
     return o
 end
-
 function FakeTooltip:AddLine(_, text)
     self.text = self.text .. text .. '\n'
 end
-
 function FakeTooltip:AddSeparator()
     self.text = self.text .. '\n'
 end
@@ -60,6 +57,18 @@ function getArgs(input)
         table.insert(args, arg)
     end
     return args
+end
+
+function stringify(o)
+    if type(o) == 'table' then
+        local s = ' { '
+        for k, v in pairs(o) do
+            s = '"' .. s .. '" : ' .. stringify(v) .. ', '
+        end
+        return s .. ' } '
+    else
+        return tostring(o)
+    end
 end
 
 local defaultItem = {
@@ -128,6 +137,7 @@ while true do
         -- args[3] is total EPH weight, e.g. '1'
         -- args[4] is total resist weight, e.g. '1'
         -- args[5] is full DPS weight, e.g. '1'
+        -- args[6] is includeCorrupted
         -- given an item type and other params, generate a search query for replacing the currently
         -- equipped item of that type
 
@@ -173,7 +183,7 @@ while true do
             ['jewel Abyss'] = 'Abyss',
         }
         local options = {
-            includeCorrupted = true,
+            includeCorrupted = args[6],
             includeEldritch = eldritchModSlots[slot.slotName] == true,
             includeTalisman = slot.slotName == 'Amulet',
             influence1 = 1,
@@ -182,6 +192,7 @@ while true do
             statWeights = tradeQuery.statSortSelectionList,
             jewelType = jewelTypes[args[2]],
         }
+        respond(stringify(options), true)
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()
         -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot

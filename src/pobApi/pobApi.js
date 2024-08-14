@@ -139,12 +139,12 @@ class PobApi extends Emitter {
 	}
 
 	// todo[high] rename to getModWeights
-	async generateQuery(type = undefined) {
+	async generateQuery(type = undefined, includeCorrupted = true) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return Promise.reject('PoB generateQuery missing type');
 		return this.send('generateQuery', pobType, this.weights.life,
-			this.weights.resist, this.weights.dps).then(JSON.parse);
+			this.weights.resist, this.weights.dps, includeCorrupted).then(JSON.parse);
 	}
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
