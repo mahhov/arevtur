@@ -8,13 +8,6 @@
 		padding: 8px;
 	}
 
-	#text-container.hidden,
-	#table-container.hidden,
-		/* todo[high] rename dev-options-container */
-	#preferences-container.hidden {
-		display: none;
-	}
-
 	#text-container {
 		display: block;
 		height: 100%;
@@ -33,10 +26,6 @@
 	#table-container .column:not(:first-child) {
 		margin-left: 20px;
 	}
-
-	#preferences > * {
-		display: block;
-	}
 </style>
 
 <script>
@@ -45,10 +34,10 @@
 
 <x-formatted-text id="text-container"></x-formatted-text>
 <div id="table-container"></div>
-<div id="preferences-container">
+<div id="dev-options-container">
 	This is for developers.
 	<div>
-		<label><input id="preferences-restrict-window" type="checkbox">Restrict PoE Window</label>
+		<label><input id="restrict-window" type="checkbox">Restrict to the PoE Window</label>
 	</div>
 	<div>
 		<button id="reset-pob">Reset PoB</button>

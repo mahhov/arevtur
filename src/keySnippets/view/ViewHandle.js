@@ -61,8 +61,8 @@ class ViewHandle extends ViewHandleBase {
 		this.showCommand('setTable', {rows}, duration, 600, rows.length);
 	}
 
-	async showPreferences() {
-		this.showCommand('showPreferences', {}, undefined, 300, 5);
+	async showDevOptions() {
+		this.showCommand('showDevOptions', {}, undefined, 300, 5);
 	}
 }
 

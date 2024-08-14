@@ -18,8 +18,8 @@ ipc.on('window-command', (_, command) => {
 			updateTable(command.rows);
 			setVisibleContainer($('#table-container'));
 			break;
-		case 'showPreferences':
-			setVisibleContainer($('#preferences-container'));
+		case 'showDevOptions':
+			setVisibleContainer($('#dev-options-container'));
 			break;
 		case 'open':
 			break;
@@ -54,7 +54,7 @@ let setVisibleContainer = container => {
 	[
 		$('#text-container'),
 		$('#table-container'),
-		$('#preferences-container'),
+		$('#dev-options-container'),
 	].forEach(c => c.classList.toggle('hidden', c !== container));
 };
 
@@ -71,8 +71,8 @@ document.addEventListener('keydown', ({code}) => {
 window.addEventListener('blur', () => ipcSend({name: 'close'}));
 document.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
 
-$('#preferences-restrict-window').addEventListener('input', () =>
-	configForRenderer.config = {restrictToPoeWindow: $('#preferences-restrict-window').checked});
+$('#restrict-window').addEventListener('input', () =>
+	configForRenderer.config = {restrictToPoeWindow: $('#restrict-window').checked});
 
 $('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
 
@@ -82,6 +82,6 @@ $('#open-config').addEventListener('click', () => {
 });
 
 configForRenderer.addListener('change', config => {
-	$('#preferences-restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
+	$('#restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
 	document.documentElement.classList.toggle('dark', config.darkTheme);
 });

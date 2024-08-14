@@ -25,7 +25,7 @@ let displayDevOptions = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
 	else
-		await viewHandle.showPreferences();
+		await viewHandle.showDevOptions();
 };
 
 let priceClipboard = async itemText => {
