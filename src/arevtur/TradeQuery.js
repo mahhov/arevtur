@@ -219,7 +219,6 @@ class TradeQueryImport {
 
 module.exports = {TradeQueryParams, TradeQueryImport};
 
-// todo[blocking] when receiving 0 items, results aren't cleared
 // todo[blocking] query for claw returns 0 prefix/suffix
 // todo[high] query property highlighting is hard to distinguish
 // todo[high] merge all resist mods when importing

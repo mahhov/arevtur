@@ -65,6 +65,7 @@ customElements.define(name, class Inputs extends XElement {
 
 	clearItems() {
 		this.itemsData.clear();
+		this.renderItemsData(false, false);
 	}
 
 	joinItems(items) {
