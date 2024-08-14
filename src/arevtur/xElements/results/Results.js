@@ -7,7 +7,7 @@ const testData = require('./testData');
 
 customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
-		return {};
+		return {expectedCount: {}};
 	}
 
 	static get htmlTemplate() {
@@ -73,8 +73,18 @@ customElements.define(name, class Inputs extends XElement {
 		this.renderItemsData(false, true);
 	}
 
-	updateItemsProgress(ratio) {
+	updateItemsProgress(ratio, expectedCount) {
 		this.$('#results-progress-bar').value = ratio;
+		this.expectedCount = expectedCount;
+		this.updateResultsCount();
+	}
+
+	updateResultsCount() {
+		this.$('#results-count').textContent = [
+			this.itemsData.shownItems.length,
+			this.itemsData.allItems.length,
+			this.expectedCount,
+		].join(' / ');
 	}
 
 	renderItemsData(listBackgroundsOnly = false, resetChartRange = false) {
@@ -86,8 +96,7 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	renderItemsDataList() {
-		this.$('#results-count').textContent =
-			this.itemsData.shownItems.length + ' / ' + this.itemsData.allItems.length;
+		this.updateResultsCount();
 
 		XElement.clearChildren(this.$('#results-list'));
 		this.itemsData.shownItems.forEach((itemData, i) => {

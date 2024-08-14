@@ -279,6 +279,7 @@ customElements.define(name, class extends XElement {
 	};
 
 	propagateLockedWeights() {
+		// todo[medium] locked isn't working
 		let queryProperties = this.$$('#query-properties-list x-query-property');
 		queryProperties.forEach((queryProperty, i, a) => {
 			if (queryProperty.locked && i < a.length)

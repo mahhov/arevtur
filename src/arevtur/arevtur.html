@@ -60,15 +60,18 @@
 	let submitQueries = async tradeQueryParams => {
 		cancelQueries();
 		lastTradeQueryParams = tradeQueryParams;
-		let progressRatios = tradeQueryParams.map(_ => 0);
+		let progressResponses = tradeQueryParams.map(_ => 0);
 		tradeQueryParams
 			.forEach((queryParam, i) =>
-				queryParam.getItemsStream((text, ratio) => {
-					console.log('progress', text, ratio);
-					progressRatios[i] = ratio;
-					let avgProgressRatio = progressRatios.reduce((sum, v) => sum + v) /
-						progressRatios.length;
-					$('x-results').updateItemsProgress(avgProgressRatio);
+				queryParam.getItemsStream(response => {
+					console.log('progress', response.text, response.ratio);
+					progressResponses[i] = response;
+					let avgProgressRatio = progressResponses
+							.reduce((sum, response) => sum + response.ratio, 0) /
+						progressResponses.length;
+					let sumProgressLength = progressResponses
+						.reduce((sum, response) => sum + response.length, 0);
+					$('x-results').updateItemsProgress(avgProgressRatio, sumProgressLength);
 				})
 					.forEach(items => $('x-results').joinItems(items)));
 	};
@@ -87,7 +90,7 @@
 	$('x-inputs').addEventListener('cancel', cancelQueries);
 
 	$('x-results').addEventListener('submit', async e =>
-		submitQueries(await $('x-inputs').getTradeQueryParams(e.detail.overridePrice)));
+		submitQueries(await $('x-inputs').finalizeTradeQueryParams(e.detail.overridePrice)));
 
 	document.addEventListener('wheel', e => {
 		if (!e.ctrlKey)
@@ -97,7 +100,8 @@
 		webFrame.setZoomLevel(factor);
 	});
 
-	// todo[low] assume quality 0%
+	// todo[low] assume quality 0% & catalysts
+	// todo[low] allow ignoring or overriding anointments
 	// todo[low] items sometimes coming back without pseudo mod 'Sum: '
 	// todo[medium] make UI easier to understand and add tooltips
 	// todo[medium] catch JSON and pob and https request failures

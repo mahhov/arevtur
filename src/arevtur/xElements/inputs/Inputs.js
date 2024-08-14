@@ -179,7 +179,6 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	store() {
-		// todo[high] league gets reset sometimes
 		configForRenderer.config = {'league': this.$('#league-input').value};
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
 		localStorage.setItem('input-set-index', this.inputSetIndex);

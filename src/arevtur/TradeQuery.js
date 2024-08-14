@@ -143,23 +143,36 @@ class TradeQueryParams {
 		return items;
 	}
 
+	// todo[medium] change progressCallback to progressStream
 	async queryAndParseItems(query, stream, progressCallback) {
 		// todo[medium] more selective try/catch
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
 			let headers = TradeQueryParams.createRequestHeader(this.sessionId);
-			progressCallback('Initial query.', 0);
+			progressCallback({
+				text: 'Initial query.',
+				ratio: 0,
+				length: 0,
+			});
 			console.log('initial query', query);
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
-			progressCallback(`Received ${data.result.length} items.`, 0);
+			let length = data.result.length;
+			progressCallback({
+				text: `Received ${data.result.length} items.`,
+				ratio: 0,
+				length,
+			});
 
 			let requestGroups = [];
 			while (data.result.length)
 				requestGroups.push(data.result.splice(0, 10));
-			progressCallback(`Will make ${requestGroups.length} grouped item queries.`,
-				1 / (requestGroups.length + 1));
+			progressCallback({
+				text: `Will make ${requestGroups.length} grouped item queries.`,
+				ratio: 1 / (requestGroups.length + 1),
+				length,
+			});
 
 			let receivedCount = 0;
 			let promises = requestGroups.map(async (requestGroup, i) => {
@@ -173,8 +186,11 @@ class TradeQueryParams {
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
 				let response2 = await rlrGet(endpoint2, tradeQueryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
-				progressCallback(`Received grouped item query # ${i}.`,
-					(1 + ++receivedCount) / (requestGroups.length + 1));
+				progressCallback({
+					text: `Received grouped item query # ${i}.`,
+					ratio: (1 + ++receivedCount) / (requestGroups.length + 1),
+					length,
+				});
 				let items = await Promise.all(data2.result.map(
 					async itemData => await ItemData.create(this.league, this.affixValueShift,
 						this.defenseProperties, this.priceShifts, itemData)));
@@ -182,7 +198,11 @@ class TradeQueryParams {
 				return items;
 			});
 			let items = (await Promise.all(promises)).flat();
-			progressCallback('All grouped item queries completed.', 1);
+			progressCallback({
+				text: 'All grouped item queries completed.',
+				ratio: 1,
+				length,
+			});
 			return items;
 		} catch (e) {
 			console.warn('ERROR', e);
