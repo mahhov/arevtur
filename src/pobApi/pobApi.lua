@@ -4,8 +4,7 @@ package.path = package.path .. ';' .. scriptPath .. '?.lua' -- HeadlessWrapper
 package.path = package.path .. ';' .. './lua/?.lua' -- xml
 
 -- linux
-package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno
-package.path = package.path .. ';../?.lua' -- xml
+package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno & xml
 
 function respond(response, debug)
     if not debug then
@@ -79,6 +78,11 @@ local defaultItem = {
                         Citrine Amulet
                     ]]
 }
+
+-- override the legion timeless jewel reads because Inflate is hard to replicate
+data.readLUT = function()
+    return {}
+end
 
 -- core
 

@@ -1,5 +1,6 @@
 local _, _, scriptPath = string.find(arg[0], '(.+[/\\]).-')
-package.path = package.path .. ';../runtime/lua/?.lua'
+--package.path = package.path .. ';/home/manukh/personal/arevtur/src/pobApi/HeadlessWrapper.lua'
+package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno
 package.path = package.path .. ';../?.lua'
 require('HeadlessWrapper')
 print('Headless wrapper loaded')
@@ -73,6 +74,7 @@ function FileSearch:NextFile()
     return self.files[1]
 end
 
+
 function toJson(o)
     if type(o) == 'table' then
         local s = ' { '
@@ -112,12 +114,28 @@ end
 --io.write('ready ::end::')
 --io.flush()
 
+function Inflate(data)
+    print('Inflate called<<<<<<<<<<<<<<<<<<<<<<,')
+    return nil
+end
+
 --buildXmlFile = '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
 buildXmlFile = '/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
 buildXml = readFile(buildXmlFile)
-loadBuildFromXML(buildXml)
 
+data.readLUT = function()
+    return {}
+end
+
+loadBuildFromXML(buildXml)
 print('BUILD LOADED')
+
+--print(buildXml)
+--print(build.calcsTab.colWidth)
+--print(build.calcsTab:GetMiscCalculator() ~= nil)
+
+--os.exit()
+
 --
 ---- ITEM SWAP - given item text, see what swapping it in would do for the build
 --
@@ -220,7 +238,7 @@ tradeQuery.statSortSelectionList = {
     { stat = 'FullDPS', weightMult = tonumber(arg6) },
 }
 
--- TradeQueryClass:PriceItemRowDisplay
+---- TradeQueryClass:PriceItemRowDisplay
 local jewelNodeId
 for nodeId, slot in pairs(itemsTab.sockets) do
     if not slot.inactive then
@@ -277,7 +295,7 @@ tradeQueryGenerator:StartQuery(slot, options)
 
 print(toJson(tradeQueryGenerator.calcContext.baseOutput))
 
---tradeQueryGenerator:OnFrame()
+tradeQueryGenerator:OnFrame()
 
 --print('')
 --print('')
@@ -290,49 +308,8 @@ print(toJson(tradeQueryGenerator.calcContext.baseOutput))
 
 -- LOADING TimelessJewelData
 
---
-----NewFileSearch(string) -> FileSearch
-----FileSearch
-----    GetFileModifiedTime() -> nil
-----    GetFileName() -> string
-----    NextFile() -> boolean
---function GetScriptPath()
---    return "."
---end
---FileSearch = {
---    files = {},
---}
---function FileSearch:new()
---    o = {}
---    setmetatable(o, self)
---    self.__index = self
---    return o
---end
---function NewFileSearch(path)
---    isLinux = os.getenv('HOME')
---    cmd = isLinux and 'ls' or 'dir /B'
---    cmdHideErr = isLinux and '2>/dev/null' or '2>nul'
---    fullCmd = cmd .. ' ' .. path .. ' ' .. cmdHideErr
---    --print(fullCmd)
---    fs = FileSearch:new()
---    lsOutput = io.popen(fullCmd)
---    for filename in lsOutput:lines() do
---        --        print(filename)
---        table.insert(fs.files, filename)
---    end
---    lsOutput:close()
---    return #fs.files > 0 and fs or nil
---end
---function FileSearch:GetFileModifiedTime()
---    return nil
---end
---function FileSearch:GetFileName()
---    return self.files[1]:match('([^/]+)$')
---end
---function FileSearch:NextFile()
---    table.remove(self.files, 1)
---    return self.files[1]
---end
+
+
 --
 --fileHandle = NewFileSearch(GetScriptPath() .. '/Data/TimelessJewelData/' .. 'GloriousVanity' .. ".zip.part*")
 ----print('num files: ' .. #fileHandle.files)
@@ -362,6 +339,6 @@ print(toJson(tradeQueryGenerator.calcContext.baseOutput))
 --    print(x)
 --end
 --unzipOutput:close()
---
---
+
+
 
