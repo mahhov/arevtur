@@ -59,11 +59,11 @@ function getArgs(input)
     return args
 end
 
-function stringify(o)
+function toJson(o)
     if type(o) == 'table' then
         local s = ' { '
         for k, v in pairs(o) do
-            s = '"' .. s .. '" : ' .. stringify(v) .. ', '
+            s = s .. '"' .. k .. '" : ' .. toJson(v) .. ', '
         end
         return s .. ' } '
     else
@@ -137,7 +137,10 @@ while true do
         -- args[3] is total EPH weight, e.g. '1'
         -- args[4] is total resist weight, e.g. '1'
         -- args[5] is full DPS weight, e.g. '1'
-        -- args[6] is includeCorrupted
+        -- args[6] is Str weight, e.g. '1'
+        -- args[7] is Dex weight, e.g. '1'
+        -- args[8] is Int weight, e.g. '1'
+        -- args[9] is includeCorrupted
         -- given an item type and other params, generate a search query for replacing the currently
         -- equipped item of that type
 
@@ -153,6 +156,9 @@ while true do
             { stat = 'ColdResistTotal', weightMult = tonumber(args[4]) },
             { stat = 'FireResistTotal', weightMult = tonumber(args[4]) },
             { stat = 'FullDPS', weightMult = tonumber(args[5]) },
+            { stat = 'Str', weightMult = tonumber(args[6]) },
+            { stat = 'Dex', weightMult = tonumber(args[7]) },
+            { stat = 'Int', weightMult = tonumber(args[8]) },
         }
 
         -- TradeQueryClass:PriceItemRowDisplay
@@ -192,7 +198,7 @@ while true do
             statWeights = tradeQuery.statSortSelectionList,
             jewelType = jewelTypes[args[2]],
         }
-        respond(stringify(options), true)
+        respond('Options ' .. toJson(options), true)
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()
         -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot

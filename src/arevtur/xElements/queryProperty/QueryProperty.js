@@ -60,6 +60,7 @@ customElements.define(name, class extends XElement {
 			this.weight = this.buildValue;
 			this.emit('change');
 		});
+		this.property = this.property || '';
 		this.weight = this.weight || 0;
 		this.filter = this.filter || 'weight';
 

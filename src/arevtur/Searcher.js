@@ -7,6 +7,7 @@ class Searcher {
 	// When preserveOrder is true, 'brown ... fur' must be present; otherwise, 'fur ... brown' will
 	// also suffice. Order of operations: , ! | <space> ' Doesn't support escaping these operators.
 	// E.g. searching for a comma or quoted text.
+	// todo[low] support searching for % or #
 	constructor(searchText, preserveOrder = true) {
 		this.segments = searchText
 			.replace(/([.*+?^${}()[\]\\])/g, '\\$1') // doesn't replace '|'
@@ -44,7 +45,7 @@ let testSearcher = new Searcher('small \'cat\' | kitten, brown fur, !fat | ugly'
 	[testSearcher.test(['fur brown', 'kittens', '']), false],
 	[testSearcher.test(['fur brown', '', '']), false],
 	[testSearcher.test(['brown', 'kittens', 'fur']), false],
-].forEach(([a, b], i) => a !== b && console.log('Failed testSearcher test case', i));
+].forEach(([a, b], i) => a !== b && console.error('Failed testSearcher test case', i));
 
 let testSearcherNoOrder = new Searcher('small \'cat\' | kitten, brown fur, !fat | ugly', false);
 [
@@ -54,6 +55,6 @@ let testSearcherNoOrder = new Searcher('small \'cat\' | kitten, brown fur, !fat 
 	[testSearcherNoOrder.test(['fur brown', 'kittens', '']), true],
 	[testSearcherNoOrder.test(['fur brown', '', '']), false],
 	[testSearcherNoOrder.test(['brown', 'kittens', 'fur']), false],
-].forEach(([a, b], i) => a !== b && console.log('Failed testSearcherNoOrder test case', i));
+].forEach(([a, b], i) => a !== b && console.error('Failed testSearcherNoOrder test case', i));
 
 module.exports = Searcher;

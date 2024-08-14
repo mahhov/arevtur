@@ -10,7 +10,10 @@
     "weights": {
       "life": 0.5,
       "resist": 0.1,
-      "damage": 0.25
+      "damage": 0.25,
+      "str": 0,
+      "dex": 0,
+      "int": 0
     }
   }
 }

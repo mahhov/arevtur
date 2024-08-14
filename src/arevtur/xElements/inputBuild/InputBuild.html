@@ -25,6 +25,10 @@
 	#damage-weight {
 		background-color: var(--colored-text-background-red)
 	}
+
+	.attribute-weight {
+		background-color: var(--colored-text-background-light-green)
+	}
 </style>
 
 <span class="container pob">
@@ -45,6 +49,21 @@
 		<label>
 			damage
 			<input id="damage-weight" max="1" min="0" step=".05" type="number">
+		</label>
+		<label>
+			str
+			<input id="attribute-str-weight" class="attribute-weight"
+			       max="1" min="0" step=".05" type="number">
+		</label>
+		<label>
+			dex
+			<input id="attribute-dex-weight" class="attribute-weight"
+			       max="1" min="0" step=".05" type="number">
+		</label>
+		<label>
+			int
+			<input id="attribute-int-weight" class="attribute-weight"
+			       max="1" min="0" step=".05" type="number">
 		</label>
 	</span>
 </span>

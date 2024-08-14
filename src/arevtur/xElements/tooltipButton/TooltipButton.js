@@ -25,7 +25,7 @@ customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 		this.clearChildren('#tooltip');
 		let span;
 		value
-			.split(/(@[\w,]+|\n)/)
+			.split(/(@[-\w,]+|\n)/)
 			.filter(v => v)
 			.forEach(term => {
 				if (term[0] === '@') {

@@ -65,6 +65,9 @@ class PobApi extends Emitter {
 			life: 0,
 			resist: 0,
 			dps: 0,
+			str: 0,
+			dex: 0,
+			int: 0,
 		};
 		this.script = null;
 		// this.crashCount = 0;
@@ -144,7 +147,8 @@ class PobApi extends Emitter {
 		if (!pobType)
 			return Promise.reject('PoB generateQuery missing type');
 		return this.send('generateQuery', pobType, this.weights.life,
-			this.weights.resist, this.weights.dps, includeCorrupted).then(JSON.parse);
+			this.weights.resist, this.weights.dps, this.weights.str, this.weights.dex,
+			this.weights.int, includeCorrupted).then(JSON.parse);
 	}
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
@@ -155,11 +159,15 @@ class PobApi extends Emitter {
 		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
 		let anyDiffResistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) res(?:\.|istance)/i;
 		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
+		let strRegex = /([+-]\d+) strength/i;
+		let dexRegex = /([+-]\d+) dexterity/i;
+		let intRegex = /([+-]\d+) intelligence/i;
 
 		if (!itemText.split('Equipping this item').slice(1).forEach)
 			console.error(itemText);
 
 		let diffs = itemText.split(/(?=equipping this item)/i).slice(1).map(diffText => {
+			// todo[medium] see if we can use a loop to reduce repeated logic
 			let equippingText = diffText.match(/equipping this item.*/i)[0];
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
 			let flatLife = Number(diffText.match(flatLifeRegex)?.[1].replace(/,/g, '')) || 0;
@@ -167,16 +175,25 @@ class PobApi extends Emitter {
 				.match(new RegExp(anyDiffResistRegex, 'gi'))
 				?.reduce((sum, m) => sum + Number(m.match(anyDiffResistRegex)[1]), 0) || 0;
 			let fullDps = Number(diffText.match(fullDpsRegex)?.[1]) || 0;
+			let str = Number(diffText.match(strRegex)?.[1]) || 0;
+			let dex = Number(diffText.match(dexRegex)?.[1]) || 0;
+			let int = Number(diffText.match(intRegex)?.[1]) || 0;
 			let unscaledValue =
 				effectiveHitPool * this.weights.life +
 				totalResist * this.weights.resist +
-				fullDps * this.weights.dps;
+				fullDps * this.weights.dps +
+				str * this.weights.str +
+				dex * this.weights.dex +
+				int * this.weights.int;
 
 			return {
 				equippingText,
 				effectiveHitPool,
 				flatLife,
 				totalResist,
+				str,
+				dex,
+				int,
 				fullDps,
 				unscaledValue,
 			};
@@ -188,10 +205,20 @@ class PobApi extends Emitter {
 			textPrefix ? `@bold,green ${textPrefix}` : '',
 			textPrefix ? '-'.repeat(30) : '',
 			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
-			diff.effectiveHitPool ? `@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
-			diff.flatLife ? `@bold,blue Flat Life ${diff.flatLife}` : '',
-			diff.totalResist ? `@bold,orange Total Resist ${diff.totalResist}` : '',
-			diff.fullDps ? `@bold,red Full DPS ${diff.fullDps}%` : '',
+			this.weights.life && diff.effectiveHitPool ?
+				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
+			this.weights.life && diff.flatLife ?
+				`@bold,blue Flat Life ${diff.flatLife}` : '',
+			this.weights.resist && diff.totalResist ?
+				`@bold,orange Total Resist ${diff.totalResist}` : '',
+			this.weights.dps && diff.fullDps ?
+				`@bold,red Full DPS ${diff.fullDps}%` : '',
+			this.weights.str && diff.str ?
+				`@bold,light-green Str ${diff.str}` : '',
+			this.weights.dex && diff.dex ?
+				`@bold,light-green Dex ${diff.dex}` : '',
+			this.weights.int && diff.int ?
+				`@bold,light-green Int ${diff.int}` : '',
 			`@bold,green Value ${PobApi.round(diff.unscaledValue, 3)}`,
 			'-'.repeat(30),
 			...itemText.split('\n').map(itemTextLine => {
@@ -207,6 +234,12 @@ class PobApi extends Emitter {
 					return `@bold,orange ${itemTextLine}`;
 				if (itemTextLine.match(fullDpsRegex))
 					return `@bold,red ${itemTextLine}`;
+				if (itemTextLine.match(strRegex))
+					return `@bold,light-green ${itemTextLine}`;
+				if (itemTextLine.match(dexRegex))
+					return `@bold,light-green ${itemTextLine}`;
+				if (itemTextLine.match(intRegex))
+					return `@bold,light-green ${itemTextLine}`;
 				if (itemTextLine.match(/^equipping this item/i))
 					return `@bold,green ${itemTextLine}`;
 				if (itemTextLine.match(/^tip: /i))

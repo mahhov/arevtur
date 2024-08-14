@@ -36,15 +36,15 @@
 	--colored-text-red: oklch(.75 .2 10);
 	--colored-text-orange: oklch(.75 .2 50);
 	--colored-text-gold: oklch(.75 .2 90);
-	--colored-text-green: oklch(0.75 0.2 130);
+	--colored-text-green: oklch(.75 .2 130);
 	--colored-text-light-green: oklch(.75 .2 180);
-	--colored-text-blue: oklch(0.75 0.2 240);
+	--colored-text-blue: oklch(.75 .2 240);
 	--colored-text-pink: oklch(.75 .2 340);
 
 	/* colored text backgrounds */
-	--colored-text-background-orange: lch(85 40 80);
-	--colored-text-background-red: lch(85 40 0);
-	--colored-text-background-blue: lch(85 40 290);
+	--colored-text-background-red: oklch(.87 .2 10);
+	--colored-text-background-orange: oklch(.87 .2 50);
+	--colored-text-background-blue: oklch(.87 .2 240);
 }
 
 :root.dark {
@@ -84,9 +84,13 @@
 	/* colored text are inherited */
 
 	/* colored text backgrounds */
-	--colored-text-background-orange: lch(25 40 80);
-	--colored-text-background-red: lch(25 40 0);
-	--colored-text-background-blue: lch(25 40 290);
+	--colored-text-background-red: oklch(.35 .1 10);
+	--colored-text-background-orange: oklch(.35 .1 50);
+	--colored-text-background-gold: oklch(.35 .1 90);
+	--colored-text-background-green: oklch(.35 .1 130);
+	--colored-text-background-light-green: oklch(.35 .1 180);
+	--colored-text-background-blue: oklch(.35 .1 240);
+	--colored-text-background-pink: oklch(.35 .1 340);
 }
 
 :root:not(.maximize) {

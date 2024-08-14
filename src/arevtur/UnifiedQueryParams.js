@@ -171,8 +171,8 @@ class UnifiedQueryParams {
 		let queries = [];
 
 		let query = {
-			league: league,
-			sessionId: sessionId,
+			league,
+			sessionId,
 			name: this.name,
 			type: this.type,
 			minValue: this.minValue,
@@ -184,9 +184,9 @@ class UnifiedQueryParams {
 			uncorrupted: this.uncorrupted,
 			nonUnique: this.nonUnique,
 			influences: this.influences,
-			weights: weights,
-			ands: ands,
-			nots: nots,
+			weights,
+			ands,
+			nots,
 			affixValueShift: 0,
 			priceShifts: {},
 		};

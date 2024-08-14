@@ -105,3 +105,5 @@ class ItemData {
 }
 
 module.exports = ItemData;
+
+// todo[high] chart not re-centering as more items get added async after build eval
