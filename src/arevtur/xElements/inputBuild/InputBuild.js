@@ -71,7 +71,7 @@ customElements.define(name, class InputBuild extends XElement {
 			weights: {
 				life: Number(this.$('#life-weight').value) || 0,
 				resist: Number(this.$('#resist-weight').value) || 0,
-				dps: Number(this.$('#damage-weight').value) || 0,
+				damage: Number(this.$('#damage-weight').value) || 0,
 				str: Number(this.$('#attribute-str-weight').value) || 0,
 				dex: Number(this.$('#attribute-dex-weight').value) || 0,
 				int: Number(this.$('#attribute-int-weight').value) || 0,

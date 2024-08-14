@@ -13,7 +13,7 @@ class ItemsData extends Emitter {
 		},
 		{
 			name: 'Build sorting',
-			description: 'Sort by changes in effective health, total dps, and total resists according to the weights set above.',
+			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above.',
 			sortY: item => item.valueBuildPromise.resolved.value,
 			showFilter: item => item.valueBuildPromise.resolved,
 			trigger: item => item.valueBuildPromise,

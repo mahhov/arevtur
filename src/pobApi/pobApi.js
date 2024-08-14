@@ -64,7 +64,7 @@ class PobApi extends Emitter {
 		this.weights = {
 			life: 0,
 			resist: 0,
-			dps: 0,
+			damage: 0,
 			str: 0,
 			dex: 0,
 			int: 0,
@@ -145,7 +145,7 @@ class PobApi extends Emitter {
 		if (!pobType)
 			return Promise.reject('PoB getModWeights missing type');
 		return this.send('getModWeights', pobType, this.weights.life,
-			this.weights.resist, this.weights.dps, this.weights.str, this.weights.dex,
+			this.weights.resist, this.weights.damage, this.weights.str, this.weights.dex,
 			this.weights.int, includeCorrupted).then(JSON.parse);
 	}
 
@@ -179,7 +179,7 @@ class PobApi extends Emitter {
 			let unscaledValue =
 				effectiveHitPool * this.weights.life +
 				totalResist * this.weights.resist +
-				fullDps * this.weights.dps +
+				fullDps * this.weights.damage +
 				str * this.weights.str +
 				dex * this.weights.dex +
 				int * this.weights.int;
@@ -209,7 +209,7 @@ class PobApi extends Emitter {
 				`@bold,blue Flat Life ${diff.flatLife}` : '',
 			this.weights.resist && diff.totalResist ?
 				`@bold,orange Total Resist ${diff.totalResist}` : '',
-			this.weights.dps && diff.fullDps ?
+			this.weights.damage && diff.fullDps ?
 				`@bold,red Full DPS ${diff.fullDps}%` : '',
 			this.weights.str && diff.str ?
 				`@bold,light-green Str ${diff.str}` : '',
