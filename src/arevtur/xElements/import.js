@@ -2,6 +2,7 @@ require('./arrangableList/ArrangableList');
 require('./autocompleteInput/AutocompleteInput');
 require('./chart/Chart');
 require('./configToggleButton/ConfigToggleButton');
+require('./formattedText/FormattedText');
 require('./inputBuild/InputBuild');
 require('./inputImportTradeSearchUrl/InputImportTradeSearchUrl');
 require('./inputSet/InputSet');

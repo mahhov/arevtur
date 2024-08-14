@@ -4,8 +4,8 @@
 
 	body {
 		border: 1px solid;
-		margin: 0;
-		padding: 10px;
+		margin: 2px; /* so the border is visible */
+		padding: 8px;
 	}
 
 	#text-container.hidden,
@@ -16,9 +16,9 @@
 	}
 
 	#text-container {
-		white-space: pre;
+		display: block;
+		height: 100%;
 		overflow: auto;
-		text-wrap: wrap;
 	}
 
 	#table-container {
@@ -39,7 +39,11 @@
 	}
 </style>
 
-<div id="text-container"></div>
+<script>
+	require('../../arevtur/xElements/import');
+</script>
+
+<x-formatted-text id="text-container"></x-formatted-text>
 <div id="table-container"></div>
 <div id="preferences-container">
 	This is for developers.

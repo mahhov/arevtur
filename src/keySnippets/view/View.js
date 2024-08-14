@@ -28,35 +28,7 @@ ipc.on('window-command', (_, command) => {
 	}
 });
 
-let updateText = text => {
-	let container = $('#text-container');
-	while (container.firstChild)
-		container.firstChild.remove();
-
-	let addSpan = (classes = []) => {
-		let span = $c('span');
-		span.classList.add(...classes);
-		container.appendChild(span);
-		return span;
-	};
-
-	// todo[blocking] export to shared util
-	let span;
-	text
-		.split(/(@[-\w,]+ |\n)/)
-		.filter(v => v)
-		.forEach(term => {
-			if (term[0] === '@') {
-				span = addSpan(term.slice(1, -1).split(','));
-				return;
-			}
-			if (term === '\n')
-				span = addSpan();
-			else if (!span)
-				span = addSpan();
-			span.textContent += term;
-		});
-};
+let updateText = text => $('#text-container').text = text;
 
 let updateTable = rows => {
 	let container = $('#table-container');

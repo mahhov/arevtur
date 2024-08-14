@@ -20,17 +20,16 @@
 		outline: 2px solid var(--interactable-focus-border);
 		display: block;
 		z-index: 1;
-		white-space: pre;
 		font-size: 14px;
 		padding: 5px;
 	}
 
-	.container:not(:hover) #tooltip, #tooltip:empty {
+	.container:not(:hover) #tooltip, #tooltip:not([text]), #tooltip[text=''] {
 		display: none;
 	}
 </style>
 
 <div class="container">
 	<button id="button"></button>
-	<div id="tooltip"></div>
+	<x-formatted-text id="tooltip"></x-formatted-text>
 </div>
