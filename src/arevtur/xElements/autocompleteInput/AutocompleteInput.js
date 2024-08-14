@@ -117,6 +117,8 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	}
 
 	updateAutocompletesShown(showAll = false) {
+		if (!this.shadowRoot.activeElement)
+			return;
 		let optionIndexes = AutocompleteInput.smartFilter(!showAll && this.$('input').value,
 			this.autocompletes, 500);
 		let options = optionIndexes.map(i => [this.autocompletes[i], this.tooltips_?.[i] || '']);
