@@ -44,7 +44,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-items-status').classList.add('valid'));
 
 		this.$('#league-input').addEventListener('change', () => this.store());
-		this.$('#session-id-input').addEventListener('input', () => this.store());
+		this.$('#session-id-input').addEventListener('change', () => this.store());
 
 		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
 

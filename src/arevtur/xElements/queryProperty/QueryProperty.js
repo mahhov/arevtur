@@ -43,15 +43,15 @@ customElements.define(name, class extends XElement {
 			this.filter = this.$('#filter').value;
 			this.emit('change');
 		});
-		this.$('#locked').addEventListener('input', () => {
+		this.$('#locked').addEventListener('change', () => {
 			this.locked = this.$('#locked').checked;
 			this.emit('lock-change');
 		});
-		this.$('#shared').addEventListener('input', () => {
+		this.$('#shared').addEventListener('change', () => {
 			this.shared = this.$('#shared').checked;
 			this.emit('share-change');
 		});
-		this.$('#enabled').addEventListener('input', () => {
+		this.$('#enabled').addEventListener('change', () => {
 			this.enabled = this.$('#enabled').checked;
 			this.emit('enable-change');
 		});

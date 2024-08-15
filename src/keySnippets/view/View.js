@@ -71,7 +71,7 @@ document.addEventListener('keydown', ({code}) => {
 window.addEventListener('blur', () => ipcSend({name: 'close'}));
 document.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
 
-$('#restrict-window').addEventListener('input', () =>
+$('#restrict-window').addEventListener('change', () =>
 	configForRenderer.config = {restrictToPoeWindow: $('#restrict-window').checked});
 
 $('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));

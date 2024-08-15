@@ -33,7 +33,7 @@ customElements.define(name, class InputBuild extends XElement {
 			this.$('#attribute-dex-weight'),
 			this.$('#attribute-int-weight'),
 		]
-			.forEach(weight => weight.addEventListener('change', () => {
+			.forEach(weight => weight.addEventListener('input', () => {
 				this.saveConfig();
 				this.updatePob();
 			}));

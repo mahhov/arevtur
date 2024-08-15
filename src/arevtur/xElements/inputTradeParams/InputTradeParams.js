@@ -54,11 +54,11 @@ customElements.define(name, class extends XElement {
 			this.type = this.$('#type-input').value;
 			this.emit('change');
 		});
-		this.$('#min-value-input').addEventListener('change', () => {
+		this.$('#min-value-input').addEventListener('input', () => {
 			this.minValue = this.$('#min-value-input').value;
 			this.emit('change');
 		});
-		this.$('#price-input').addEventListener('change', () => {
+		this.$('#price-input').addEventListener('input', () => {
 			this.price = this.$('#price-input').value;
 			this.emit('change');
 		});
@@ -79,7 +79,7 @@ customElements.define(name, class extends XElement {
 		});
 		[...defensePropertyTuples, ...affixPropertyTuples]
 			.forEach(([property, query]) => {
-				this.$(query).addEventListener('change', () => {
+				this.$(query).addEventListener('input', () => {
 					this[property] = this.$(query).value;
 					this.emit('change');
 				});
