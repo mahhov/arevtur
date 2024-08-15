@@ -27,10 +27,10 @@ let getRateLimitHeaders = responseHeaders => {
 let rlrGetQueue = new RateLimitedRetryQueue(667 * 1.2, [5000, 15000, 60000]);
 let rlrPostQueue = new RateLimitedRetryQueue(1500 * 1.2, [5000, 15000, 60000]);
 
-let rlrGet = (endpoint, tradeQueryParams, headers, stopObj) => rlrGetQueue.add(async () => {
+let rlrGet = (endpoint, params, headers, stopObj) => rlrGetQueue.add(async () => {
 	if (stopObj.stop)
 		return;
-	let g = await get(endpoint, tradeQueryParams, headers);
+	let g = await get(endpoint, params, headers);
 	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(g.response.headers)[0]);
 	console.log('got, made requests', rateLimitStr);
 	return g;
@@ -45,7 +45,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	return p;
 });
 
-class TradeQueryParams {
+class TradeQuery {
 	constructor(data) {
 		this.league = data.league || 'Standard';
 		this.sessionId = data.sessionId || '';
@@ -147,7 +147,7 @@ class TradeQueryParams {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
-			let headers = TradeQueryParams.createRequestHeader(this.sessionId);
+			let headers = TradeQuery.createRequestHeader(this.sessionId);
 			progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
@@ -177,7 +177,7 @@ class TradeQueryParams {
 
 			let receivedCount = 0;
 			let promises = requestGroups.map(async (requestGroup, i) => {
-				let tradeQueryParams = {
+				let params = {
 					query: data.id,
 					'pseudos[]': [
 						ApiConstants.SHORT_PROPERTIES.totalEleRes,
@@ -185,7 +185,7 @@ class TradeQueryParams {
 					],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let response2 = await rlrGet(endpoint2, tradeQueryParams, headers, this.stopObj);
+				let response2 = await rlrGet(endpoint2, params, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				progressStream.write({
 					text: `Received grouped item query # ${i}.`,
@@ -231,7 +231,7 @@ class TradeQueryImport {
 
 	async getApiQueryParams() {
 		let response = await get(this.tradeSearchUrl, {},
-			TradeQueryParams.createRequestHeader(this.sessionId));
+			TradeQuery.createRequestHeader(this.sessionId));
 		let jsonString = response.string;
 		let {query} = JSON.parse(jsonString);
 		return {
@@ -241,6 +241,6 @@ class TradeQueryImport {
 	}
 }
 
-module.exports = {TradeQueryParams, TradeQueryImport};
+module.exports = {TradeQuery, TradeQueryImport};
 
 // todo[high] merge all resist mods when importing

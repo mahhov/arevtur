@@ -51,17 +51,19 @@
 
 <script>
 	const {webFrame} = require('electron');
-	const {TradeQueryParams} = require('./PoeTradeApi');
+	// todo[blocking] this isn't used here, but it is used in UnifiedQueryParams. We can't move it
+	//  there because of circular dependency
+	const {TradeQuery} = require('./PoeTradeApi');
 	const {clamp, transpose} = require('../util/util');
 
 	const $ = document.querySelector.bind(document);
 
-	let lastTradeQueryParams;
-	let submitQueries = async tradeQueryParams => {
+	let lastTradeQueries;
+	let submitQueries = async tradeQueries => {
 		cancelQueries();
-		lastTradeQueryParams = tradeQueryParams;
+		lastTradeQueries = tradeQueries;
 		let [itemStreams, progressStreams] = transpose(
-			tradeQueryParams.map(queryParam => queryParam.getItemsStream()));
+			tradeQueries.map(tradeQuery => tradeQuery.getItemsStream()));
 		itemStreams.forEach(itemStream => itemStream.forEach(items =>
 			$('x-results').joinItems(items)));
 		progressStreams.forEach(progressStream => progressStream.forEach(progress => {
@@ -81,20 +83,20 @@
 	};
 
 	let cancelQueries = () => {
-		lastTradeQueryParams?.forEach(queryParam => queryParam.stop());
-		lastTradeQueryParams = null;
+		lastTradeQueries?.forEach(tradeQuery => tradeQuery.stop());
+		lastTradeQueries = null;
 	};
 
 	$('x-inputs').addEventListener('submit', async e => {
 		if (!e.detail.add)
 			$('x-results').clearItems();
-		submitQueries(await $('x-inputs').finalizeTradeQueryParams());
+		submitQueries(await $('x-inputs').finalizeTradeQuery());
 	});
 
 	$('x-inputs').addEventListener('cancel', cancelQueries);
 
 	$('x-results').addEventListener('submit', async e =>
-		submitQueries(await $('x-inputs').finalizeTradeQueryParams(e.detail.overridePrice)));
+		submitQueries(await $('x-inputs').finalizeTradeQuery(e.detail.overridePrice)));
 
 	document.addEventListener('wheel', e => {
 		if (!e.ctrlKey)

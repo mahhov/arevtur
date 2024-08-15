@@ -112,7 +112,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.setInputSetIndex(this.inputSetIndex);
 
 		// todo[high] replace this with explicit calls when inputs change
-		setInterval(() => this.finalizeTradeQueryParams(), 1000);
+		setInterval(() => this.finalizeTradeQuery(), 1000);
 	}
 
 	async onConfigChange(config) {
@@ -186,7 +186,7 @@ customElements.define(name, class Inputs extends XElement {
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
 	}
 
-	async finalizeTradeQueryParams(overridePrice = null) {
+	async finalizeTradeQuery(overridePrice = null) {
 		let currencyPrices = await ApiConstants.constants.currencyPrices(
 			configForRenderer.config.league);
 		let manual6LinkOptions = [
@@ -198,18 +198,18 @@ customElements.define(name, class Inputs extends XElement {
 
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
-		let tradeQueryParams = this.inputSets
+		let tradeQuery = this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet =>
 				UnifiedQueryParams
 					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-					.toTradeQueryParams(league, sessionId, overridePrice,
+					.toTradeQuery(league, sessionId, overridePrice,
 						manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
 
 		// todo[medium] move this to InputTradeParams and remove import button, instead
 		//  automatically update url <-> form when either one changes
-		this.$('#input-import-trade-search-url').url = tradeQueryParams[0].apiHtmlUrl;
+		this.$('#input-import-trade-search-url').url = tradeQuery[0].apiHtmlUrl;
 
-		return tradeQueryParams;
+		return tradeQuery;
 	}
 });
