@@ -19,7 +19,7 @@ class Config extends Emitter {
 		ipcMain.handle('config-change', async (event, newConfig) => {
 			deepMerge(this.config, newConfig);
 			this.emit('change', this.config);
-			console.log('Updated config', JSON.stringify(this.config, 2, 2));
+			// console.log('Updated config', JSON.stringify(this.config, 2, 2));
 			try {
 				await fs.mkdir(appData.basePath, {recursive: true});
 				await fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2));
@@ -28,7 +28,11 @@ class Config extends Emitter {
 			}
 		});
 
+		let added = [];
 		ipcMain.handle('listen-config-change', event => {
+			if (added.includes(event.sender))
+				return;
+			added.push(event.sender);
 			this.addListener('change', config => event.sender.send('config-changed', config));
 			event.sender.send('config-changed', this.config);
 		});
