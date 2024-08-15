@@ -120,6 +120,7 @@ customElements.define(name, class extends XElement {
 					queryProperty.remove();
 			});
 		});
+		// todo[high] merge attributes
 		this.$('#merge-resist-mods-button').addEventListener('click', () => {
 			let maxWeight = 0;
 			[...this.$('#query-properties-list').children].forEach(queryProperty => {

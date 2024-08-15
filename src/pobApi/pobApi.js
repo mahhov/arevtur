@@ -43,7 +43,7 @@ class Script extends CustomOsScript {
 		let promise = new XPromise();
 		this.cache[text] = promise;
 		this.pendingResponses.push(promise);
-		console.log('PoBApi sending', text);
+		// console.log('PoBApi sending', text);
 		super.send(text);
 		return promise;
 	}
