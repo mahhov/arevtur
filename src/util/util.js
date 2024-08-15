@@ -17,5 +17,6 @@ module.exports = {
 	minIndex: array => array.indexOf(Math.min(...array)),
 	clamp: (value, min, max) => Math.min(Math.max(value, min), max),
 	deepMerge,
-	// todo[medium] move un-classed methods like deepCopy and static methods like decode64 here
+	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
+	// todo[low] move un-classed methods like deepCopy and static methods like decode64 here
 };

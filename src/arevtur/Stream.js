@@ -19,6 +19,10 @@ class Stream {
 	done(value) {
 		this.resolve(value);
 	}
+
+	get lastValue() {
+		return this.written[this.written.length - 1];
+	}
 }
 
 module.exports = Stream;

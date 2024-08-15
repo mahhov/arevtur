@@ -52,7 +52,7 @@
 <script>
 	const {webFrame} = require('electron');
 	const {TradeQueryParams} = require('./TradeQuery');
-	const {clamp} = require('../util/util');
+	const {clamp, transpose} = require('../util/util');
 
 	const $ = document.querySelector.bind(document);
 
@@ -60,20 +60,24 @@
 	let submitQueries = async tradeQueryParams => {
 		cancelQueries();
 		lastTradeQueryParams = tradeQueryParams;
-		let progressResponses = tradeQueryParams.map(_ => 0);
-		tradeQueryParams
-			.forEach((queryParam, i) =>
-				queryParam.getItemsStream(response => {
-					console.log('progress', response.text, response.ratio);
-					progressResponses[i] = response;
-					let avgProgressRatio = progressResponses
-							.reduce((sum, response) => sum + response.ratio, 0) /
-						progressResponses.length;
-					let sumProgressLength = progressResponses
-						.reduce((sum, response) => sum + response.length, 0);
-					$('x-results').updateItemsProgress(avgProgressRatio, sumProgressLength);
-				})
-					.forEach(items => $('x-results').joinItems(items)));
+		let [itemStreams, progressStreams] = transpose(
+			tradeQueryParams.map(queryParam => queryParam.getItemsStream()));
+		itemStreams.forEach(itemStream => itemStream.forEach(items =>
+			$('x-results').joinItems(items)));
+		progressStreams.forEach(progressStream => progressStream.forEach(progress => {
+				console.log('progress', progress.text, progress.ratio);
+				let progresses = progressStreams
+					.map(progressStream => progressStream.lastValue)
+					.filter(progress => progress);
+				let queriesComplete = progresses.reduce((sum, progress) =>
+					sum + progress.queriesComplete, 0);
+				let queriesTotal = progresses.reduce((sum, progress) =>
+					sum + progress.queriesTotal, 0);
+				let itemCount = progresses.reduce((sum, progress) =>
+					sum + progress.itemCount, 0);
+				$('x-results').updateItemsProgress(queriesComplete / queriesTotal, itemCount);
+			}),
+		);
 	};
 
 	let cancelQueries = () => {

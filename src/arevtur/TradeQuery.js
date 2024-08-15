@@ -100,22 +100,23 @@ class TradeQueryParams {
 		};
 	}
 
-	getItemsStream(progressCallback) {
+	getItemsStream() {
 		this.stopObj = {};
-		let stream = new Stream();
-		this.writeItemsToStream(stream, progressCallback)
-			.then(() => stream.done());
-		return stream;
+		let itemStream = new Stream();
+		let progressStream = new Stream();
+		this.writeItemsToStream(itemStream, progressStream)
+			.then(() => itemStream.done());
+		return [itemStream, progressStream];
 	}
 
 	stop() {
 		this.stopObj.stop = true;
 	}
 
-	async writeItemsToStream(stream, progressCallback) {
-		let items = await this.queryAndParseItems(this.getQuery(), stream, progressCallback);
+	async writeItemsToStream(itemStream, progressStream) {
+		let items = await this.queryAndParseItems(this.getQuery(), itemStream, progressStream);
 
-		// todo[medium] this doesn't work for hybrid (e.g. es + evasion) bases
+		// todo[low] this doesn't work for hybrid (e.g. es + evasion) bases
 		let defenseProperty = Object.entries(this.defenseProperties)
 			.find(([_, {weight}]) => weight);
 		if (defenseProperty) {
@@ -135,43 +136,43 @@ class TradeQueryParams {
 				let overrides = this.overrideDefenseProperty(defenseProperty[0],
 					minDefensePropertyValue);
 				let query = this.getQuery(overrides);
-				newItems = await this.queryAndParseItems(query, stream, progressCallback);
+				newItems = await this.queryAndParseItems(query, itemStream, progressStream);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);
 		}
-
-		return items;
 	}
 
-	// todo[medium] change progressCallback to progressStream
-	async queryAndParseItems(query, stream, progressCallback) {
+	async queryAndParseItems(query, itemStream, progressStream) {
 		// todo[medium] more selective try/catch
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
 			let headers = TradeQueryParams.createRequestHeader(this.sessionId);
-			progressCallback({
+			progressStream.write({
 				text: 'Initial query.',
-				ratio: 0,
-				length: 0,
+				queriesComplete: 0,
+				queriesTotal: 11,
+				itemCount: 0,
 			});
 			console.log('initial query', query);
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
-			let length = data.result.length;
-			progressCallback({
+			let itemCount = data.result.length;
+			progressStream.write({
 				text: `Received ${data.result.length} items.`,
-				ratio: 0,
-				length,
+				queriesComplete: 0,
+				queriesTotal: 11,
+				itemCount,
 			});
 
 			let requestGroups = [];
 			while (data.result.length)
 				requestGroups.push(data.result.splice(0, 10));
-			progressCallback({
+			progressStream.write({
 				text: `Will make ${requestGroups.length} grouped item queries.`,
-				ratio: 1 / (requestGroups.length + 1),
-				length,
+				queriesComplete: 1,
+				queriesTotal: requestGroups.length + 1,
+				itemCount,
 			});
 
 			let receivedCount = 0;
@@ -186,22 +187,24 @@ class TradeQueryParams {
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
 				let response2 = await rlrGet(endpoint2, tradeQueryParams, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
-				progressCallback({
+				progressStream.write({
 					text: `Received grouped item query # ${i}.`,
-					ratio: (1 + ++receivedCount) / (requestGroups.length + 1),
-					length,
+					queriesComplete: 1 + ++receivedCount,
+					queriesTotal: requestGroups.length + 1,
+					itemCount,
 				});
 				let items = await Promise.all(data2.result.map(
 					async itemData => await ItemData.create(this.league, this.affixValueShift,
 						this.defenseProperties, this.priceShifts, itemData)));
-				stream.write(items);
+				itemStream.write(items);
 				return items;
 			});
 			let items = (await Promise.all(promises)).flat();
-			progressCallback({
+			progressStream.write({
 				text: 'All grouped item queries completed.',
-				ratio: 1,
-				length,
+				queriesComplete: requestGroups.length + 1,
+				queriesTotal: requestGroups.length + 1,
+				itemCount,
 			});
 			return items;
 		} catch (e) {
