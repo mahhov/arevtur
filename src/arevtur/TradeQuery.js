@@ -219,6 +219,8 @@ class TradeQueryParams {
 	}
 }
 
+// todo[medium] rename file PoeTradeApi
+// todo[medium] make this into a function
 class TradeQueryImport {
 	constructor(sessionId, tradeSearchUrl) {
 		this.sessionId = sessionId;

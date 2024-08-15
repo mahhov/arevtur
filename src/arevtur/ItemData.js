@@ -46,6 +46,10 @@ class ItemData {
 			type: tradeApiItemData.item.typeLine,
 			itemLevel: tradeApiItemData.item.ilvl,
 			corrupted: tradeApiItemData.item.corrupted,
+			// todo[medium] show split & mirrored in UI
+			// todo[medium] allow searching for non-split & mirrored
+			mirrored: tradeApiItemData.item.duplicated,
+			split: tradeApiItemData.item.split,
 			influences: Object.keys(tradeApiItemData.item.influences || {}),
 			sockets,
 			affixes,

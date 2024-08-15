@@ -109,6 +109,7 @@ customElements.define(name, class extends XElement {
 			this.emit('change');
 		});
 		document.addEventListener('keydown', e => {
+			// todo[high] ctrl+f & g should select search text so it can be replaced easily
 			if (e.key === 'g' && e.ctrlKey)
 				this.$('#search-input').focus();
 		});
@@ -122,7 +123,9 @@ customElements.define(name, class extends XElement {
 		this.$('#merge-resist-mods-button').addEventListener('click', () => {
 			let maxWeight = 0;
 			[...this.$('#query-properties-list').children].forEach(queryProperty => {
+				// todo[high] not very robust regex
 				if (queryProperty.property.match(/\+#% to .* resistances? \(explicit\)/i)) {
+					// todo[high] max is incorrect when removing a mod with multiple resists
 					maxWeight = Math.max(queryProperty.weight, maxWeight);
 					queryProperty.remove();
 				}
