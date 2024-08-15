@@ -20,7 +20,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 	connectedCallback() {
 		// can't be done in constructor because XElement overrides the setters of attributeTypes to
 		// go through HTML attributes, which don't exist until connectedCallback is called
-		this.size = this.size || 10;
+		this.size ||= 10;
 
 		this.$('input').addEventListener('focus', () => this.updateAutocompletesShown(true));
 		this.$('input').addEventListener('change',

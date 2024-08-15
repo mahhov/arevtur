@@ -28,7 +28,7 @@ class Script extends CustomOsScript {
 			this.clear();
 			return;
 		}
-		console.log('PobApi response:', out);
+		// console.log('PobApi response:', out);
 		if (out && !this.cleared)
 			out.split('.>')
 				.map(split => split.split('<.')[1])

@@ -13,7 +13,7 @@ customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 	connectedCallback() {
 		this.$('#import').addEventListener('click', () =>
 			this.emit('import', this.$('#url').value));
-		this.url = this.url || '';
+		this.url ||= '';
 	}
 
 	set url(value) {
