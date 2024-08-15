@@ -1,10 +1,10 @@
 const querystring = require('querystring');
 const {httpRequest: {get, post}} = require('js-desktop-base');
-const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
-const ApiConstants = require('./ApiConstants');
-const Stream = require('./Stream');
-const UnifiedQueryParams = require('./UnifiedQueryParams');
-const ItemData = require('./ItemData');
+const RateLimitedRetryQueue = require('../RateLimitedRetryQueue');
+const ApiConstants = require('../ApiConstants');
+const Stream = require('../Stream');
+const UnifiedQueryParams = require('../UnifiedQueryParams');
+const ItemData = require('../ItemData');
 
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');

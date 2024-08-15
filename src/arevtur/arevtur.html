@@ -53,7 +53,7 @@
 	const {webFrame} = require('electron');
 	// todo[blocking] this isn't used here, but it is used in UnifiedQueryParams. We can't move it
 	//  there because of circular dependency
-	const {TradeQuery} = require('./PoeTradeApi');
+	const {TradeQuery} = require('./poeTradeApi/poeTradeApi');
 	const {clamp, transpose} = require('../util/util');
 
 	const $ = document.querySelector.bind(document);
