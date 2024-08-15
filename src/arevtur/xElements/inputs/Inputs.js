@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
-const {TradeQueryImport} = require('../../poeTradeApi/poeTradeApi');
+const {TradeQuery} = require('../../poeTradeApi/poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../pobApi/pobApi');
 const util = require('../../../util/util');
@@ -60,9 +60,8 @@ customElements.define(name, class Inputs extends XElement {
 		});
 
 		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
-			let tradeQueryImport = new TradeQueryImport(this.$('#session-id-input').value,
-				e.detail);
-			let apiQueryParams = await tradeQueryImport.getApiQueryParams();
+			let apiQueryParams =
+				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
 			this.inputSets.push(
 				{
@@ -208,7 +207,7 @@ customElements.define(name, class Inputs extends XElement {
 
 		// todo[medium] move this to InputTradeParams and remove import button, instead
 		//  automatically update url <-> form when either one changes
-		this.$('#input-import-trade-search-url').url = tradeQuery[0].apiHtmlUrl;
+		this.$('#input-import-trade-search-url').url = tradeQuery[0].toApiHtmlUrl;
 
 		return tradeQuery;
 	}

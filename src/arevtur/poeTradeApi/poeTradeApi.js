@@ -213,25 +213,18 @@ class TradeQuery {
 		}
 	}
 
-	get apiHtmlUrl() {
+	get toApiHtmlUrl() {
 		const api = 'https://www.pathofexile.com/trade';
 		let endpoint = `${api}/search/${this.league}`;
 		let queryParams = {q: JSON.stringify(this.getQuery())};
 		let queryParamsString = querystring.stringify(queryParams);
 		return `${endpoint}?${queryParamsString}`;
 	}
-}
 
-// todo[medium] make this into a function
-class TradeQueryImport {
-	constructor(sessionId, tradeSearchUrl) {
-		this.sessionId = sessionId;
-		this.tradeSearchUrl = tradeSearchUrl.replace('.com/trade', '.com/api/trade');
-	}
-
-	async getApiQueryParams() {
-		let response = await get(this.tradeSearchUrl, {},
-			TradeQuery.createRequestHeader(this.sessionId));
+	static async fromApiHtmlUrl(sessionId, tradeSearchUrl) {
+		tradeSearchUrl = tradeSearchUrl.replace('.com/trade', '.com/api/trade');
+		let response = await get(tradeSearchUrl, {},
+			TradeQuery.createRequestHeader(sessionId));
 		let jsonString = response.string;
 		let {query} = JSON.parse(jsonString);
 		return {
@@ -241,6 +234,6 @@ class TradeQueryImport {
 	}
 }
 
-module.exports = {TradeQuery, TradeQueryImport};
+module.exports = {TradeQuery};
 
 // todo[high] merge all resist mods when importing

@@ -72,7 +72,7 @@ customElements.define(name, class extends XElement {
 			try {
 				let modWeights = await pobApi.getModWeights(this.type, !this.uncorrupted);
 				let unifiedQueryParams = UnifiedQueryParams.fromModWeights(
-					await UnifiedQueryParams.fromInputTradeQueryParams(this), modWeights);
+					await this.unifiedQueryParams, modWeights);
 				await this.loadQueryParams(unifiedQueryParams);
 			} catch (e) {
 			}
