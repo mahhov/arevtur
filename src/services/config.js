@@ -34,10 +34,10 @@ class Config extends Emitter {
 
 		let added = [];
 		ipcMain.handle('listen-config-change', event => {
-			if (added.includes(event.sender))
-				return;
-			added.push(event.sender);
-			this.addListener('change', config => event.sender.send('config-changed', config));
+			if (!added.includes(event.sender)) {
+				added.push(event.sender);
+				this.addListener('change', config => event.sender.send('config-changed', config));
+			}
 			event.sender.send('config-changed', this.config);
 		});
 	}
