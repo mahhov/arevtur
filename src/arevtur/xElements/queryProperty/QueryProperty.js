@@ -33,7 +33,7 @@ customElements.define(name, class extends XElement {
 			this.property = this.$('#property').value;
 			this.emit('change');
 		});
-		this.$('#weight').addEventListener('input', () => {
+		this.$('#weight').addEventListener('change', () => {
 			this.weight = this.$('#weight').value;
 			this.emit('change');
 		});

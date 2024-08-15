@@ -42,12 +42,12 @@
 	<x-autocomplete-input id="type-input" placeholder="type"></x-autocomplete-input>
 	<label>
 		value
-		<input class="short-input" id="min-value-input" type="number">
+		<x-numeric-input class="short-input" id="min-value-input"></x-numeric-input>
 		<!--todo[low] trim leading 0's from number inputs-->
 	</label>
 	<label>
 		price
-		<input class="short-input" id="price-input" type="number">
+		<x-numeric-input class="short-input" id="price-input"></x-numeric-input>
 	</label>
 	<label>Offline<input id="offline-check" type="checkbox"></label>
 	<button class="pob" id="build-import-for-type-button">PoB Import</button>
@@ -55,28 +55,28 @@
 <div>
 	<label>
 		armour
-		<input class="short-input" id="armour-input" type="number">
+		<x-numeric-input class="short-input" id="armour-input"></x-numeric-input>
 		<x-tooltip-button id="armour-build-value" class="pob"></x-tooltip-button>
 	</label>
 	<label>
 		evasion
-		<input class="short-input" id="evasion-input" type="number">
+		<x-numeric-input class="short-input" id="evasion-input"></x-numeric-input>
 		<x-tooltip-button id="evasion-build-value" class="pob"></x-tooltip-button>
 	</label>
 	<label>
 		energy shield
-		<input class="short-input" id="energy-shield-input" type="number">
+		<x-numeric-input class="short-input" id="energy-shield-input"></x-numeric-input>
 		<x-tooltip-button id="energy-shield-build-value" class="pob"></x-tooltip-button>
 	</label>
 </div>
 <div>
 	<label>
 		prefix
-		<input class="short-input" id="prefix-input" type="number">
+		<x-numeric-input class="short-input" id="prefix-input"></x-numeric-input>
 	</label>
 	<label>
 		suffix
-		<input class="short-input" id="suffix-input" type="number">
+		<x-numeric-input class="short-input" id="suffix-input"></x-numeric-input>
 	</label>
 	<label>6-link<input id="linked-check" type="checkbox"></label>
 </div>

@@ -10,6 +10,7 @@ require('./inputTradeParams/InputTradeParams');
 require('./inputs/Inputs');
 require('./itemListing/ItemListing');
 require('./multiSelectLined/MultiSelectLined');
+require('./numericInput/NumericInput');
 require('./pathSelect/PathSelect');
 require('./queryProperty/QueryProperty');
 require('./results/Results');
