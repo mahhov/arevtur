@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
-const {TradeQuery} = require('../../poeTradeApi/poeTradeApi');
+const {TradeQuery} = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../pobApi/pobApi');
 const util = require('../../../util/util');
@@ -59,6 +59,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.$('#loaded-pob-status').classList.remove('busy');
 		});
 
+		// todo[medium] sometimes returns 'error 6 / forbidden'
 		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
 			let apiQueryParams =
 				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
@@ -202,8 +203,9 @@ customElements.define(name, class Inputs extends XElement {
 			.flatMap(inputSet =>
 				UnifiedQueryParams
 					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-					.toTradeQuery(league, sessionId, overridePrice,
-						manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
+					.toTradeQueryData(league, sessionId, overridePrice,
+						manual6LinkCheapestOption[0], manual6LinkCheapestOption[1])
+					.map(data => new TradeQuery(data)));
 
 		// todo[medium] move this to InputTradeParams and remove import button, instead
 		//  automatically update url <-> form when either one changes

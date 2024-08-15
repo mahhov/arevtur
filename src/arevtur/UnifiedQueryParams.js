@@ -6,7 +6,6 @@ const {
 	influenceProperties,
 	queryPropertyFilters,
 } = require('./xElements/inputTradeParams/Properties');
-// const {TradeQuery} = require('./PoeTradeApi');
 
 let deepCopy = obj => {
 	if (typeof obj !== 'object' || obj === null)
@@ -162,7 +161,7 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	toTradeQuery(league, sessionId, overridePrice, manual6LinkName, manual6LinkPrice) {
+	toTradeQueryData(league, sessionId, overridePrice, manual6LinkName, manual6LinkPrice) {
 		let maxPrice = overridePrice !== null ? overridePrice : this.maxPrice;
 		let weights = Object.fromEntries(
 			[...this.weightEntries, ...this.sharedWeightEntries].filter(entry => entry[3]));
@@ -236,7 +235,7 @@ class UnifiedQueryParams {
 			queries.push(queryO);
 		}));
 
-		return queries.map(query => new TradeQuery(query));
+		return queries;
 	}
 
 	static toApiQueryParams(tradeQuery, overrides = {}) {
