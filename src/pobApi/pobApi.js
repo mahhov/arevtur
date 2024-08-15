@@ -153,7 +153,6 @@ class PobApi extends Emitter {
 		itemText = PobApi.clean(itemText);
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
-		let flatLifeRegex = /([+-][\d,]+) total life/i;
 		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
 		let anyDiffResistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) res(?:\.|istance)/i;
 		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
@@ -168,7 +167,6 @@ class PobApi extends Emitter {
 			// todo[medium] see if we can use a loop to reduce repeated logic
 			let equippingText = diffText.match(/equipping this item.*/i)[0];
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
-			let flatLife = Number(diffText.match(flatLifeRegex)?.[1].replace(/,/g, '')) || 0;
 			let totalResist = diffText
 				.match(new RegExp(anyDiffResistRegex, 'gi'))
 				?.reduce((sum, m) => sum + Number(m.match(anyDiffResistRegex)[1]), 0) || 0;
@@ -187,7 +185,6 @@ class PobApi extends Emitter {
 			return {
 				equippingText,
 				effectiveHitPool,
-				flatLife,
 				totalResist,
 				str,
 				dex,
@@ -205,8 +202,6 @@ class PobApi extends Emitter {
 			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
 			this.weights.life && diff.effectiveHitPool ?
 				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
-			this.weights.life && diff.flatLife ?
-				`@bold,blue Flat Life ${diff.flatLife}` : '',
 			this.weights.resist && diff.totalResist ?
 				`@bold,orange Total Resist ${diff.totalResist}` : '',
 			this.weights.damage && diff.fullDps ?
@@ -223,8 +218,6 @@ class PobApi extends Emitter {
 				if (textPrefix && itemTextLine === textPrefix)
 					return `@bold,green ${itemTextLine}`;
 				if (itemTextLine.match(effectiveHitPoolRegex))
-					return `@bold,blue ${itemTextLine}`;
-				if (itemTextLine.match(flatLifeRegex))
 					return `@bold,blue ${itemTextLine}`;
 				if (itemTextLine.match(anyItemResistRegex))
 					return `@bold,orange ${itemTextLine}`;
