@@ -89,6 +89,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 
 	set value(value) {
 		this.$('input').value = value;
+		this.$('input').title = value;
 		this.updateAutocompletesShown();
 		this.updateInputValidity();
 	}
@@ -103,8 +104,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 
 	internalSetValue(value, tooltip, blur) {
 		this.value = value;
-		this.$('input').value = value;
-		this.$('input').title = tooltip || '';
+		this.$('input').title = tooltip || value || '';
 		if (blur)
 			this.blur();
 		this.emit('change');
