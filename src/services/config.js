@@ -17,12 +17,16 @@ class Config extends Emitter {
 		}
 
 		ipcMain.handle('config-change', async (event, newConfig) => {
+			let oldConfigJson = JSON.stringify(this.config, '', 2);
 			deepMerge(this.config, newConfig);
+			let newConfigJson = JSON.stringify(this.config, '', 2);
+			if (oldConfigJson === newConfigJson)
+				return;
 			this.emit('change', this.config);
 			// console.log('Updated config', JSON.stringify(this.config, 2, 2));
 			try {
 				await fs.mkdir(appData.basePath, {recursive: true});
-				await fs.writeFile(appData.configPath, JSON.stringify(this.config, '', 2));
+				await fs.writeFile(appData.configPath, newConfigJson);
 			} catch (e) {
 				console.error('Failed to save config', appData.configPath, e);
 			}
