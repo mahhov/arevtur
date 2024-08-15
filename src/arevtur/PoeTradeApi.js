@@ -222,7 +222,6 @@ class TradeQueryParams {
 	}
 }
 
-// todo[medium] rename file PoeTradeApi
 // todo[medium] make this into a function
 class TradeQueryImport {
 	constructor(sessionId, tradeSearchUrl) {
@@ -244,5 +243,4 @@ class TradeQueryImport {
 
 module.exports = {TradeQueryParams, TradeQueryImport};
 
-// todo[high] query property highlighting is hard to distinguish
 // todo[high] merge all resist mods when importing
