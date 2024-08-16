@@ -1099,6 +1099,24 @@ Right click to drink. Can only hold charges while in belt. Refills as you kill m
 
 // unique jewel
 
+Item Class: Jewels
+Rarity: Unique
+Kitava's Teachings
+Small Cluster Jewel
+--------
+Item Level: 72
+--------
+Adds Disciple of Kitava
+--------
+Savour the bitter, cherish the sweet,
+For there may never be another chance to eat.
+--------
+Place into an allocated Small, Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+--------
+Corrupted
+--------
+Note: ~price 1 chaos
+
 
 Item Class: Abyss Jewels
 Rarity: Unique
@@ -1936,7 +1954,7 @@ Right click this item then left click a Map item to apply it. Can apply up to 5 
 
 
 
-
+// invitation
 
 
 
@@ -1953,6 +1971,10 @@ From the heart of the Tangle, the Eater of Worlds
 reaches out for control of the Atlas.
 --------
 Open portals to Absence of Symmetry and Harmony by using this item in a personal Map Device.
+
+
+// scarab
+
 
 
 Item Class: Map Fragments
@@ -1985,6 +2007,9 @@ Can be used in a personal Map Device to add modifiers to a Map.
 Note: ~price 1 chaos
 
 
+// memory
+
+
 Item Class: Memories
 Rarity: Magic
 Einhar's Memory of Crystal Prisons
@@ -1999,6 +2024,22 @@ Right-click on this, then left click on a completed Map on your Atlas to apply t
 Unmodifiable
 --------
 Note: ~price 75 chaos
+
+
+// base item
+
+Item Class: Jewels
+Rarity: Rare
+Vivid Splinter
+Cobalt Jewel
+--------
+Item Level: 83
+--------
+3% increased Cast Speed with Cold Skills
+8% increased Global Critical Strike Chance
+15% increased Mana Regeneration Rate
+--------
+Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
 
 
 
@@ -2075,6 +2116,8 @@ Rift Heart
 
 
 
+// fossil
+
 
 Item Class: Stackable Currency
 Rarity: Currency
@@ -2089,7 +2132,7 @@ Place in a Resonator to influence item crafting.
 Shift click to unstack.
 
 
-
+// resonator
 
 
 Item Class: Delve Stackable Socketable Currency
@@ -2118,6 +2161,9 @@ Sockets: D
 Reforges a rare item with new random modifiers
 --------
 All sockets must be filled with Fossils before this item can be used.
+
+
+// beast
 
 
 Item Class: Stackable Currency
@@ -2182,7 +2228,7 @@ Right-click to add this to your bestiary.
 Note: ~price .9 divine
 
 
-
+// essence
 
 
 Item Class: Stackable Currency
@@ -2226,7 +2272,7 @@ Belt: Gain Alchemist's Genius when you use a Flask
 --------
 Right click this item then left click a normal or rare item to apply it.
 
-
+// vial
 
 Item Class: Stackable Currency
 Rarity: Currency

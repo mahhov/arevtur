@@ -241,6 +241,7 @@ class UniqueWeaponArmourAccessoryPricer extends Pricer {
 		super(Filter.and(
 			Filter.not(item => item.itemClass.includes(' Flasks')),
 			Filter.not(Filter.itemClass('Jewels')),
+			Filter.not(Filter.itemClass('Abyss Jewels')),
 			Filter.not(Filter.itemClass('Relics')),
 			Filter.not(Filter.itemClass('Maps')),
 			Filter.itemRarity('Unique'),
@@ -329,11 +330,20 @@ class VaalSkillGemPricer extends Pricer {
 
 class ClusterJewelPricer extends Pricer {
 	constructor() {
-		super(Filter.all({
-			itemClass: 'Jewels',
-			name2Contains: ' Jewel',
-			textContains: ' Jewel Socket on the Passive ',
-		}), [poeNinjaApi.endpointsByLeague.CLUSTER_JEWEL]);
+		super(Filter.and(
+			Filter.itemClass('Jewels'),
+			Filter.nonUnique(),
+			Filter.name2Contains(' Cluster Jewel'),
+			Filter.textContains(' Jewel Socket on the Passive '),
+		), [poeNinjaApi.endpointsByLeague.CLUSTER_JEWEL]);
+	}
+
+	nameFilter(item, inputItem) {
+		return inputItem.text.includes(item.name);
+	}
+
+	priceString(item) {
+		return `${price(item.chaosValue)} - ${item.variant}, lvl ${item.levelRequired}, ${item.name}`;
 	}
 }
 
@@ -445,8 +455,11 @@ class BaseItemPricer extends Pricer {
 		super(Filter.and(
 			Filter.nonUnique(),
 			Filter.not(Filter.itemRarity('Gem')),
-			Filter.textContains('Requirements:'),
-			Filter.textContains('Level:'),
+			Filter.or(
+				Filter.textContains('Requirements:'),
+				Filter.itemClass('Jewels'),
+			),
+			Filter.not(Filter.name2Contains(' Cluster Jewel')),
 		), [poeNinjaApi.endpointsByLeague.BASE_ITEM]);
 	}
 

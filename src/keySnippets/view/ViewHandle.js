@@ -54,7 +54,7 @@ class ViewHandle extends ViewHandleBase {
 	}
 
 	async showText(text, duration) {
-		this.showCommand('setText', {text}, duration, 300, Math.min(text.split('\n').length, 20));
+		this.showCommand('setText', {text}, duration, 600, Math.min(text.split('\n').length, 40));
 	}
 
 	async showTable(rows, duration) {
