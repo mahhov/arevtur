@@ -45,4 +45,4 @@ class Config extends Emitter {
 
 module.exports = {config: new Config(), defaultConfig};
 
-// todo[high] viewHorizontal & viewMaximize should use local storage, see git branch configButton
+// todo[medium] viewHorizontal & viewMaximize should use local storage, see git branch configButton

@@ -10,27 +10,40 @@ let getEndpointsByLeague = () => {
 		league => `${BASE}/${prefix}?${querystring.stringify({league, type})}`;
 
 	return {
-		GEM: genEndpointByLeague(ITEM, 'SkillGem'),
-		DIVINATION_CARD: genEndpointByLeague(ITEM, 'DivinationCard'),
-		ESSENCE: genEndpointByLeague(ITEM, 'Essence'),
 		CURRENCY: genEndpointByLeague(CURRENCY, 'Currency'),
-		UNIQUE_JEWEL: genEndpointByLeague(ITEM, 'UniqueJewel'),
-		UNIQUE_FLASK: genEndpointByLeague(ITEM, 'UniqueFlask'),
+		FRAGMENT: genEndpointByLeague(CURRENCY, 'Fragment'),
+		KALGUURAN_RUNE: genEndpointByLeague(ITEM, 'KalguuranRune'),
+		TATTOO: genEndpointByLeague(ITEM, 'Tattoo'),
+		OMENS: genEndpointByLeague(ITEM, 'Omen'),
+		DIVINATION_CARD: genEndpointByLeague(ITEM, 'DivinationCard'),
+		ARTIFACT: genEndpointByLeague(ITEM, 'Artifact'),
+		OIL: genEndpointByLeague(ITEM, 'Oil'),
+		INCUBATOR: genEndpointByLeague(ITEM, 'Incubator'),
+
 		UNIQUE_WEAPON: genEndpointByLeague(ITEM, 'UniqueWeapon'),
 		UNIQUE_ARMOUR: genEndpointByLeague(ITEM, 'UniqueArmour'),
 		UNIQUE_ACCESSORY: genEndpointByLeague(ITEM, 'UniqueAccessory'),
+		UNIQUE_FLASK: genEndpointByLeague(ITEM, 'UniqueFlask'),
+		UNIQUE_JEWEL: genEndpointByLeague(ITEM, 'UniqueJewel'),
+		UNIQUE_RELIC: genEndpointByLeague(ITEM, 'UniqueRelic'),
+		SKILL_GEM: genEndpointByLeague(ITEM, 'SkillGem'),
+		CLUSTER_JEWEL: genEndpointByLeague(ITEM, 'ClusterJewel'),
+
+		MAP: genEndpointByLeague(ITEM, 'Map'),
+		BLIGHTED_MAP: genEndpointByLeague(ITEM, 'BlightedMap'),
+		BLIGHT_RAVAGED_MAP: genEndpointByLeague(ITEM, 'BlightRavagedMap'),
 		UNIQUE_MAP: genEndpointByLeague(ITEM, 'UniqueMap'),
+		DELIRIUM_ORB: genEndpointByLeague(ITEM, 'DeliriumOrb'),
+		INVITATION: genEndpointByLeague(ITEM, 'Invitation'),
+		SCARAB: genEndpointByLeague(ITEM, 'Scarab'),
+		MEMORY: genEndpointByLeague(ITEM, 'Memory'),
+
+		BASE_ITEM: genEndpointByLeague(ITEM, 'BaseType'),
 		FOSSIL: genEndpointByLeague(ITEM, 'Fossil'),
 		RESONATOR: genEndpointByLeague(ITEM, 'Resonator'),
-		FRAGMENT: genEndpointByLeague(CURRENCY, 'Fragment'),
-		MAP: genEndpointByLeague(ITEM, 'Map'),
-		SCARAB: genEndpointByLeague(ITEM, 'Scarab'),
-		BASE_ITEM: genEndpointByLeague(ITEM, 'BaseType'),
-		INCUBATOR: genEndpointByLeague(ITEM, 'Incubator'),
-		OIL: genEndpointByLeague(ITEM, 'Oil'),
 		BEAST: genEndpointByLeague(ITEM, 'Beast'),
-		DELIRIUM_ORB: genEndpointByLeague(ITEM, 'DeliriumOrb'),
-		OMENS: genEndpointByLeague(ITEM, 'Omen'),
+		ESSENCE: genEndpointByLeague(ITEM, 'Essence'),
+		VIAL: genEndpointByLeague(ITEM, 'Vial'),
 	};
 };
 

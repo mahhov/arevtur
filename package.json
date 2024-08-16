@@ -5,7 +5,7 @@
   "scripts": {
     "start": "electron .",
     "build": "build",
-    "ship": ". ./git_token && git push && rm -rf dist && build -lwp always"
+    "ship": ". ./git_token && git push --tags && rm -rf dist && build -lwp always"
   },
   "author": "mahhov1",
   "license": "ISC",

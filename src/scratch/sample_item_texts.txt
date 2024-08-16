@@ -45,6 +45,8 @@ With at least 1000 Strength, 1.69% of Damage dealt by your Raised Zombies is Lee
 "The Emperor's trusted surgeons are not the only ones who
 practice the darkdark artsarts. SomeSome of us are just more discreet."
 
+
+
 Item Class: OneOne Hand Axes
 Rarity: Unique
 Dyadus
@@ -78,6 +80,8 @@ He burned as a torch in the blackest night
 She shone as ice in the winter sun
 Proudly, fiercely
 At their mother's side, forever.
+
+
 
 Item Class: Belts
 Rarity: Unique
@@ -188,6 +192,1999 @@ You gain Onslaught for 4 seconds on Critical Strike
 Command like a king and nothing will stand in your way.
 
 
+
+
+
+
+
+// CurrencyPricer
+
+Item Class: Stackable Currency
+Rarity: Currency
+Hinekora's Lock
+--------
+Stack Size: 1/10
+--------
+Allows an item to foresee the result of the next Currency item used on it
+Modifying the item in any way removes the ability to foresee
+--------
+Right click this item then left click an item to apply it.
+--------
+Note: ~price 67 divine
+
+Item Class: Stackable Currency
+Rarity: Currency
+Mirror Shard
+--------
+Stack Size: 1/20
+--------
+A stack of 20 shards becomes a Mirror of Kalandra.
+--------
+Note: ~price 28.3 divine
+
+Item Class: Stackable Currency
+Rarity: Currency
+Stacked Deck
+--------
+Stack Size: 1/20
+--------
+A stack of unknown divination cards
+--------
+Right click to take a divination card out of the deck.
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Veiled Orb
+--------
+Stack Size: 1/20
+--------
+Removes a random modifier and adds a random Veiled modifier to a rare item
+--------
+Right click this item then left click a rare item to apply it.
+--------
+Note: ~price 7.3 chaos
+
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Primal Crystallised Lifeforce
+--------
+Stack Size: 2044/50000
+--------
+Can be used at the Horticrafting bench in your hideout.
+Shift click to unstack.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Orb of Alchemy
+--------
+Stack Size: 143/20
+--------
+Upgrades a normal item to a rare item
+--------
+Right click this item then left click a normal item to apply it.
+Shift click to unstack.
+--------
+Note: ~b/o 1 alch
+
+Item Class: Stackable Currency
+Rarity: Currency
+Orb of Unmaking
+--------
+Stack Size: 11/40
+--------
+Grants an atlas passive skill refund point
+--------
+Right click on this item to use it.
+Shift click to unstack.
+--------
+Note: ~price 1 chaos
+
+Item Class: Stackable Currency
+Rarity: Currency
+Greater Eldritch Ichor
+--------
+Stack Size: 120/10
+--------
+Adds a Greater Eater of Worlds implicit modifier to
+a Body Armour, Boots, Gloves or Helmet
+This replaces any existing implicit modifiers other than Searing Exarch implicit modifiers
+--------
+Right click this item then left click a normal, magic or rare item to apply it. Cannot be used on Shaper, Elder or Elderslayer influenced items.
+Shift click to unstack.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Glassblower's Bauble
+--------
+Stack Size: 19/20
+--------
+Improves the quality of a flask or tincture
+--------
+Right click this item then left click a flask or tincture to apply it. Has greater effect on lower item level, non-unique flasks. The maximum quality is 20%.
+Shift click to unstack.
+--------
+Note: ~price 1 chaos
+
+Item Class: Stackable Currency
+Rarity: Currency
+Tainted Armourer's Scrap
+--------
+Stack Size: 2/40
+--------
+Randomises the quality of a corrupted armour
+--------
+Right click this item then left click a corrupted armour to apply it. The maximum random quality is 20%.
+Shift click to unstack.
+
+Item Class: Stackable Currency
+Rarity: Currency
+Tempering Catalyst
+--------
+Stack Size: 1/10
+--------
+Adds quality that enhances Defence modifiers on a ring, amulet or belt
+Replaces other quality types
+--------
+Right click this item then left click a ring, amulet or belt to apply it. Has greater effect on lower item level, non-unique jewellery. The maximum quality is 20%.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Blighted Scouting Report
+--------
+Stack Size: 1/20
+--------
+Reroll all of Kirac's Atlas Missions, including at least one Blighted Map
+--------
+Right click this item while viewing Kirac's Atlas Missions to use it.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Blessing of Tul
+--------
+Stack Size: 1/10
+--------
+Upgrades a breach unique item or breachstone to a more powerful version
+--------
+Right click this item then left click an applicable breach unique item to upgrade it.
+--------
+Note: ~price 62 chaos
+
+
+
+
+
+
+
+
+
+// FragmentPricer
+
+
+Item Class: Map Fragments
+Rarity: Normal
+The Maven's Writ
+--------
+It would be foolish to obey the Maven's demands.
+It would also be foolish not to.
+--------
+Open a portal to Absence of Mercy and Empathy by using this item in a personal Map Device. Can only be used once.
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Gift to the Goddess
+--------
+The Divine Font can be used additional times.
+--------
+The Goddess abides a kingdom beyond compare,
+should you meet her challenge.
+--------
+Travel to the Aspirants' Plaza and spend this item to open the Eternal Labyrinth of Opportunity.
+--------
+Note: ~price 125 chaos
+
+
+
+Item Class: Vault Keys
+Rarity: Normal
+Visceral Reliquary Key
+--------
+Item Level: 87
+--------
+That which could not be digested
+remains lost within, the buried remnants
+of whole cultures, of entire worlds.
+--------
+Travel to the Visceral Reliquary by using this item in a personal Map Device. Can only be used once.
+--------
+Note: ~price 18 divine
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Reality Fragment
+--------
+The Absence of Mercy and Empathy is level 85
+The Maven's full power is unleashed in The Absence of Mercy and Empathy
+--------
+You must rise from mere amusement to respected equal.
+--------
+Use five of these in a personal Map Device to open Portals to The Absence of Mercy and Empathy. Can only be used once.
+--------
+Note: ~price 1.3 chaos
+
+
+Item Class: Breachstones
+Rarity: Normal
+Tul's Flawless Breachstone
+--------
+Rare Monsters drop 2 additional Reward Types
+Area has 4 additional random Modifiers
+200% increased Experience Gain
+250% more Monster Life
+60% increased Rarity of Items found in this Area
+60% increased Pack Size
+Monster Level: 84
+--------
+Travel to Tul's Domain by using this item in a personal Map Device. Can only be used once.
+--------
+Note: ~price 100 chaos
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Fragment of Knowledge
+--------
+Stack Size: 1/10
+--------
+Understanding leads to mastery.
+--------
+Can be used in a personal Map Device.
+
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Fragment of Eradication
+--------
+Stack Size: 1/10
+--------
+Plagues are exhausted, not cured.
+--------
+Can be used in a personal Map Device.
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Fragment of the Hydra
+--------
+Stack Size: 1/10
+--------
+Enter the crucible. The nexus of
+nothingness and equilibrium of eternity.
+--------
+Can be used in a personal Map Device.
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Sacrifice at Noon
+--------
+Stack Size: 26/10
+--------
+The light without pales in comparison to the light within.
+--------
+Can be used in a personal Map Device.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Offering to the Goddess
+--------
+It is time for the Goddess to give her final verdict.
+Your fate rests in her even hands.
+--------
+Travel to the Aspirants' Plaza and spend this item to open the Eternal Labyrinth.
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Divine Vessel
+--------
+Unique Boss deals 10% increased Damage
+Unique Boss has 10% increased Attack and Cast Speed
+Unique Boss has 10% increased Life
+Unique Boss has 20% increased Area of Effect
+--------
+Power is a curious thing.
+It can be contained, hidden, locked away,
+and yet it always breaks free.
+--------
+Can be used in a personal Map Device, allowing you to capture the Soul of the Map's Boss. The Vessel containing the captured Soul can be retrieved from the Map Device. You must be in the Map when the boss is defeated.
+--------
+Note: ~price 1 chaos
+
+
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Timeless Karui Splinter
+--------
+Stack Size: 21/100
+--------
+Combine 100 Splinters to create a Timeless Karui Emblem.
+Shift click to unstack.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Splinter of Tul
+--------
+Stack Size: 6/100
+--------
+Combine 100 Splinters to create Tul's Breachstone.
+Shift click to unstack.
+--------
+Note: ~price 2 alch
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Unrelenting Timeless Eternal Emblem
+--------
+Monsters gain 10% increased Maximum Life each time they are Revived
+Monsters gain 50% increased Critical Strike Chance each time they are Revived
+Monsters gain 3% additional Critical Strike Multiplier each time they are Revived
+10% increased Experience Gain
+10% improved Rewards
+--------
+Place two or more different Emblems in a Map Device to access the Domain of Timeless Conflict. Can only be used once.
+--------
+Note: ~price 30 chaos
+
+
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Valdo's Puzzle Box
+--------
+Stack Size: 1/10
+--------
+Contains a Mysterious Map with a Foil Unique Reward
+--------
+I can find no method of destroying the dangerous contents within...
+ perhaps, someday, you will find a way.
+--------
+Right click to open.
+
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Timeless Eternal Emblem
+--------
+Place two or more different Emblems in a Map Device to access the Domain of Timeless Conflict. Can only be used once.
+--------
+Note: ~price 1 chaos
+
+
+
+
+
+
+// KalguuranRunePricer
+
+Item Class: Stackable Currency
+Rarity: Currency
+Power Rune
+--------
+Stack Size: 1/250
+--------
+Naught else matters.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+--------
+Note: ~price 4.4 divine
+
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Bound Rune
+--------
+Stack Size: 3/250
+--------
+Sometimes, it is the connections between, rather
+than the things themselves, that matters most.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+Shift click to unstack.
+--------
+Note: ~price 1 chaos
+
+
+
+// TattooPricer
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Journey Tattoo of the Soul
+--------
+Stack Size: 1/10
+Replaces a +30 to Intelligence (augmented) Notable Passive Skill
+--------
++40 to maximum Energy Shield per Allocated Journey Tattoo of the Soul
+--------
+Right click this item then left click a valid Passive Skill. Maximum 50 Tattoos.
+--------
+Note: ~price 45 divine
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Tattoo of the Hinekora Warmonger
+--------
+Stack Size: 1/10
+Replaces a Small Intelligence Passive Skill
+--------
+Minions have 5% increased maximum Life
+--------
+Right click this item then left click a valid Passive Skill. Maximum 50 Tattoos.
+
+
+// OmensPricer
+
+Item Class: Stackable Currency
+Rarity: Currency
+Omen of Brilliance
+--------
+Will be Consumed when you level up
+to grant 100% increased Experience gained for 60 seconds
+--------
+Each player can only consume one Omen in each combat area.
+
+
+
+// DivinationCardPricer
+
+
+Item Class: Divination Cards
+Rarity: Divination Card
+Unrequited Love
+--------
+Stack Size: 1/16
+--------
+19x Mirror Shard
+--------
+The pale flame of his heart disappeared in his azure reflection.
+The work of a life.
+Ambitious, and unfinished.
+--------
+Note: ~price 34 divine
+
+
+// ArtifactPricer
+
+Item Class: Stackable Currency
+Rarity: Currency
+Exotic Coinage
+--------
+Stack Size: 1/1000
+--------
+These can be brought to Tujen to refresh his vendor inventory.
+
+Item Class: Stackable Currency
+Rarity: Currency
+Burial Medallion
+--------
+Stack Size: 1/1000
+--------
+These can be brought to Dannig to refresh his vendor inventory.
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Scrap Metal
+--------
+Stack Size: 1/1000
+--------
+These can be brought to Rog to refresh his vendor inventory.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Astragali
+--------
+Stack Size: 1/1000
+--------
+These can be brought to Gwennen to refresh her vendor inventory.
+
+
+// OilPricer
+
+Item Class: Stackable Currency
+Rarity: Currency
+Tainted Oil
+--------
+Stack Size: 3/10
+--------
+Can be combined with other Oils at Cassia to enchant corrupted Rings, Amulets or Blighted Maps.
+Shift click to unstack.
+--------
+Note: ~b/o 130 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Prismatic Oil
+--------
+Stack Size: 4/10
+--------
+Can be combined with other Oils at Cassia to enchant Amulets.
+Shift click to unstack.
+--------
+Note: ~b/o 75 chaos
+
+
+
+// IncubatorPricer
+
+Item Class: Incubators
+Rarity: Currency
+Obscured Incubator
+--------
+Stack Size: 3/10
+--------
+Item Level: 85
+--------
+Adds an incubated Breach item to an equippable item
+Item drops after killing 10530 monsters
+--------
+Right click this item then left click an item to apply it. The Incubated item drops after killing a specific number of monsters.
+Shift click to unstack.
+
+
+Item Class: Incubators
+Rarity: Currency
+Celestial Jeweller's Incubator
+--------
+Stack Size: 2/10
+--------
+Item Level: 83
+--------
+Adds an incubated Shaper or Elder Trinket item to an equippable item
+Item drops after killing 20784 monsters
+--------
+Right click this item then left click an item to apply it. The Incubated item drops after killing a specific number of monsters.
+Shift click to unstack.
+
+
+
+// UniqueWeaponPricer
+
+Item Class: Two Hand Swords
+Rarity: Unique
+Starforge
+Infernal Sword
+--------
+Two Handed Sword
+Physical Damage: 311-648 (augmented)
+Critical Strike Chance: 5.00%
+Attacks per Second: 1.46 (augmented)
+Weapon Range: 1.3 metres
+--------
+Requirements:
+Level: 67
+Str: 113
+Dex: 113
+--------
+Sockets: R R-R
+--------
+Item Level: 84
+--------
+30% increased Global Physical Damage (implicit)
+--------
+402% increased Physical Damage
+8% increased Attack Speed
++93 to maximum Life
+Your Physical Damage can Shock
+20% increased Area of Effect for Attacks
+Deal no Elemental Damage
+--------
+The end is written into the beginning.
+--------
+Foil Unique (Celestial Pearl)
+--------
+Shaper Item
+--------
+Note: ~b/o 11 divine
+
+
+Item Class: Two Hand Swords
+Rarity: Unique
+Starforge
+Infernal Sword
+--------
+Two Handed Sword
+Physical Damage: 316-658 (augmented)
+Critical Strike Chance: 5.00%
+Attacks per Second: 1.42 (augmented)
+Weapon Range: 1.3 metres
+--------
+Requirements:
+Level: 67
+Str: 113
+Dex: 113
+--------
+Sockets: G-R G
+--------
+Item Level: 87
+--------
+30% increased Global Physical Damage (implicit)
+--------
+410% increased Physical Damage
+5% increased Attack Speed
++98 to maximum Life
+Your Physical Damage can Shock
+20% increased Area of Effect for Attacks
+Deal no Elemental Damage
+--------
+The end is written into the beginning.
+--------
+Shaper Item
+--------
+Note: ~price 10.9 divine
+
+
+
+// UniqueArmourPricer
+
+
+Item Class: Body Armours
+Rarity: Unique
+Replica Farrul's Fur
+Triumphant Lamellar
+--------
+Quality: +20% (augmented)
+Armour: 1155 (augmented)
+Evasion Rating: 1450 (augmented)
+--------
+Requirements:
+Level: 69
+Str: 95
+Dex: 116
+--------
+Sockets: R-R-R-G-G B
+--------
+Item Level: 84
+--------
+128% increased Armour and Evasion
++93 to maximum Life
++2.00 seconds to Cat's Agility Duration
+Aspect of the Cat has no Reservation
+Gain up to your maximum number of Frenzy and Endurance Charges when you gain Cat's Agility
+You have Onslaught while you have Cat's Agility
+--------
+"Attempt #120: the prototype has finally achieved power similar to the original
+without breaking all the bones of the test subject. A rousing success."
+--------
+Note: ~price 27 divine
+
+
+// UniqueAccessoryPricer
+
+
+
+Item Class: Amulets
+Rarity: Unique
+Warped Timepiece
+Turquoise Amulet
+--------
+Requirements:
+Level: 50
+--------
+Item Level: 68
+--------
+Anger has 15% increased Aura Effect (implicit)
+--------
+25% increased Attack Speed
+17% increased Cast Speed
+14% increased Movement Speed
+13% reduced Skill Effect Duration
+Debuffs on you expire 100% faster
+--------
+As you have lived, so you shall die
+forever trying to keep up with me.
+Your blood on these hands of mine
+forever makes me the public enemy.
+--------
+Corrupted
+--------
+Note: ~price 1 alch
+
+
+Item Class: Belts
+Rarity: Unique
+Ynda's Stand
+Studded Belt
+--------
+Requirements:
+Level: 52
+--------
+Item Level: 84
+--------
+21% increased Stun Duration on Enemies (implicit)
+--------
+Regenerate 38.7 Life per second
++20% to Fire Resistance
++27% to Cold Resistance
+Gain Ward instead of 50% of Armour and Evasion Rating from Equipped Body Armour
+--------
+When all else was burning and overrun,
+she held the bridge to the very end.
+
+
+Item Class: Rings
+Rarity: Unique
+Vivinsect
+Unset Ring
+--------
+Requirements:
+Level: 48
+--------
+Sockets: G
+--------
+Item Level: 85
+--------
+Has 1 Socket (implicit)
+--------
++5 to Level of Socketed Aura Gems
+Socketed Gems have 20% reduced Reservation Efficiency
++18 to all Attributes
++32 to Strength and Dexterity
+Regenerate 15 Life per second for each Uncorrupted Item Equipped
+-2 to Total Mana Cost of Skills for each Corrupted Item Equipped
+--------
+"Fusing the parasite with another ring has manifested unpredictable effects.
+I theorise the sacrificial vessel's level of anguish is a key variable."
+- Arzaak, Syndicate Researcher
+
+
+
+
+// unique flask
+
+Item Class: Mana Flasks
+Rarity: Unique
+Replica Lavianga's Spirit
+Sanctified Mana Flask
+--------
+Recovers 1474 (augmented) Mana over 13 (augmented) Seconds
+Consumes 7 of 35 Charges on use
+Currently has 0 Charges
+--------
+Requirements:
+Level: 50
+--------
+Item Level: 83
+--------
+34% increased Amount Recovered
+50% reduced Recovery rate
+8% increased Attack Speed during Effect
+7% increased Cast Speed during Effect
+10% increased Mana Cost of Skills during Effect
+--------
+"An intriguing paradox."
+--------
+Right click to drink. Can only hold charges while in belt. Refills as you kill monsters.
+--------
+Note: ~price 2 chaos
+
+
+Item Class: Utility Flasks
+Rarity: Unique
+Vessel of Vinktar
+Topaz Flask
+--------
+Lasts 8 Seconds
+Consumes 48 (augmented) of 50 Charges on use
+Currently has 0 Charges
++5% to maximum Lightning Resistance
++40% to Lightning Resistance
+--------
+Requirements:
+Level: 68
+--------
+Item Level: 81
+--------
+142% increased Charges per use
+Shocks nearby Enemies during Effect, causing 10% increased Damage taken
+You are Shocked during Effect, causing 50% increased Damage taken
+Adds 11 to 60 Lightning Damage to Spells during Effect
+20% of Lightning Damage Leeched as Life during Effect
+--------
+The great city of storms, washed away by Vinktar's thirst for power.
+--------
+Right click to drink. Can only hold charges while in belt. Refills as you kill monsters.
+
+
+
+Item Class: Hybrid Flasks
+Rarity: Unique
+Divination Distillate
+Large Hybrid Flask
+--------
+Recovers 510 Life over 5 Seconds
+Recovers 140 Mana over 5 Seconds
+Consumes 20 of 40 Charges on use
+Currently has 0 Charges
+--------
+Requirements:
+Level: 30
+--------
+Item Level: 85
+--------
+41% increased Rarity of Items found during Effect
+25% increased Light Radius during Effect
++10% to Elemental Resistances during Effect
+--------
+Knowledge is fermented in pain and loss
+Distilled with reflection
+To quench the thirst of those
+who dream of enlightenment
+--------
+Right click to drink. Can only hold charges while in belt. Refills as you kill monsters.
+--------
+Note: ~b/o 1 chaos
+
+
+
+Item Class: Life Flasks
+Rarity: Unique
+Blood of the Karui
+Sanctified Life Flask
+--------
+Recovers 2190 (augmented) Life over 2.50 (augmented) Seconds
+Consumes 15 of 30 Charges on use
+Currently has 0 Charges
+--------
+Requirements:
+Level: 50
+--------
+Item Level: 69
+--------
+50% increased Life Recovered
+41% reduced Recovery rate
+Recover Full Life at the end of the Effect
+--------
+"Kaom fought and killed for his people.
+Kaom bled for his people.
+And so the people gave, the people bled,
+So their King might go on."
+- Lavianga, Advisor to Kaom
+--------
+Right click to drink. Can only hold charges while in belt. Refills as you kill monsters.
+
+
+
+// unique jewel
+
+
+Item Class: Abyss Jewels
+Rarity: Unique
+Amanamu's Gaze
+Ghastly Eye Jewel
+--------
+Abyss
+--------
+Requirements:
+Level: 40
+--------
+Item Level: 85
+--------
++6 to all Attributes
+Minions have +6% to Damage over Time Multiplier per
+Ghastly Eye Jewel affecting you, up to a maximum of +30%
+--------
+The Liege of the Lightless seeks dominion over the surface dwellers.
+--------
+Place into an Abyssal Socket on an Item or into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+--------
+Note: ~b/o 2 divine
+
+
+Item Class: Jewels
+Rarity: Unique
+Brutal Restraint
+Timeless Jewel
+--------
+Limited to: 1 Historic
+Radius: Large
+--------
+Item Level: 85
+--------
+Denoted service of 6412 dekhara in the akhara of Asenath
+Passives in radius are Conquered by the Maraketh
+Historic
+--------
+They believed themselves the most ordered, but that tradition turned their forests to salt.
+--------
+Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+--------
+Note: ~price 15 chaos
+
+
+
+Item Class: Jewels
+Rarity: Unique
+Voices
+Large Cluster Jewel
+--------
+Item Level: 84
+--------
+Adds 3 Jewel Socket Passive Skills
+Adds 7 Small Passive Skills which grant nothing
+--------
+Only a madman would ignore a god's instructions.
+--------
+Place into an allocated Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+--------
+Corrupted
+
+
+Item Class: Jewels
+Rarity: Unique
+Voices
+Large Cluster Jewel
+--------
+Item Level: 81
+--------
+Adds 3 Jewel Socket Passive Skills
+Adds 3 Small Passive Skills which grant nothing
+--------
+Only a madman would ignore a god's instructions.
+--------
+Place into an allocated Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+--------
+Corrupted
+--------
+Note: ~price 40 divine
+
+
+Item Class: Jewels
+Rarity: Unique
+Emperor's Might
+Crimson Jewel
+--------
+Limited to: 1
+--------
+Item Level: 83
+--------
+4% increased Strength
+10% increased Damage
+3% increased Character Size
+--------
+Even an iron fist can be handled with grace.
+--------
+Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+--------
+Note: ~price 5 divine
+
+
+
+
+
+
+// relic
+
+
+
+Item Class: Relics
+Rarity: Unique
+The First Crest
+Coffer Relic
+--------
+Item Level: 85
+--------
+Aureus Coins are converted to Tainted Currency upon defeating the Herald of the Scourge
+This item is destroyed when applied to a Sanctum
+--------
+"In pursuit of divinity, he tried many times to found a religion. Few followed his initial symbols and proverbs. He needed something greater. A symbol none could deny." - Lycia, the Heretic
+--------
+Place this item on the Relic Altar at the start of each Sanctum run
+--------
+Unmodifiable
+
+
+
+
+// Gem
+
+Item Class: Support Gems
+Rarity: Gem
+Awakened Enlighten Support
+--------
+Exceptional, Support
+Level: 4 (Max)
+Cost & Reservation Multiplier: 88%
+--------
+Requirements:
+Level: 78
+Int: 123
+--------
+Supports any skill gem. Once this gem reaches level 2 or above, will apply a cost & reservation multiplier to supported gems. Cannot support skills that don't come from gems.
+--------
+This is a Support Gem. It does not grant a bonus to your character, but to skills in sockets connected to it. Place into an item socket connected to a socket containing the Skill Gem you wish to augment. Right click to remove from a socket.
+--------
+Corrupted
+--------
+Note: ~price 65 divine
+
+
+Item Class: Support Gems
+Rarity: Gem
+Awakened Empower Support
+--------
+Exceptional, Support
+Level: 3
+Cost & Reservation Multiplier: 130%
+Quality: +20% (augmented)
+--------
+Requirements:
+Level: 76
+Str: 120
+--------
+Supports any skill gem. Once this gem reaches level 2 or above, will raise the level of supported gems. Cannot support skills that don't come from gems.
+--------
+This Gem gains 100% increased Experience
++2 to Level of Supported Skill Gems
+--------
+Experience: 1/420882786
+--------
+This is a Support Gem. It does not grant a bonus to your character, but to skills in sockets connected to it. Place into an item socket connected to a socket containing the Skill Gem you wish to augment. Right click to remove from a socket.
+--------
+Corrupted
+--------
+Note: ~b/o 28 divine
+
+
+Item Class: Support Gems
+Rarity: Gem
+Awakened Multistrike Support
+--------
+Attack, Melee, Support
+Level: 1
+Cost & Reservation Multiplier: 150%
+--------
+Requirements:
+Level: 72
+Str: 72
+Dex: 50
+--------
+Supports melee attack skills, making them repeat three times when used, targeting a random enemy each time. Cannot support Vaal skills, channelling skills, travel skills, retaliation skills or triggered skills.
+--------
+Supported Skills Repeat 3 additional times
+Supported Skills have 45% more Melee Attack Speed
+Supported Skills deal 20% less Attack Damage
+First Repeat of Supported Skills deals 22% more Damage
+Second Repeat of Supported Skills deals 44% more Damage
+Third Repeat of Supported Skills deals 66% more Damage
+--------
+Experience: 1/407097645
+--------
+This is a Support Gem. It does not grant a bonus to your character, but to skills in sockets connected to it. Place into an item socket connected to a socket containing the Skill Gem you wish to augment. Right click to remove from a socket.
+--------
+Note: ~price 144.9994 divine
+
+
+
+
+Item Class: Skill Gems
+Rarity: Gem
+Cobra Lash
+--------
+Attack, Projectile, Chaos
+Level: 21 (Max)
+Cost: 8 Mana
+Attack Speed: 120% of base
+Attack Damage: 209.2% of base
+Effectiveness of Added Damage: 209%
+Quality: +23% (augmented)
+--------
+Requirements:
+Level: 72
+Dex: 100
+Int: 70
+--------
+Fires a poisonous projectile based on your weapon that will chain between enemies. Requires a Dagger or Claw.
+--------
+8% more Damage with Hits and Ailments for each remaining Chain
+Chains +7 Times
+60% of Physical Damage Converted to Chaos Damage
+40% chance to Poison on Hit
+--------
+Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+--------
+Corrupted
+
+
+
+
+Item Class: Skill Gems
+Rarity: Gem
+Cobra Lash
+--------
+Attack, Projectile, Chaos
+Level: 20 (Max)
+Cost: 8 Mana
+Attack Speed: 120% of base
+Attack Damage: 205% of base
+Effectiveness of Added Damage: 205%
+Quality: +20% (augmented)
+--------
+Requirements:
+Level: 70
+Dex: 98
+Int: 68
+--------
+Fires a poisonous projectile based on your weapon that will chain between enemies. Requires a Dagger or Claw.
+--------
+8% more Damage with Hits and Ailments for each remaining Chain
+Chains +7 Times
+60% of Physical Damage Converted to Chaos Damage
+40% chance to Poison on Hit
+--------
+Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+--------
+Corrupted
+--------
+Note: ~b/o 5 chaos
+
+
+
+
+Item Class: Skill Gems
+Rarity: Gem
+Cobra Lash
+--------
+Attack, Projectile, Chaos
+Level: 20 (Max)
+Cost: 8 Mana
+Attack Speed: 120% of base
+Attack Damage: 205% of base
+Effectiveness of Added Damage: 205%
+Quality: +23% (augmented)
+--------
+Requirements:
+Level: 70
+Dex: 98
+Int: 68
+--------
+Fires a poisonous projectile based on your weapon that will chain between enemies. Requires a Dagger or Claw.
+--------
+8% more Damage with Hits and Ailments for each remaining Chain
+Chains +7 Times
+60% of Physical Damage Converted to Chaos Damage
+40% chance to Poison on Hit
+--------
+Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+--------
+Corrupted
+
+
+
+Item Class: Skill Gems
+Rarity: Gem
+Cleave
+--------
+Attack, Projectile, Chaos
+Level: 20 (Max)
+Cost: 8 Mana
+Attack Speed: 120% of base
+Attack Damage: 205% of base
+Effectiveness of Added Damage: 205%
+Quality: +23% (augmented)
+--------
+Requirements:
+Level: 70
+Dex: 98
+Int: 68
+--------
+Fires a poisonous projectile based on your weapon that will chain between enemies. Requires a Dagger or Claw.
+--------
+8% more Damage with Hits and Ailments for each remaining Chain
+Chains +7 Times
+60% of Physical Damage Converted to Chaos Damage
+40% chance to Poison on Hit
+--------
+Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+--------
+Corrupted
+
+
+
+
+
+Item Class: Skill Gems
+Rarity: Gem
+Cleave
+--------
+Attack, AoE, Vaal, Duration, Melee
+Level: 1
+Cost: 7 Mana
+Attack Speed: 80% of base
+Attack Damage: 179.4% of base
+Effectiveness of Added Damage: 179%
+--------
+Requirements:
+Level: 1
+--------
+The character swings their weapon (or both weapons if dual wielding) in an arc, damaging monsters in an area in front of them. Only works with Axes and Swords.
+--------
+When Dual Wielding, Deals 60% Damage from each Weapon combined
+--------
+Vaal Cleave
+--------
+Souls Per Use: 25
+Can Store 3 Uses
+Soul Gain Prevention: 4 sec
+Attack Speed: 80% of base
+Attack Damage: 287.5% of base
+Effectiveness of Added Damage: 287%
+--------
+The character swings their weapon (or both weapons if dual wielding) in an arc, damaging monsters in an area in front of them. Killing Blows on Rare or Unique enemies grant a buff that improves Cleave for a duration. Killing Blows on Rare Enemies also steal their modifiers for a secondary duration. Only works with Axes and Swords.
+--------
+When Dual Wielding, Deals 60% Damage from each Weapon combined
+Base duration is 20.00 seconds
+Base secondary duration is 20.00 seconds
++0.8 seconds to Attack Time
+Modifiers to Skill Effect Duration also apply to this Skill's Soul Gain Prevention
++1.5 metres to radius
+Culling Strike
+Can't be Evaded
+Buff grants Culling Strike with Cleave
+Buff grants 60% more Cleave Area of Effect
+Buff grants 60% more Cleave Damage with Hits and Ailments to Enemies that are on Low Life
+--------
+Experience: 1/70
+--------
+Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+--------
+Corrupted
+--------
+Note: ~price 1 alch
+
+
+Item Class: Skill Gems
+Rarity: Gem
+Cleave of Rage
+--------
+Attack, AoE, Melee
+Level: 21 (Max)
+Cost: 13 Mana
+Attack Speed: 80% of base
+Attack Damage: 538.5% of base
+Effectiveness of Added Damage: 538%
+Quality: +23% (augmented)
+--------
+Requirements:
+Level: 72
+Str: 100
+Dex: 70
+--------
+The character swings both their weapons in an arc, damaging monsters in an area in front of them. Requires dual wielding both an Axe and a Sword.
+--------
+When Dual Wielding, Deals 60% Damage from each Weapon combined
++0.1 metres to Radius per 5 Rage
+Gain 3 Rage on Attack Hit
+--------
+Place into an item socket of the right colour to gain this skill. Right click to remove from a socket.
+--------
+Corrupted
+--------
+Transfigured
+--------
+Note: ~price 1.9 divine
+
+
+
+// Cluster jewel
+
+Item Class: Jewels
+Rarity: Rare
+Sol Wound
+Small Cluster Jewel
+--------
+Requirements:
+Level: 67
+--------
+Item Level: 84
+--------
+Adds 3 Passive Skills (enchant)
+Added Small Passive Skills grant: 6% increased Mana Reservation Efficiency of Skills (enchant)
+--------
+Added Small Passive Skills also grant: +6 to All Attributes
+Added Small Passive Skills also grant: +51 to Armour
+Added Small Passive Skills also grant: 5% increased Mana Regeneration Rate
+Added Small Passive Skills also grant: +5 to Maximum Energy Shield
+--------
+Place into an allocated Small, Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+--------
+Corrupted
+
+
+
+Item Class: Jewels
+Rarity: Rare
+Dragon Glimmer
+Large Cluster Jewel
+--------
+Item Level: 54
+--------
+Adds 8 Passive Skills (enchant)
+2 Added Passive Skills are Jewel Sockets (enchant)
+Added Small Passive Skills grant: 12% increased Fire Damage (enchant)
+--------
+Added Small Passive Skills also grant: +17 to Armour
+Added Small Passive Skills also grant: +2 to Intelligence
+1 Added Passive Skill is Prismatic Heart
+--------
+Place into an allocated Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+--------
+Note: ~price 6.4 divine
+
+
+Item Class: Jewels
+Rarity: Rare
+Honour Curio
+Medium Cluster Jewel
+--------
+Item Level: 50
+--------
+Adds 4 Passive Skills (enchant)
+1 Added Passive Skill is a Jewel Socket (enchant)
+Added Small Passive Skills grant: 10% increased Projectile Damage (enchant)
+--------
+Added Small Passive Skills also grant: +14 to Armour
+Added Small Passive Skills also grant: +3 to Strength
+1 Added Passive Skill is Repeater
+--------
+Place into an allocated Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+
+
+
+
+
+
+// Map
+
+Item Class: Maps
+Rarity: Rare
+Festering Oubliette
+Ziggurat Map
+--------
+Map Tier: 17
+Item Quantity: +119% (augmented)
+Item Rarity: +71% (augmented)
+Monster Pack Size: +37% (augmented)
+More Maps: +50% (augmented)
+More Scarabs: +78% (augmented)
+More Currency: +70% (augmented)
+--------
+Item Level: 84
+--------
+Monster Level: 84
+--------
+100% more Monster Life
+22% increased Monster Damage
+Monsters have +1 to Maximum Endurance Charges
+Monsters gain an Endurance Charge when hit
+Players cannot Regenerate Life, Mana or Energy Shield
+Players have 25% less Area of Effect
+Rare Monsters have Volatile Cores
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Modifiable only with Chaos Orbs, Vaal Orbs, Delirium Orbs and Chisels
+
+
+
+
+Item Class: Maps
+Rarity: Rare
+Superior Forge of the Phoenix Map
+--------
+Map Tier: 16
+Item Quantity: +20% (augmented)
+Quality: +20% (augmented)
+--------
+Item Level: 82
+--------
+Monster Level: 83
+--------
+Area is influenced by The Shaper (implicit)
+--------
+Unidentified
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Note: ~price 8 chaos
+
+
+
+Item Class: Maps
+Rarity: Normal
+Strand Map
+--------
+Map Tier: 6
+--------
+Item Level: 83
+--------
+Monster Level: 73
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+
+
+Item Class: Maps
+Rarity: Unique
+Whakawairua Tuahu
+Strand Map
+--------
+Map Tier: 6
+Item Quantity: +53% (augmented)
+Item Rarity: +142% (augmented)
+--------
+Item Level: 83
+--------
+Monster Level: 73
+--------
+Area contains many Totems
+Curses have 50% reduced effect on Monsters
+--------
+We all began life in darkness, we shall all end it there.
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Note: ~price 4 chaos
+
+
+
+// BlightedMapPricer
+
+
+Item Class: Maps
+Rarity: Normal
+Blighted Jungle Valley Map
+--------
+Map Tier: 15
+--------
+Item Level: 83
+--------
+Monster Level: 82
+--------
+Area is infested with Fungal Growths (implicit)
+Map's Item Quantity Modifiers also affect Blight Chest count at 25% value (implicit)
+Can be Anointed up to 3 times (implicit)
+Natural inhabitants of this area have been removed (implicit)
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Note: ~b/o 5 chaos
+
+Item Class: Maps
+Rarity: Rare
+Haunted Trap
+Blighted Jungle Valley Map
+--------
+Map Tier: 15
+Item Quantity: +75% (augmented)
+Item Rarity: +33% (augmented)
+Monster Pack Size: +21% (augmented)
+Quality: +20% (augmented)
+--------
+Item Level: 83
+--------
+Monster Level: 82
+--------
+Area is infested with Fungal Growths (implicit)
+Map's Item Quantity Modifiers also affect Blight Chest count at 25% value (implicit)
+Can be Anointed up to 3 times (implicit)
+Natural inhabitants of this area have been removed (implicit)
+--------
+21% increased number of Rare Monsters
+Monsters have 70% chance to Avoid Elemental Ailments
+22% increased Monster Damage
++25% Monster Chaos Resistance
++40% Monster Elemental Resistances
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Corrupted
+
+
+
+
+// Blighted ravaged map
+
+Item Class: Maps
+Rarity: Rare
+Rugged Shadows
+Blight-ravaged Temple Map
+--------
+Map Tier: 15
+Item Quantity: +63% (augmented)
+Item Rarity: +26% (augmented)
+Monster Pack Size: +71% (augmented)
+Quality: +20% (augmented)
+--------
+Item Level: 81
+--------
+Monster Level: 85
+--------
+Varieties of Items contained in 36 Blight Chests are Lucky (enchant)
+21% chance for Blight Chests to contain an additional Reward (enchant)
+Lanes of Blight Encounters have 75% chance for an additional Reward Chest (enchant)
+--------
+Monster Level: 85 (implicit)
+200% more Monster Life (implicit)
+20% increased Monster Movement Speed (implicit)
+Area is infested with Fungal Growths (implicit)
+Map's Item Quantity Modifiers also affect Blight Chest count at 50% value (implicit)
+Can be Anointed up to 9 times (implicit)
+Natural inhabitants of this area have been removed (implicit)
+--------
+Area has increased monster variety
+30% more Monster Life
+Monsters reflect 18% of Elemental Damage
+Monsters cannot be Stunned
+Monsters take 40% reduced Extra Damage from Critical Strikes
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Corrupted
+
+
+
+Item Class: Maps
+Rarity: Normal
+Blight-ravaged Alleyways Map
+--------
+Map Tier: 16
+--------
+Item Level: 83
+--------
+Monster Level: 85
+--------
+Monster Level: 85 (implicit)
+200% more Monster Life (implicit)
+20% increased Monster Movement Speed (implicit)
+Area is infested with Fungal Growths (implicit)
+Map's Item Quantity Modifiers also affect Blight Chest count at 50% value (implicit)
+Can be Anointed up to 9 times (implicit)
+Natural inhabitants of this area have been removed (implicit)
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Note: ~price 44 chaos
+
+
+// Unique Map
+
+
+Item Class: Maps
+Rarity: Unique
+Doryani's Machinarium
+Maze Map
+--------
+Map Tier: 16
+Item Quantity: +45% (augmented)
+Item Rarity: +52% (augmented)
+--------
+Item Level: 84
+--------
+Monster Level: 83
+--------
+32% increased Experience gain
+Unique Boss is augmented by Player choices
+Found Items have 10% chance to drop Corrupted in Area
+--------
+We are ever the makers of our own undoing.
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Note: ~price 5.9 divine
+
+
+Item Class: Maps
+Rarity: Unique
+Infused Beachhead
+Harbinger Map
+--------
+Map Tier: 16
+Item Quantity: +94% (augmented)
+Item Rarity: +100% (augmented)
+--------
+Item Level: 84
+--------
+Monster Level: 83
+--------
+100% more Monster Life
+100% increased Monster Damage
+Unique Boss drops an additional Harbinger Scroll
+Area contains 20 additional Harbingers
+--------
+
+
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Corrupted
+--------
+Note: ~price 90 chaos
+
+
+Item Class: Maps
+Rarity: Unique
+Replica Pillars of Arun
+Dunes Map
+--------
+Map Tier: 2
+Item Quantity: +219% (augmented)
+Item Rarity: +208% (augmented)
+Monster Pack Size: +30% (augmented)
+--------
+Item Level: 84
+--------
+Monster Level: 69
+--------
+63% increased Experience gain
+Area contains unbridged gaps to cross
+Monsters have 50% chance to Avoid Ailments
+100% increased Monster Damage
+20% increased Monster Movement Speed
+23% increased Monster Attack Speed
+23% increased Monster Cast Speed
+Players have 200% increased Cooldown Recovery Rate for Movement Skills
+--------
+"Whatever these maps are, it is clear they are dangerous. Send in only
+test subjects, no guards or researchers."
+- Administrator Qotra
+--------
+Travel to this Map by using it in a personal Map Device. Maps can only be used once.
+--------
+Note: ~price 4 chaos
+
+
+
+
+
+// Delirium
+
+Item Class: Stackable Currency
+Rarity: Currency
+Diviner's Delirium Orb
+--------
+Stack Size: 1/10
+--------
+Modifies a Map item adding layers of Delirium with the Divination Cards reward type
+--------
+Right click this item then left click a Map item to apply it. Can apply up to 5 to a single Map item.
+
+Item Class: Stackable Currency
+Rarity: Currency
+Blacksmith's Delirium Orb
+--------
+Stack Size: 1/10
+--------
+Modifies a Map item adding layers of Delirium with the Weapons reward type
+--------
+Right click this item then left click a Map item to apply it. Can apply up to 5 to a single Map item.
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Fossilised Delirium Orb
+--------
+Stack Size: 1/10
+--------
+Modifies a Map item adding layers of Delirium with the Fossils reward type
+--------
+Right click this item then left click a Map item to apply it. Can apply up to 5 to a single Map item.
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Whispering Delirium Orb
+--------
+Stack Size: 1/10
+--------
+Modifies a Map item adding layers of Delirium with the Essences reward type
+--------
+Right click this item then left click a Map item to apply it. Can apply up to 5 to a single Map item.
+
+
+
+
+
+
+
+
+
+
+Item Class: Misc Map Items
+Rarity: Normal
+Screaming Invitation
+--------
+Item Level: 83
+--------
+Modifiers to Item Quantity affect the amount of rewards dropped by the boss (implicit)
+--------
+From the heart of the Tangle, the Eater of Worlds
+reaches out for control of the Atlas.
+--------
+Open portals to Absence of Symmetry and Harmony by using this item in a personal Map Device.
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Harbinger Scarab
+--------
+Stack Size: 1/20
+Limit: 4
+--------
+Area contains 3 additional Harbingers
+--------
+Their troops came in numbers uncountable and from lands unknown.
+--------
+Can be used in a personal Map Device to add modifiers to a Map.
+
+
+Item Class: Map Fragments
+Rarity: Normal
+Scarab of Wisps
+--------
+Stack Size: 43/20
+Limit: 2
+--------
+Monsters in Area have a chance to be Empowered by 2000 Wildwood Wisps
+--------
+The Draíocht connects everything that lives.
+--------
+Can be used in a personal Map Device to add modifiers to a Map.
+--------
+Note: ~price 1 chaos
+
+
+Item Class: Memories
+Rarity: Magic
+Einhar's Memory of Crystal Prisons
+--------
+Item Level: 85
+--------
+Areas contain additional Essences
+Essences contain Rogue Exiles
+--------
+Right-click on this, then left click on a completed Map on your Atlas to apply this Memory.
+--------
+Unmodifiable
+--------
+Note: ~price 75 chaos
+
+
+
+Item Class: Boots
+Rarity: Rare
+Oblivion Track
+Runic Sabatons
+--------
+Quality: +20% (augmented)
+Ward: 220 (augmented)
+--------
+Requirements:
+Level: 76
+Str: 46
+Dex: 46
+Int: 46
+--------
+Sockets: G-R-B-R
+--------
+Item Level: 86
+--------
++32 to Ward
+23% increased Ward
++2 to Level of all Raise Spectre Gems
++3% to maximum Fire Resistance
++20% to Fire Resistance
+10% increased Stun and Block Recovery
+Gain 8% of Physical Damage as Extra Lightning Damage
+--------
+Elder Item
+Crusader Item
+--------
+Note: ~price 25 divine
+
+
+Item Class: Amulets
+Rarity: Rare
+Rift Heart
+Focused Amulet
+--------
+Quality (Attribute Modifiers): +20% (augmented)
+--------
+Requirements:
+Level: 60
+--------
+Item Level: 84
+--------
+Allocates Indiscriminate Revenge (enchant)
+--------
+-1 Prefix Modifier allowed (implicit)
+-2 Suffix Modifiers allowed (implicit)
+Implicit Modifiers Cannot Be Changed (implicit)
+100% increased Explicit Modifier magnitudes (implicit)
+Item sells for much more to vendors (implicit)
+--------
+-2 to Level of all Skill Gems
+-2 to Level of all Physical Skill Gems
+48% reduced Warcry Speed (crafted)
+--------
+Mirrored
+--------
+Split
+--------
+Note: ~price 15 divine
+
+
+Rift Heart
+18148.86c - focused-amulet-82
+4448.25c - focused-amulet-84
+4448.25c - focused-amulet-86
+3772.12c - focused-amulet-83
+3558.6c - focused-amulet-85
+
+
+
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Serrated Fossil
+--------
+Stack Size: 4/20
+--------
+More Attack modifiers
+Fewer Caster modifiers
+--------
+Place in a Resonator to influence item crafting.
+Shift click to unstack.
+
+
+
+
+
+Item Class: Delve Stackable Socketable Currency
+Rarity: Currency
+Powerful Chaotic Resonator
+--------
+Stack Size: 1/10
+Requires 3 (unmet) Socketed Fossils
+--------
+Sockets: D D D
+--------
+Reforges a rare item with new random modifiers
+--------
+All sockets must be filled with Fossils before this item can be used.
+
+
+Item Class: Delve Stackable Socketable Currency
+Rarity: Currency
+Primitive Chaotic Resonator
+--------
+Stack Size: 1/10
+Requires 1 (unmet) Socketed Fossil
+--------
+Sockets: D
+--------
+Reforges a rare item with new random modifiers
+--------
+All sockets must be filled with Fossils before this item can be used.
+
+
+Item Class: Stackable Currency
+Rarity: Rare
+Zephyrbite the Mangy
+Scavenging Vulture
+--------
+Genus: Vultures
+Group: Avians
+Family: The Sands
+--------
+Item Level: 50
+--------
+Always Crits
+Extra Life
+Putrid Flight
+--------
+Right-click to add this to your bestiary.
+--------
+Note: ~price 20 chaos
+
+
+Item Class: Stackable Currency
+Rarity: Unique
+Fenumus, First of the Night
+--------
+Genus: Arachnoscorpions
+Group: Arachnids
+Family: The Caverns
+--------
+Item Level: 77
+--------
+Cannot be fully Slowed
+--------
+Right-click to add this to your bestiary.
+--------
+Note: ~price 20 chaos
+
+
+
+Item Class: Stackable Currency
+Rarity: Rare
+Fouldrool the Tyrant
+Black Mórrigan
+--------
+Genus: Goliaths
+Group: Unnaturals
+Family: The Wilds
+--------
+Item Level: 81
+--------
+Molten Shell
+Cannot be Slowed
+Burning Ground on Death
+Farric Presence
+Spectral Swipe
+Tiger Prey
+10% chance not to be consumed when sacrificed at the Blood Altar
+--------
+Right-click to add this to your bestiary.
+--------
+Note: ~price .9 divine
+
+
+
+
+
 Item Class: Stackable Currency
 Rarity: Currency
 Screaming Essence of Anger
@@ -207,3 +2204,38 @@ Other Jewellery: (23-26)% increased Fire Damage
 Right click this item then left click a normal or rare item to apply it.
 
 
+
+Item Class: Stackable Currency
+Rarity: Currency
+Essence of Horror
+--------
+Stack Size: 1/9
+--------
+Upgrades a normal item to rare or reforges a rare item, guaranteeing one property
+
+Weapon: 16% chance to gain a Power, Frenzy or Endurance Charge on Kill
+Gloves: Socketed Gems have +3.5% Critical Strike Chance
+Boots: 5% reduced Elemental Damage Taken while stationary
+Body Armour: You take 10% reduced Extra Damage from Critical Strikes per Endurance Charge
+Helmet: Socketed Gems deal 30% more Elemental Damage
+Shield: Chill Nearby Enemies when you Block
+Quiver: 8 to 12 Added Cold Damage per Frenzy Charge
+Amulet: (15-25)% chance to Crush on Hit
+Ring: 4 to 7 Added Cold Damage per Frenzy Charge
+Belt: Gain Alchemist's Genius when you use a Flask
+--------
+Right click this item then left click a normal or rare item to apply it.
+
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Vial of the Ritual
+--------
+Stack Size: 1/10
+--------
+The ritual creates order.
+Both in the minds of men and gods.
+The ritual creates order.
+--------
+Sacrifice this item on the Altar of Sacrifice along with Dance of the Offered to transform it.

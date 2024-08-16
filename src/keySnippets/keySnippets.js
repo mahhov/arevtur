@@ -31,9 +31,15 @@ let displayDevOptions = async () => {
 let priceClipboard = async itemText => {
 	if (!itemText || !await windowCheck())
 		return;
-	console.log('clipboard', itemText.slice(0, 100));
-	let pricerOutput = Pricer.getPrice(itemText).catch(e => []);
-	let pobOutput = pobApi.evalItem(itemText).catch(e => ({text: ''}));
+	// console.log('clipboard', itemText.slice(0, 100));
+	let pricerOutput = Pricer.getPrice(itemText).catch(e => {
+		console.error('Pricer failed', e);
+		return [];
+	});
+	let pobOutput = pobApi.evalItem(itemText).catch(e => {
+		// console.error('Pricer pobApi failed', e);
+		return {text: ''};
+	});
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
 	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
 	await viewHandle.showText([
@@ -41,8 +47,6 @@ let priceClipboard = async itemText => {
 		pobOutput.text ? '-'.repeat(30) : null,
 		pobOutput.text || null,
 	].filter(v => v).join('\n'), 0);
-	// todo[high] add config to set display duration
-	// todo[high] add shortcuts to lock/dismiss display
 };
 
 let windowCheck = async () => {
@@ -85,8 +89,8 @@ module.exports = {
 	trayOptions: appData.isDev ? [{label: 'Dev options', click: displayDevOptions}] : [],
 };
 
-// todo[high] a way to restart PoB for clipboard without having to open preferences. maybe set
+// todo[medium] a way to restart PoB for clipboard without having to open preferences. maybe set
 //  automatic restart count to 1 and do an explicit restart with each request if needed
 
 // todo[medium] estimate price of item mods
-// todo[high] generate search query for mods of selected item
+// todo[medium] generate search query for mods of selected item

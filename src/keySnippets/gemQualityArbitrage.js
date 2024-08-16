@@ -5,7 +5,7 @@ let str = num => (parseInt(num * 100) / 100).toString();
 
 let main = async () => {
 	let data = (await poeNinjaApi.getData(
-		poeNinjaApi.endpointsByLeague.GEM(config.config.league))).lines
+		poeNinjaApi.endpointsByLeague.SKILL_GEM(config.config.league))).lines
 		.reduce((data, {name, corrupted, gemLevel, gemQuality, chaosValue}) => {
 			let key = [corrupted && 'corrupted',
 				gemLevel === 20 && 'level',
