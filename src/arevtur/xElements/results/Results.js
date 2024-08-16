@@ -34,7 +34,7 @@ customElements.define(name, class Inputs extends XElement {
 
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
-				this.$('#search-input').focus();
+				this.$('#search-input').select();
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 

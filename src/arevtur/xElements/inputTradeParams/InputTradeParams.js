@@ -109,9 +109,8 @@ customElements.define(name, class extends XElement {
 			this.emit('change');
 		});
 		document.addEventListener('keydown', e => {
-			// todo[high] ctrl+f & g should select search text so it can be replaced easily
 			if (e.key === 'g' && e.ctrlKey)
-				this.$('#search-input').focus();
+				this.$('#search-input').select();
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 		this.$('#drop-implicit-mods-button').addEventListener('click', () => {

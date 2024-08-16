@@ -17,8 +17,8 @@ class TextItem {
 		// 	 text: string,
 		//	 lines: [], like lastLine,
 		//   lastLine: {line: string, words: string[], line split on space},
-		//   itemClass: string, 1st line, without first 2 words
-		//   itemRarity: string, 2nd line without first word
+		//   itemClass: string, 1st line, without first 2 words,
+		//   itemRarity: string, 2nd line without first word,
 		//   itemName1: string, 3rd line,
 		//   itemName2: string, 4th line,
 		// }
