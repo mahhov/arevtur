@@ -13,6 +13,11 @@ ipc.on('window-command', (_, command) => {
 		case 'setText':
 			updateText(command.text);
 			setVisibleContainer($('#text-container'));
+			ipcSend({
+				name: 'size',
+				width: $('#text-container').scrollWidth + 22,
+				height: $('#text-container').scrollHeight + 22,
+			});
 			break;
 		case 'setTable':
 			updateTable(command.rows);

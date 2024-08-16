@@ -35,6 +35,9 @@ class ViewHandle extends ViewHandleBase {
 				// todo[low] merge this file with keySnippet
 				pobApi.setParams();
 				break;
+			case 'size':
+				this.resize(600, message.height);
+				break;
 			default:
 				console.error('Unknown window message:', message);
 		}
@@ -46,15 +49,16 @@ class ViewHandle extends ViewHandleBase {
 	}
 
 	async showCommand(commandName, commandData, duration, widthPx, heightLines) {
+		heightLines = Math.min(heightLines, 40);
 		this.send({name: commandName, ...commandData});
 		await this.show(duration);
-		await this.resize(widthPx, 20 + 20 * heightLines);
+		await this.resize(widthPx, Math.ceil(22.17 + 18.27 * heightLines));
 		await this.moveToMouse();
 		await this.validateOnScreen();
 	}
 
 	async showText(text, duration) {
-		this.showCommand('setText', {text}, duration, 600, Math.min(text.split('\n').length, 40));
+		this.showCommand('setText', {text}, duration, 600, text.split('\n').length);
 	}
 
 	async showTable(rows, duration) {
