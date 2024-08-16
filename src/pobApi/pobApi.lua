@@ -43,7 +43,9 @@ function FakeTooltip:new()
     return o
 end
 function FakeTooltip:AddLine(_, text)
-    self.text = self.text .. text .. '\n'
+    if text then
+        self.text = self.text .. text .. '\n'
+    end
 end
 function FakeTooltip:AddSeparator()
     self.text = self.text .. '\n'

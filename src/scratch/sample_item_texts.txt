@@ -1,3 +1,29 @@
+Item Class: Jewels
+Rarity: Rare
+Brood Hope
+Crimson Jewel
+--------
+Item Level: 73
+--------
+6% increased Attack Speed while Dual Wielding
+Gain 2 Life per Enemy Hit with Attacks
+12% increased Shock Duration on Enemies
+3% chance to Shock
+--------
+Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+
+
+Item Class: Jewels
+Rarity: Magic
+Crimson Jewel
+--------
+Item Level: 75
+--------
+Unidentified
+--------
+Place into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+
+
 Item Class: Stackable Currency\n
 Rarity: Currency\n
 Wailing Essence of Suffering\n
@@ -1098,6 +1124,31 @@ Right click to drink. Can only hold charges while in belt. Refills as you kill m
 
 
 // unique jewel
+
+
+Item Class: Jewels
+Rarity: Unique
+Megalomaniac
+Medium Cluster Jewel
+--------
+Requirements:
+Level: 54
+--------
+Item Level: 84
+--------
+Adds 4 Passive Skills
+Added Small Passive Skills grant Nothing
+1 Added Passive Skill is Antifreeze
+1 Added Passive Skill is Endbringer
+1 Added Passive Skill is Fire Attunement
+--------
+If you're going to act like you're better than everyone else, make sure you are.
+--------
+Place into an allocated Medium or Large Jewel Socket on the Passive Skill Tree. Added passives do not interact with jewel radiuses. Right click to remove from the Socket.
+--------
+Corrupted
+
+
 
 Item Class: Jewels
 Rarity: Unique

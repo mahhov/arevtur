@@ -286,5 +286,4 @@ module.exports = new PobApi();
 //   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
 //  /Data/TimelessJewelData/GloriousVanity.bin
-// todo[blocking] crashing with jewels, cluster jewels, and mega jewel
-// todo[blocking] crashing with flasks
+// todo[high] tooltip not working for jewels, cluster jewels, mega jewels, flasks
