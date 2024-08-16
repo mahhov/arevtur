@@ -91,9 +91,9 @@ class Constants {
 			.map(({id, text, type}) => ({id, text: `${text} (${type})`}));
 		/*
 		[{
-      id: 'pseudo.pseudo_total_cold_resistance',
-      text: '+#% total to Cold Resistance (pseudo)',
-    }, ...]
+	      id: 'pseudo.pseudo_total_cold_resistance',
+	      text: '+#% total to Cold Resistance (pseudo)',
+	    }, ...]
 		*/
 	}
 
