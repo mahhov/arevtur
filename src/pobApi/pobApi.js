@@ -37,6 +37,8 @@ class Script extends CustomOsScript {
 	}
 
 	send(...args) {
+		if (this.cleared)
+			return Promise.reject('PobApi script already cleared');
 		let text = args.map(arg => `<${arg}>`).join(' ');
 		if (this.cache[text])
 			return this.cache[text];
@@ -282,6 +284,7 @@ module.exports = new PobApi();
 // todo[high] allow configs ignoring ES and excluding resists from effective health
 // todo[medium] failing when timeless jewel is equipped:
 //   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
-// back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
-// /Data/TimelessJewelData/GloriousVanity.bin
-
+//  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
+//  /Data/TimelessJewelData/GloriousVanity.bin
+// todo[blocking] crashing with jewels, cluster jewels, and mega jewel
+// todo[blocking] crashing with flasks
