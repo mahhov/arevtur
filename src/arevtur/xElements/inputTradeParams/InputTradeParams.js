@@ -316,9 +316,9 @@ customElements.define(name, class extends XElement {
 	}
 
 	applySearch() {
-		let searcher = new Searcher(this.$('#search-input').value, false);
+		let searcher = new Searcher(this.$('#search-input').value);
 		[...this.$('#query-properties-list').children].forEach(queryProperty => {
-			let match = this.$('#search-input').value && searcher.test([queryProperty.property]);
+			let match = this.$('#search-input').value && searcher.test(queryProperty.property);
 			queryProperty.classList.toggle('search-highlighted', match);
 		});
 	}

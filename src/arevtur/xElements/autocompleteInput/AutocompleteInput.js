@@ -41,7 +41,6 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				this.$('select').selectedIndex = this.$('select').length - 1;
 				this.$('select').focus();
 			} else if (e.key === 'Enter' || e.key === 'Tab') {
-				// todo[blocking] tabbing out after pressing enter in the dropdown clears the selection
 				let optionEl = this.$('select').options[0];
 				if (optionEl)
 					this.internalSetValue(optionEl.value, optionEl.title, true);
@@ -61,7 +60,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				e.key === 'ArrowUp' && this.$('select').selectedIndex === 0;
 			if (arrowOut)
 				e.preventDefault();
-			if (arrowOut || e.key === 'Escape' || e.key === 'Enter' || e.key === 'Tab' ||
+			if (arrowOut || e.key === 'Escape' || e.key === 'Tab' ||
 				e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
 				this.$('select').selectedIndex = -1;
 				this.$('input').focus();
@@ -141,13 +140,11 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		if (!input)
 			return [...Array(Math.min(array.length, maxSize))].map((_, i) => i);
 
-		let searcher = new Searcher(input, false);
+		let searcher = new Searcher(input);
 		let size = 0;
 		return array
 			.map((v, i) => {
-				if (size > maxSize)
-					return null;
-				if (!searcher.test([v.match(/[a-z]+|[A-Z][a-z]*|\d+|./g).join(' ')]))
+				if (size > maxSize || !searcher.test(v))
 					return null;
 				size++;
 				return i;
