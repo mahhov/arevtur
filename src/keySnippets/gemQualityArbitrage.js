@@ -29,3 +29,5 @@ let main = async () => {
 };
 
 module.exports = main;
+
+// todo[medium] graph dmg/health increase / chaos for each upgrade quality/lvl/awakened of a gem

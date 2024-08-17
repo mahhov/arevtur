@@ -2323,6 +2323,19 @@ Belt: Gain Alchemist's Genius when you use a Flask
 --------
 Right click this item then left click a normal or rare item to apply it.
 
+
+Item Class: Stackable Currency
+Rarity: Currency
+Remnant of Corruption
+--------
+Stack Size: 5/9
+--------
+Corrupts the Essences trapping a monster, modifying them unpredictably
+--------
+Right click this item then left click a monster trapped by Essences to corrupt them. Corrupted Essences cannot be modified again.
+Shift click to unstack.
+
+
 // vial
 
 Item Class: Stackable Currency

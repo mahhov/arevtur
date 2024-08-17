@@ -343,7 +343,8 @@ class ClusterJewelPricer extends Pricer {
 	}
 
 	priceString(item) {
-		return `${price(item.chaosValue)} - ${item.variant}, lvl ${item.levelRequired}, ${item.name}`;
+		return `${price(
+			item.chaosValue)} - ${item.variant}, lvl ${item.levelRequired}, ${item.name}`;
 	}
 }
 
@@ -507,11 +508,14 @@ class BeastPricer extends Pricer {
 
 class EssencePricer extends Pricer {
 	constructor() {
-		super(Filter.all({
-			itemClass: 'Stackable Currency',
-			itemRarity: 'Currency',
-			name2Contains: 'Essence of ',
-		}), [poeNinjaApi.endpointsByLeague.ESSENCE]);
+		super(Filter.and(
+			Filter.itemClass('Stackable Currency'),
+			Filter.itemRarity('Currency'),
+			Filter.or(
+				Filter.name2Contains('Essence of '),
+				Filter.name2Contains('Remnant of Corruption'),
+			),
+		), [poeNinjaApi.endpointsByLeague.ESSENCE]);
 	}
 }
 

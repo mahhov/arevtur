@@ -41,6 +41,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				this.$('select').selectedIndex = this.$('select').length - 1;
 				this.$('select').focus();
 			} else if (e.key === 'Enter' || e.key === 'Tab') {
+				// todo[blocking] tabbing out after pressing enter in the dropdown clears the selection
 				let optionEl = this.$('select').options[0];
 				if (optionEl)
 					this.internalSetValue(optionEl.value, optionEl.title, true);
