@@ -1,5 +1,5 @@
 const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
-const ViewHandle = require('./view/ViewHandle');
+const ViewHandle = require('./ViewHandle');
 const {config} = require('../services/config');
 const Pricer = require('./Pricer');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
