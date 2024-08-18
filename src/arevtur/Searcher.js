@@ -46,7 +46,7 @@ class Searcher {
 	}
 
 	testMulti(strings) {
-		return strings.some(string => this.test(string));
+		return this.test(strings.join(' '));
 	}
 }
 
