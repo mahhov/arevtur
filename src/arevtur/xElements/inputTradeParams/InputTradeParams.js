@@ -10,6 +10,7 @@ const {
 } = require('./Properties');
 const pobApi = require('../../../pobApi/pobApi');
 const Searcher = require('../../Searcher');
+const Macros = require('../../Macros');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -113,38 +114,24 @@ customElements.define(name, class extends XElement {
 				this.$('#search-input').select();
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
-		this.$('#drop-implicit-mods-button').addEventListener('click', () => {
-			[...this.$('#query-properties-list').children].forEach(queryProperty => {
-				if (queryProperty.property.includes('(implicit)'))
-					queryProperty.remove();
-			});
+		this.$('#drop-implicit-mods-button').addEventListener('click', async () => {
+			let unifiedQueryParams = await Macros.Input.dropImplicits(
+				await this.unifiedQueryParams);
+			await this.loadQueryParams(unifiedQueryParams);
 		});
-		// todo[high] merge attributes
-		this.$('#merge-resist-mods-button').addEventListener('click', () => {
-			let maxWeight = 0;
-			[...this.$('#query-properties-list').children].forEach(queryProperty => {
-				// todo[high] not very robust regex
-				if (queryProperty.property.match(/\+#% to .* resistances? \(explicit\)/i)) {
-					// todo[high] max is incorrect when removing a mod with multiple resists
-					maxWeight = Math.max(queryProperty.weight, maxWeight);
-					queryProperty.remove();
-				}
-			});
-			if (maxWeight) {
-				let queryProperty = this.addQueryProperty();
-				queryProperty.property = '+#% total Resistance (pseudo)';
-				queryProperty.weight = maxWeight;
-			}
-			this.propagateLockedWeights();
-			this.checkProperties(); // todo[medium] remove null 0 properties
-			this.applySearch();
-			this.emit('change');
+		this.$('#replace-resist-mods-button').addEventListener('click', async () => {
+			let unifiedQueryParams = await Macros.Input.replaceResists(
+				await this.unifiedQueryParams, pobApi.weights);
+			await this.loadQueryParams(unifiedQueryParams);
 		});
-		this.$('#enable-all-mods-button').addEventListener('click', () => {
-			[...this.$('#query-properties-list').children].forEach(
-				queryProperty => queryProperty.enabled = true);
-			this.checkProperties();
-			this.emit('change');
+		this.$('#replace-attribute-mods-button').addEventListener('click', async () => {
+			let unifiedQueryParams = await Macros.Input.replaceAttributes(
+				await this.unifiedQueryParams, pobApi.weights);
+			await this.loadQueryParams(unifiedQueryParams);
+		});
+		this.$('#enable-all-mods-button').addEventListener('click', async () => {
+			let unifiedQueryParams = Macros.Input.enableAll(await this.unifiedQueryParams);
+			await this.loadQueryParams(unifiedQueryParams);
 		});
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
