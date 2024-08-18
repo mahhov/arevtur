@@ -88,7 +88,7 @@ class Constants {
 		let response = await get('https://www.pathofexile.com/api/trade/data/stats');
 		return JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
-			.map(({id, text, type}) => ({id, text: `${text} (${type})`}));
+			.map(({id, text, type}) => ({id, text: `${text} (${type})`, originalText: text, type}));
 		/*
 		[{
 	      id: 'pseudo.pseudo_total_cold_resistance',
@@ -107,9 +107,9 @@ class Constants {
 		return properties.find(property => property.text === text)?.id;
 	}
 
-	async propertyIdToText(id) {
+	async propertyById(id) {
 		let properties = await this.properties;
-		return properties.find(property => property.id === id)?.text;
+		return properties.find(property => property.id === id);
 	}
 
 	// currencies

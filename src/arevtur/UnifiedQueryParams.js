@@ -74,7 +74,7 @@ class UnifiedQueryParams {
 		XElement.clearChildren(inputElement.$('#query-properties-list'));
 		this.sharedWeightEntries.map(async ([property, weight, locked, enabled]) => {
 			let queryProperty = inputElement.addQueryProperty();
-			queryProperty.property = await ApiConstants.constants.propertyIdToText(property);
+			queryProperty.property = (await ApiConstants.constants.propertyById(property))?.text;
 			queryProperty.weight = weight;
 			queryProperty.filter = 'weight';
 			queryProperty.locked = locked;
@@ -87,7 +87,7 @@ class UnifiedQueryParams {
 				this[key].forEach(async ([property, weight, locked, enabled]) => {
 					let queryProperty = inputElement.addQueryProperty();
 					queryProperty.property =
-						await ApiConstants.constants.propertyIdToText(property);
+						(await ApiConstants.constants.propertyById(property))?.text;
 					queryProperty.filter = filter;
 					queryProperty.weight = weight;
 					queryProperty.locked = locked;
@@ -97,7 +97,7 @@ class UnifiedQueryParams {
 				this[key].forEach(async ([property, enabled]) => {
 					let queryProperty = inputElement.addQueryProperty();
 					queryProperty.property =
-						await ApiConstants.constants.propertyIdToText(property);
+						(await ApiConstants.constants.propertyById(property))?.text;
 					queryProperty.filter = filter;
 					queryProperty.enabled = enabled;
 				});
