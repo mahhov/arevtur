@@ -70,6 +70,7 @@ class ItemData {
 		this.valueBuildPromise.then(resolved => this.valueBuildPromise.resolved = resolved);
 
 		this.valueCraftPromise = this.craftValue();
+		this.valueCraftPromise.then(resolved => this.valueCraftPromise.resolved = resolved);
 
 		this.priceDetails = {
 			count: tradeApiItemData.listing.price.amount,
@@ -111,7 +112,8 @@ class ItemData {
 	async craftValue() {
 		// todo[high] do extra trade requests to get uncorrupted + open affix items
 		if (this.corrupted || this.mirrored || this.split)
-			return Promise.resolve({value: 0, text: 'Unmodifiable'});
+			return this.valueBuildPromise.then(valueBuild =>
+				({value: valueBuild.value, text: 'Unmodifiable'}));
 
 		let openAffixes = [];
 		if (this.affixes.prefix < 3)
@@ -119,7 +121,8 @@ class ItemData {
 		if (this.affixes.suffix < 3)
 			openAffixes.push('Suffix');
 		if (!openAffixes.length)
-			return Promise.resolve({value: 0, text: 'No open affix'});
+			return this.valueBuildPromise.then(valueBuild =>
+				({value: valueBuild.value, text: 'No open affix'}));
 
 		// '0.52% of ...' -> '#% of ...'
 		let existingMods = [this.fracturedMods, this.explicitMods]
@@ -130,7 +133,8 @@ class ItemData {
 
 		// todo[high] consider replacing crafted mod
 		if (this.craftedMods.length)
-			return Promise.resolve({value: 0, text: 'Already crafted'});
+			return this.valueBuildPromise.then(valueBuild =>
+				({value: valueBuild.value, text: 'Already crafted'}));
 
 		// todo[high] only consider mods that have >0 value
 		let craftableMods = (await pobApi
@@ -154,7 +158,8 @@ class ItemData {
 				.every(craftableStat => !existingMods.includes(craftableStat)));
 
 		if (!craftableMods.length)
-			return Promise.resolve({value: 0, text: 'No craftable mods'});
+			return this.valueBuildPromise.then(valueBuild =>
+				({value: valueBuild.value, text: 'No craftable mods'}));
 
 		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
 			pobApi.evalItemWithCraft(this.text, craftableMod)));

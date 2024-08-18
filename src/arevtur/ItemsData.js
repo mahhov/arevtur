@@ -10,13 +10,18 @@ class ItemsData extends Emitter {
 			sortY: item => item.evalValue,
 			showFilter: item => true,
 			trigger: null,
-		},
-		{
+		}, {
 			name: 'Build sorting',
 			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above. Does not consider craftable affixes.',
 			sortY: item => item.valueBuildPromise.resolved.value,
 			showFilter: item => item.valueBuildPromise.resolved,
 			trigger: item => item.valueBuildPromise,
+		}, {
+			name: 'Build + craft sorting',
+			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above. Considers craftable affixes.',
+			sortY: item => item.valueCraftPromise.resolved.value,
+			showFilter: item => item.valueCraftPromise.resolved,
+			trigger: item => item.valueCraftPromise,
 		},
 	];
 
