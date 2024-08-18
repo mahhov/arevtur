@@ -81,6 +81,10 @@ customElements.define(name, class extends XElement {
 			this.$('#value-build').text = valueBuild.value;
 			this.$('#value-build').tooltip = valueBuild.text;
 		});
+		itemData.valueCraftPromise.then(value => {
+			this.$('#value-craft').text = 'crafts ready';
+			this.$('#value-craft').tooltip = value;
+		});
 		this.$('#price-text').textContent = round(itemData.price);
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
 			.map(([name, value]) => ` + ${name} (${round(value)} chaos)`);

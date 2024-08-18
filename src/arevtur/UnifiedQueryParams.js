@@ -26,7 +26,7 @@ class UnifiedQueryParams {
 	maxPrice = 1;
 	offline = false;
 	defenseProperties = {}; // {armour, evasion, energyShield: {weight: 0, min: 0}}
-	affixProperties = {};   // {prefix, suffix: 0}
+	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
 	linked = false;
 	uncorrupted = false;
 	nonUnique = false;

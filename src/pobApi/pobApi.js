@@ -163,6 +163,11 @@ class PobApi extends Emitter {
 			this.weights.int, includeCorrupted).then(JSON.parse);
 	}
 
+	async getCraftedMods() {
+		let jsonString = await this.send('getCraftedMods');
+		return Object.values(JSON.parse(jsonString.replaceAll(',  }', '}')));
+	}
+
 	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
 		itemText = PobApi.clean(itemText);
 

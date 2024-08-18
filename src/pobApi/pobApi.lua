@@ -68,7 +68,11 @@ function toJson(o)
         end
         return s .. ' } '
     else
-        return tostring(o)
+        if type(o) == 'number' then
+            return tostring(o)
+        else
+            return '"' .. tostring(o) .. '"'
+        end
     end
 end
 
@@ -211,5 +215,10 @@ while true do
         -- todo[medium] allow picking mod sets, e.g. talisman, corrupted, influence, eldritch
         -- todo[low] json params
         -- todo[low] make sure these all work for characters with empty slots
+
+    elseif cmd == 'getCraftedMods' then
+        local response = toJson(data.masterMods)
+        respond('craft mods length: ' .. #response, true)
+        respond(response)
     end
 end

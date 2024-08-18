@@ -178,6 +178,8 @@ const SORT = {
 };
 
 // From PoB src/Classes/ItemsTab.lua
+// maps trade api types to pob equipment slot
+// todo[medium] rename POB_SLOTS
 const POB_TYPES = {
 	'weapon': 'Weapon 1',
 	'weapon.one': 'Weapon 1',
@@ -211,8 +213,46 @@ const POB_TYPES = {
 	'accessory.ring': 'Ring 1',
 	'accessory.belt': 'Belt',
 	'jewel': 'Jewel Any',
-	'jewel.base': 'jewel Base',
-	'jewel.abyss': 'jewel Abyss',
+	'jewel.base': 'Jewel Base',
+	'jewel.abyss': 'Jewel Abyss',
+};
+
+// map trade api type to pob crafting type
+const POB_CRAFT_TYPES = {
+	'weapon': 'One Handed Axe',
+	'weapon.one': 'One Handed Axe',
+	'weapon.onemelee': 'One Handed Axe',
+	'weapon.twomelee': 'Two Handed Axe',
+	'weapon.bow': 'Bow',
+	'weapon.claw': 'Claw',
+	'weapon.dagger': 'Dagger',
+	'weapon.basedagger': 'Dagger',
+	'weapon.runedagger': 'Dagger',
+	'weapon.oneaxe': 'One Handed Axe',
+	'weapon.onesword': 'One Handed Sword',
+	'weapon.onemace': 'One Handed Mace',
+	'weapon.basemace': 'One Handed Mace',
+	'weapon.sceptre': 'Sceptre',
+	'weapon.staff': 'Staff',
+	'weapon.basestaff': 'Staff',
+	'weapon.warstaff': 'Staff',
+	'weapon.twoaxe': 'Two Handed Axe',
+	'weapon.twomace': 'Two Handed Mace',
+	'weapon.twosword': 'Two Handed Sword',
+	'weapon.wand': 'Wand',
+	'weapon.rod': 'One Handed Axe',
+	'accessory.amulet': 'Amulet',
+	'armour.helmet': 'Helmet',
+	'armour.shield': 'Shield',
+	'armour.quiver': 'Quiver',
+	'armour.chest': 'Body Armour',
+	'armour.gloves': 'Gloves',
+	'armour.boots': 'Boots',
+	'accessory.ring': 'Ring',
+	'accessory.belt': 'Belt',
+	'jewel': 'not craftable',
+	'jewel.base': 'not craftable',
+	'jewel.abyss': 'not craftable',
 };
 
 module.exports = {

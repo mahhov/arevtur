@@ -193,9 +193,11 @@ class TradeQuery {
 					queriesTotal: requestGroups.length + 1,
 					itemCount,
 				});
-				let items = await Promise.all(data2.result.map(
-					async itemData => await ItemData.create(this.league, this.affixValueShift,
-						this.defenseProperties, this.priceShifts, itemData)));
+				let items = data2.result.map(itemData =>
+					new ItemData(this.league, this.affixValueShift, this.defenseProperties,
+						this.priceShifts, itemData));
+				// todo[high] let users wait on pricePromise and rm this await
+				await Promise.all(items.map(item => item.pricePromise));
 				itemStream.write(items);
 				return items;
 			});
