@@ -121,12 +121,12 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#replace-resist-mods-button').addEventListener('click', async () => {
 			let unifiedQueryParams = await Macros.Input.replaceResists(
-				await this.unifiedQueryParams, pobApi.weights);
+				await this.unifiedQueryParams);
 			await this.loadQueryParams(unifiedQueryParams);
 		});
 		this.$('#replace-attribute-mods-button').addEventListener('click', async () => {
 			let unifiedQueryParams = await Macros.Input.replaceAttributes(
-				await this.unifiedQueryParams, pobApi.weights);
+				await this.unifiedQueryParams);
 			await this.loadQueryParams(unifiedQueryParams);
 		});
 		this.$('#enable-all-mods-button').addEventListener('click', async () => {

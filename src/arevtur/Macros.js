@@ -1,5 +1,6 @@
 const ApiConstants = require('./ApiConstants');
 const Searcher = require('./Searcher');
+const pobApi = require('../pobApi/pobApi');
 
 class Macros {
 	static  Input = {
@@ -17,20 +18,20 @@ class Macros {
 				(await ApiConstants.constants.propertyById(propertyId))?.type !== 'implicit');
 		},
 
-		replaceResists: async (unifiedQueryParams, buildParamWeights) => {
+		replaceResists: async unifiedQueryParams => {
 			// /(\+#%|total|to|all|and|cold|fire|lightning|chaos|elemental|resistances?|\s)+/
 			let searcher = new Searcher(
 				'= +#% total to all and cold fire lightning chaos elemental resistance resistances');
 			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
 				!searcher.test(
 					(await ApiConstants.constants.propertyById(propertyId))?.originalText));
-			if (buildParamWeights.resist)
+			if (pobApi.weights.resist)
 				unifiedQueryParams.weightEntries.push(
-					['pseudo.pseudo_total_resistance', buildParamWeights.resist, false, false]);
+					['pseudo.pseudo_total_resistance', pobApi.weights.resist, false, false]);
 			return unifiedQueryParams;
 		},
 
-		replaceAttributes: async (unifiedQueryParams, buildParamWeights) => {
+		replaceAttributes: async unifiedQueryParams => {
 			let searchers = ['strength', 'dexterity', 'intelligence'].map(
 				attribute => new Searcher(`+# to !gem !passive !per !while !with ${attribute}`));
 			for (let searcher of searchers) {
@@ -39,9 +40,9 @@ class Macros {
 						(await ApiConstants.constants.propertyById(propertyId))?.originalText));
 			}
 			[
-				['pseudo.pseudo_total_strength', buildParamWeights.str],
-				['pseudo.pseudo_total_dexterity', buildParamWeights.dex],
-				['pseudo.pseudo_total_intelligence', buildParamWeights.int],
+				['pseudo.pseudo_total_strength', pobApi.weights.str],
+				['pseudo.pseudo_total_dexterity', pobApi.weights.dex],
+				['pseudo.pseudo_total_intelligence', pobApi.weights.int],
 			]
 				.filter(tuple => tuple[1])
 				.forEach(tuple => unifiedQueryParams.weightEntries.push([...tuple, false, false]));
