@@ -12,6 +12,7 @@ class Script extends CustomOsScript {
 		this.cache = {};
 		this.addListener(response => this.onScriptResponse(response));
 		this.cleared = false;
+		this.inProgressResponse = '';
 	}
 
 	spawnProcess(pobPath) {
@@ -28,12 +29,23 @@ class Script extends CustomOsScript {
 			this.clear();
 			return;
 		}
-		// console.log('PobApi response:', out);
-		if (out && !this.cleared)
-			out.split('.>')
-				.map(split => split.split('<.')[1])
-				.filter(v => v !== undefined) // last value after split will be undefined
-				.forEach(resolve => this.pendingResponses.shift().resolve(resolve));
+		// console.log('PobApi response:',
+		// 	out.length > 100 ? (out.slice(0, 50), '...', out.slice(-50)), out);
+		if (out && !this.cleared) {
+			out
+				.split(/(<\.|\.>)/)
+				.filter(v => v)
+				.forEach(part => {
+					if (part === '<.') {
+						this.inProgressResponse = '';
+					} else if (part === '.>') {
+						this.pendingResponses.shift().resolve(this.inProgressResponse);
+						this.inProgressResponse = '';
+					} else {
+						this.inProgressResponse += part;
+					}
+				});
+		}
 	}
 
 	send(...args) {
