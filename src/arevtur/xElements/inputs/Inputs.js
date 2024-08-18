@@ -198,7 +198,7 @@ customElements.define(name, class Inputs extends XElement {
 
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
-		let tradeQuery = this.inputSets
+		let tradeQueries = this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet =>
 				UnifiedQueryParams
@@ -209,8 +209,8 @@ customElements.define(name, class Inputs extends XElement {
 
 		// todo[medium] move this to InputTradeParams and remove import button, instead
 		//  automatically update url <-> form when either one changes
-		this.$('#input-import-trade-search-url').url = tradeQuery[0].toApiHtmlUrl;
+		this.$('#input-import-trade-search-url').url = tradeQueries[0].toApiHtmlUrl;
 
-		return tradeQuery;
+		return tradeQueries;
 	}
 });

@@ -54,6 +54,8 @@ customElements.define(name, class extends XElement {
 		this.$('#item-level-text').textContent = itemData.itemLevel;
 
 		this.$('#corrupted-text').classList.toggle('hidden', !itemData.corrupted);
+		this.$('#mirrored-text').classList.toggle('hidden', !itemData.mirrored);
+		this.$('#split-text').classList.toggle('hidden', !itemData.split);
 
 		listTuples.forEach(([containerQuery, propertyName]) => {
 			XElement.clearChildren(this.$(containerQuery));
