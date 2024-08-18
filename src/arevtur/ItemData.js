@@ -1,5 +1,6 @@
 const ApiConstants = require('./ApiConstants');
 const pobApi = require('../pobApi/pobApi');
+const util = require('../util/util');
 
 class ItemData {
 	constructor(league, affixValueShift, queryDefenseProperties, priceShifts,
@@ -157,13 +158,7 @@ class ItemData {
 
 		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
 			pobApi.evalItemWithCraft(this.text, craftableMod)));
-		let bestValue = 0, bestI = 0;
-		craftableMods.forEach((craftableMod, i) => {
-			if (craftableMod.value > bestValue) {
-				bestValue = craftableMod.value;
-				bestI = i;
-			}
-		});
+		let bestI = util.maxIndex(craftableMods.map(craftableMod => craftableMod.value));
 		return craftableMods[bestI];
 	}
 }

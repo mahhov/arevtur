@@ -15,6 +15,7 @@ let deepMerge = (target, source) => {
 
 module.exports = {
 	minIndex: array => array.indexOf(Math.min(...array)),
+	maxIndex: array => array.indexOf(Math.max(...array)),
 	clamp: (value, min, max) => Math.min(Math.max(value, min), max),
 	deepMerge,
 	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
