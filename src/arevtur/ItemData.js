@@ -68,10 +68,7 @@ class ItemData {
 		this.valueBuildPromise = pobApi.evalItem(this.text);
 		this.valueBuildPromise.then(resolved => this.valueBuildPromise.resolved = resolved);
 
-		this.valueCraftPromise = ItemData.craftValue(this.itemClass,
-			this.corrupted || this.mirrored || this.split, this.affixes,
-			tradeApiItemData.item.fracturedMods || [], tradeApiItemData.item.explicitMods || [],
-			tradeApiItemData.item.craftedMods || []);
+		this.valueCraftPromise = this.craftValue();
 
 		this.priceDetails = {
 			count: tradeApiItemData.listing.price.amount,
@@ -110,37 +107,35 @@ class ItemData {
 		return Buffer.from(string64, 'base64').toString();
 	};
 
-	// todo[high] too many params
-	static async craftValue(itemClass, corrupted, affixes, fracturedMods, explicitMods,
-	                        craftedMods) {
+	async craftValue() {
 		// todo[high] do extra trade requests to get uncorrupted + open affix items
-		if (corrupted)
-			return;
+		if (this.corrupted || this.mirrored || this.split)
+			return Promise.resolve({value: 0, text: 'Unmodifiable'});
 
 		let openAffixes = [];
-		if (affixes.prefix < 3)
+		if (this.affixes.prefix < 3)
 			openAffixes.push('Prefix');
-		if (affixes.suffix < 3)
+		if (this.affixes.suffix < 3)
 			openAffixes.push('Suffix');
 		if (!openAffixes.length)
-			return;
+			return Promise.resolve({value: 0, text: 'No open affix'});
 
 		// '0.52% of ...' -> '#% of ...'
-		let existingMods = [fracturedMods, explicitMods]
+		let existingMods = [this.fracturedMods, this.explicitMods]
 			.flat()
 			.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
-		// let craftedMods = craftedMods
+		// let craftedMods = this.craftedMods
 		// 	.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
 
 		// todo[high] consider replacing crafted mod
-		if (craftedMods.length)
-			return;
+		if (this.craftedMods.length)
+			return Promise.resolve({value: 0, text: 'Already crafted'});
 
 		// todo[high] only consider mods that have >0 value
 		let craftableMods = (await pobApi
 			.getCraftedMods())
 			.filter(craftableMod => openAffixes.includes(craftableMod.type))
-			.filter(craftableMod => craftableMod.types[itemClass])
+			.filter(craftableMod => craftableMod.types[this.itemClass])
 			.map(craftableMod => {
 				craftableMod.key = Object.values(craftableMod.statOrder).join();
 				return craftableMod;
@@ -154,15 +149,23 @@ class ItemData {
 			.map(craftableMod => [craftableMod[1], craftableMod[2]].filter(v => v))
 			.filter(craftableMod => craftableMod
 				// 'Regenerate (1.8-3) ...' -> 'Regenerate # ...'
-				.map(craftableStat =>
-					craftableStat.replaceAll(/\(\d+(\.\d+)?-\d+(\.\d+)?\)/g, '#'))
+				.map(craftableStat => craftableStat.replaceAll(/\(\d+(\.\d+)?-\d+(\.\d+)?\)/g, '#'))
 				.every(craftableStat => !existingMods.includes(craftableStat)));
 
-		// todo[high] compute value of each craftable mod
-		return craftableMods;
+		if (!craftableMods.length)
+			return Promise.resolve({value: 0, text: 'No craftable mods'});
+
+		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
+			pobApi.evalItemWithCraft(this.text, craftableMod)));
+		let bestValue = 0, bestI = 0;
+		craftableMods.forEach((craftableMod, i) => {
+			if (craftableMod.value > bestValue) {
+				bestValue = craftableMod.value;
+				bestI = i;
+			}
+		});
+		return craftableMods[bestI];
 	}
 }
 
 module.exports = ItemData;
-
-// todo[high] chart not re-centering as more items get added async after build eval

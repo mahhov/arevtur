@@ -81,9 +81,9 @@ customElements.define(name, class extends XElement {
 			this.$('#value-build').text = valueBuild.value;
 			this.$('#value-build').tooltip = valueBuild.text;
 		});
-		itemData.valueCraftPromise.then(value => {
-			this.$('#value-craft').text = 'crafts ready';
-			this.$('#value-craft').tooltip = value;
+		itemData.valueCraftPromise.then(valueCraft => {
+			this.$('#value-craft').text = `Craft: ${valueCraft.value}`;
+			this.$('#value-craft').tooltip = valueCraft.text;
 		});
 		this.$('#price-text').textContent = round(itemData.price);
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)

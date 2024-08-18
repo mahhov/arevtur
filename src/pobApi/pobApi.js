@@ -131,6 +131,15 @@ class PobApi extends Emitter {
 			.then(text => this.parseItemTooltip(text));
 	}
 
+	evalItemWithCraft(item, craftedMods) {
+		if (!item.toLowerCase().includes('requirements:') &&
+			!item.toLowerCase().includes('sockets:'))
+			return Promise.reject('Item missing requirements & sockets');
+		item = [item, '// Craft:', ...craftedMods].join('\n');
+		return this.send('item', item.replace(/[\n\r]+/g, ' \\n '))
+			.then(text => this.parseItemTooltip(text, 1, craftedMods));
+	}
+
 	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
@@ -151,7 +160,7 @@ class PobApi extends Emitter {
 
 		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
 		return this.send('mod', itemMod, pobType)
-			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, itemMod));
+			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod]));
 	}
 
 	async getModWeights(type = undefined, includeCorrupted = true) {
@@ -168,7 +177,7 @@ class PobApi extends Emitter {
 		return Object.values(JSON.parse(jsonString.replaceAll(',  }', '}')));
 	}
 
-	parseItemTooltip(itemText, valueScale = 1, textPrefix = '') {
+	parseItemTooltip(itemText, valueScale = 1, textPrefixes = []) {
 		itemText = PobApi.clean(itemText);
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
@@ -216,8 +225,8 @@ class PobApi extends Emitter {
 		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue);
 
 		let summaryText = [
-			textPrefix ? `@bold,green ${textPrefix}` : '',
-			textPrefix ? '-'.repeat(30) : '',
+			...textPrefixes.map(textPrefix => `@bold,pink ${textPrefix}`),
+			textPrefixes.length ? '-'.repeat(30) : '',
 			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
 			this.weights.life && diff.effectiveHitPool ?
 				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
@@ -234,8 +243,8 @@ class PobApi extends Emitter {
 			`@bold,green Value ${PobApi.round(diff.unscaledValue, 3)}`,
 			'-'.repeat(30),
 			...itemText.split('\n').map(itemTextLine => {
-				if (textPrefix && itemTextLine === textPrefix)
-					return `@bold,green ${itemTextLine}`;
+				if (textPrefixes.some(textPrefix => itemTextLine === textPrefix))
+					return `@bold,pink ${itemTextLine}`;
 				if (itemTextLine.match(effectiveHitPoolRegex))
 					return `@bold,blue ${itemTextLine}`;
 				if (itemTextLine.match(anyItemResistRegex))
@@ -252,6 +261,8 @@ class PobApi extends Emitter {
 					return `@bold,light-green ${itemTextLine}`;
 				if (itemTextLine.match(/^equipping this item/i))
 					return `@bold,green ${itemTextLine}`;
+				if (itemTextLine.match(/^\/\/ Craft:$/i))
+					return `@bold,pink ${itemTextLine}`;
 				if (itemTextLine.match(/^tip: /i))
 					return null;
 				return itemTextLine;
