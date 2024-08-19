@@ -309,7 +309,7 @@ class PobApi extends Emitter {
 // singleton
 module.exports = new PobApi();
 
-// todo[high] allow configs ignoring ES and excluding resists from effective health
+// todo[blocking] allow configs ignoring ES and excluding resists from effective health
 // todo[medium] failing when timeless jewel is equipped:
 //   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,

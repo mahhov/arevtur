@@ -237,5 +237,3 @@ class TradeQuery {
 }
 
 module.exports = {TradeQuery};
-
-// todo[high] merge all resist mods when importing
