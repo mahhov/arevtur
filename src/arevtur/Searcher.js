@@ -36,17 +36,21 @@ class Searcher {
 	test(string) {
 		string = string.toLowerCase();
 		return (
-			this.requiredWords.every(word => string.includes(word)) &&
+			this.requiredWords.every(word => string.match(Searcher.startWordRegex(word))) &&
 			(!this.allowedWords.length || string
 				.split(/\s+/)
 				.filter(v => v)
 				.every(stringWord => this.allowedWords.includes(stringWord))) &&
-			this.unallowedWords.every(word => !string.includes(word))
+			this.unallowedWords.every(word => !string.match(Searcher.startWordRegex(word)))
 		);
 	}
 
 	testMulti(strings) {
 		return this.test(strings.join(' '));
+	}
+
+	static startWordRegex(word) {
+		return new RegExp(`(^|[^a-z])${word}`);
 	}
 }
 
