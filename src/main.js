@@ -1,11 +1,13 @@
 const path = require('path');
 const {TrayHelper} = require('js-desktop-base');
-require('./services/config');
 const keySnippet = require('./keySnippets/keySnippets');
+let googleAnalytics = require('./services/googleAnalytics');
+
+googleAnalytics.emitStartup();
+
 let windows = [
 	require('./updateCheck/updateCheck'),
 	require('./arevtur/arevtur'),
-	// require('./modViewer/modViewer'), // todo[low] either remove or get it working
 ];
 
 let trayIcon = path.join(__dirname, '../resources/icons/fa-dollar-sign-solid-256.png');

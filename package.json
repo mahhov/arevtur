@@ -13,7 +13,7 @@
     "bs-better-stream": "^1.9.5",
     "electron-updater": "^6.2.1",
     "env-paths": "^2.2.0",
-    "js-desktop-base": "^5.4.5",
+    "js-desktop-base": "^5.5.1",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {

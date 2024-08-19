@@ -13,24 +13,10 @@ class Config extends Emitter {
 		try {
 			deepMerge(this.config, require(appData.configPath));
 		} catch (e) {
-			// For the first run, config.json won't exist. This is expected and ok.
+			// for the first run, config.json won't exist
 		}
 
-		ipcMain.handle('config-change', async (event, newConfig) => {
-			let oldConfigJson = JSON.stringify(this.config, '', 2);
-			deepMerge(this.config, newConfig);
-			let newConfigJson = JSON.stringify(this.config, '', 2);
-			if (oldConfigJson === newConfigJson)
-				return;
-			this.emit('change', this.config);
-			// console.log('Updated config', JSON.stringify(this.config, 2, 2));
-			try {
-				await fs.mkdir(appData.basePath, {recursive: true});
-				await fs.writeFile(appData.configPath, newConfigJson);
-			} catch (e) {
-				console.error('Failed to save config', appData.configPath, e);
-			}
-		});
+		ipcMain.handle('config-change', (event, newConfig) => this.updateConfig(newConfig));
 
 		let added = [];
 		ipcMain.handle('listen-config-change', event => {
@@ -41,8 +27,24 @@ class Config extends Emitter {
 			event.sender.send('config-changed', this.config);
 		});
 	}
+
+	async updateConfig(newConfig) {
+		let oldConfigJson = JSON.stringify(this.config, '', 2);
+		deepMerge(this.config, newConfig);
+		let newConfigJson = JSON.stringify(this.config, '', 2);
+		if (oldConfigJson === newConfigJson)
+			return;
+		this.emit('change', this.config);
+		// console.log('Updated config', JSON.stringify(this.config, 2, 2));
+		try {
+			await fs.mkdir(appData.basePath, {recursive: true});
+			await fs.writeFile(appData.configPath, newConfigJson);
+		} catch (e) {
+			console.error('Failed to save config', appData.configPath, e);
+		}
+	}
 }
 
-module.exports = {config: new Config(), defaultConfig};
+module.exports = new Config();
 
 // todo[medium] viewHorizontal & viewMaximize should use local storage, see git branch configButton

@@ -1,5 +1,5 @@
 const poeNinjaApi = require('../services/poeNinjaApi');
-const {config} = require('../services/config');
+const config = require('../services/config');
 const Filter = require('./Filter');
 
 // todo[medium] dedupe the multiple round util functions
