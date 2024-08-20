@@ -48,10 +48,10 @@ class Script extends CustomOsScript {
 		}
 	}
 
-	send(...args) {
+	send(argsObj) {
 		if (this.cleared)
 			return Promise.reject('PobApi script already cleared');
-		let text = args.map(arg => `<${arg}>`).join(' ');
+		let text = JSON.stringify(argsObj);
 		if (this.cache[text])
 			return this.cache[text];
 		let promise = new XPromise();
@@ -105,15 +105,15 @@ class PobApi extends Emitter {
 		this.emit('change');
 		console.log('PobApi creating new script', this.pobPath, this.buildPath);
 		this.script = new Script(this.pobPath);
-		this.send('build', this.buildPath);
+		this.send({cmd: 'build', path: this.buildPath});
 		// this.send('extraBuildMods', '+1000% to all Resistances \\n maximum energy shield is 0');
 	}
 
-	async send(...args) {
+	async send(argsObj) {
 		if (!this.script)
 			return Promise.reject('Ignoring PoB requests until script has started');
 		this.emit('busy');
-		let response = this.script.send(...args);
+		let response = this.script.send(argsObj);
 		response
 			.then(() => {
 				if (!this.script.pendingResponses.length)
@@ -128,7 +128,7 @@ class PobApi extends Emitter {
 		if (!item.toLowerCase().includes('requirements:') &&
 			!item.toLowerCase().includes('sockets:'))
 			return Promise.reject('Item missing requirements & sockets');
-		return this.send('item', item.replace(/[\n\r]+/g, ' \\n '))
+		return this.send({cmd: 'item', text: item.replace(/[\n\r]+/g, ' \\n ')})
 			.then(text => this.parseItemTooltip(text));
 	}
 
@@ -137,7 +137,7 @@ class PobApi extends Emitter {
 			!item.toLowerCase().includes('sockets:'))
 			return Promise.reject('Item missing requirements & sockets');
 		item = [item, '// Craft:', ...craftedMods].join('\n');
-		return this.send('item', item.replace(/[\n\r]+/g, ' \\n '))
+		return this.send({cmd: 'item', text: item.replace(/[\n\r]+/g, ' \\n ')})
 			.then(text => this.parseItemTooltip(text, 1, craftedMods));
 	}
 
@@ -160,7 +160,7 @@ class PobApi extends Emitter {
 				.replace(/total/i, '');
 
 		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
-		return this.send('mod', itemMod, pobType)
+		return this.send({cmd: 'mod', mod: itemMod, type: pobType})
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod]));
 	}
 
@@ -168,14 +168,14 @@ class PobApi extends Emitter {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return Promise.reject('PoB getModWeights missing type');
-		return this.send('getModWeights', pobType, this.weights.life,
-			this.weights.resist, this.weights.damage, this.weights.str, this.weights.dex,
-			this.weights.int, includeCorrupted).then(JSON.parse);
+		return this.send({
+			cmd: 'getModWeights', type: pobType, weights: this.weights, includeCorrupted,
+		}).then(JSON.parse);
 	}
 
 	async getCraftedMods() {
-		let jsonString = await this.send('getCraftedMods');
-		return Object.values(JSON.parse(jsonString.replaceAll(',  }', '}')));
+		let jsonString = await this.send({cmd: 'getCraftedMods'});
+		return Object.values(JSON.parse(jsonString));
 	}
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefixes = []) {
