@@ -4,7 +4,7 @@ package.path = package.path .. ';' .. scriptPath .. '?.lua' -- HeadlessWrapper
 package.path = package.path .. ';' .. './lua/?.lua' -- xml
 
 -- linux
-package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno & xml
+package.path = package.path .. ';../runtime/lua/?.lua' -- dkjson & xml
 
 function respond(response, debug)
     if not debug then
@@ -18,6 +18,7 @@ respond('script started', true)
 
 require('HeadlessWrapper')
 respond('HeadlessWrapper loaded', true)
+
 local dkjson = require 'dkjson'
 respond('dkjson loaded', true)
 
@@ -55,6 +56,7 @@ function getArgs(input)
     -- parses a string, e.g. '<x> <3> <4>', into array of strings
     args = {}
     for arg in input:gmatch('<(.-)>') do
+        arg = arg:gsub([[\n]], '\n') -- replace escaped \\n with real \n
         table.insert(args, arg)
     end
     return args
@@ -76,14 +78,21 @@ function toJson(o)
     end
 end
 
-local defaultItem = {
-    raw = [[
-                        Item Class: Amulets
-                        Rarity: Rare
-                        Empyrean Collar
-                        Citrine Amulet
-                    ]]
-}
+local sampleItemAmulet = [[
+    Item Class: Amulets
+    Rarity: Rare
+    Empyrean Collar
+    Citrine Amulet
+]]
+
+function loadExtraMods(mods)
+    local itemText = sampleItemAmulet .. '\n' .. mods
+    local item = new('Item', itemText)
+    item.type = 'extraSlot'
+    build.itemsTab:AddItem(item)
+    build.buildFlag = true
+    build:OnFrame({})
+end
 
 -- override the legion timeless jewel reads because Inflate is hard to replicate
 data.readLUT = function()
@@ -109,13 +118,20 @@ while true do
     elseif cmd == 'build' then
         -- args[2] is build xml path
         loadBuildFromXML(readFile(args[2]))
+        -- copied from `ItemsTab addSlot`
+        local slot = new("ItemSlotControl", nil, 0, 0, build.itemsTab, 'extraSlot')
+        build.itemsTab.slots[slot.slotName] = slot
+        table.insert(build.itemsTab.orderedSlots, slot)
+        build.itemsTab.slotOrder[slot.slotName] = #build.itemsTab.orderedSlots
+        table.insert(build.itemsTab.controls, slot)
+        build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
         respond('build loaded')
 
     elseif cmd == 'item' then
         -- args[2] is item text
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
-        local itemText = args[2]:gsub([[\n]], '\n') -- replace escaped \\n with real \n
+        local itemText = args[2]
         local item = new('Item', itemText)
         if item.base then
             local tooltip = FakeTooltip:new()
@@ -126,14 +142,14 @@ while true do
         end
 
     elseif cmd == 'mod' then
-        -- args[2] is type, e.g. 'Amulet'
-        -- args[3] is mod, e.g. '+100 evasion'
+        -- args[2] is mod, e.g. '+100 evasion'
+        -- args[3] is type, e.g. 'Amulet'
         -- given a mod and item type, see what adding that mod to the currently equipped item of
         -- that type would do for the build
         local slots = build.itemsTab.slots
         local slot = slots[args[3]]
         if slot then
-            local equippedItem = build.itemsTab.items[slot.selItemId] or defaultItem
+            local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
             local newItem = new('Item', equippedItem.raw .. '\n' .. args[2])
             local tooltip = FakeTooltip:new()
             build.itemsTab:AddItemTooltip(tooltip, newItem)
@@ -220,5 +236,8 @@ while true do
         local response = toJson(data.masterMods)
         respond('craft mods length: ' .. #response, true)
         respond(response)
+
+    else
+        respond('unrecognized command ' .. cmd)
     end
 end

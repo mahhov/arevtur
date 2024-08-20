@@ -29,8 +29,8 @@ class Script extends CustomOsScript {
 			this.clear();
 			return;
 		}
-		// console.log('PobApi response:',
-		// 	out.length > 100 ? (out.slice(0, 50), '...', out.slice(-50)), out);
+		console.log('PobApi response:',
+			out.length > 100 ? `${out.slice(0, 50)}...${out.slice(-50)}` : out);
 		if (out && !this.cleared) {
 			out
 				.split(/(<\.|\.>)/)
@@ -106,6 +106,7 @@ class PobApi extends Emitter {
 		console.log('PobApi creating new script', this.pobPath, this.buildPath);
 		this.script = new Script(this.pobPath);
 		this.send('build', this.buildPath);
+		// this.send('extraBuildMods', '+1000% to all Resistances \\n maximum energy shield is 0');
 	}
 
 	async send(...args) {
