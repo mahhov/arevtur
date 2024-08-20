@@ -2,12 +2,11 @@
 	@import '../sharedStyle.css';
 
 	:host {
-		display: contents;
+		display: inline-block;
 	}
 
 	.container {
-		display: inline-block;
-		outline: inherit;
+		display: contents;
 	}
 
 	.container:has(button:empty) {
@@ -22,6 +21,9 @@
 		z-index: 1;
 		font-size: 14px;
 		padding: 5px;
+		left: 0;
+		right: 0;
+		min-width: 300px;
 	}
 
 	.container:not(:hover) #tooltip, #tooltip:not([text]), #tooltip[text=''] {
