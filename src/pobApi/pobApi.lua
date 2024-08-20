@@ -52,11 +52,15 @@ function FakeTooltip:AddSeparator()
     self.text = self.text .. '\n'
 end
 
+function emplaceNewLines(string)
+    return string:gsub([[\n]], '\n') -- replace escaped \\n with real \n
+end
+
 function getArgs(input)
     -- parses a string, e.g. '<x> <3> <4>', into array of strings
     args = {}
     for arg in input:gmatch('<(.-)>') do
-        arg = arg:gsub([[\n]], '\n') -- replace escaped \\n with real \n
+        arg = emplaceNewLines(arg)
         table.insert(args, arg)
     end
     return args
@@ -109,7 +113,7 @@ while true do
     elseif args.cmd == 'item' then
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
-        local item = new('Item', args.text)
+        local item = new('Item', emplaceNewLines(args.text))
         if item.base then
             local tooltip = FakeTooltip:new()
             build.itemsTab:AddItemTooltip(tooltip, item)

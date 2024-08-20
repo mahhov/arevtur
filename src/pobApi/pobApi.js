@@ -29,8 +29,9 @@ class Script extends CustomOsScript {
 			this.clear();
 			return;
 		}
-		console.log('PobApi response:',
-			out.length > 100 ? `${out.slice(0, 50)}...${out.slice(-50)}` : out);
+		let maxLength = 200;
+		console.log('PobApi response:', out.length > maxLength ?
+			`${out.slice(0, maxLength / 2)}...${out.slice(-maxLength / 2)}` : out);
 		if (out && !this.cleared) {
 			out
 				.split(/(<\.|\.>)/)

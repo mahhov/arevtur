@@ -131,6 +131,8 @@ class ItemData {
 		// let craftedMods = this.craftedMods
 		// 	.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
 
+		// todo[high] consider cost of crafts
+
 		// todo[high] consider replacing crafted mod
 		if (this.craftedMods.length)
 			return this.valueBuildPromise.then(valueBuild =>
