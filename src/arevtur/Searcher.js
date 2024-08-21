@@ -1,11 +1,12 @@
 const assert = require('assert');
 
 // case insensitive
-// not necessarily at a word boundary
+// must be at a word boundary
 // not necessarily in order
-// 'x y' means 'x' and 'y' must be contained in 'string'
-// 'x !y' means 'x' must be contained in 'string', but 'y' must not be
-// 'x = y' means 'x' must be contained in 'string', and string must only consist of 'x' and 'y'
+// 'x y' means 'x' and 'y' must be contained in `string`
+// 'x !y' means 'x' must be contained in `string`, but 'y' must not be
+// 'x = y' means 'x' must be contained in `string`, and `string` must only consist of 'x' and 'y'
+// 'x_y' means 'x y' must be contained in `string` (as opposed to 'x' and 'y' individually)
 class Searcher {
 	constructor(searchText) {
 		this.requiredWords = [];
@@ -36,12 +37,12 @@ class Searcher {
 	test(string) {
 		string = string.toLowerCase();
 		return (
-			this.requiredWords.every(word => string.match(Searcher.startWordRegex(word))) &&
+			this.requiredWords.every(word => string.match(Searcher.toRegex(word))) &&
 			(!this.allowedWords.length || string
 				.split(/\s+/)
 				.filter(v => v)
 				.every(stringWord => this.allowedWords.includes(stringWord))) &&
-			this.unallowedWords.every(word => !string.match(Searcher.startWordRegex(word)))
+			this.unallowedWords.every(word => !string.match(Searcher.toRegex(word)))
 		);
 	}
 
@@ -49,8 +50,9 @@ class Searcher {
 		return this.test(strings.join(' '));
 	}
 
-	static startWordRegex(word) {
-		return new RegExp(`(^|[^a-z])${word}`);
+	static toRegex(word) {
+		// word boundary & replace '_'
+		return new RegExp(`(^|[^a-z])${word.replaceAll('_', ' ')}`);
 	}
 }
 
@@ -59,10 +61,16 @@ assert(searcher.test('+5% cold resistance'));
 assert(searcher.test('+5% cold and lightning resistance'));
 assert(!searcher.test('+5% cold and fire resistance'));
 assert(!searcher.test('lots of cold resistance'));
+
 searcher = new Searcher('cold = resist fire');
 assert(searcher.test('cold resist'));
 assert(!searcher.test('fire resist'));
 assert(searcher.test('cold fire resist'));
 assert(!searcher.test('cold fire lightning resist'));
+
+searcher = new Searcher('cold_resist !fire_resist');
+assert(searcher.test('cold resist fire lightning resist'));
+assert(!searcher.test('cold fire resist fire lightning resist'));
+assert(!searcher.test('cold resist fire resist'));
 
 module.exports = Searcher;
