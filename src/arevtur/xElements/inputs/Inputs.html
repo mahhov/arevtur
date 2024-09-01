@@ -23,8 +23,12 @@
 		padding: inherit;
 	}
 
-	#input-set-list x-input-set.dragging {
-		outline: 1px solid var(--interactable-focus-border);
+	#input-set-list x-input-set {
+		border: 1px solid transparent;
+	}
+
+	#input-set-list x-input-set:where(.selected, .active, .dragging) {
+		border: 1px solid var(--interactable-focus-border);
 	}
 
 	#input-trade-params {

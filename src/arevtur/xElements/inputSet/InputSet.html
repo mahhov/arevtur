@@ -1,7 +1,7 @@
 <style>
 	@import '../sharedStyle.css';
 
-	#container {
+	:host {
 		display: inline-block;
 	}
 
@@ -12,16 +12,10 @@
 		border-left: none;
 	}
 
-	#container.selected * {
-		border-color: var(--interactable-focus-border);
-	}
-
-	#container.active:not(.selected) * {
-		background-color: var(--interactable-active-back);
+	input {
+		border: 0;
 	}
 </style>
 
-<div id="container">
-	<input id="name" placeholder="name">
-	<button id="remove">X</button>
-</div>
+<input id="name" placeholder="name">
+<button id="remove">X</button>
