@@ -9,7 +9,7 @@ const round = (number, decimals = 2) => {
 };
 
 const price = (number, invert) => Number.isNaN(number) ? '?' :
-	`${round(invert ? 1 / number : number)}${invert ? '1/c' : 'c'}`;
+	`${round(invert ? 1 / number : number)}${invert ? '/c' : 'c'}`;
 
 class TextItem {
 	constructor(text) {
