@@ -1,9 +1,9 @@
 const path = require('path');
 const {TrayHelper} = require('js-desktop-base');
 const keySnippet = require('./keySnippets/keySnippets');
-let googleAnalytics = require('./services/googleAnalytics');
+const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
 
-googleAnalytics.emitStartup();
+googleAnalyticsForMain.emitStartup();
 
 let windows = [
 	require('./updateCheck/updateCheck'),

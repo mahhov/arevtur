@@ -5,6 +5,8 @@ const Emitter = require('../util/Emitter');
 const {deepMerge} = require('../util/util');
 const defaultConfig = require('./defaultConfig.json');
 
+// todo[low] rename configForMain, and move into config dir
+
 // keeps config in sync between windows
 class Config extends Emitter {
 	constructor() {

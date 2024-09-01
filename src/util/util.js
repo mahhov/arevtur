@@ -13,11 +13,37 @@ let deepMerge = (target, source) => {
 	return target;
 };
 
+let deepCopy = obj => {
+	if (typeof obj !== 'object' || obj === null)
+		return obj;
+	if (Array.isArray(obj))
+		return obj.map(v => deepCopy(v));
+	return Object.fromEntries(Object.entries(obj)
+		.map(([k, v]) => [k, deepCopy(v)]));
+};
+
+let flattenObject = (obj, separator = '_') => {
+	if (typeof obj !== 'object' || obj === null)
+		return obj;
+	return Object.entries(obj).reduce((flatObj, [key, value]) => {
+		value = flattenObject(value);
+		if (typeof value !== 'object' || value === null)
+			flatObj[key] = value;
+		else
+			Object.entries(value).forEach(([key2, value]) => {
+				flatObj[`${key}${separator}${key2}`] = value;
+			});
+		return flatObj;
+	}, {});
+};
+
 module.exports = {
 	minIndex: array => array.indexOf(Math.min(...array)),
 	maxIndex: array => array.indexOf(Math.max(...array)),
 	clamp: (value, min, max) => Math.min(Math.max(value, min), max),
 	deepMerge,
+	deepCopy,
+	flattenObject,
 	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
-	// todo[low] move un-classed methods like deepCopy and static methods like decode64 here
+	// todo[low] move un-classed & static methods like decode64 here
 };

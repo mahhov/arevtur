@@ -1,20 +1,12 @@
 const ApiConstants = require('./ApiConstants');
 const {XElement} = require('xx-element');
+const {deepCopy} = require('../util/util');
 const {
 	defensePropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
 	queryPropertyFilters,
 } = require('./xElements/inputTradeParams/Properties');
-
-let deepCopy = obj => {
-	if (typeof obj !== 'object' || obj === null)
-		return obj;
-	if (Array.isArray(obj))
-		return obj.map(v => deepCopy(v));
-	return Object.fromEntries(Object.entries(obj)
-		.map(([k, v]) => [k, deepCopy(v)]));
-};
 
 let pruneIfEmptyFilters = obj =>
 	Object.values(obj.filters).filter(v => v !== undefined).length ? obj : undefined;

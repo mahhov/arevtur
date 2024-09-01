@@ -52,6 +52,8 @@
 <script type="module">
 	const {webFrame} = require('electron');
 	const {clamp, transpose} = require('../util/util');
+	const googleAnalyticsForRenderer = require(
+		'../services/googleAnalytics/googleAnalyticsForRenderer');
 
 	const $ = document.querySelector.bind(document);
 
@@ -102,6 +104,8 @@
 		let factor = clamp(webFrame.getZoomLevel() + sign, -8, 0);
 		webFrame.setZoomLevel(factor);
 	});
+
+	googleAnalyticsForRenderer.emit('arevtur_loaded');
 
 	// todo[low] assume quality 0% & catalysts
 	// todo[low] allow ignoring or overriding anointments
