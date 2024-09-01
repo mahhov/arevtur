@@ -9,6 +9,7 @@ class ItemData {
 		this.name = tradeApiItemData.item.name;
 		this.type = tradeApiItemData.item.typeLine; // e.g. 'Gold Amulet'
 		this.itemLevel = tradeApiItemData.item.ilvl;
+		this.rarity = tradeApiItemData.item.rarity;
 		this.corrupted = tradeApiItemData.item.corrupted;
 		this.mirrored = tradeApiItemData.item.duplicated;
 		this.split = tradeApiItemData.item.split;
@@ -111,7 +112,7 @@ class ItemData {
 
 	async craftValue() {
 		// todo[high] do extra trade requests to get uncorrupted + open affix items
-		if (this.corrupted || this.mirrored || this.split)
+		if (this.rarity === 'Unique' || this.corrupted || this.mirrored || this.split)
 			return this.valueBuildPromise.then(valueBuild =>
 				({value: valueBuild.value, text: 'Unmodifiable'}));
 
@@ -128,8 +129,6 @@ class ItemData {
 		let existingMods = [this.fracturedMods, this.explicitMods]
 			.flat()
 			.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
-		// let craftedMods = this.craftedMods
-		// 	.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
 
 		// todo[high] consider cost of crafts
 
