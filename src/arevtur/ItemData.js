@@ -138,26 +138,42 @@ class ItemData {
 			return this.valueBuildPromise.then(valueBuild =>
 				({value: valueBuild.value, text: 'Already crafted'}));
 
-		// todo[high] only consider mods that have >0 value
 		let craftableMods = (await pobApi
 			.getCraftedMods())
+			// check if item has open prefix/suffix
 			.filter(craftableMod => openAffixes.includes(craftableMod.type))
+			// check if craft applies to item type
 			.filter(craftableMod => craftableMod.types[this.itemClass])
+			// add key to dedupe different tiers of similar crafts
 			.map(craftableMod => {
 				craftableMod.key = Object.values(craftableMod.statOrder).join();
 				return craftableMod;
 			});
+		// find highest tier of similar crafts
 		let seenCraftableMods = craftableMods.reduce((seen, craftableMod) => {
 			seen[craftableMod.key] = Math.max(craftableMod.level, seen[craftableMod.key] || 0);
 			return seen;
 		}, {});
 		craftableMods = craftableMods
+			// skip lower tier crafts
 			.filter(craftableMod => craftableMod.level === seenCraftableMods[craftableMod.key])
+			// map to stats
 			.map(craftableMod => [craftableMod[1], craftableMod[2]].filter(v => v))
+			// skip stats the item already has
 			.filter(craftableMod => craftableMod
 				// 'Regenerate (1.8-3) ...' -> 'Regenerate # ...'
 				.map(craftableStat => craftableStat.replaceAll(/\(\d+(\.\d+)?-\d+(\.\d+)?\)/g, '#'))
 				.every(craftableStat => !existingMods.includes(craftableStat)));
+
+		// skip crafts that don't benefit build
+		craftableMods = await Promise.all(craftableMods.map(
+			async craftableMod => {
+				craftableMod.eval =
+					// todo[high] use correct slot
+					await pobApi.evalItemModSummary('Amulet', craftableMod.join('\n'), 0);
+				return craftableMod;
+			}));
+		craftableMods = craftableMods.filter(craftableMod => craftableMod.eval.value);
 
 		if (!craftableMods.length)
 			return this.valueBuildPromise.then(valueBuild =>
