@@ -17,13 +17,12 @@
 		width: 60px;
 	}
 
-	/* todo[high] query property highlighting is hard to distinguish */
-	#query-properties-list x-query-property.dragging {
-		outline: 1px solid var(--interactable-focus-border);
+	#query-properties-list x-query-property {
+		border: 1px solid transparent;
 	}
 
-	#query-properties-list x-query-property.search-highlighted {
-		outline: 1px solid var(--interactable-focus-border);
+	#query-properties-list x-query-property:where(:hover, .dragging, .search-highlighted) {
+		border: 1px solid var(--interactable-focus-border);
 	}
 
 	#search-input {
