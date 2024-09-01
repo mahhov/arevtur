@@ -125,8 +125,7 @@ while true do
     elseif args.cmd == 'mod' then
         -- given a mod and item type, see what adding that mod to the currently equipped item of
         -- that type would do for the build
-        local slots = build.itemsTab.slots
-        local slot = slots[args.type]
+        local slot = build.itemsTab.slots[args.type]
         if slot then
             local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
             local newItem = new('Item', equippedItem.raw .. '\n' .. args.mod)

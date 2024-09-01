@@ -142,7 +142,8 @@ class PobApi extends Emitter {
 			.then(text => this.parseItemTooltip(text, 1, craftedMods));
 	}
 
-	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1, raw = false) {
+	// todo[low] rename evalItemMod
+	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1) {
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType || !itemMod)
 			return Promise.reject('PoB evalItemModSummary missing type or mod');
@@ -224,7 +225,7 @@ class PobApi extends Emitter {
 			};
 		});
 
-		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue);
+		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue) || '';
 
 		let summaryText = [
 			...textPrefixes.map(textPrefix => `@bold,pink ${textPrefix}`),
