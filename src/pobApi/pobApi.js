@@ -126,17 +126,17 @@ class PobApi extends Emitter {
 	}
 
 	evalItem(item) {
-		if (!item.toLowerCase().includes('requirements:') &&
-			!item.toLowerCase().includes('sockets:'))
-			return Promise.reject('Item missing requirements & sockets');
+		if (!['requirements:', 'sockets:', 'Item Class: Jewels']
+			.some(search => item.toLowerCase().includes(search)))
+			return Promise.reject('Item is unequippable');
 		return this.send({cmd: 'item', text: item.replace(/[\n\r]+/g, ' \\n ')})
 			.then(text => this.parseItemTooltip(text));
 	}
 
 	evalItemWithCraft(item, craftedMods) {
-		if (!item.toLowerCase().includes('requirements:') &&
-			!item.toLowerCase().includes('sockets:'))
-			return Promise.reject('Item missing requirements & sockets');
+		if (!['requirements:', 'sockets:', 'Item Class: Jewels']
+			.some(search => item.toLowerCase().includes(search)))
+			return Promise.reject('Item is unequippable');
 		item = [item, '// Craft:', ...craftedMods].join('\n');
 		return this.send({cmd: 'item', text: item.replace(/[\n\r]+/g, ' \\n ')})
 			.then(text => this.parseItemTooltip(text, 1, craftedMods));
