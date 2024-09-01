@@ -79,6 +79,13 @@
 				$('x-results').updateItemsProgress(queriesComplete / queriesTotal, itemCount);
 			}),
 		);
+		await itemStreams[0].promise;
+		googleAnalyticsForRenderer.emit('arevturQueryComplete', {
+			queryCount: tradeQueries.length,
+			type: tradeQueries[0].type,
+			maxPrice: tradeQueries[0].maxPrice,
+			itemCount: $('x-results').expectedCount,
+		});
 	};
 
 	let cancelQueries = () => {
@@ -105,7 +112,7 @@
 		webFrame.setZoomLevel(factor);
 	});
 
-	googleAnalyticsForRenderer.emit('arevtur_loaded');
+	googleAnalyticsForRenderer.emit('arevturLoaded');
 
 	// todo[low] assume quality 0% & catalysts
 	// todo[low] allow ignoring or overriding anointments

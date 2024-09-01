@@ -25,7 +25,7 @@ class GoogleAnalyticsForMain {
 			this.emit(eventName, eventParams));
 	}
 
-	async emit(eventName, eventParams) {
+	async emit(eventName, eventParams = undefined) {
 		let body = {
 			client_id: clientId,
 			user_id: String(config.config.gaUserId),

@@ -6,6 +6,7 @@ const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
 const pobApi = require('../pobApi/pobApi');
 const appData = require('../services/appData');
+const googleAnalyticsForMain = require('../services/googleAnalytics/googleAnalyticsForMain');
 
 let viewHandle = new ViewHandle();
 
@@ -17,6 +18,7 @@ let displayGemQualityArbitrage = async () => {
 		viewHandle.hide();
 	else {
 		let rows = await gemQualityArbitrage();
+		googleAnalyticsForMain.emit('gemQualityArbitrageUsed');
 		await viewHandle.showTable(rows, 6000);
 	}
 };
@@ -42,6 +44,8 @@ let priceClipboard = async itemText => {
 	});
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
 	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
+	googleAnalyticsForMain.emit('pricerUsed',
+		{pricer: pricerOutput.length, pob: !!pobOutput.text});
 	await viewHandle.showText([
 		...pricerOutput,
 		pobOutput.text ? '-'.repeat(30) : null,

@@ -7,3 +7,10 @@ class GoogleAnalyticsForRenderer {
 }
 
 module.exports = new GoogleAnalyticsForRenderer();
+
+// todo[high] log events for:
+//  - adding query
+//  - chart interaction
+//  - setting sort
+//  - whisper
+//  - copy item
