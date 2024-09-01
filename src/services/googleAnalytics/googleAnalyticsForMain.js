@@ -8,7 +8,6 @@ const {flattenObject} = require('../../util/util');
 let randId = () => Math.floor(Math.random() * 1000 ** 2) + 1;
 
 let debug = appData.isDev;
-debug = false;
 let endpoint = `https://www.google-analytics.com/${debug ? 'debug/' : ''}mp/collect`;
 let apiSecret = 'B3I4WMgISoWkw-MNBv7mtw';
 let measurementId = 'G-4F5V3VE4B6';

@@ -309,7 +309,6 @@ class PobApi extends Emitter {
 	}
 }
 
-// singleton
 module.exports = new PobApi();
 
 // todo[blocking] allow configs ignoring ES and excluding resists from effective health
@@ -317,4 +316,4 @@ module.exports = new PobApi();
 //   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
 //  /Data/TimelessJewelData/GloriousVanity.bin
-// todo[high] tooltip not working for jewels, cluster jewels, mega jewels, flasks
+// todo[high] tooltip not working for cluster jewels, mega jewels, flasks

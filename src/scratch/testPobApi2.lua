@@ -1,5 +1,5 @@
 local _, _, scriptPath = string.find(arg[0], '(.+[/\\]).-')
---package.path = package.path .. ';/home/manukh/personal/arevtur/src/pobApi/HeadlessWrapper.lua'
+--package.path = package.path .. ';/home/x/personal/arevtur/src/pobApi/HeadlessWrapper.lua'
 package.path = package.path .. ';../runtime/lua/?.lua' -- dkjsno
 package.path = package.path .. ';../?.lua'
 require('HeadlessWrapper')
@@ -120,7 +120,7 @@ function Inflate(data)
 end
 
 --buildXmlFile = '~/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
-buildXmlFile = '/home/manukh/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
+buildXmlFile = '/home/x/.var/app/community.pathofbuilding.PathOfBuilding/data/pobfrontend/Path of Building/Builds/cobra lash.xml'
 buildXml = readFile(buildXmlFile)
 
 data.readLUT = function()

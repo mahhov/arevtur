@@ -101,6 +101,7 @@ while true do
 
     elseif args.cmd == 'build' then
         loadBuildFromXML(readFile(args.path))
+        build.itemsTab:UpdateSockets()
         -- copied from `ItemsTab addSlot`
         local slot = new("ItemSlotControl", nil, 0, 0, build.itemsTab, 'extraSlot')
         build.itemsTab.slots[slot.slotName] = slot
@@ -180,20 +181,21 @@ while true do
         }
         local jewelTypes = {
             ['Jewel Any'] = 'Any',
-            ['jewel Base'] = 'Base',
-            ['jewel Abyss'] = 'Abyss',
+            ['Jewel Base'] = 'Base',
+            ['Jewel Abyss'] = 'Abyss',
         }
         local options = {
             includeCorrupted = args.includeCorrupted,
             includeEldritch = eldritchModSlots[slot.slotName] == true,
             includeTalisman = slot.slotName == 'Amulet',
+            -- todo[high] allow influence mods
             influence1 = 1,
             influence2 = 1,
             maxPrice = 1,
             statWeights = tradeQuery.statSortSelectionList,
             jewelType = jewelTypes[args.type],
         }
-        respond('Options ' .. dkjson.encode(options), true)
+        respond('Slot ' .. slot.slotName .. ', Options ' .. dkjson.encode(options), true)
         tradeQueryGenerator:StartQuery(slot, options)
         tradeQueryGenerator:OnFrame()
         -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot
