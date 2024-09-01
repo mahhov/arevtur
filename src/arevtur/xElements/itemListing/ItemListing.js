@@ -28,12 +28,12 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#copy-item-button').addEventListener('click', e => {
-			navigator.clipboard.writeText(this.itemData_.text);
-			e.stopPropagation();
-		});
 		this.$('#whisper-button').addEventListener('click', e => {
 			navigator.clipboard.writeText(this.itemData_.whisper);
+			e.stopPropagation();
+		});
+		this.$('#copy-item-button').addEventListener('click', e => {
+			navigator.clipboard.writeText(this.itemData_.text);
 			e.stopPropagation();
 		});
 		this.addEventListener('click', () => this.emit('select'));
@@ -72,23 +72,25 @@ customElements.define(name, class extends XElement {
 		this.$('#defense-value-text').textContent = itemData.evalValueDetails.defenses;
 		this.$('#weight-value-text').textContent = itemData.evalValueDetails.mods;
 
-		this.$('#value-text').textContent = round(itemData.evalValue);
+		// todo[high] rename 'eval' to 'weighted'
+		this.$('#value-eval').text = `Eval: ${round(itemData.evalValue)}`;
 		let expandedValues = Object.entries(itemData.evalValueDetails)
 			.filter(([_, value]) => value);
-		this.$('#value-expanded-text').textContent = expandedValues.length > 1 ?
+		this.$('#value-eval').tooltip = expandedValues.length > 1 ?
 			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
 		itemData.valueBuildPromise.then(valueBuild => {
-			this.$('#value-build').text = valueBuild.value;
+			this.$('#value-build').text = `Build: ${valueBuild.value}`;
 			this.$('#value-build').tooltip = valueBuild.text;
 		});
 		itemData.valueCraftPromise.then(valueCraft => {
 			this.$('#value-craft').text = `Craft: ${valueCraft.value}`;
 			this.$('#value-craft').tooltip = valueCraft.text;
 		});
-		this.$('#price-text').textContent = round(itemData.price);
+
+		this.$('#price').text = `${round(itemData.price)} chaos`;
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
 			.map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
-		this.$('#price-expanded-text').textContent =
+		this.$('#price').tooltip =
 			itemData.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
 				`${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join(
 					'')}` : '';

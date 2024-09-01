@@ -96,7 +96,7 @@ progress::-webkit-progress-value {
 }
 
 .pob {
-	outline: 1px var(--colored-text-pink) solid;
+	border: 1px var(--colored-text-pink) solid;
 }
 
 .maximize-shown {
