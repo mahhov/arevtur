@@ -48,7 +48,7 @@ class UnifiedQueryParams {
 		inputElement.name = this.name || '';
 		inputElement.type = await ApiConstants.constants.typeIdToText(this.type) || '';
 		inputElement.minValue = this.minValue || 0;
-		inputElement.price = this.maxPrice || 1;
+		inputElement.price = this.maxPrice || 0;
 		inputElement.offline = this.offline || false;
 		let defenseProperties = this.defenseProperties || {};
 		defensePropertyTuples.forEach(([property]) => {
@@ -288,7 +288,7 @@ class UnifiedQueryParams {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
 					trade_filters: {
 						filters: {
-							price: {max: overridden.maxPrice},
+							price: {max: overridden.maxPrice || undefined},
 						},
 					},
 					socket_filters: overridden.linked ? {
@@ -323,7 +323,7 @@ class UnifiedQueryParams {
 			name: apiQueryParams.term || '',
 			type: filters?.type_filters?.filters?.category?.option || '',
 			minValue: weightedStats?.value?.min || 0,
-			maxPrice: filters?.trade_filters?.filters?.price?.max || 1,
+			maxPrice: filters?.trade_filters?.filters?.price?.max || 0,
 			offline: apiQueryParams?.query?.status !== 'online' &&
 				apiQueryParams?.query?.status?.option !== 'online',
 			// defenseProperties
