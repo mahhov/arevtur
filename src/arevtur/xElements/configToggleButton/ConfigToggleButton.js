@@ -1,6 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/configForRenderer');
+const appData = require('../../../services/appData');
 
 let toggle = key => configForRenderer.config = {[key]: !configForRenderer.config[key]};
 
@@ -37,3 +38,5 @@ configForRenderer.addListener('change', config => {
 		!config.viewMaximize && config.viewHorizontal);
 	document.documentElement.classList.toggle('dark', config.darkTheme);
 });
+
+document.documentElement.classList.toggle('experimental', appData.isDev);

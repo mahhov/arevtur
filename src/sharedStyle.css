@@ -107,6 +107,10 @@ progress::-webkit-progress-value {
 	display: var(--maximize-hidden-display);
 }
 
+.experimental {
+	display: var(--experimental-display);
+}
+
 .bold {
 	font-weight: bold;
 }

@@ -102,3 +102,7 @@
 	--maximize-shown-display: '';
 	--maximize-hidden-display: none !important;
 }
+
+:root:not(.experimental) {
+	--experimental-display: none !important;
+}
