@@ -44,8 +44,8 @@ customElements.define(name, class InputBuild extends XElement {
 		this.$('#attribute-str-weight').value = buildParams.weights.str;
 		this.$('#attribute-dex-weight').value = buildParams.weights.dex;
 		this.$('#attribute-int-weight').value = buildParams.weights.int;
-		this.$('#ignore-es-check').checked = buildParams.weights.ignoreEs;
-		this.$('#equal-resists-check').checked = buildParams.weights.equalResists;
+		this.$('#ignore-es-check').checked = buildParams.extraMods.ignoreEs;
+		this.$('#equal-resists-check').checked = buildParams.extraMods.equalResists;
 		pobApi.setParams(configForRenderer.config.buildParams);
 	}
 
@@ -61,6 +61,8 @@ customElements.define(name, class InputBuild extends XElement {
 					str: Number(this.$('#attribute-str-weight').value) || 0,
 					dex: Number(this.$('#attribute-dex-weight').value) || 0,
 					int: Number(this.$('#attribute-int-weight').value) || 0,
+				},
+				extraMods: {
 					ignoreEs: Number(this.$('#ignore-es-check').checked) || false,
 					equalResists: Number(this.$('#equal-resists-check').checked) || false,
 				},

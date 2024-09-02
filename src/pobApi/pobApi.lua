@@ -56,16 +56,6 @@ function emplaceNewLines(string)
     return string:gsub([[\n]], '\n') -- replace escaped \\n with real \n
 end
 
-function getArgs(input)
-    -- parses a string, e.g. '<x> <3> <4>', into array of strings
-    args = {}
-    for arg in input:gmatch('<(.-)>') do
-        arg = emplaceNewLines(arg)
-        table.insert(args, arg)
-    end
-    return args
-end
-
 local sampleItemAmulet = [[
     Item Class: Amulets
     Rarity: Rare
@@ -74,7 +64,7 @@ local sampleItemAmulet = [[
 ]]
 
 function loadExtraMods(mods)
-    local itemText = sampleItemAmulet .. '\n' .. mods
+    local itemText = sampleItemAmulet .. '\n' .. emplaceNewLines(mods)
     local item = new('Item', itemText)
     item.type = 'extraSlot'
     build.itemsTab:AddItem(item)
@@ -114,6 +104,7 @@ while true do
     elseif args.cmd == 'item' then
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
+        loadExtraMods(args.extraMods)
         local item = new('Item', emplaceNewLines(args.text))
         if item.base then
             local tooltip = FakeTooltip:new()
@@ -126,6 +117,7 @@ while true do
     elseif args.cmd == 'mod' then
         -- given a mod and item type, see what adding that mod to the currently equipped item of
         -- that type would do for the build
+        loadExtraMods(args.extraMods)
         local slot = build.itemsTab.slots[args.type]
         if slot then
             local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
@@ -140,6 +132,7 @@ while true do
     elseif args.cmd == 'getModWeights' then
         -- given an item type and other params, generate a search query for replacing the currently
         -- equipped item of that type
+        loadExtraMods(args.extraMods)
         local itemsTab = build.itemsTab
         local tradeQuery = itemsTab.tradeQuery
         tradeQuery:PriceItem()

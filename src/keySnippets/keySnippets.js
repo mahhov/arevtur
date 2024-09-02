@@ -95,6 +95,6 @@ module.exports = {
 
 // todo[medium] a way to restart PoB for clipboard without having to open preferences. maybe set
 //  automatic restart count to 1 and do an explicit restart with each request if needed
-
 // todo[medium] estimate price of item mods
-// todo[medium] generate search query for mods of selected item
+// todo[blocking] a way to disable key snippet
+// todo[blocking] generate search query for mods of selected item

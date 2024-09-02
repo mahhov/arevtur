@@ -84,6 +84,8 @@ class PobApi extends Emitter {
 			str: 0,
 			dex: 0,
 			int: 0,
+		};
+		this.extraMods = {
 			ignoreEs: false,
 			equalResists: false,
 		};
@@ -94,28 +96,38 @@ class PobApi extends Emitter {
 		          pobPath = this.pobPath,
 		          buildPath = this.buildPath,
 		          weights = this.weights,
+		          extraMods = this.extraMods,
 	          } = {}) {
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
 		this.weights = weights;
+		this.extraMods = [
+			extraMods.ignoreEs ? 'maximum energy shield is 0' : '',
+			extraMods.equalResists ? '+1000% to all resistances' : '',
+		].filter(v => v).join(' \\n ');
 		this.restart();
+		// todo[low] support stopping pending commands without having to restart the script
 	}
 
 	async restart() {
 		await this.script?.clear();
+		// todo[blocking] does this 'change' cause re-requests before the new script is up and
+		//  running?
 		this.emit('change');
 		if (!this.pobPath || !this.buildPath)
 			return;
 		console.log('PobApi creating new script', this.pobPath, this.buildPath);
 		this.script = new Script(this.pobPath);
-		this.send({cmd: 'build', path: this.buildPath});
-		// this.send('extraBuildMods', '+1000% to all Resistances \\n maximum energy shield is 0');
+		this.send({
+			cmd: 'build',
+			path: this.buildPath,
+		});
 	}
 
 	async send(argsObj) {
 		if (!this.script)
 			return Promise.reject('Ignoring PoB requests until script has started');
-		this.emit('busy');
+		this.emit('busy'); // todo[blocking] progress bar
 		let response = this.script.send(argsObj);
 		response
 			.then(() => {
@@ -131,8 +143,12 @@ class PobApi extends Emitter {
 		if (!['requirements:', 'sockets:', 'Item Class: Jewels']
 			.some(search => item.toLowerCase().includes(search)))
 			return Promise.reject('Item is unequippable');
-		return this.send({cmd: 'item', text: item.replace(/[\n\r]+/g, ' \\n ')})
-			.then(text => this.parseItemTooltip(text));
+		return this.send({
+			cmd: 'item',
+			text: item.replace(/[\n\r]+/g, ' \\n '),
+			weights: this.weights,
+			extraMods: this.extraMods,
+		}).then(text => this.parseItemTooltip(text));
 	}
 
 	evalItemWithCraft(item, craftedMods) {
@@ -140,8 +156,12 @@ class PobApi extends Emitter {
 			.some(search => item.toLowerCase().includes(search)))
 			return Promise.reject('Item is unequippable');
 		item = [item, '// Craft:', ...craftedMods].join('\n');
-		return this.send({cmd: 'item', text: item.replace(/[\n\r]+/g, ' \\n ')})
-			.then(text => this.parseItemTooltip(text, 1, craftedMods));
+		return this.send({
+			cmd: 'item',
+			text: item.replace(/[\n\r]+/g, ' \\n '),
+			weights: this.weights,
+			extraMods: this.extraMods,
+		}).then(text => this.parseItemTooltip(text, 1, craftedMods));
 	}
 
 	// todo[low] rename evalItemMod
@@ -164,7 +184,13 @@ class PobApi extends Emitter {
 				.replace(/total/i, '');
 
 		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
-		return this.send({cmd: 'mod', mod: itemMod, type: pobType})
+		return this.send({
+			cmd: 'mod',
+			mod: itemMod,
+			type: pobType,
+			weights: this.weights,
+			extraMods: this.extraMods,
+		})
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod]));
 	}
 
@@ -173,12 +199,18 @@ class PobApi extends Emitter {
 		if (!pobType)
 			return Promise.reject('PoB getModWeights missing type');
 		return this.send({
-			cmd: 'getModWeights', type: pobType, weights: this.weights, includeCorrupted,
+			cmd: 'getModWeights',
+			type: pobType,
+			includeCorrupted,
+			weights: this.weights,
+			extraMods: this.extraMods,
 		}).then(JSON.parse);
 	}
 
 	async getCraftedMods() {
-		let jsonString = await this.send({cmd: 'getCraftedMods'});
+		let jsonString = await this.send({
+			cmd: 'getCraftedMods',
+		});
 		return Object.values(JSON.parse(jsonString));
 	}
 
@@ -227,6 +259,7 @@ class PobApi extends Emitter {
 			};
 		});
 
+		// todo[blocking] returning NaN
 		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue) || '';
 
 		let summaryText = [
