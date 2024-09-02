@@ -347,3 +347,5 @@ module.exports = new PobApi();
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
 //  /Data/TimelessJewelData/GloriousVanity.bin
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
+// todo[high] way to cancel queue when e.g. running new search or changing item type or changing
+//  weights

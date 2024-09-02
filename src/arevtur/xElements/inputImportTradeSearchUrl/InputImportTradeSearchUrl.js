@@ -3,7 +3,7 @@ const {template, name} = importUtil(__filename);
 
 customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 	static get attributeTypes() {
-		return {url: {}};
+		return {url: {}, itemText: {}};
 	}
 
 	static get htmlTemplate() {
@@ -11,12 +11,19 @@ customElements.define(name, class InputImportTradeSearchUrl extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#import').addEventListener('click', () =>
-			this.emit('import', this.$('#url').value));
+		this.$('#import-url').addEventListener('click', () =>
+			this.emit('import-url', this.$('#url').value));
+		this.$('#import-item-text').addEventListener('click', () =>
+			this.emit('import-item-text', this.$('#item-text').value));
 		this.url ||= '';
+		this.itemText ||= '';
 	}
 
 	set url(value) {
 		this.$('#url').value = value;
+	}
+
+	set itemText(value) {
+		this.$('#item-text').value = value;
 	}
 });

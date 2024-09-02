@@ -60,7 +60,7 @@ customElements.define(name, class Inputs extends XElement {
 		});
 
 		// todo[medium] sometimes returns 'error 6 / forbidden'
-		this.$('#input-import-trade-search-url').addEventListener('import', async e => {
+		this.$('#input-import-trade-search-url').addEventListener('import-url', async e => {
 			let apiQueryParams =
 				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
@@ -73,6 +73,21 @@ customElements.define(name, class Inputs extends XElement {
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1);
 			this.store();
+		});
+
+		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
+			let propertyTexts = await ApiConstants.constants.propertyTexts();
+			let properties = e.detail
+				.split('\n')
+				.map(line => line.trim())
+				.map(line => line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+				.map(line => line.replaceAll('decrease', '(decrease|increase)'))
+				.map(line => line.replaceAll(/(\d+)/g, '($1|#)'))
+				.map(line => `^${line}( \\(\\explicit+\\))?$`)
+				.map(line => new RegExp(line))
+				.map(regex => propertyTexts.filter(pt => pt.match(regex)).join('\n'))
+				.filter(s => s);
+			console.log(properties);
 		});
 
 		this.$('#input-set-list').addEventListener('arrange', e => {

@@ -1,3 +1,45 @@
+Item Class: Rings
+Rarity: Rare
+Havoc Knuckle
+Sapphire Ring
+--------
+Requirements:
+Level: 55
+--------
+Item Level: 70
+--------
++24% to Cold Resistance (implicit)
+--------
+Adds 9 to 16 Fire Damage to Attacks
+15% increased Cast Speed
++60 to maximum Mana
++8% to all Elemental Resistances
+Gain 6 Mana per Enemy Killed
+--------
+Note: ~price 6 alch
+
+Item Class: Rings
+Rarity: Rare
+Dire Loop
+Amethyst Ring
+--------
+Requirements:
+Level: 33
+--------
+Item Level: 81
+--------
++18% to Chaos Resistance (implicit)
+--------
++47 to maximum Mana (fractured)
++67 to maximum Life
++22% to Lightning Resistance
+Gain 7 Life per Enemy Killed
+--------
+Fractured Item
+--------
+Note: ~price 1 alch
+
+
 Item Class: Jewels
 Rarity: Rare
 Brood Hope
