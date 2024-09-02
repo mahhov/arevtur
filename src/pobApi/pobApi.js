@@ -111,23 +111,20 @@ class PobApi extends Emitter {
 
 	async restart() {
 		await this.script?.clear();
-		// todo[blocking] does this 'change' cause re-requests before the new script is up and
-		//  running?
+		if (this.pobPath && this.buildPath) {
+			this.script = new Script(this.pobPath);
+			this.send({
+				cmd: 'build',
+				path: this.buildPath,
+			});
+		}
 		this.emit('change');
-		if (!this.pobPath || !this.buildPath)
-			return;
-		console.log('PobApi creating new script', this.pobPath, this.buildPath);
-		this.script = new Script(this.pobPath);
-		this.send({
-			cmd: 'build',
-			path: this.buildPath,
-		});
 	}
 
 	async send(argsObj) {
 		if (!this.script)
 			return Promise.reject('Ignoring PoB requests until script has started');
-		this.emit('busy'); // todo[blocking] progress bar
+		this.emit('busy');
 		let response = this.script.send(argsObj);
 		response
 			.then(() => {
@@ -346,7 +343,6 @@ class PobApi extends Emitter {
 
 module.exports = new PobApi();
 
-// todo[blocking] allow configs ignoring ES and excluding resists from effective health
 // todo[medium] failing when timeless jewel is equipped:
 //   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
