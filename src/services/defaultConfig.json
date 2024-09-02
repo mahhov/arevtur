@@ -13,7 +13,9 @@
       "damage": 0.25,
       "str": 0,
       "dex": 0,
-      "int": 0
+      "int": 0,
+      "ignoreEs": true,
+      "equalResists": true
     }
   },
   "gaUserId": ""

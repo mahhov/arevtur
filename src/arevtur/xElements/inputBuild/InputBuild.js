@@ -16,14 +16,8 @@ customElements.define(name, class InputBuild extends XElement {
 	connectedCallback() {
 		this.$('#pob-path').defaultPath = appData.defaultPobPath;
 		this.$('#build-path').defaultPath = appData.defaultPobBuildsPath;
-		this.$('#pob-path').addEventListener('selected', () => {
-			this.saveConfig();
-			this.updatePob();
-		});
-		this.$('#build-path').addEventListener('selected', () => {
-			this.saveConfig();
-			this.updatePob();
-		});
+		this.$('#pob-path').addEventListener('selected', () => this.saveConfig());
+		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#refresh').addEventListener('click', () => pobApi.restart());
 		[
 			this.$('#life-weight'),
@@ -32,49 +26,44 @@ customElements.define(name, class InputBuild extends XElement {
 			this.$('#attribute-str-weight'),
 			this.$('#attribute-dex-weight'),
 			this.$('#attribute-int-weight'),
-		]
-			.forEach(weight => weight.addEventListener('change', () => {
-				this.saveConfig();
-				this.updatePob();
-			}));
+			this.$('#ignore-es-check'),
+			this.$('#equal-resists-check'),
+		].forEach(weight => weight.addEventListener('change', () => this.saveConfig()));
 
 		configForRenderer.addListener('change', config => this.loadConfig());
-		this.loadConfig();
 	}
 
 	loadConfig() {
 		let buildParams = configForRenderer.config.buildParams;
-		this.$('#pob-path').path = buildParams.pobPath || '';
-		this.$('#build-path').path = buildParams.buildPath || '';
-		this.$('#life-weight').value = buildParams.weights.life || 0;
-		this.$('#resist-weight').value = buildParams.weights.resist || 0;
-		this.$('#damage-weight').value = buildParams.weights.damage || 0;
-		this.$('#attribute-str-weight').value = buildParams.weights.str || 0;
-		this.$('#attribute-dex-weight').value = buildParams.weights.dex || 0;
-		this.$('#attribute-int-weight').value = buildParams.weights.int || 0;
-		// todo[high] allow custom weights
-		this.updatePob();
+		this.$('#pob-path').path = buildParams.pobPath;
+		this.$('#build-path').path = buildParams.buildPath;
+		// todo[low] allow custom weights
+		this.$('#life-weight').value = buildParams.weights.life;
+		this.$('#resist-weight').value = buildParams.weights.resist;
+		this.$('#damage-weight').value = buildParams.weights.damage;
+		this.$('#attribute-str-weight').value = buildParams.weights.str;
+		this.$('#attribute-dex-weight').value = buildParams.weights.dex;
+		this.$('#attribute-int-weight').value = buildParams.weights.int;
+		this.$('#ignore-es-check').checked = buildParams.weights.ignoreEs;
+		this.$('#equal-resists-check').checked = buildParams.weights.equalResists;
+		pobApi.setParams(configForRenderer.config.buildParams);
 	}
 
 	saveConfig() {
-		configForRenderer.config = {buildParams: this.params};
-	}
-
-	updatePob() {
-		pobApi.setParams(this.params);
-	}
-
-	get params() {
-		return {
-			pobPath: this.$('#pob-path').path,
-			buildPath: this.$('#build-path').path,
-			weights: {
-				life: Number(this.$('#life-weight').value) || 0,
-				resist: Number(this.$('#resist-weight').value) || 0,
-				damage: Number(this.$('#damage-weight').value) || 0,
-				str: Number(this.$('#attribute-str-weight').value) || 0,
-				dex: Number(this.$('#attribute-dex-weight').value) || 0,
-				int: Number(this.$('#attribute-int-weight').value) || 0,
+		configForRenderer.config = {
+			buildParams: {
+				pobPath: this.$('#pob-path').path,
+				buildPath: this.$('#build-path').path,
+				weights: {
+					life: Number(this.$('#life-weight').value) || 0,
+					resist: Number(this.$('#resist-weight').value) || 0,
+					damage: Number(this.$('#damage-weight').value) || 0,
+					str: Number(this.$('#attribute-str-weight').value) || 0,
+					dex: Number(this.$('#attribute-dex-weight').value) || 0,
+					int: Number(this.$('#attribute-int-weight').value) || 0,
+					ignoreEs: Number(this.$('#ignore-es-check').checked) || false,
+					equalResists: Number(this.$('#equal-resists-check').checked) || false,
+				},
 			},
 		};
 	}

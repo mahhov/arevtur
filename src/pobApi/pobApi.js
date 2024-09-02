@@ -63,7 +63,8 @@ class Script extends CustomOsScript {
 		return promise;
 	}
 
-	clear() {
+	async clear() {
+		(await this.process).kill('SIGKILL'); // necessary on linux
 		this.cleared = true;
 		this.pendingResponses.forEach(pendingResponse =>
 			pendingResponse.reject('PoBApi failed'));
@@ -83,9 +84,10 @@ class PobApi extends Emitter {
 			str: 0,
 			dex: 0,
 			int: 0,
+			ignoreEs: false,
+			equalResists: false,
 		};
 		this.script = null;
-		// this.crashCount = 0;
 	}
 
 	setParams({
@@ -93,17 +95,17 @@ class PobApi extends Emitter {
 		          buildPath = this.buildPath,
 		          weights = this.weights,
 	          } = {}) {
-		if (pobPath !== this.pobPath || buildPath !== this.buildPath) {
-			this.pobPath = pobPath;
-			this.buildPath = buildPath;
-			this.restart();
-		}
+		this.pobPath = pobPath;
+		this.buildPath = buildPath;
 		this.weights = weights;
+		this.restart();
 	}
 
-	restart() {
-		this.script?.clear();
+	async restart() {
+		await this.script?.clear();
 		this.emit('change');
+		if (!this.pobPath || !this.buildPath)
+			return;
 		console.log('PobApi creating new script', this.pobPath, this.buildPath);
 		this.script = new Script(this.pobPath);
 		this.send({cmd: 'build', path: this.buildPath});
