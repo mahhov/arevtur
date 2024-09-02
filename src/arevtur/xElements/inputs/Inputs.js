@@ -66,7 +66,7 @@ customElements.define(name, class Inputs extends XElement {
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
 			this.inputSets.push(
 				{
-					name: `untitled ${timestamp()}}`,
+					name: `imported ${timestamp()}`,
 					active: false,
 					unifiedQueryParams,
 				});
@@ -81,6 +81,7 @@ customElements.define(name, class Inputs extends XElement {
 			this.store();
 		});
 		this.$('#add-input-set-button').addEventListener('click', e => {
+			// todo[low] if user doesn't override name, append item type when selected
 			this.inputSets.push({name: timestamp()});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
