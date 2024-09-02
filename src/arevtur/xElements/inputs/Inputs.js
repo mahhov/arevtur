@@ -103,6 +103,13 @@ customElements.define(name, class Inputs extends XElement {
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
 			this.store();
 		});
+		this.$('#close-all-input-sets-button').addEventListener('click', e => {
+			this.clearChildren('#input-set-list');
+			this.inputSets = [{name: timestamp()}];
+			this.addInputSetEl();
+			this.setInputSetIndex(0);
+			this.store();
+		});
 
 		this.$('#input-trade-params').addEventListener('change', async () => {
 			let unifiedQueryParams = await this.$('#input-trade-params').unifiedQueryParams;
