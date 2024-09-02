@@ -29,6 +29,7 @@ const queryPropertyFilters = [
 	// queryParamsKey, queryPropertyFilter, hasWeight
 	['weightEntries', 'weight', true],
 	['andEntries', 'and', true],
+	// todo[low] disable weight input for filters without weight
 	['notEntries', 'not'],
 	// todo[medium] get pob weight recommendations for conditional affixes
 	['conditionalPrefixEntries', 'conditional prefix', true],

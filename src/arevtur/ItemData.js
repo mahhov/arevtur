@@ -28,8 +28,7 @@ class ItemData {
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
-		// e.g. 'Amulet'
-		this.itemClass = this.text.match(/^Item Class: (\w+)/)[1].replace(/s$/, '');
+		this.itemClass = ItemData.typeNameFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
 		// sockets
@@ -81,6 +80,10 @@ class ItemData {
 		this.pricePromise = ItemData.price(league, this.priceDetails);
 		// todo[medium] rm price, let users use pricePromise
 		this.pricePromise.then(price => this.price = price);
+	}
+
+	static typeNameFromItemText(text) {
+		return text.match(/^Item Class: (\w+)/)[1].replace(/s$/, '');
 	}
 
 	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {

@@ -6,6 +6,7 @@ const {TradeQuery} = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../pobApi/pobApi');
 const util = require('../../../util/util');
+const ItemData = require('../../ItemData');
 
 let timestamp = () => {
 	let date = new Date();
@@ -64,20 +65,15 @@ customElements.define(name, class Inputs extends XElement {
 			let apiQueryParams =
 				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
-			this.inputSets.push(
-				{
-					name: `imported ${timestamp()}`,
-					active: false,
-					unifiedQueryParams,
-				});
-			this.addInputSetEl();
-			this.setInputSetIndex(this.inputSets.length - 1);
-			this.store();
+			this.importInputSet(unifiedQueryParams);
 		});
 
 		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
+			let typeText = ItemData.typeNameFromItemText(e.detail);
+			let typeId = await ApiConstants.constants.typeTextToId(typeText);
+
 			let propertyTexts = await ApiConstants.constants.propertyTexts();
-			let properties = e.detail
+			let matchedPropertyIds = await Promise.all(e.detail
 				.split('\n')
 				.map(line => line.trim())
 				.map(line => line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
@@ -85,9 +81,14 @@ customElements.define(name, class Inputs extends XElement {
 				.map(line => line.replaceAll(/(\d+)/g, '($1|#)'))
 				.map(line => `^${line}( \\(\\explicit+\\))?$`)
 				.map(line => new RegExp(line))
-				.map(regex => propertyTexts.filter(pt => pt.match(regex)).join('\n'))
-				.filter(s => s);
-			console.log(properties);
+				// todo[low] sometimes, there are multiple properties with the same text. should do
+				//   an 'or' between them. e.g. '+# to Strength and Intelligence'
+				.map(regex => propertyTexts.find(pt => pt.match(regex)))
+				.filter(propertyText => propertyText)
+				.map(propertyText => ApiConstants.constants.propertyTextToId(propertyText)));
+
+			let unifiedQueryParams = UnifiedQueryParams.fromPropertyIds(typeId, matchedPropertyIds);
+			this.importInputSet(unifiedQueryParams);
 		});
 
 		this.$('#input-set-list').addEventListener('arrange', e => {
@@ -136,6 +137,18 @@ customElements.define(name, class Inputs extends XElement {
 		await ApiConstants.constants.currencyPrices(config.league);
 		if (config.league === configForRenderer.config.league)
 			this.$('#loaded-currencies-status').classList.add('valid');
+	}
+
+	importInputSet(unifiedQueryParams) {
+		this.inputSets.push(
+			{
+				name: `imported ${timestamp()}`,
+				active: false,
+				unifiedQueryParams,
+			});
+		this.addInputSetEl();
+		this.setInputSetIndex(this.inputSets.length - 1);
+		this.store();
 	}
 
 	async setInputSetIndex(index, fromEl = null, exclusive = true) {

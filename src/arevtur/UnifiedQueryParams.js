@@ -15,7 +15,7 @@ class UnifiedQueryParams {
 	name = '';
 	type = '';
 	minValue = 0;
-	maxPrice = 1;
+	maxPrice = 0;
 	offline = false;
 	defenseProperties = {}; // {armour, evasion, energyShield: {weight: 0, min: 0}}
 	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
@@ -127,8 +127,7 @@ class UnifiedQueryParams {
 		let unsharedEntries = Object.fromEntries(
 			queryPropertyFilters.map(([key, filter, hasWeight]) => {
 				let entries = propertyEntries
-					.filter(entry =>
-						entry.filter === filter && (entry.weight || !hasWeight) && !entry.shared)
+					.filter(entry => entry.filter === filter && !entry.shared)
 					.map(entry => hasWeight ?
 						[entry.propertyId, entry.weight, entry.locked, entry.enabled] :
 						[entry.propertyId, entry.shared, entry.enabled]);
@@ -352,6 +351,13 @@ class UnifiedQueryParams {
 		Object.assign(unifiedQueryParams, deepCopy(baseUnifiedQueryParams));
 		unifiedQueryParams.weightEntries = modWeights.map(modWeight =>
 			[modWeight.tradeModId, modWeight.weight * (modWeight.invert ? -1 : 1), false, true]);
+		return unifiedQueryParams;
+	}
+
+	static fromPropertyIds(type, propertyIds) {
+		let unifiedQueryParams = new UnifiedQueryParams();
+		unifiedQueryParams.type = type;
+		unifiedQueryParams.andEntries = propertyIds.map(propertyId => [propertyId, 0, false, true]);
 		return unifiedQueryParams;
 	}
 }
