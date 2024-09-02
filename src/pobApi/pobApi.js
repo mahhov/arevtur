@@ -225,9 +225,9 @@ class PobApi extends Emitter {
 		if (!itemText.split('Equipping this item').slice(1).forEach)
 			console.error(itemText);
 
-		let diffs = itemText.split(/(?=equipping this item)/i).slice(1).map(diffText => {
-			// todo[medium] see if we can use a loop to reduce repeated logic
-			let equippingText = diffText.match(/equipping this item.*/i)[0];
+		let diffs = itemText.split(/(?=equipping this item)/i).slice(1).concat('').map(diffText => {
+			// todo[low] see if we can use a loop to reduce repeated logic
+			let equippingText = diffText.match(/equipping this item.*/i)?.[0] || '';
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
 			let totalResist = diffText
 				.match(new RegExp(anyDiffResistRegex, 'gi'))
@@ -256,8 +256,7 @@ class PobApi extends Emitter {
 			};
 		});
 
-		// todo[blocking] returning NaN
-		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue) || '';
+		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue);
 
 		let summaryText = [
 			...textPrefixes.map(textPrefix => `@bold,pink ${textPrefix}`),
