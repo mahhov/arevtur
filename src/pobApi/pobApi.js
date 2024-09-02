@@ -137,7 +137,7 @@ class PobApi extends Emitter {
 	}
 
 	evalItem(item) {
-		if (!['requirements:', 'sockets:', 'Item Class: Jewels']
+		if (!['requirements:', 'sockets:', 'item class: jewels']
 			.some(search => item.toLowerCase().includes(search)))
 			return Promise.reject('Item is unequippable');
 		return this.send({
@@ -149,7 +149,7 @@ class PobApi extends Emitter {
 	}
 
 	evalItemWithCraft(item, craftedMods) {
-		if (!['requirements:', 'sockets:', 'Item Class: Jewels']
+		if (!['requirements:', 'sockets:', 'item class: jewels']
 			.some(search => item.toLowerCase().includes(search)))
 			return Promise.reject('Item is unequippable');
 		item = [item, '// Craft:', ...craftedMods].join('\n');
