@@ -53,14 +53,13 @@ customElements.define(name, class Chart extends XElement {
 
 		this.$('#refocus-button').addEventListener('click', () => this.resetRange());
 
-		this.$('#help-tooltip').text = 'help?';
 		this.$('#help-tooltip').tooltip = [
-			'lmb drag to pan',
-			'mouse wheel to scale',
+			'LMB drag to pan',
+			'Mouse wheel to scale',
 			// 'rmb drag to scale',
-			// 'shift+lmb drag to scale',
-			'double lmb to recenter',
-			'shift+double lmb to recenter while including origin',
+			// 'shift+LMB drag to scale',
+			'Double LMB to recenter',
+			'Shift+double LMB to recenter to origin',
 			// todo[low] ctrl+lmb is running bad query. it's probably even harder to fix with build
 			//  sorting. 'ctrl+lmb to query at the min-value and max-price corresponding to the
 			//  cursor's position',
