@@ -170,12 +170,15 @@ class ItemData {
 		// skip crafts that don't benefit build
 		craftableMods = await Promise.all(craftableMods.map(
 			async craftableMod => {
+				// todo[high] use correct slot
 				craftableMod.eval =
-					// todo[high] use correct slot
-					await pobApi.evalItemModSummary('Amulet', craftableMod.join('\n'), 0);
+					await pobApi.evalItemModSummary('Amulet', craftableMod.join('\n'));
 				return craftableMod;
 			}));
-		craftableMods = craftableMods.filter(craftableMod => craftableMod.eval.value);
+		craftableMods = craftableMods
+			.filter(craftableMod => craftableMod.eval.value)
+			.sort((a, b) => b.eval.value - a.eval.value)
+			.filter((craftableMod, i, a) => craftableMod.eval.value > a[0].eval.value - 1);
 
 		if (!craftableMods.length)
 			return this.valueBuildPromise.then(valueBuild =>

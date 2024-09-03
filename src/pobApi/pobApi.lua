@@ -67,6 +67,13 @@ function loadExtraMods(mods)
     local itemText = sampleItemAmulet .. '\n' .. emplaceNewLines(mods)
     local item = new('Item', itemText)
     item.type = 'extraSlot'
+
+    local extraSlot = build.itemsTab.slots['extraSlot']
+    local oldItemText = build.itemsTab.items[extraSlot.selItemId]
+    if oldItemText and item.raw == oldItemText.raw then
+        return
+    end
+
     build.itemsTab:AddItem(item)
     build.buildFlag = true
     build:OnFrame({})

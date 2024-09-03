@@ -136,6 +136,7 @@ class TradeQuery {
 				let overrides = this.overrideDefenseProperty(defenseProperty[0],
 					minDefensePropertyValue);
 				let query = this.getQuery(overrides);
+				// todo[low] resets the progress stream to 0/11 instead of appending to it 12/22
 				newItems = await this.queryAndParseItems(query, itemStream, progressStream);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);

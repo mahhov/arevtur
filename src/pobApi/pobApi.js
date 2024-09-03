@@ -29,15 +29,17 @@ class Script extends CustomOsScript {
 			this.clear();
 			return;
 		}
-		let maxLength = 200;
-		console.log('PobApi response:', out.length > maxLength ?
-			`${out.slice(0, maxLength / 2)}...${out.slice(-maxLength / 2)}` : out);
+		// let maxLength = 200;
+		// console.log('PobApi response:', out.length > maxLength ?
+		// 	`${out.slice(0, maxLength / 2)}...${out.slice(-maxLength / 2)}` : out);
 		if (out && !this.cleared) {
 			out
 				.split(/(<\.|\.>)/)
 				.filter(v => v)
 				.forEach(part => {
 					if (part === '<.') {
+						if (this.inProgressResponse)
+							console.log('PobApi debug response:', this.inProgressResponse);
 						this.inProgressResponse = '';
 					} else if (part === '.>') {
 						this.pendingResponses.shift().resolve(this.inProgressResponse);
