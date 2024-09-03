@@ -9,20 +9,9 @@ body {
 	font-family: sans-serif;
 }
 
-/* todo[high] remove, unused */
-.alternate {
-	color: var(--alternate-primary);
-}
-
 .area {
 	color: var(--area-primary);
 	background: var(--area-back);
-}
-
-/* todo[high] remove, unused */
-.header {
-	color: var(--header-primary);
-	background: var(--header-back);
 }
 
 /* status indicators */

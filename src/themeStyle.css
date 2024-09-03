@@ -1,15 +1,10 @@
 :root {
 	--primary: black;
-	--alternate-primary: #02a; /* text that needs to stand out a bit */
 	--back: white;
 
 	/* areas that need to be distinguished e.g. inputs or outputs */
 	--area-primary: black;
 	--area-back: #f8f8f8;
-
-	/* section headers */
-	--header-primary: black;
-	--header-back: #eee;
 
 	/* interactable elements e.g buttons or inputs */
 	--interactable-primary: black;
@@ -49,16 +44,11 @@
 
 :root.dark {
 	--primary: white;
-	--alternate-primary: #73b4e6; /* text that needs to stand out a bit */
 	--back: black;
 
 	/* areas that need to be distinguished e.g. inputs or outputs */
 	--area-primary: white;
 	--area-back: #111;
-
-	/* section headers */
-	--header-primary: white;
-	--header-back: #20384f;
 
 	/* interactable elements e.g buttons or inputs */
 	--interactable-primary: white;

@@ -136,7 +136,7 @@ customElements.define(name, class Inputs extends XElement {
 				points: this.itemsData.bestBoundPath,
 				isPath: true,
 			}, {
-				cssPropertyValueColor: '--alternate-primary',
+				cssPropertyValueColor: '--interactable-focus-border',
 				fill: true,
 				size: 8,
 				points: this.itemsData.itemsToPoints(this.itemsData.selectedItems),
@@ -146,7 +146,7 @@ customElements.define(name, class Inputs extends XElement {
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems),
 			}, {
-				cssPropertyValueColor: '--alternate-primary',
+				cssPropertyValueColor: '--interactable-focus-border',
 				fill: true,
 				size: 8,
 				points: this.itemsData.itemsToPoints(this.itemsData.hoveredItems),
