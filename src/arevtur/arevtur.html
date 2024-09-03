@@ -59,6 +59,8 @@
 
 	let lastTradeQueries;
 	let submitQueries = async tradeQueries => {
+		let startTime = Performance.now();
+
 		cancelQueries();
 		lastTradeQueries = tradeQueries;
 		let [itemStreams, progressStreams] = transpose(
@@ -85,6 +87,7 @@
 			type: tradeQueries[0].type,
 			maxPrice: tradeQueries[0].maxPrice,
 			itemCount: $('x-results').expectedCount,
+			elapsedTime: performance.now() - startTime, // todo[low] measure PoB craft time
 		});
 	};
 
