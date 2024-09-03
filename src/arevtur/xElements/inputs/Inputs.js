@@ -35,27 +35,29 @@ customElements.define(name, class Inputs extends XElement {
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
-		ApiConstants.constants.leagues.then(() =>
-			this.$('#loaded-leagues-status').classList.add('valid'));
-		ApiConstants.constants.types.then(() =>
-			this.$('#loaded-types-status').classList.add('valid'));
-		ApiConstants.constants.properties.then(() =>
-			this.$('#loaded-properties-status').classList.add('valid'));
-		ApiConstants.constants.items.then(() =>
-			this.$('#loaded-items-status').classList.add('valid'));
+		this.updateStatusIndicator(
+			ApiConstants.constants.leagues,
+			this.$('#loaded-leagues-status'));
+		this.updateStatusIndicator(
+			ApiConstants.constants.types,
+			this.$('#loaded-types-status'));
+		this.updateStatusIndicator(
+			ApiConstants.constants.properties,
+			this.$('#loaded-properties-status'));
+		this.updateStatusIndicator(
+			ApiConstants.constants.items,
+			this.$('#loaded-items-status'));
 
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('change', () => this.store());
 
 		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
 
-		// todo[medium] likewise use busy for other status chips to differentiate between loading
-		//  and failed
 		pobApi.addListener('not-ready', () =>
-			this.$('#loaded-pob-status').classList.remove('valid', 'busy'));
+			this.$('#loaded-pob-status').classList.add('invalid'));
 		pobApi.addListener('busy', queueLength => {
-			this.$('#loaded-pob-status').classList.add('valid');
-			this.$('#loaded-pob-status').classList.toggle('busy', queueLength);
+			this.$('#loaded-pob-status').classList.remove('invalid');
+			this.$('#loaded-pob-status').classList.toggle('valid', !queueLength);
 			this.$('#loaded-pob-status #queue-length').textContent =
 				queueLength ? `(${queueLength})` : '';
 		});
@@ -138,12 +140,28 @@ customElements.define(name, class Inputs extends XElement {
 		setInterval(() => this.finalizeTradeQuery(), 1000);
 	}
 
-	async onConfigChange(config) {
+	updateStatusIndicator(promise, element, league) {
+		element.classList.add('busy');
+		element.classList.remove('valid', 'invalid');
+		promise
+			.then(() => {
+				if (!league || league === configForRenderer.config.league)
+					element.classList.add('valid');
+			})
+			.catch(() => {
+				if (!league || league === configForRenderer.config.league)
+					element.classList.add('invalid');
+			});
+	}
+
+	onConfigChange(config) {
 		this.$('#league-input').value = config.league;
-		this.$('#loaded-currencies-status').classList.remove('valid');
-		await ApiConstants.constants.currencyPrices(config.league);
-		if (config.league === configForRenderer.config.league)
-			this.$('#loaded-currencies-status').classList.add('valid');
+		this.$('#loaded-currencies-status').classList.remove('valid', 'invalid');
+		this.updateStatusIndicator(
+			ApiConstants.constants.currencyPrices(config.league),
+			this.$('#loaded-currencies-status'),
+			config.league,
+		);
 	}
 
 	importInputSet(unifiedQueryParams) {

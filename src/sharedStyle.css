@@ -21,10 +21,10 @@ body {
 	background: var(--header-back);
 }
 
-.invalid {
-	color: var(--invalid-primary);
-	border-color: var(--invalid-primary);
-	background: var(--invalid-back);
+.busy {
+	color: var(--busy-primary);
+	border-color: var(--busy-primary);
+	background: var(--busy-back);
 }
 
 .valid {
@@ -33,10 +33,10 @@ body {
 	background: var(--valid-back);
 }
 
-.busy {
-	color: var(--busy-primary);
-	border-color: var(--busy-primary);
-	background: var(--busy-back);
+.invalid {
+	color: var(--invalid-primary);
+	border-color: var(--invalid-primary);
+	background: var(--invalid-back);
 }
 
 .hidden {
