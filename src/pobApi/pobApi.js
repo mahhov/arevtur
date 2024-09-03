@@ -188,10 +188,12 @@ class PobApi extends Emitter {
 			weights: this.weights,
 			extraMods: this.extraMods,
 		})
-			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod]));
+			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod],
+				Number(pobType.match(/\d+/)?.[0]) || 1));
 	}
 
 	async getModWeights(type = undefined, includeCorrupted = true) {
+		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
 		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return Promise.reject('PoB getModWeights missing type');
@@ -211,7 +213,7 @@ class PobApi extends Emitter {
 		return Object.values(JSON.parse(jsonString));
 	}
 
-	parseItemTooltip(itemText, valueScale = 1, textPrefixes = []) {
+	parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {
 		itemText = PobApi.clean(itemText);
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
@@ -225,9 +227,14 @@ class PobApi extends Emitter {
 		if (!itemText.split('Equipping this item').slice(1).forEach)
 			console.error(itemText);
 
-		let diffs = itemText.split(/(?=equipping this item)/i).slice(1).concat('').map(diffText => {
+		let diffTexts = itemText.split(/(?=equipping this item)/i).slice(1);
+		if (!diffTexts.length)
+			diffTexts.push('');
+
+		let diffs = diffTexts.map(diffText => {
 			// todo[low] see if we can use a loop to reduce repeated logic
 			let equippingText = diffText.match(/equipping this item.*/i)?.[0] || '';
+			let equippingIndex = Number(equippingText.match(/\d+/)?.[0]) || 1;
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
 			let totalResist = diffText
 				.match(new RegExp(anyDiffResistRegex, 'gi'))
@@ -246,6 +253,7 @@ class PobApi extends Emitter {
 
 			return {
 				equippingText,
+				equippingIndex,
 				effectiveHitPool,
 				totalResist,
 				str,
@@ -256,7 +264,9 @@ class PobApi extends Emitter {
 			};
 		});
 
-		let diff = PobApi.mapMax(diffs, diff => diff.unscaledValue);
+		let diff = exactDiff ?
+			diffs.find(diff => diff.equippingIndex === exactDiff) :
+			PobApi.mapMax(diffs, diff => diff.unscaledValue);
 
 		let summaryText = [
 			...textPrefixes.map(textPrefix => `@bold,pink ${textPrefix}`),
