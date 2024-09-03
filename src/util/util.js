@@ -53,4 +53,5 @@ module.exports = {
 	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
 	randInt,
 	// todo[low] move un-classed & static methods like decode64 here
+	//  (const|let) \w+ = (\w+|\([^)]*\)) =>
 };

@@ -1,76 +1,74 @@
 const {httpRequest: {get}} = require('js-desktop-base');
-var querystring = require('querystring');
+const querystring = require('querystring');
 
-let getEndpointsByLeague = () => {
-	const BASE = 'https://poe.ninja/api/data';
-	const ITEM = `itemoverview`;
-	const CURRENCY = `currencyoverview`;
+class PoeNinjaApi {
+	constructor() {
+		const ITEM = `itemoverview`;
+		const CURRENCY = `currencyoverview`;
 
-	let genEndpointByLeague = (prefix, type) =>
-		league => `${BASE}/${prefix}?${querystring.stringify({league, type})}`;
+		this.endpointsByLeague = {
+			CURRENCY: PoeNinjaApi.genEndpointByLeague(CURRENCY, 'Currency'),
+			FRAGMENT: PoeNinjaApi.genEndpointByLeague(CURRENCY, 'Fragment'),
+			KALGUURAN_RUNE: PoeNinjaApi.genEndpointByLeague(ITEM, 'KalguuranRune'),
+			TATTOO: PoeNinjaApi.genEndpointByLeague(ITEM, 'Tattoo'),
+			OMENS: PoeNinjaApi.genEndpointByLeague(ITEM, 'Omen'),
+			DIVINATION_CARD: PoeNinjaApi.genEndpointByLeague(ITEM, 'DivinationCard'),
+			ARTIFACT: PoeNinjaApi.genEndpointByLeague(ITEM, 'Artifact'),
+			OIL: PoeNinjaApi.genEndpointByLeague(ITEM, 'Oil'),
+			INCUBATOR: PoeNinjaApi.genEndpointByLeague(ITEM, 'Incubator'),
 
-	return {
-		CURRENCY: genEndpointByLeague(CURRENCY, 'Currency'),
-		FRAGMENT: genEndpointByLeague(CURRENCY, 'Fragment'),
-		KALGUURAN_RUNE: genEndpointByLeague(ITEM, 'KalguuranRune'),
-		TATTOO: genEndpointByLeague(ITEM, 'Tattoo'),
-		OMENS: genEndpointByLeague(ITEM, 'Omen'),
-		DIVINATION_CARD: genEndpointByLeague(ITEM, 'DivinationCard'),
-		ARTIFACT: genEndpointByLeague(ITEM, 'Artifact'),
-		OIL: genEndpointByLeague(ITEM, 'Oil'),
-		INCUBATOR: genEndpointByLeague(ITEM, 'Incubator'),
+			UNIQUE_WEAPON: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueWeapon'),
+			UNIQUE_ARMOUR: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueArmour'),
+			UNIQUE_ACCESSORY: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueAccessory'),
+			UNIQUE_FLASK: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueFlask'),
+			UNIQUE_JEWEL: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueJewel'),
+			UNIQUE_RELIC: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueRelic'),
+			SKILL_GEM: PoeNinjaApi.genEndpointByLeague(ITEM, 'SkillGem'),
+			CLUSTER_JEWEL: PoeNinjaApi.genEndpointByLeague(ITEM, 'ClusterJewel'),
 
-		UNIQUE_WEAPON: genEndpointByLeague(ITEM, 'UniqueWeapon'),
-		UNIQUE_ARMOUR: genEndpointByLeague(ITEM, 'UniqueArmour'),
-		UNIQUE_ACCESSORY: genEndpointByLeague(ITEM, 'UniqueAccessory'),
-		UNIQUE_FLASK: genEndpointByLeague(ITEM, 'UniqueFlask'),
-		UNIQUE_JEWEL: genEndpointByLeague(ITEM, 'UniqueJewel'),
-		UNIQUE_RELIC: genEndpointByLeague(ITEM, 'UniqueRelic'),
-		SKILL_GEM: genEndpointByLeague(ITEM, 'SkillGem'),
-		CLUSTER_JEWEL: genEndpointByLeague(ITEM, 'ClusterJewel'),
+			MAP: PoeNinjaApi.genEndpointByLeague(ITEM, 'Map'),
+			BLIGHTED_MAP: PoeNinjaApi.genEndpointByLeague(ITEM, 'BlightedMap'),
+			BLIGHT_RAVAGED_MAP: PoeNinjaApi.genEndpointByLeague(ITEM, 'BlightRavagedMap'),
+			UNIQUE_MAP: PoeNinjaApi.genEndpointByLeague(ITEM, 'UniqueMap'),
+			DELIRIUM_ORB: PoeNinjaApi.genEndpointByLeague(ITEM, 'DeliriumOrb'),
+			INVITATION: PoeNinjaApi.genEndpointByLeague(ITEM, 'Invitation'),
+			SCARAB: PoeNinjaApi.genEndpointByLeague(ITEM, 'Scarab'),
+			MEMORY: PoeNinjaApi.genEndpointByLeague(ITEM, 'Memory'),
 
-		MAP: genEndpointByLeague(ITEM, 'Map'),
-		BLIGHTED_MAP: genEndpointByLeague(ITEM, 'BlightedMap'),
-		BLIGHT_RAVAGED_MAP: genEndpointByLeague(ITEM, 'BlightRavagedMap'),
-		UNIQUE_MAP: genEndpointByLeague(ITEM, 'UniqueMap'),
-		DELIRIUM_ORB: genEndpointByLeague(ITEM, 'DeliriumOrb'),
-		INVITATION: genEndpointByLeague(ITEM, 'Invitation'),
-		SCARAB: genEndpointByLeague(ITEM, 'Scarab'),
-		MEMORY: genEndpointByLeague(ITEM, 'Memory'),
+			BASE_ITEM: PoeNinjaApi.genEndpointByLeague(ITEM, 'BaseType'),
+			FOSSIL: PoeNinjaApi.genEndpointByLeague(ITEM, 'Fossil'),
+			RESONATOR: PoeNinjaApi.genEndpointByLeague(ITEM, 'Resonator'),
+			BEAST: PoeNinjaApi.genEndpointByLeague(ITEM, 'Beast'),
+			ESSENCE: PoeNinjaApi.genEndpointByLeague(ITEM, 'Essence'),
+			VIAL: PoeNinjaApi.genEndpointByLeague(ITEM, 'Vial'),
+		};
 
-		BASE_ITEM: genEndpointByLeague(ITEM, 'BaseType'),
-		FOSSIL: genEndpointByLeague(ITEM, 'Fossil'),
-		RESONATOR: genEndpointByLeague(ITEM, 'Resonator'),
-		BEAST: genEndpointByLeague(ITEM, 'Beast'),
-		ESSENCE: genEndpointByLeague(ITEM, 'Essence'),
-		VIAL: genEndpointByLeague(ITEM, 'Vial'),
+		this.cache = {};
+	}
+
+	static genEndpointByLeague(prefix, type) {
+		const BASE = 'https://poe.ninja/api/data';
+		return league => `${BASE}/${prefix}?${querystring.stringify({league, type})}`;
+	}
+
+	getData(endpoint) {
+		const CACHE_DURATION_S = 12 * 60; // 12 minutes
+
+		// todo[low] consolidate Date.now(), performance.now(), and process.hrtime()
+		let timestampS = process.hrtime()[0];
+		let cache = this.cache[endpoint] = this.cache[endpoint] || {};
+
+		if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_S)
+			return cache.data;
+
+		cache.timestampS = timestampS;
+		return cache.data = get(endpoint)
+			.then(({string}) => JSON.parse(string))
+			.catch(e => {
+				cache.data = null;
+				console.error(`Unable to connect to '${endpoint}':`, e);
+			});
 	};
-};
+}
 
-let endpointsByLeague = getEndpointsByLeague();
-
-const CACHE_DURATION_S = 12 * 60; // 12 minutes
-
-let priceCache = {};
-
-let getData = endpoint => {
-	let timestampS = process.hrtime()[0];
-	let cache = priceCache[endpoint] = priceCache[endpoint] || {};
-
-	if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_S)
-		return cache.data;
-
-	cache.timestampS = timestampS;
-	return cache.data = get(endpoint)
-		.then(({string}) => JSON.parse(string))
-		.catch(e => {
-			cache.data = null;
-			console.error(`Unable to connect to '${endpoint}':`, e);
-		});
-};
-
-module.exports = {endpointsByLeague, getData};
-
-// axios.get = endpoint => Promise.resolve({data: {lines: endpoint + ' ' + parseInt(Math.random() *
-// 10000)}}); df = require('./DataFetcher'); df.getData(df.Endpoints.DIVINATION_CARD).then(data =>
-// console.log(data)); df.getData(df.Endpoints.UNIQUE_ACCESSORY).then(data => console.log(data));
+module.exports = new PoeNinjaApi();
