@@ -31,48 +31,47 @@
 	}
 </style>
 
-<!--<fieldset>-->
-<!--	<legend><label>PoB Config<input type="checkbox"></label></legend>-->
-<x-path-select id="pob-path" class="maximized-hidden" directory
-               placeholder="Select PoB Path"></x-path-select>
-<x-path-select id="build-path" class="maximized-hidden" extension="xml"
-               placeholder="Select PoB Build"></x-path-select>
-<button id="refresh" class="maximized-hidden">Refresh Build</button>
-<div>
-	<label title="Weight for Effective Hit Pool">
-		Life
-		<x-numeric-input id="life-weight" min="0" max="1" step=".05"></x-numeric-input>
-	</label>
-	<label title="Weight for total resists, including over-cap resists">
-		Resist
-		<x-numeric-input id="resist-weight" min="0" max="1" step=".05"></x-numeric-input>
-	</label>
-	<label title="Weight for Full DPS">
-		Damage
-		<x-numeric-input id="damage-weight" min="0" max="1" step=".05"></x-numeric-input>
-	</label>
-	<label title="Weight for total strength">
-		Str
-		<x-numeric-input id="attribute-str-weight" class="attribute-weight"
-		                 min="0" max="1" step=".05"></x-numeric-input>
-	</label>
-	<label title="Weight for total dexterity">
-		Dex
-		<x-numeric-input id="attribute-dex-weight" class="attribute-weight"
-		                 min="0" max="1" step=".05"></x-numeric-input>
-	</label>
-	<label title="Weight for total intelligence">
-		Int
-		<x-numeric-input id="attribute-int-weight" class="attribute-weight"
-		                 min="0" max="1" step=".05"></x-numeric-input>
-	</label>
-	<label title="Exclude ES from Effective Hit Pool">
-		Ignore ES
-		<input id="ignore-es-check" type="checkbox">
-	</label>
-	<label title="Exclude resists from Effective Hit pool">
-		Equal resists
-		<input id="equal-resists-check" type="checkbox">
-	</label>
-</div>
-<!--</fieldset>-->
+<span class="container pob">
+	<x-path-select id="pob-path" class="maximized-hidden" directory
+	               placeholder="Select PoB Path"></x-path-select>
+	<x-path-select id="build-path" class="maximized-hidden" extension="xml"
+	               placeholder="Select PoB Build"></x-path-select>
+	<button id="refresh" class="maximized-hidden">Refresh Build</button>
+	<div>
+		<label title="Weight for Effective Hit Pool">
+			Life
+			<x-numeric-input id="life-weight" min="0" max="1" step=".05"></x-numeric-input>
+		</label>
+		<label title="Weight for total resists, including over-cap resists">
+			Resist
+			<x-numeric-input id="resist-weight" min="0" max="1" step=".05"></x-numeric-input>
+		</label>
+		<label title="Weight for Full DPS">
+			Damage
+			<x-numeric-input id="damage-weight" min="0" max="1" step=".05"></x-numeric-input>
+		</label>
+		<label title="Weight for total strength">
+			Str
+			<x-numeric-input id="attribute-str-weight" class="attribute-weight"
+			                 min="0" max="1" step=".05"></x-numeric-input>
+		</label>
+		<label title="Weight for total dexterity">
+			Dex
+			<x-numeric-input id="attribute-dex-weight" class="attribute-weight"
+			                 min="0" max="1" step=".05"></x-numeric-input>
+		</label>
+		<label title="Weight for total intelligence">
+			Int
+			<x-numeric-input id="attribute-int-weight" class="attribute-weight"
+			                 min="0" max="1" step=".05"></x-numeric-input>
+		</label>
+		<label title="Exclude ES from Effective Hit Pool">
+			Ignore ES
+			<input id="ignore-es-check" type="checkbox">
+		</label>
+		<label title="Exclude resists from Effective Hit pool">
+			Equal resists
+			<input id="equal-resists-check" type="checkbox">
+		</label>
+	</div>
+</span>

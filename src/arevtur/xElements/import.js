@@ -2,6 +2,7 @@
 
 require('./arrangeableList/ArrangeableList');
 require('./autocompleteInput/AutocompleteInput');
+require('./collapsable/Collapsable');
 require('./configToggleButton/ConfigToggleButton');
 require('./formattedText/FormattedText');
 require('./inputImportTradeSearchUrl/InputImportTradeSearchUrl');
@@ -23,5 +24,3 @@ require('./queryProperty/QueryProperty'); // x-autocomplete-input, x-numeric-inp
 // x-arrangeable-list,  x-input-trade-params
 require('./inputs/Inputs');
 require('./results/Results'); // x-autocomplete-input, x-chart
-
-

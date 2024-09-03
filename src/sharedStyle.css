@@ -116,38 +116,6 @@ progress::-webkit-progress-value {
 	width: 12px;
 }
 
-fieldset {
-	border: 1px solid var(--interactable-border);
-}
-
-legend label {
-	cursor: pointer;
-	user-select: none;
-}
-
-legend label::after {
-	content: " [-]"
-}
-
-legend input[type=checkbox] {
-	display: none;
-}
-
-fieldset:has(:checked) {
-	padding-top: 0;
-	padding-bottom: 0;
-	border-style: solid none none none;
-	color: var(--non-interactable-border);
-}
-
-fieldset:has(:checked) > legend label::after {
-	content: " [+]"
-}
-
-fieldset:has(:checked) > :not(legend) {
-	display: none;
-}
-
 .pob {
 	border: 1px var(--colored-text-pink) solid;
 }

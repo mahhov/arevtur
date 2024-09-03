@@ -1,0 +1,44 @@
+<style>
+	@import '../sharedStyle.css';
+
+	:host {
+		display: contents;
+	}
+
+	fieldset {
+		border: 1px solid var(--interactable-border);
+	}
+
+	label {
+		cursor: pointer;
+		user-select: none;
+	}
+
+	label::after {
+		content: " [-]"
+	}
+
+	input[type=checkbox] {
+		display: none;
+	}
+
+	fieldset:has(:checked) {
+		padding-top: 0;
+		padding-bottom: 0;
+		border-style: solid none none none;
+		color: var(--non-interactable-border);
+	}
+
+	fieldset:has(:checked) slot {
+		display: none;
+	}
+
+	fieldset:has(:checked) label::after {
+		content: " [+]"
+	}
+</style>
+
+<fieldset>
+	<legend><label><span id="title"></span><input type="checkbox"></label></legend>
+	<slot name="content"></slot>
+</fieldset>
