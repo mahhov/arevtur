@@ -126,13 +126,10 @@ class PobApi extends Emitter {
 	async send(argsObj) {
 		if (!this.script)
 			return Promise.reject('Ignoring PoB requests until script has started');
-		this.emit('busy');
 		let response = this.script.send(argsObj);
+		this.emit('busy', this.script.pendingResponses.length);
 		response
-			.then(() => {
-				if (!this.script.pendingResponses.length)
-					this.emit('ready');
-			})
+			.then(() => this.emit('busy', this.script.pendingResponses.length))
 			.catch(() => this.emit('not-ready'));
 		// rejections are expected
 		return response.catch(() => '');

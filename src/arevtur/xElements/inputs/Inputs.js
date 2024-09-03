@@ -53,11 +53,11 @@ customElements.define(name, class Inputs extends XElement {
 		//  and failed
 		pobApi.addListener('not-ready', () =>
 			this.$('#loaded-pob-status').classList.remove('valid', 'busy'));
-		pobApi.addListener('busy', () =>
-			this.$('#loaded-pob-status').classList.add('valid', 'busy'));
-		pobApi.addListener('ready', () => {
+		pobApi.addListener('busy', queueLength => {
 			this.$('#loaded-pob-status').classList.add('valid');
-			this.$('#loaded-pob-status').classList.remove('busy');
+			this.$('#loaded-pob-status').classList.toggle('busy', queueLength);
+			this.$('#loaded-pob-status #queue-length').textContent =
+				queueLength ? `(${queueLength})` : '';
 		});
 
 		// todo[medium] sometimes returns 'error 6 / forbidden'
