@@ -30,6 +30,8 @@ document.addEventListener('keydown', e => {
 		toggle('viewHorizontal');
 	if (e.key === 'd' && e.ctrlKey)
 		toggle('darkTheme');
+	if (e.key === 'e' && e.ctrlKey)
+		toggle('experimental');
 });
 
 configForRenderer.addListener('change', config => {

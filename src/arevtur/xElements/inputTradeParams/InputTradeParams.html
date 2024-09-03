@@ -55,7 +55,7 @@
 	<label>Offline<input id="offline-check" type="checkbox"></label>
 	<button id="build-import-for-type-button" class="pob">PoB Import</button>
 </div>
-<div>
+<div class="experimental">
 	<label>
 		armour
 		<x-numeric-input id="armour-input" class="short-input"></x-numeric-input>
@@ -72,7 +72,7 @@
 		<x-tooltip-button id="energy-shield-build-value" class="pob"></x-tooltip-button>
 	</label>
 </div>
-<div>
+<div class="experimental">
 	<label>
 		prefix
 		<x-numeric-input id="prefix-input" class="short-input"></x-numeric-input>
@@ -86,7 +86,9 @@
 <div>
 	<label>Uncorrupted<input id="uncorrupted-check" type="checkbox"></label>
 	<label>Non unique<input id="non-unique-check" type="checkbox"></label>
-	<x-multi-select-lined id="influence-input" placeholder="Add influences"></x-multi-select-lined>
+	<!-- todo[low] influences not working and not styled dark -->
+	<x-multi-select-lined id="influence-input" class="experimental"
+	                      placeholder="Add influences"></x-multi-select-lined>
 </div>
 <div>
 	<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
