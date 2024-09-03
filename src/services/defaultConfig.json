@@ -4,6 +4,7 @@
   "darkTheme": true,
   "viewHorizontal": true,
   "viewMaximize": false,
+  "experimental": false,
   "buildParams": {
     "pobPath": "",
     "buildPath": "",

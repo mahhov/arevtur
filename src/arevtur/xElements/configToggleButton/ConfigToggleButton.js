@@ -37,6 +37,5 @@ configForRenderer.addListener('change', config => {
 	document.documentElement.classList.toggle('horizontal',
 		!config.viewMaximize && config.viewHorizontal);
 	document.documentElement.classList.toggle('dark', config.darkTheme);
+	document.documentElement.classList.toggle('experimental', config.experimental);
 });
-
-document.documentElement.classList.toggle('experimental', appData.isDev);
