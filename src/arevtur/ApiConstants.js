@@ -17,7 +17,6 @@ let retry = handler => {
 	};
 };
 
-
 class Constants {
 
 	// leagues

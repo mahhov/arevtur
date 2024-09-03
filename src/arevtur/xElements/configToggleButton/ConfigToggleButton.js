@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const {configForRenderer} = require('../../../services/configForRenderer');
+const {configForRenderer} = require('../../../services/config/configForRenderer');
 const appData = require('../../../services/appData');
 
 let toggle = key => configForRenderer.config = {[key]: !configForRenderer.config[key]};

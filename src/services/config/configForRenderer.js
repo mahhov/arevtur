@@ -1,5 +1,5 @@
 const {ipcRenderer} = require('electron');
-const Emitter = require('../util/Emitter');
+const Emitter = require('../../util/Emitter');
 const defaultConfig = require('./defaultConfig.json');
 
 class ConfigForRenderer extends Emitter {

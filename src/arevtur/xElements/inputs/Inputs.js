@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const {configForRenderer} = require('../../../services/configForRenderer');
+const {configForRenderer} = require('../../../services/config/configForRenderer');
 const ApiConstants = require('../../ApiConstants');
 const {TradeQuery} = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');

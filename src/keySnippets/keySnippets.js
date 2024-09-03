@@ -1,6 +1,6 @@
 const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./ViewHandle');
-const config = require('../services/config');
+const config = require('../services/config/configForMain');
 const Pricer = require('./Pricer');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');

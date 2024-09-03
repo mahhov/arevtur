@@ -1,14 +1,12 @@
 const {ipcMain} = require('electron');
 const fs = require('fs').promises;
-const appData = require('./appData');
-const Emitter = require('../util/Emitter');
-const {deepMerge} = require('../util/util');
+const appData = require('../appData');
+const Emitter = require('../../util/Emitter');
+const {deepMerge} = require('../../util/util');
 const defaultConfig = require('./defaultConfig.json');
 
-// todo[low] rename configForMain, and move into config dir
-
 // keeps config in sync between windows
-class Config extends Emitter {
+class ConfigForMain extends Emitter {
 	constructor() {
 		super();
 		this.config = defaultConfig;
@@ -47,6 +45,6 @@ class Config extends Emitter {
 	}
 }
 
-module.exports = new Config();
+module.exports = new ConfigForMain();
 
 // todo[medium] viewHorizontal & viewMaximize should use local storage, see git branch configButton

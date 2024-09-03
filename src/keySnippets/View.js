@@ -1,6 +1,6 @@
 const os = require('os');
 const {ipcRenderer: ipc, shell} = require('electron');
-const {configForRenderer} = require('../services/configForRenderer');
+const {configForRenderer} = require('../services/config/configForRenderer');
 const appData = require('../services/appData');
 
 const ipcSend = message => ipc.send('window-request', message);

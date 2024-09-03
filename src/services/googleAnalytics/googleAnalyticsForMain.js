@@ -1,7 +1,7 @@
 const os = require('os');
 const {ipcMain, app} = require('electron');
 const {httpRequest: {post2}} = require('js-desktop-base');
-const config = require('../config');
+const config = require('../config/configForMain');
 const appData = require('../appData');
 const {flattenObject} = require('../../util/util');
 
