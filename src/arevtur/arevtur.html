@@ -59,7 +59,7 @@
 
 	let lastTradeQueries;
 	let submitQueries = async tradeQueries => {
-		let startTime = Performance.now();
+		let startTime = performance.now();
 
 		cancelQueries();
 		lastTradeQueries = tradeQueries;

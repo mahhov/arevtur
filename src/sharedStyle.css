@@ -48,7 +48,7 @@ body {
 	border-color: var(--interactable-focus-border);
 }
 
-button, input, select,
+button, input, select, textarea,
 ::-webkit-scrollbar-thumb, .interactable {
 	background: var(--interactable-back);
 	color: var(--interactable-primary);
@@ -61,18 +61,40 @@ button {
 	cursor: pointer;
 }
 
-button:hover, input:hover, option:hover,
+button:hover, input:hover, option:hover, textarea:hover,
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--interactable-hover-back);
 }
 
-button:active, option:active,
+button:active, input:active, option:active, textarea:active,
 ::-webkit-scrollbar-thumb:active {
 	background: var(--interactable-active-back);
 }
 
 input {
 	padding: 3px;
+}
+
+input[type=checkbox] {
+	appearance: none;
+	width: 1em;
+	height: 1em;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+input[type=checkbox]::before {
+	content: "";
+	width: 5px;
+	height: 9px;
+	border: solid var(--primary);
+	border-width: 0 2px 2px 0;
+	transform: rotate(35deg);
+}
+
+input[type=checkbox]:not(:checked)::before {
+	visibility: hidden;
 }
 
 progress {
@@ -142,6 +164,3 @@ progress::-webkit-progress-value {
 .pink {
 	color: var(--colored-text-pink);
 }
-
-/* todo[medium] checkbox styling */
-/* todo[medium] textarea styling */
