@@ -4,6 +4,7 @@ const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
 const ApiConstants = require('../arevtur/ApiConstants');
 const Emitter = require('../util/Emitter');
+const {deepEquality} = require('../util/util');
 
 class Script extends CustomOsScript {
 	constructor(pobPath) {
@@ -100,13 +101,15 @@ class PobApi extends Emitter {
 		          weights = this.weights,
 		          extraMods = this.extraMods,
 	          } = {}) {
+		if (pobPath === this.pobPath && buildPath === this.buildPath &&
+			deepEquality(weights, this.weights) &&
+			deepEquality(extraMods, this.extraMods))
+			return;
+
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
 		this.weights = weights;
-		this.extraMods = [
-			extraMods.ignoreEs ? 'maximum energy shield is 0' : '',
-			extraMods.equalResists ? '+1000% to all resistances' : '',
-		].filter(v => v).join(' \\n ');
+		this.extraMods = extraMods;
 		this.restart();
 		// todo[low] support stopping pending commands without having to restart the script
 	}
@@ -143,7 +146,7 @@ class PobApi extends Emitter {
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
 			weights: this.weights,
-			extraMods: this.extraMods,
+			extraMods: this.extraModStrings,
 		}).then(text => this.parseItemTooltip(text));
 	}
 
@@ -156,7 +159,7 @@ class PobApi extends Emitter {
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
 			weights: this.weights,
-			extraMods: this.extraMods,
+			extraMods: this.extraModStrings,
 		}).then(text => this.parseItemTooltip(text, 1, craftedMods));
 	}
 
@@ -185,7 +188,7 @@ class PobApi extends Emitter {
 			mod: itemMod,
 			type: pobType,
 			weights: this.weights,
-			extraMods: this.extraMods,
+			extraMods: this.extraModStrings,
 		})
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod],
 				Number(pobType.match(/\d+/)?.[0]) || 1));
@@ -201,7 +204,7 @@ class PobApi extends Emitter {
 			type: pobType,
 			includeCorrupted,
 			weights: this.weights,
-			extraMods: this.extraMods,
+			extraMods: this.extraModStrings,
 		}).then(JSON.parse);
 	}
 
@@ -210,6 +213,13 @@ class PobApi extends Emitter {
 			cmd: 'getCraftedMods',
 		});
 		return Object.values(JSON.parse(jsonString));
+	}
+
+	get extraModStrings() {
+		return [
+			this.extraMods.ignoreEs ? 'maximum energy shield is 0' : '',
+			this.extraMods.equalResists ? '+1000% to all resistances' : '',
+		].filter(v => v).join(' \\n ');
 	}
 
 	parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {

@@ -37,6 +37,9 @@ let flattenObject = (obj, separator = '_') => {
 	}, {});
 };
 
+let deepEquality = (obj1, obj2) =>
+	JSON.stringify(obj1) === JSON.stringify(obj2);
+
 let randInt = n => Math.floor(Math.random() * n);
 
 module.exports = {
@@ -46,6 +49,7 @@ module.exports = {
 	deepMerge,
 	deepCopy,
 	flattenObject,
+	deepEquality,
 	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
 	randInt,
 	// todo[low] move un-classed & static methods like decode64 here
