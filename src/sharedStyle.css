@@ -1,3 +1,5 @@
+/* big items */
+
 html {
 	color: var(--primary);
 	background: var(--back);
@@ -7,6 +9,7 @@ body {
 	font-family: sans-serif;
 }
 
+/* todo[high] remove, unused */
 .alternate {
 	color: var(--alternate-primary);
 }
@@ -16,10 +19,13 @@ body {
 	background: var(--area-back);
 }
 
+/* todo[high] remove, unused */
 .header {
 	color: var(--header-primary);
 	background: var(--header-back);
 }
+
+/* status indicators */
 
 .busy {
 	color: var(--busy-primary);
@@ -39,9 +45,13 @@ body {
 	background: var(--invalid-back);
 }
 
+/* hidden */
+
 .hidden {
 	display: none !important;
 }
+
+/* inputs */
 
 :focus {
 	outline: 0;
@@ -117,9 +127,43 @@ progress::-webkit-progress-value {
 	width: 12px;
 }
 
+fieldset {
+	border: 1px solid var(--interactable-border);
+}
+
+legend label {
+	cursor: pointer;
+	user-select: none;
+}
+
+legend label::after {
+	content: " [-]"
+}
+
+legend input[type=checkbox] {
+	display: none;
+}
+
+fieldset:has(:checked) {
+	padding-top: 0;
+	padding-bottom: 0;
+	border-style: solid none none none;
+	color: var(--non-interactable-border);
+}
+
+fieldset:has(:checked) > legend label::after {
+	content: " [+]"
+}
+
+fieldset:has(:checked) > :not(legend) {
+	display: none;
+}
+
 .pob {
 	border: 1px var(--colored-text-pink) solid;
 }
+
+/* conditionally visible via configs */
 
 .maximize-shown {
 	display: var(--maximize-shown-display);
@@ -132,6 +176,8 @@ progress::-webkit-progress-value {
 .experimental {
 	display: var(--experimental-display);
 }
+
+/* text */
 
 .bold {
 	font-weight: bold;
