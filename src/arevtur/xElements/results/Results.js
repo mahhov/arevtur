@@ -60,6 +60,8 @@ customElements.define(name, class Inputs extends XElement {
 			this.renderItemsData(true);
 		});
 
+		this.expectedCount = 0;
+		this.updateResultsCount();
 		// testData(this);
 	}
 
