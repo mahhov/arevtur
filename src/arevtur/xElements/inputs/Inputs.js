@@ -14,7 +14,7 @@ let timestamp = () => {
 	// return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
 };
 
-customElements.define(name, class Inputs extends XElement {
+customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {};
 	}

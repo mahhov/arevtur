@@ -1,7 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 
-customElements.define(name, class InputImportTradeSearchUrl extends XElement {
+customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {url: {}, itemText: {}};
 	}

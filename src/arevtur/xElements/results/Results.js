@@ -5,7 +5,7 @@ const Searcher = require('../../Searcher');
 const Debouncer = require('../../../util/Debouncer');
 const testData = require('./testData');
 
-customElements.define(name, class Inputs extends XElement {
+customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {expectedCount: {}};
 	}

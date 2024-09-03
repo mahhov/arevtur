@@ -4,7 +4,7 @@ const pobApi = require('../../../pobApi/pobApi');
 const appData = require('../../../services/appData');
 const {configForRenderer} = require('../../../services/config/configForRenderer');
 
-customElements.define(name, class InputBuild extends XElement {
+customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {};
 	}
