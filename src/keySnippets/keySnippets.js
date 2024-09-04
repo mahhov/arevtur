@@ -48,7 +48,7 @@ let priceClipboard = async itemText => {
 		{pricer: pricerOutput.length, pob: !!pobOutput.text});
 	await viewHandle.showText([
 		...pricerOutput,
-		pobOutput.text ? '-'.repeat(30) : null,
+		pricerOutput.length && pobOutput.text ? '-'.repeat(30) : null,
 		pobOutput.text || null,
 	].filter(v => v).join('\n'), 0);
 };

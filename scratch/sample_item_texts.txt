@@ -1,3 +1,24 @@
+Item Class: Belts
+Rarity: Rare
+Apocalypse Leash
+Leather Belt
+--------
+Requirements:
+Level: 57
+--------
+Item Level: 85
+--------
++40 to maximum Life (implicit)
+--------
++400 to Armour
++140 to maximum Life
++45% to Fire Resistance
++41% to Lightning Resistance
+19% increased Stun and Block Recovery
+--------
+Note: ~price 6 chaos
+
+
 Item Class: Rings
 Rarity: Rare
 Havoc Knuckle
