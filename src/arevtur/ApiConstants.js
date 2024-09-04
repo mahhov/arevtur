@@ -2,7 +2,7 @@ const {httpRequest, XPromise} = require('js-desktop-base');
 const poeNinjaApi = require('../services/poeNinjaApi');
 
 // Without a non-empty user-agent header, PoE will return 403.
-let get = endpoint => httpRequest.get(endpoint, {}, {'User-Agent': '_'});
+let get = endpoint => httpRequest.get(endpoint, {}, {'User-Agent': 'Arevtur'});
 
 let duration3hours = 3 * 60 * 60 * 1000;
 let retry = handler => {
