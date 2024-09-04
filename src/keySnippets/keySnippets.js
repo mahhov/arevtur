@@ -83,7 +83,7 @@ let init = () => {
 		addPoeShortcutListener('p', displayDevOptions, true);
 
 	setupPobApi();
-	config.addListener('change', config => setupPobApi());
+	configForMain.addListener('change', config => setupPobApi());
 };
 
 let setupPobApi = () => pobApi.setParams(configForMain.config.buildParams);
