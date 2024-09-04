@@ -9,6 +9,7 @@ require('./inputImportTradeSearchUrl/InputImportTradeSearchUrl');
 require('./inputSet/InputSet');
 require('./numericInput/NumericInput');
 require('./pathSelect/PathSelect');
+require('./tour/Tour');
 
 require('./inputBuild/InputBuild'); // x-path-select, x-numeric-input
 require('./multiSelectLined/MultiSelectLined'); // x-autocomplete-input

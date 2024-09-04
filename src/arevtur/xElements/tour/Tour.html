@@ -1,0 +1,48 @@
+<style>
+	@import '../sharedStyle.css';
+
+	:host {
+		display: contents;
+	}
+
+	.blur {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		opacity: 50%;
+		background: black;
+	}
+
+	#highlight-border {
+		position: absolute;
+		background: var(--colored-text-background-blue);
+	}
+
+	#container {
+		position: absolute;
+		background: var(--colored-text-background-blue);
+		border: 1px solid var(--interactable-focus-border);
+		padding: 10px;
+	}
+
+	#text {
+		white-space: pre;
+		margin-bottom: 10px;
+	}
+</style>
+
+<div class="blur"></div>
+
+<div id="highlight-border"></div>
+
+<div id="container">
+	<div id="text"></div>
+	<!-- todo[medium] styling for disabled buttons -->
+	<div>
+		<button id="prev">Previous</button>
+		<button id="next">Next</button>
+		<button id="dismiss">X</button>
+	</div>
+</div>

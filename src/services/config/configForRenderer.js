@@ -29,4 +29,5 @@ class ConfigForRenderer extends Emitter {
 	}
 }
 
+// todo[high] here and elsewhere, export `new X()` instead of `{x: new X()}`
 module.exports = {configForRenderer: new ConfigForRenderer()};

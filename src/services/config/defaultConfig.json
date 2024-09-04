@@ -5,6 +5,7 @@
   "viewHorizontal": true,
   "viewMaximize": false,
   "experimental": false,
+  "tourComplete": false,
   "buildParams": {
     "pobPath": "",
     "buildPath": "",

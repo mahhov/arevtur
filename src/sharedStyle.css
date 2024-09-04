@@ -116,11 +116,18 @@ progress::-webkit-progress-value {
 	width: 12px;
 }
 
-.pob {
-	border: 1px var(--colored-text-pink) solid;
+/* special */
+
+.tour-highlight {
+	z-index: 1;
+	position: relative;
 }
 
-/* conditionally visible via configs */
+.pob {
+	border: 1px solid var(--colored-text-pink);
+}
+
+/* state based */
 
 .maximize-shown {
 	display: var(--maximize-shown-display);

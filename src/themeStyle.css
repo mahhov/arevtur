@@ -56,7 +56,7 @@
 	--interactable-border: #232;
 	--interactable-hover-back: #333;
 	--interactable-active-back: #555;
-	--interactable-focus-border: #73b4e6;
+	--interactable-focus-border: var(--colored-text-blue);
 
 	/* non interactable elements that need to stand out e.g. progress bar */
 	--non-interactable-back: #20384f;
