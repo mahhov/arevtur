@@ -1,7 +1,7 @@
-const os = require('os');
 const {ipcRenderer: ipc, shell} = require('electron');
 const {configForRenderer} = require('../services/config/configForRenderer');
 const appData = require('../services/appData');
+const {openPath} = require('../util/util');
 
 const ipcSend = message => ipc.send('window-request', message);
 
@@ -81,10 +81,7 @@ $('#restrict-window').addEventListener('change', () =>
 
 $('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
 
-$('#open-config').addEventListener('click', () => {
-	let path = (os.platform() === 'linux' ? 'file:' : '') + appData.basePath;
-	shell.openExternal(path);
-});
+$('#open-config').addEventListener('click', () => openPath(appData.basePath));
 
 configForRenderer.addListener('change', config => {
 	$('#restrict-window').checked = configForRenderer.config.restrictToPoeWindow;

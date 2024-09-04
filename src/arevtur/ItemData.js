@@ -1,6 +1,6 @@
 const apiConstants = require('./apiConstants');
 const pobApi = require('../services/pobApi/pobApi');
-const util = require('../util/util');
+const {maxIndex} = require('../util/util');
 
 class ItemData {
 	constructor(league, affixValueShift, queryDefenseProperties, priceShifts,
@@ -187,7 +187,7 @@ class ItemData {
 
 		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
 			pobApi.evalItemWithCraft(this.text, craftableMod)));
-		let bestI = util.maxIndex(craftableMods.map(craftableMod => craftableMod.value));
+		let bestI = maxIndex(craftableMods.map(craftableMod => craftableMod.value));
 		return craftableMods[bestI];
 	}
 }

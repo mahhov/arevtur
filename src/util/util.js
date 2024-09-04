@@ -1,3 +1,13 @@
+const os = require('os');
+const {shell} = require('electron');
+
+let minIndex = array => array.indexOf(Math.min(...array));
+let maxIndex = array => array.indexOf(Math.max(...array));
+let clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+let transpose = a => a[0].map((_, i) => a.map(v => v[i]));
+let randInt = n => Math.floor(Math.random() * n);
+let randId = () => randInt(1000 ** 2) + 1;
+
 let deepMerge = (target, source) => {
 	if (typeof source !== 'object' || source === null)
 		return source;
@@ -40,20 +50,29 @@ let flattenObject = (obj, separator = '_') => {
 let deepEquality = (obj1, obj2) =>
 	JSON.stringify(obj1) === JSON.stringify(obj2);
 
-let randInt = n => Math.floor(Math.random() * n);
-let randId = () => randInt(1000 ** 2) + 1;
+let openPath = (path, isFile = false) => {
+	console.log(path, isFile)
+	if (isFile)
+		shell.showItemInFolder(path);
+	else
+		shell.openPath(path);
+};
 
 module.exports = {
-	minIndex: array => array.indexOf(Math.min(...array)),
-	maxIndex: array => array.indexOf(Math.max(...array)),
-	clamp: (value, min, max) => Math.min(Math.max(value, min), max),
+	minIndex,
+	maxIndex,
+	clamp,
+	transpose,
+	randInt,
+	randId,
+
 	deepMerge,
 	deepCopy,
 	flattenObject,
 	deepEquality,
-	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
-	randInt,
-	randId,
+
+	openPath,
+
 	// todo[low] move un-classed & static methods like decode64 here
 	//  (const|let) \w+ = (\w+|\([^)]*\)) =>
 };

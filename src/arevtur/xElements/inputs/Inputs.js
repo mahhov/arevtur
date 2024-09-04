@@ -1,3 +1,4 @@
+const fs = require('fs').promises;
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/config/configForRenderer');
@@ -5,8 +6,10 @@ const apiConstants = require('../../apiConstants');
 const TradeQuery = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../services/pobApi/pobApi');
-const util = require('../../../util/util');
+const {minIndex, openPath} = require('../../../util/util');
 const ItemData = require('../../ItemData');
+const logging = require('../../../services/logging');
+const appData = require('../../../services/appData');
 
 let timestamp = () => {
 	let date = new Date();
@@ -52,6 +55,19 @@ customElements.define(name, class extends XElement {
 		this.$('#session-id-input').addEventListener('change', () => this.store());
 
 		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
+
+		this.$('#bug-report-button').addEventListener('click', async () => {
+			let configs = configForRenderer.config;
+			let local = {...localStorage, 'input-session-id': 'redacted'};
+			let build = await fs.readFile(configs.buildParams.buildPath)
+				.then(r => r.toString())
+				.catch(e => e);
+			let logs = logging.logs;
+			let report = {configs, local, build, logs};
+			let reportString = JSON.stringify(report, '', 2);
+			await fs.writeFile(appData.bugReportPath, reportString);
+			openPath(appData.bugReportPath, true);
+		});
 
 		pobApi.addListener('not-ready', () =>
 			this.$('#loaded-pob-status').classList.add('invalid'));
@@ -247,7 +263,7 @@ customElements.define(name, class extends XElement {
 			['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft],
 		];
 		let manual6LinkCheapestOption = manual6LinkOptions[
-			util.minIndex(manual6LinkOptions.map(v => v[1]))];
+			minIndex(manual6LinkOptions.map(v => v[1]))];
 
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
