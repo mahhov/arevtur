@@ -67,13 +67,14 @@
 
 <x-input-build id="input-build"></x-input-build>
 
-<div class="maximized-hidden experimental">
-	<x-input-import-trade-search-url
-			id="input-import-trade-search-url"></x-input-import-trade-search-url>
+<div class="maximized-hidden">
+	<x-input-import-trade-search-url id="input-import-trade-search-url"
+	                                 class="experimental"></x-input-import-trade-search-url>
 	<div id="input-set-container">
 		<x-arrangeable-list id="input-set-list"></x-arrangeable-list>
 		<button id="add-input-set-button">add</button>
-		<button id="close-all-input-sets-button">clear all</button>
+		<button id="clear-all-input-sets-button">clear all</button>
+		<!-- todo[low] duplicate input set button -->
 	</div>
 </div>
 

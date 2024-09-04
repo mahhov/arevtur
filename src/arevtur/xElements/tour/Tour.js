@@ -104,6 +104,13 @@ customElements.define(name, class Tour extends XElement {
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
+					lines: ['4/6', 'You can switch between saved queries with these tabs.'],
+					elementQueries: [
+						'#input-set-container',
+					],
+					corner: {x: -1, y: 1},
+					align: {x: 1, y: 1},
+				}, {
 					lines: ['4/6', 'Niche (and experimental) query options can be enabled here.'],
 					elementQueries: [
 						'[config-key=experimental]',
