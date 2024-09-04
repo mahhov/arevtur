@@ -154,7 +154,7 @@ class PobApi extends Emitter {
 		if (!['requirements:', 'sockets:', 'item class: jewels']
 			.some(search => item.toLowerCase().includes(search)))
 			return Promise.reject('Item is unequippable');
-		item = [item, '// Craft:', ...craftedMods].join('\n');
+		item = [item, '', ...craftedMods].join('\n');
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
