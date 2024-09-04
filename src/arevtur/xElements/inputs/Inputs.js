@@ -32,7 +32,7 @@ customElements.define(name, class extends XElement {
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo[high] try catch JSON.parse
-		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{}];
+		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
 		this.updateStatusIndicator(
