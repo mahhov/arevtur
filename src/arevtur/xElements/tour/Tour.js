@@ -67,7 +67,8 @@ customElements.define(name, class Tour extends XElement {
 					lines: ['3/6', 'Select an item type and max price; e.g. amulet for under 50c.'],
 					elementQueries: [
 						'#type-input',
-						'#price-input',
+						'label:has(#min-value-input)',
+						'label:has(#price-input)',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
@@ -171,8 +172,13 @@ customElements.define(name, class Tour extends XElement {
 			this.update();
 		});
 		this.$('#next').addEventListener('click', () => {
-			this.stepI++;
-			this.update();
+			if (this.stepI === this.steps.length - 1 ||
+				this.steps[this.stepI + 1].elementQueries
+					.map(query => deepQuery(query)[0])
+					.every(v => v)) {
+				this.stepI++;
+				this.update();
+			}
 		});
 		this.$('#dismiss').addEventListener('click', () => {
 			this.stepI = this.steps.length;
@@ -240,7 +246,4 @@ customElements.define(name, class Tour extends XElement {
 	}
 });
 
-// todo[blocking]
-//  next before submit results return
-//  price highlighting off
-//  finalize texts
+// todo[blocking] finalize texts
