@@ -25,8 +25,10 @@ class Script extends CustomOsScript {
 
 	onScriptResponse({out, err, exit}) {
 		if (exit || err) {
-			console.error('PobApi failed:', err, exit);
-			this.clear();
+			if (!this.cleared) {
+				console.error('PobApi failed:', err, exit);
+				this.clear();
+			}
 			return;
 		}
 		// let maxLength = 200;
@@ -66,8 +68,10 @@ class Script extends CustomOsScript {
 	}
 
 	async clear() {
-		(await this.process).kill('SIGKILL'); // necessary on linux
 		this.cleared = true;
+		(await this.process).kill('SIGKILL'); // necessary on linux
+		// todo[low] distinguish between error (e.g. lua crashed) and restart (e.g. user changed
+		//  weight).
 		this.pendingResponses.forEach(pendingResponse =>
 			pendingResponse.reject('PoBApi failed'));
 		this.pendingResponses = [];
