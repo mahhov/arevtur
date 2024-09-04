@@ -90,7 +90,7 @@ let setupPobApi = () => pobApi.setParams(config.config.buildParams);
 init();
 
 module.exports = {
-	trayOptions: appData.isDev ? [{label: 'Dev options', click: displayDevOptions}] : [],
+	trayOptions: [appData.isDev && {label: 'Dev options', click: displayDevOptions}],
 };
 
 // todo[medium] a way to restart PoB for clipboard without having to open preferences. maybe set

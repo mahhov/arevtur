@@ -1,5 +1,8 @@
+const fs = require('fs').promises;
 const path = require('path');
+const {app} = require('electron');
 const {TrayHelper} = require('js-desktop-base');
+const appData = require('./services/appData');
 const keySnippet = require('./keySnippets/keySnippets');
 const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
 
@@ -16,4 +19,12 @@ TrayHelper.createExitTray(trayIcon, 'Arevtur', [
 	...windows.flatMap(w => w.trayOptions),
 	{type: 'separator'},
 	{label: `Dev console`, click: () => windows.forEach(w => w.showDevTools())},
-]);
+	appData.isDev && {
+		label: `Clear all data and exit`, click: async () => {
+			await Promise.all(windows.map(async w =>
+				(await w.window).webContents.session.clearStorageData()));
+			await fs.unlink(appData.configPath);
+			app.exit();
+		},
+	},
+].filter(v => v));
