@@ -11,7 +11,6 @@ const {
 const pobApi = require('../../../pobApi/pobApi');
 const Searcher = require('../../Searcher');
 const Macros = require('../../Macros');
-const PobConsts = require('../../../pobApi/PobConsts');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {

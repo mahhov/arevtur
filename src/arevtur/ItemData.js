@@ -1,7 +1,6 @@
 const apiConstants = require('./apiConstants');
 const pobApi = require('../pobApi/pobApi');
 const util = require('../util/util');
-const PobConsts = require('../pobApi/PobConsts');
 
 class ItemData {
 	constructor(league, affixValueShift, queryDefenseProperties, priceShifts,
