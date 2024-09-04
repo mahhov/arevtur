@@ -9,7 +9,7 @@ const {
 	influenceProperties,
 } = require('./Properties');
 const pobApi = require('../../../pobApi/pobApi');
-const Searcher = require('../../Searcher');
+const Searcher = require('../../../util/Searcher');
 const Macros = require('../../Macros');
 
 customElements.define(name, class extends XElement {

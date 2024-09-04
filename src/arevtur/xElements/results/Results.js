@@ -1,7 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ItemsData = require('../../ItemsData');
-const Searcher = require('../../Searcher');
+const Searcher = require('../../../util/Searcher');
 const Debouncer = require('../../../util/Debouncer');
 const testData = require('./testData');
 

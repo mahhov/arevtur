@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const Searcher = require('../../Searcher');
+const Searcher = require('../../../util/Searcher');
 
 customElements.define(name, class AutocompleteInput extends XElement {
 	constructor() {

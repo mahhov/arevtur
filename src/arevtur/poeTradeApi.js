@@ -1,8 +1,8 @@
 const querystring = require('querystring');
 const {httpRequest: {get, post}} = require('js-desktop-base');
-const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
+const RateLimitedRetryQueue = require('../util/RateLimitedRetryQueue');
 const apiConstants = require('./apiConstants');
-const Stream = require('./Stream');
+const Stream = require('../util/Stream');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
 const ItemData = require('./ItemData');
 

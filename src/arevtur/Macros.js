@@ -1,5 +1,5 @@
 const apiConstants = require('./apiConstants');
-const Searcher = require('./Searcher');
+const Searcher = require('../util/Searcher');
 const pobApi = require('../pobApi/pobApi');
 
 class Macros {
