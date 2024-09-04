@@ -24,6 +24,8 @@ class UnifiedQueryParams {
 	nonUnique = false;
 	influences = [];
 	weightEntries = [];            // (propertyId, weight, locked, enabled)[]
+	// todo[high] don't default '' to 0 in order to not break negated mods; e.g. 'Socketed Attacks
+	//  have +# to Total Mana Cost'
 	andEntries = [];               // (propertyId, weight, locked, enabled)[]
 	notEntries = [];               // (propertyId, enabled)[]
 	conditionalPrefixEntries = []; // (propertyId, weight, locked, enabled)[]
