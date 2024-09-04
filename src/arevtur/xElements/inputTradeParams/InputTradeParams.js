@@ -44,8 +44,8 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		apiConstants.itemTexts().then(itemTexts =>
-			this.$('#name-input').autocompletes = itemTexts);
+		apiConstants.items.then(items =>
+			this.$('#name-input').autocompletes = items);
 		this.$('#name-input').addEventListener('change', () => {
 			this.name = this.$('#name-input').value;
 			this.emit('change');

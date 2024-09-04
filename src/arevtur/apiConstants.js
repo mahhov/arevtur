@@ -164,19 +164,16 @@ class ApiConstants {
 		/* ['Pledge of Hands', ...] */
 	}
 
-	async itemTexts() {
-		await this.initItemsPromise; // todo[blocking] what is this
-		return this.items;
-	}
-
 	// utility
 
 	static createRequestHeader(sessionId = undefined) {
-		// todo[blocking] wait for user id to make requests
 		// Without a non-empty user-agent header, PoE will return 403.
 		console.error(configForRenderer.config.userId);
 		return {
 			// Without a non-empty user-agent header, PoE will return 403.
+			// todo[high] userId will be empty before config has loaded. If PoE API starts blocking
+			//  'arevtur_', we'll need to wait for the actual userId to load or flush out headers
+			//  to look more like the expected value; e.g. scratch/poeTradeHeader.json
 			'User-Agent': `arevtur_${configForRenderer.config.userId}`,
 			Cookie: sessionId ? `POESESSID=${sessionId}` : '',
 		};
