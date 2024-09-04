@@ -2,7 +2,7 @@ const {ipcMain} = require('electron');
 const fs = require('fs').promises;
 const appData = require('../appData');
 const Emitter = require('../../util/Emitter');
-const {deepMerge} = require('../../util/util');
+const {deepMerge, randId} = require('../../util/util');
 const defaultConfig = require('./defaultConfig.json');
 
 // keeps config in sync between windows
@@ -15,6 +15,10 @@ class ConfigForMain extends Emitter {
 		} catch (e) {
 			// for the first run, config.json won't exist
 		}
+		// Initialize userId for first run. Used for google analytics and for PoE trade API for the
+		// User-Agent header.
+		if (!this.config.userId)
+			this.updateConfig({userId: String(randId())});
 
 		ipcMain.handle('config-change', (event, newConfig) => this.updateConfig(newConfig));
 

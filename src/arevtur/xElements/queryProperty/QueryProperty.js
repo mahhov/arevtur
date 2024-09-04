@@ -2,7 +2,8 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const pobApi = require('../../../pobApi/pobApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
-const ApiConstants = require('../../ApiConstants');
+const apiConstants = require('../../apiConstants');
+const PobConsts = require('../../../pobApi/PobConsts');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -111,9 +112,10 @@ customElements.define(name, class extends XElement {
 	async refreshBuild() {
 		try {
 			this.buildValue = '';
-			let modWeights = await pobApi.getModWeights(this.type);
+			let pobType = await apiConstants.typeToPobType(this.type);
+			let modWeights = await pobApi.getModWeights(pobType);
 			let unifiedQueryParams = UnifiedQueryParams.fromModWeights({}, modWeights);
-			let propertyId = await ApiConstants.constants.propertyTextToId(this.property);
+			let propertyId = await apiConstants.propertyTextToId(this.property);
 			this.buildValue =
 				unifiedQueryParams.weightEntries.find(entry => entry[0] === propertyId)[1];
 		} catch (e) {

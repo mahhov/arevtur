@@ -1,4 +1,4 @@
-const ApiConstants = require('./ApiConstants');
+const apiConstants = require('./apiConstants');
 const {XElement} = require('xx-element');
 const {deepCopy} = require('../util/util');
 const {
@@ -46,7 +46,7 @@ class UnifiedQueryParams {
 
 	async toInputTradeQueryParams(inputElement) {
 		inputElement.name = this.name || '';
-		inputElement.type = await ApiConstants.constants.typeIdToText(this.type) || '';
+		inputElement.type = await apiConstants.typeIdToText(this.type) || '';
 		inputElement.minValue = this.minValue || 0;
 		inputElement.price = this.maxPrice || 0;
 		inputElement.offline = this.offline || false;
@@ -66,7 +66,7 @@ class UnifiedQueryParams {
 		XElement.clearChildren(inputElement.$('#query-properties-list'));
 		this.sharedWeightEntries.map(async ([property, weight, locked, enabled]) => {
 			let queryProperty = inputElement.addQueryProperty();
-			queryProperty.property = (await ApiConstants.constants.propertyById(property))?.text;
+			queryProperty.property = (await apiConstants.propertyById(property))?.text;
 			queryProperty.weight = weight;
 			queryProperty.filter = 'weight';
 			queryProperty.locked = locked;
@@ -79,7 +79,7 @@ class UnifiedQueryParams {
 				this[key].forEach(async ([property, weight, locked, enabled]) => {
 					let queryProperty = inputElement.addQueryProperty();
 					queryProperty.property =
-						(await ApiConstants.constants.propertyById(property))?.text;
+						(await apiConstants.propertyById(property))?.text;
 					queryProperty.filter = filter;
 					queryProperty.weight = weight;
 					queryProperty.locked = locked;
@@ -89,16 +89,16 @@ class UnifiedQueryParams {
 				this[key].forEach(async ([property, enabled]) => {
 					let queryProperty = inputElement.addQueryProperty();
 					queryProperty.property =
-						(await ApiConstants.constants.propertyById(property))?.text;
+						(await apiConstants.propertyById(property))?.text;
 					queryProperty.filter = filter;
 					queryProperty.enabled = enabled;
 				});
 		});
-		await ApiConstants.constants.properties;
+		await apiConstants.properties;
 	}
 
 	static async fromInputTradeQueryParams(inputElement) {
-		let type = await ApiConstants.constants.typeTextToId(inputElement.type);
+		let type = await apiConstants.typeTextToId(inputElement.type);
 
 		let defenseProperties = Object.fromEntries(defensePropertyTuples
 			.map(([property]) => [property, {
@@ -112,7 +112,7 @@ class UnifiedQueryParams {
 		let propertyEntries = (await Promise.all(
 			[...inputElement.$$('#query-properties-list x-query-property')]
 				.map(async queryProperty => ({
-					propertyId: await ApiConstants.constants.propertyTextToId(
+					propertyId: await apiConstants.propertyTextToId(
 						queryProperty.property),
 					weight: Number(queryProperty.weight),
 					filter: queryProperty.filter,
@@ -264,7 +264,7 @@ class UnifiedQueryParams {
 			.filter(influence => influence)
 			.forEach(influence => miscFilters[`${influence}_item`] = {option: true});
 
-		let sort = weightFilters.length ? overridden.sort : ApiConstants.SORT.price;
+		let sort = weightFilters.length ? overridden.sort : apiConstants.sort.price;
 
 		return {
 			query: {

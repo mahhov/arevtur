@@ -268,5 +268,3 @@ customElements.define(name, class Tour extends XElement {
 			+ selfWidth * (alignAnchor / 2 - .5);
 	}
 });
-
-// todo[blocking] finalize texts

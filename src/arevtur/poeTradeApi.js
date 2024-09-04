@@ -1,7 +1,7 @@
 const querystring = require('querystring');
 const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('./RateLimitedRetryQueue');
-const ApiConstants = require('./ApiConstants');
+const apiConstants = require('./apiConstants');
 const Stream = require('./Stream');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
 const ItemData = require('./ItemData');
@@ -74,14 +74,9 @@ class TradeQuery {
 		this.ands = data.ands || {};
 		// {property: undefined, ...}
 		this.nots = data.nots || {};
-		this.sort = data.sort || ApiConstants.SORT.value;
+		this.sort = data.sort || apiConstants.sort.value;
 		this.affixValueShift = data.affixValueShift || 0;
 		this.priceShifts = data.priceShifts || {};
-	}
-
-	static createRequestHeader(sessionId = undefined) {
-		// Without a non-empty user-agent header, PoE will return 403.
-		return {'User-Agent': '_', Cookie: sessionId ? `POESESSID=${sessionId}` : ''};
 	}
 
 	getQuery(overrides = {}) {
@@ -148,7 +143,7 @@ class TradeQuery {
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
-			let headers = TradeQuery.createRequestHeader(this.sessionId);
+			let headers = apiConstants.createRequestHeader(this.sessionId);
 			progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
@@ -181,8 +176,8 @@ class TradeQuery {
 				let params = {
 					query: data.id,
 					'pseudos[]': [
-						ApiConstants.SHORT_PROPERTIES.totalEleRes,
-						ApiConstants.SHORT_PROPERTIES.flatLife,
+						apiConstants.shortProperties.totalEleRes,
+						apiConstants.shortProperties.flatLife,
 					],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
@@ -226,8 +221,7 @@ class TradeQuery {
 
 	static async fromApiHtmlUrl(sessionId, tradeSearchUrl) {
 		tradeSearchUrl = tradeSearchUrl.replace('.com/trade', '.com/api/trade');
-		let response = await get(tradeSearchUrl, {},
-			TradeQuery.createRequestHeader(sessionId));
+		let response = await get(tradeSearchUrl, {}, apiConstants.createRequestHeader(sessionId));
 		let jsonString = response.string;
 		let {query} = JSON.parse(jsonString);
 		return {
@@ -237,4 +231,4 @@ class TradeQuery {
 	}
 }
 
-module.exports = {TradeQuery};
+module.exports = TradeQuery;

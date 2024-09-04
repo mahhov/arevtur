@@ -41,6 +41,7 @@ let deepEquality = (obj1, obj2) =>
 	JSON.stringify(obj1) === JSON.stringify(obj2);
 
 let randInt = n => Math.floor(Math.random() * n);
+let randId = () => randInt(1000 ** 2) + 1;
 
 module.exports = {
 	minIndex: array => array.indexOf(Math.min(...array)),
@@ -52,6 +53,7 @@ module.exports = {
 	deepEquality,
 	transpose: a => a[0].map((_, i) => a.map(v => v[i])),
 	randInt,
+	randId,
 	// todo[low] move un-classed & static methods like decode64 here
 	//  (const|let) \w+ = (\w+|\([^)]*\)) =>
 };

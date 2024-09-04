@@ -1,4 +1,4 @@
-const ApiConstants = require('./ApiConstants');
+const apiConstants = require('./apiConstants');
 const Searcher = require('./Searcher');
 const pobApi = require('../pobApi/pobApi');
 
@@ -15,7 +15,7 @@ class Macros {
 
 		dropImplicits: async unifiedQueryParams => {
 			return Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
-				(await ApiConstants.constants.propertyById(propertyId))?.type !== 'implicit');
+				(await apiConstants.propertyById(propertyId))?.type !== 'implicit');
 		},
 
 		replaceResists: async unifiedQueryParams => {
@@ -24,7 +24,7 @@ class Macros {
 				'= +#% total to all and cold fire lightning chaos elemental resistance resistances');
 			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
 				!searcher.test(
-					(await ApiConstants.constants.propertyById(propertyId))?.originalText));
+					(await apiConstants.propertyById(propertyId))?.originalText));
 			if (pobApi.weights.resist)
 				unifiedQueryParams.weightEntries.push(
 					['pseudo.pseudo_total_resistance', pobApi.weights.resist, false, false]);
@@ -37,7 +37,7 @@ class Macros {
 			for (let searcher of searchers) {
 				await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
 					!searcher.test(
-						(await ApiConstants.constants.propertyById(propertyId))?.originalText));
+						(await apiConstants.propertyById(propertyId))?.originalText));
 			}
 			[
 				['pseudo.pseudo_total_strength', pobApi.weights.str],

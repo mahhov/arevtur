@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const ApiConstants = require('../../ApiConstants');
+const apiConstants = require('../../apiConstants');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const {
 	defensePropertyTuples,
@@ -11,6 +11,7 @@ const {
 const pobApi = require('../../../pobApi/pobApi');
 const Searcher = require('../../Searcher');
 const Macros = require('../../Macros');
+const PobConsts = require('../../../pobApi/PobConsts');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -43,13 +44,13 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		ApiConstants.constants.itemTexts().then(itemTexts =>
+		apiConstants.itemTexts().then(itemTexts =>
 			this.$('#name-input').autocompletes = itemTexts);
 		this.$('#name-input').addEventListener('change', () => {
 			this.name = this.$('#name-input').value;
 			this.emit('change');
 		});
-		ApiConstants.constants.typeTexts().then(typeTexts =>
+		apiConstants.typeTexts().then(typeTexts =>
 			this.$('#type-input').autocompletes = typeTexts);
 		this.$('#type-input').addEventListener('change', () => {
 			this.type = this.$('#type-input').value;
@@ -71,7 +72,8 @@ customElements.define(name, class extends XElement {
 		//  before the query returns.
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
 			try {
-				let modWeights = await pobApi.getModWeights(this.type, !this.uncorrupted);
+				let pobType = await apiConstants.typeToPobType(this.type);
+				let modWeights = await pobApi.getModWeights(pobType, !this.uncorrupted);
 				let unifiedQueryParams = UnifiedQueryParams.fromModWeights(
 					await this.unifiedQueryParams, modWeights);
 				await this.loadQueryParams(unifiedQueryParams);
@@ -232,7 +234,7 @@ customElements.define(name, class extends XElement {
 	addQueryProperty() {
 		let queryProperty = document.createElement('x-query-property');
 		queryProperty.type = this.type;
-		ApiConstants.constants.propertyTexts()
+		apiConstants.propertyTexts()
 			.then(propertyTexts => queryProperty.properties = propertyTexts);
 		queryProperty.enabled = true;
 		queryProperty.slot = 'list';
@@ -328,7 +330,8 @@ customElements.define(name, class extends XElement {
 			try {
 				this[buildValue] = 0;
 				this[buildValue + 'Tooltip'] = '';
-				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 400);
+				let pobType = await apiConstants.typeToPobType(this.type);
+				let summary = await pobApi.evalItemModSummary(pobType, modProperty, 400);
 				this[buildValue] = summary.value;
 				this[buildValue + 'Tooltip'] = summary.text;
 			} catch (e) {

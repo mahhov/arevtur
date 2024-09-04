@@ -3,9 +3,7 @@ const {ipcMain, app} = require('electron');
 const {httpRequest: {post2}} = require('js-desktop-base');
 const config = require('../config/configForMain');
 const appData = require('../appData');
-const {flattenObject} = require('../../util/util');
-
-let randId = () => Math.floor(Math.random() * 1000 ** 2) + 1;
+const {flattenObject, randId} = require('../../util/util');
 
 let debug = appData.isDev;
 let endpoint = `https://www.google-analytics.com/${debug ? 'debug/' : ''}mp/collect`;
@@ -16,10 +14,6 @@ let clientId = 'arevtur-app';
 class GoogleAnalyticsForMain {
 	constructor() {
 		this.sessionId = randId();
-
-		if (!config.config.gaUserId)
-			config.updateConfig({gaUserId: randId()});
-
 		ipcMain.handle('ga-emit', (event, [eventName, eventParams]) =>
 			this.emit(eventName, eventParams));
 	}
@@ -27,7 +21,7 @@ class GoogleAnalyticsForMain {
 	async emit(eventName, eventParams = undefined) {
 		let body = {
 			client_id: clientId,
-			user_id: String(config.config.gaUserId),
+			user_id: config.config.userId,
 			events: [{
 				name: eventName,
 				params: {

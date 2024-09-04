@@ -1,8 +1,8 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/config/configForRenderer');
-const ApiConstants = require('../../ApiConstants');
-const {TradeQuery} = require('../../poeTradeApi');
+const apiConstants = require('../../apiConstants');
+const TradeQuery = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../pobApi/pobApi');
 const util = require('../../../util/util');
@@ -27,7 +27,7 @@ customElements.define(name, class extends XElement {
 		configForRenderer.addListener('change', config => this.onConfigChange(config));
 		this.onConfigChange(configForRenderer.config);
 
-		ApiConstants.constants.leagues.then(leagues =>
+		apiConstants.leagues.then(leagues =>
 			this.$('#league-input').autocompletes = leagues);
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
@@ -36,16 +36,16 @@ customElements.define(name, class extends XElement {
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
 		this.updateStatusIndicator(
-			ApiConstants.constants.leagues,
+			apiConstants.leagues,
 			this.$('#loaded-leagues-status'));
 		this.updateStatusIndicator(
-			ApiConstants.constants.types,
+			apiConstants.types,
 			this.$('#loaded-types-status'));
 		this.updateStatusIndicator(
-			ApiConstants.constants.properties,
+			apiConstants.properties,
 			this.$('#loaded-properties-status'));
 		this.updateStatusIndicator(
-			ApiConstants.constants.items,
+			apiConstants.items,
 			this.$('#loaded-items-status'));
 
 		this.$('#league-input').addEventListener('change', () => this.store());
@@ -72,9 +72,9 @@ customElements.define(name, class extends XElement {
 
 		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
 			let typeText = ItemData.typeNameFromItemText(e.detail);
-			let typeId = await ApiConstants.constants.typeTextToId(typeText);
+			let typeId = await apiConstants.typeTextToId(typeText);
 
-			let propertyTexts = await ApiConstants.constants.propertyTexts();
+			let propertyTexts = await apiConstants.propertyTexts();
 			let matchedPropertyIds = await Promise.all(e.detail
 				.split('\n')
 				.map(line => line.trim())
@@ -87,7 +87,7 @@ customElements.define(name, class extends XElement {
 				//   an 'or' between them. e.g. '+# to Strength and Intelligence'
 				.map(regex => propertyTexts.find(pt => pt.match(regex)))
 				.filter(propertyText => propertyText)
-				.map(propertyText => ApiConstants.constants.propertyTextToId(propertyText)));
+				.map(propertyText => apiConstants.propertyTextToId(propertyText)));
 
 			let unifiedQueryParams = UnifiedQueryParams.fromPropertyIds(typeId, matchedPropertyIds);
 			this.importInputSet(unifiedQueryParams);
@@ -158,7 +158,7 @@ customElements.define(name, class extends XElement {
 		this.$('#league-input').value = config.league;
 		this.$('#loaded-currencies-status').classList.remove('valid', 'invalid');
 		this.updateStatusIndicator(
-			ApiConstants.constants.currencyPrices(config.league),
+			apiConstants.currencyPrices(config.league),
 			this.$('#loaded-currencies-status'),
 			config.league,
 		);
@@ -240,7 +240,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	async finalizeTradeQuery(overridePrice = null) {
-		let currencyPrices = await ApiConstants.constants.currencyPrices(
+		let currencyPrices = await apiConstants.currencyPrices(
 			configForRenderer.config.league);
 		let manual6LinkOptions = [
 			['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],

@@ -1,6 +1,7 @@
-const ApiConstants = require('./ApiConstants');
+const apiConstants = require('./apiConstants');
 const pobApi = require('../pobApi/pobApi');
 const util = require('../util/util');
+const PobConsts = require('../pobApi/PobConsts');
 
 class ItemData {
 	constructor(league, affixValueShift, queryDefenseProperties, priceShifts,
@@ -101,7 +102,7 @@ class ItemData {
 	}
 
 	static async price(league, {currency: currencyId, count, shifts}) {
-		let currencyPrices = (await ApiConstants.constants.currencyPrices(league))[currencyId];
+		let currencyPrices = (await apiConstants.currencyPrices(league))[currencyId];
 		if (currencyPrices)
 			return currencyPrices * count +
 				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
@@ -171,8 +172,9 @@ class ItemData {
 		craftableMods = await Promise.all(craftableMods.map(
 			async craftableMod => {
 				// todo[high] use correct slot
+				let pobType = await apiConstants.typeToPobType('Amulet');
 				craftableMod.eval =
-					await pobApi.evalItemModSummary('Amulet', craftableMod.join('\n'));
+					await pobApi.evalItemModSummary(pobType, craftableMod.join('\n'));
 				return craftableMod;
 			}));
 		craftableMods = craftableMods

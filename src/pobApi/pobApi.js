@@ -2,7 +2,6 @@ const path = require('path');
 const os = require('os');
 const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
-const ApiConstants = require('../arevtur/ApiConstants');
 const Emitter = require('../util/Emitter');
 const {deepEquality} = require('../util/util');
 
@@ -164,8 +163,7 @@ class PobApi extends Emitter {
 	}
 
 	// todo[low] rename evalItemMod
-	async evalItemModSummary(type = undefined, itemMod = undefined, pluginNumber = 1) {
-		let pobType = await PobApi.getPobType(type);
+	async evalItemModSummary(pobType = undefined, itemMod = undefined, pluginNumber = 1) {
 		if (!pobType || !itemMod)
 			return Promise.reject('PoB evalItemModSummary missing type or mod');
 
@@ -194,9 +192,8 @@ class PobApi extends Emitter {
 				Number(pobType.match(/\d+/)?.[0]) || 1));
 	}
 
-	async getModWeights(type = undefined, includeCorrupted = true) {
+	async getModWeights(pobType = undefined, includeCorrupted = true) {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
-		let pobType = await PobApi.getPobType(type);
 		if (!pobType)
 			return Promise.reject('PoB getModWeights missing type');
 		return this.send({
@@ -326,10 +323,6 @@ class PobApi extends Emitter {
 			value: PobApi.round(diff.unscaledValue * valueScale, 3),
 			text: summaryText,
 		};
-	}
-
-	static async getPobType(type = undefined) {
-		return ApiConstants.POB_TYPES[await ApiConstants.constants.typeTextToId(type)];
 	}
 
 	static clean(outString) {
