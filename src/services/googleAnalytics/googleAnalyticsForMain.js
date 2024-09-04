@@ -1,7 +1,7 @@
 const os = require('os');
 const {ipcMain, app} = require('electron');
 const {httpRequest: {post2}} = require('js-desktop-base');
-const config = require('../config/configForMain');
+const configForMain = require('../config/configForMain');
 const appData = require('../appData');
 const {flattenObject, randId} = require('../../util/util');
 
@@ -21,7 +21,7 @@ class GoogleAnalyticsForMain {
 	async emit(eventName, eventParams = undefined) {
 		let body = {
 			client_id: clientId,
-			user_id: config.config.userId,
+			user_id: configForMain.config.userId,
 			events: [{
 				name: eventName,
 				params: {
@@ -46,7 +46,7 @@ class GoogleAnalyticsForMain {
 		this.emit('startup', {
 			os: os.platform(),
 			version: app.getVersion(),
-			config: config.config,
+			config: configForMain.config,
 		});
 	}
 }

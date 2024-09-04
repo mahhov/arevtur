@@ -1,5 +1,5 @@
 const poeNinjaApi = require('../services/poeNinjaApi');
-const config = require('../services/config/configForMain');
+const configForMain = require('../services/config/configForMain');
 const Filter = require('./Filter');
 
 // todo[medium] dedupe the multiple round util functions
@@ -59,7 +59,7 @@ class Pricer {
 
 	refreshData() {
 		this.dataArray = this.dataEndpointsByLeague
-			.map(endpointByLeague => endpointByLeague(config.config.league))
+			.map(endpointByLeague => endpointByLeague(configForMain.config.league))
 			.map(poeNinjaApi.getData)
 			.map(promise => promise.catch(e => null));
 	}

@@ -1,6 +1,6 @@
 const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./ViewHandle');
-const config = require('../services/config/configForMain');
+const configForMain = require('../services/config/configForMain');
 const Pricer = require('./Pricer');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
@@ -54,7 +54,7 @@ let priceClipboard = async itemText => {
 };
 
 let windowCheck = async () => {
-	if (!config.config.restrictToPoeWindow)
+	if (!configForMain.config.restrictToPoeWindow)
 		return true;
 	let title = (await frontWindowTitle.get()).out.toLowerCase().trim();
 	return ['path of exile', 'arevtur'].includes(title);
@@ -85,7 +85,7 @@ let init = () => {
 	config.addListener('change', config => setupPobApi());
 };
 
-let setupPobApi = () => pobApi.setParams(config.config.buildParams);
+let setupPobApi = () => pobApi.setParams(configForMain.config.buildParams);
 
 init();
 
