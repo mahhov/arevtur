@@ -1,6 +1,6 @@
 const path = require('path');
 const {ipcMain, dialog} = require('electron');
-const ElectronWindow = require('../util/ElectronWindow');
+const ElectronWindow = require('../services/ElectronWindow');
 const appData = require('../services/appData');
 
 let window = new ElectronWindow('Arevtur', path.resolve(__dirname, 'arevtur.html'));

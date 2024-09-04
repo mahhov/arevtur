@@ -253,7 +253,8 @@ List gems' lvl 20 price, q 20 price, and potential profit.
     - [keySnippets](src%2FkeySnippets) - Handles in game shortcuts like 'ctrl+c'
     - [services](src%2Fservices) - Non-generic singletons or constants like PoB integration
     - [updateCheck](src%2FupdateCheck) - 'Check for updates' UI
-    - [util](src%2Futil) - Generic functions/classes like `randInt()`
+    - [util](src%2Futil) - Generic functions/classes like `randInt()`. These files should be usable
+      in both the renderer and main contexts; e.g. they shouldn't depend on `electron.ipcMain`.
 
 ### Tasks
 

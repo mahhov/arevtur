@@ -1,6 +1,6 @@
 const path = require('path');
 const {app, ipcMain} = require('electron');
-const ElectronWindow = require('../util/ElectronWindow');
+const ElectronWindow = require('../services/ElectronWindow');
 const Updater = require('./Updater');
 
 let updater = new Updater();
