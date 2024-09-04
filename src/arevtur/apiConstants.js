@@ -17,6 +17,12 @@ class ApiConstants {
 		price: {price: 'asc'},
 	};
 
+	constructor() {
+		// todo[low] need to make it accessible on the singleton. Should figure out a more elegant
+		//  syntax. Likewise for the fake-static constants above.
+		this.createRequestHeader = ApiConstants.createRequestHeader;
+	}
+
 	// leagues
 
 	get leagues() {
@@ -167,8 +173,6 @@ class ApiConstants {
 	// utility
 
 	static createRequestHeader(sessionId = undefined) {
-		// Without a non-empty user-agent header, PoE will return 403.
-		console.error(configForRenderer.config.userId);
 		return {
 			// Without a non-empty user-agent header, PoE will return 403.
 			// todo[high] userId will be empty before config has loaded. If PoE API starts blocking
