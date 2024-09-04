@@ -4,7 +4,7 @@ const configForMain = require('../services/config/configForMain');
 const Pricer = require('./Pricer');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
-const pobApi = require('../pobApi/pobApi');
+const pobApi = require('../services/pobApi/pobApi');
 const appData = require('../services/appData');
 const googleAnalyticsForMain = require('../services/googleAnalytics/googleAnalyticsForMain');
 

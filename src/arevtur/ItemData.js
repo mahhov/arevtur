@@ -1,5 +1,5 @@
 const apiConstants = require('./apiConstants');
-const pobApi = require('../pobApi/pobApi');
+const pobApi = require('../services/pobApi/pobApi');
 const util = require('../util/util');
 
 class ItemData {

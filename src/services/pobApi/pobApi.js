@@ -2,8 +2,8 @@ const path = require('path');
 const os = require('os');
 const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
-const Emitter = require('../util/Emitter');
-const {deepEquality} = require('../util/util');
+const Emitter = require('../../util/Emitter');
+const {deepEquality} = require('../../util/util');
 
 class Script extends CustomOsScript {
 	constructor(pobPath) {

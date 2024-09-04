@@ -1,6 +1,6 @@
 const path = require('path');
 const {ViewHandle: ViewHandleBase, ScreenMouse} = require('js-desktop-base');
-const pobApi = require('../pobApi/pobApi');
+const pobApi = require('../services/pobApi/pobApi');
 
 class ViewHandle extends ViewHandleBase {
 	constructor() {

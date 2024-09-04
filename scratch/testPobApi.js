@@ -1,4 +1,4 @@
-const pobApi = require('../src/pobApi/pobApi');
+const pobApi = require('../src/services/pobApi/pobApi');
 // let pobApi = new pobApi('C:\\Users\\placeholder\\Downloads\\PathOfBuilding-1.4.170\\');
 // pobApi.build =
 // 	'C:/Users/placeholder/Documents/Path of Building/Builds/traickster brand harvest.xml';

@@ -1,6 +1,6 @@
 const apiConstants = require('./apiConstants');
 const Searcher = require('../util/Searcher');
-const pobApi = require('../pobApi/pobApi');
+const pobApi = require('../services/pobApi/pobApi');
 
 class Macros {
 	static  Input = {

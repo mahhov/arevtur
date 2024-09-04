@@ -4,7 +4,7 @@ const {configForRenderer} = require('../../../services/config/configForRenderer'
 const apiConstants = require('../../apiConstants');
 const TradeQuery = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
-const pobApi = require('../../../pobApi/pobApi');
+const pobApi = require('../../../services/pobApi/pobApi');
 const util = require('../../../util/util');
 const ItemData = require('../../ItemData');
 

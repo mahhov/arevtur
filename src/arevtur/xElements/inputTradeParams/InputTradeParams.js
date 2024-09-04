@@ -8,7 +8,7 @@ const {
 	affixPropertyTuples,
 	influenceProperties,
 } = require('./Properties');
-const pobApi = require('../../../pobApi/pobApi');
+const pobApi = require('../../../services/pobApi/pobApi');
 const Searcher = require('../../../util/Searcher');
 const Macros = require('../../Macros');
 

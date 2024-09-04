@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const pobApi = require('../../../pobApi/pobApi');
+const pobApi = require('../../../services/pobApi/pobApi');
 const appData = require('../../../services/appData');
 const {configForRenderer} = require('../../../services/config/configForRenderer');
 

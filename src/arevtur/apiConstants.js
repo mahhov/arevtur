@@ -1,7 +1,7 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
 const poeNinjaApi = require('../services/poeNinjaApi');
 const {configForRenderer} = require('../services/config/configForRenderer');
-const PobConsts = require('../pobApi/PobConsts');
+const PobConsts = require('../services/pobApi/PobConsts');
 
 class ApiConstants {
 
