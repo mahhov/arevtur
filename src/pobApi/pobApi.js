@@ -136,7 +136,10 @@ class PobApi extends Emitter {
 		this.emit('busy', this.script.pendingResponses.length);
 		response
 			.then(() => this.emit('busy', this.script.pendingResponses.length))
-			.catch(() => this.emit('not-ready'));
+			.catch(e => {
+				console.warn('pobApi send', e);
+				this.emit('not-ready');
+			});
 		// rejections are expected
 		return response.catch(() => '');
 	}

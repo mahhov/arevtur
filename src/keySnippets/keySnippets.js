@@ -40,6 +40,7 @@ let priceClipboard = async itemText => {
 	});
 	let pobOutput = pobApi.evalItem(itemText).catch(e => {
 		// console.error('Pricer pobApi failed', e);
+		console.warn('pricer pobOutput', e);
 		return {text: ''};
 	});
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);

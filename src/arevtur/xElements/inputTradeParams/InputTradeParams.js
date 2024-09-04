@@ -77,6 +77,7 @@ customElements.define(name, class extends XElement {
 					await this.unifiedQueryParams, modWeights);
 				await this.loadQueryParams(unifiedQueryParams);
 			} catch (e) {
+				console.warn('PoB import', e);
 			}
 		});
 		[...defensePropertyTuples, ...affixPropertyTuples]
@@ -334,6 +335,7 @@ customElements.define(name, class extends XElement {
 				this[buildValue] = summary.value;
 				this[buildValue + 'Tooltip'] = summary.text;
 			} catch (e) {
+				console.warn('Refresh defense build values', e);
 			}
 		});
 	}

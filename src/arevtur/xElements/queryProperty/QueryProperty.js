@@ -118,6 +118,7 @@ customElements.define(name, class extends XElement {
 			this.buildValue =
 				unifiedQueryParams.weightEntries.find(entry => entry[0] === propertyId)[1];
 		} catch (e) {
+			console.warn('Refresh query property build values', e);
 		}
 	}
 });

@@ -61,7 +61,10 @@ class Pricer {
 		this.dataArray = this.dataEndpointsByLeague
 			.map(endpointByLeague => endpointByLeague(configForMain.config.league))
 			.map(poeNinjaApi.getData)
-			.map(promise => promise.catch(e => null));
+			.map(promise => promise.catch(e => {
+				console.warn('pricer refreshData', e);
+				return null;
+			}));
 	}
 
 	async price(inputItem) {
