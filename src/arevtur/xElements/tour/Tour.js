@@ -73,28 +73,28 @@ customElements.define(name, class Tour extends XElement {
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['4/6', 'Use PoB magic to jump start a query.'],
+					lines: ['4/6', 'Use PoB magic to jump start your query.'],
 					elementQueries: [
 						'#build-import-for-type-button',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['4/6', 'These configurations will dictate how PoB imports behave.'],
+					lines: ['4/6', 'These configurations will influence the imported weighs.'],
 					elementQueries: [
 						'.tour-pob-configs',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['4/6', 'You can further fine tune the trade query with these inputs.'],
+					lines: ['4/6', 'You can further fine tune the query with these inputs.'],
 					elementQueries: [
 						'#input-trade-params',
 					],
 					corner: {x: -1, y: -1},
 					align: {x: 1, y: -1},
 				}, {
-					lines: ['4/6', 'These buttons allow bulk editing trade query stats.'],
+					lines: ['4/6', 'These buttons bulk modify the query stats.'],
 					elementQueries: [
 						'#drop-implicit-mods-button',
 						'#replace-resist-mods-button',
@@ -111,51 +111,67 @@ customElements.define(name, class Tour extends XElement {
 					corner: {x: 1, y: 1},
 					align: {x: -1, y: 1},
 				}, {
-					lines: ['5/6', 'Submit'],
+					lines: ['5/6', 'Submit your query.'],
 					elementQueries: [
 						'#submit-button',
 					],
 					corner: {x: -1, y: -1},
 					align: {x: 1, y: -1},
 				}, {
-					lines: ['6/6', 'The found items.'],
+					lines: ['6/6', 'View the found items.'],
 					elementQueries: [
 						'x-item-listing',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['6/6', 'Values'],
+					lines: ['6/6',
+						'The weighted-sum value of this item; i.e. this is how pathofexile.com/trade would sort the items.'],
 					elementQueries: [
 						'#value-eval',
+					],
+					corner: {x: -1, y: 1},
+					align: {x: 1, y: 1},
+				}, {
+					lines: ['6/6',
+						'The build value of this item; i.e. this is how PoB would sort this item.'],
+					elementQueries: [
 						'#value-build',
+					],
+					corner: {x: -1, y: 1},
+					align: {x: 1, y: 1},
+				}, {
+					lines: ['6/6',
+						'The build value of this item after bench crafting the most valuable mod.'],
+					elementQueries: [
 						'#value-craft',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['6/6', 'Chart'],
+					lines: ['6/6',
+						'Visualize the value v price tradeoff; items in near the top/left area are the best bang-for-your-buck.'],
 					elementQueries: [
 						'#results-chart',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['6/6', 'Select a preferred sorting method.'],
+					lines: ['6/6', `Select a preferred sorting method.`],
 					elementQueries: [
 						'#sort-build-value-input',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['6/6', 'Maximize results.'],
+					lines: ['6/6', 'Maximize results for easier viewing.'],
 					elementQueries: [
 						'[config-key=viewMaximize]',
 					],
 					corner: {x: 1, y: 1},
 					align: {x: -1, y: 1},
 				}, {
-					lines: ['Revisit tutorial'],
+					lines: ['You can revisit this tutorial anytime.'],
 					elementQueries: [
 						'[config-key=tourComplete]',
 					],

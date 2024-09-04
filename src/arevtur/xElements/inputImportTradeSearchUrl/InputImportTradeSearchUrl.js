@@ -27,3 +27,10 @@ customElements.define(name, class extends XElement {
 		this.$('#item-text').value = value;
 	}
 });
+
+// todo[high] this import isn't working:
+//  50% reduced Amount Recovered
+//  135% increased Recovery rate
+//  50% of Recovery applied Instantly
+//  Grants Immunity to Chill for 13 seconds if used while Chilled
+//  Grants Immunity to Freeze for 13 seconds if used while Frozen
