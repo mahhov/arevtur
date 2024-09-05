@@ -56,7 +56,6 @@ class PoeNinjaApi {
 
 		// todo[low] consolidate Date.now(), performance.now(), and process.hrtime()
 		let timestampS = process.hrtime()[0];
-		// todo[blocking] undefined cache
 		let cache = this.cache[endpoint] = this.cache[endpoint] || {};
 
 		if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_S)
