@@ -51,7 +51,6 @@ let deepEquality = (obj1, obj2) =>
 	JSON.stringify(obj1) === JSON.stringify(obj2);
 
 let openPath = (path, isFile = false) => {
-	console.log(path, isFile)
 	if (isFile)
 		shell.showItemInFolder(path);
 	else

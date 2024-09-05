@@ -6,6 +6,7 @@ module.exports = {
 	basePath: envPaths.config,
 	configPath: path.resolve(envPaths.config, 'config.json'),
 	bugReportPath: path.resolve(envPaths.config, 'bugReport.json'),
+	bugReportBuildPath: path.resolve(envPaths.config, 'bugReportBuild.xml'),
 
 	isDev: !!process.env.npm_command,
 

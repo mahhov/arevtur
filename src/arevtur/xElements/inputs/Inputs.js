@@ -1,4 +1,3 @@
-const fs = require('fs').promises;
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {configForRenderer} = require('../../../services/config/configForRenderer');
@@ -8,8 +7,8 @@ const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../services/pobApi/pobApi');
 const {minIndex, openPath} = require('../../../util/util');
 const ItemData = require('../../ItemData');
-const logging = require('../../../services/logging');
 const appData = require('../../../services/appData');
+const BugReport = require('../../BugReport');
 
 let timestamp = () => {
 	let date = new Date();
@@ -56,17 +55,15 @@ customElements.define(name, class extends XElement {
 
 		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
 
-		this.$('#bug-report-button').addEventListener('click', async () => {
-			let configs = configForRenderer.config;
-			let local = {...localStorage, 'input-session-id': 'redacted'};
-			let build = await fs.readFile(configs.buildParams.buildPath)
-				.then(r => r.toString())
-				.catch(e => e);
-			let logs = logging.logs;
-			let report = {configs, local, build, logs};
-			let reportString = JSON.stringify(report, '', 2);
-			await fs.writeFile(appData.bugReportPath, reportString);
-			openPath(appData.bugReportPath, true);
+		this.$('#bug-report-button').addEventListener('click', async () =>
+			(await BugReport.fromCurrentState()).toDownload());
+		this.$('#bug-report-button').addEventListener('dragover', e => e.preventDefault());
+		this.$('#bug-report-button').addEventListener('drop', async e => {
+			e.preventDefault();
+			if (appData.isDev) {
+				let path = e.dataTransfer.files[0].path;
+				(await BugReport.fromDownload(path))?.toCurrentState();
+			}
 		});
 
 		pobApi.addListener('not-ready', () =>
