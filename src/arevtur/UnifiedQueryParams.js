@@ -48,7 +48,7 @@ class UnifiedQueryParams {
 
 	async toInputTradeQueryParams(inputElement) {
 		inputElement.name = this.name || '';
-		inputElement.type = await apiConstants.typeIdToText(this.type) || '';
+		inputElement.type = await apiConstants.typeIdToText(this.type) || 'Any';
 		inputElement.minValue = this.minValue || 0;
 		inputElement.price = this.maxPrice || 0;
 		inputElement.offline = this.offline || false;

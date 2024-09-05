@@ -23,16 +23,9 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.size ||= 10;
 
 		this.$('input').addEventListener('focus', () => this.updateAutocompletesShown(true));
-		this.$('input').addEventListener('change',
-			() => {
-				let optionEl = this.$('select').options[0];
-				this.internalSetValue(optionEl?.value || this.$('input').value,
-					optionEl?.title || '', true);
-			});
-		this.$('input').addEventListener('input', () => {
-			this.updateAutocompletesShown();
-			this.$('select').selectedIndex = -1;
-		});
+		this.$('input').addEventListener('change', () =>
+			this.internalSetValue(this.$('select').options[0]));
+		this.$('input').addEventListener('input', () => this.updateAutocompletesShown());
 		this.$('input').addEventListener('keydown', e => {
 			if (e.key === 'ArrowDown') {
 				this.$('select').selectedIndex = 0;
@@ -40,20 +33,16 @@ customElements.define(name, class AutocompleteInput extends XElement {
 			} else if (e.key === 'ArrowUp') {
 				this.$('select').selectedIndex = this.$('select').length - 1;
 				this.$('select').focus();
-			} else if (e.key === 'Enter' || e.key === 'Tab') {
-				let optionEl = this.$('select').options[0];
-				if (optionEl)
-					this.internalSetValue(optionEl.value, optionEl.title, true);
-			} else
+			} else if (e.key === 'Enter' || e.key === 'Tab')
+				this.internalSetValue(this.$('select').options[0]);
+			else
 				return;
 			e.preventDefault();
 		});
 
 		this.$('select').addEventListener('keydown', e => {
-			if (e.key === 'Enter' || e.key === 'Tab') {
-				let optionEl = this.$('select').selectedOptions[0];
-				this.internalSetValue(optionEl.value, optionEl.title, true);
-			}
+			if (e.key === 'Enter' || e.key === 'Tab')
+				this.internalSetValue(this.$('select').selectedOptions[0]);
 			let arrowOut =
 				e.key === 'ArrowDown' && this.$('select').selectedIndex ===
 				this.$('select').length - 1 ||
@@ -102,18 +91,17 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.updateInputValidity();
 	}
 
-	internalSetValue(value, tooltip, blur) {
-		this.value = value;
-		this.$('input').title = tooltip || value || '';
-		if (blur)
-			this.blur();
+	internalSetValue(optionEl, blur) {
+		this.value = optionEl?.value || this.$('input').value;
+		this.$('input').value = this.value; // force update even if value unchanged
+		this.$('input').title = optionEl?.title || this.value || '';
+		this.blur();
 		this.emit('change');
 	}
 
 	updateInputValidity() {
-		this.$('input').classList
-			.toggle('invalid',
-				this.value && !this.freeform && !this.autocompletes.includes(this.value));
+		this.$('input').classList.toggle('invalid',
+			this.value && !this.freeform && !this.autocompletes.includes(this.value));
 	}
 
 	updateAutocompletesShown(showAll = false) {
@@ -131,8 +119,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 			optionEl.value = autocomplete; // necessary to prevent whitespace trimming
 			optionEl.title = tooltip || '';
 			this.$('select').appendChild(optionEl);
-			optionEl.addEventListener('click',
-				() => this.internalSetValue(optionEl.value, optionEl.title, true));
+			optionEl.addEventListener('click', () => this.internalSetValue(optionEl));
 		});
 	}
 

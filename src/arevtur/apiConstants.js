@@ -94,9 +94,11 @@ class ApiConstants {
 
 	static async initProperties() {
 		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/stats');
-		return JSON.parse(response.string).result
+		let properties = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({id, text, type}) => ({id, text: `${text} (${type})`, originalText: text, type}));
+		properties.unshift({id: '', text: '', originalText: '', type: ''})
+		return properties;
 		/*
 		[{
 	      id: 'pseudo.pseudo_total_cold_resistance',
