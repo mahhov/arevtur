@@ -64,7 +64,6 @@ customElements.define(name, class Tour extends XElement {
 					corner: {x: 1, y: 1},
 					align: {x: -1, y: 1},
 				}, {
-					// todo[blocking] don't allow proceeding if user hasn't set type
 					lines: ['3/6', 'Select an item type and max price; e.g. amulet for under 50c.'],
 					elementQueries: [
 						'#type-input',
@@ -73,7 +72,14 @@ customElements.define(name, class Tour extends XElement {
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
-					complete: () => deepQuery('#type-input')[0].value !== 'Any',
+				}, {
+					lines: ['3/6', 'Please select amulet for the tutorial'],
+					elementQueries: [
+						'#type-input',
+					],
+					corner: {x: -1, y: 1},
+					align: {x: 1, y: 1},
+					complete: () => deepQuery('#type-input')[0].value === 'Amulet',
 				}, {
 					lines: ['4/6', 'Use PoB magic to jump start your query.'],
 					elementQueries: [
@@ -193,7 +199,9 @@ customElements.define(name, class Tour extends XElement {
 		}, 100);
 
 		this.$('#prev').addEventListener('click', () => {
-			this.stepI--;
+			do
+				this.stepI--;
+			while (this.steps[this.stepI].complete?.());
 			this.update();
 		});
 		this.$('#next').addEventListener('click', () => {
@@ -203,7 +211,9 @@ customElements.define(name, class Tour extends XElement {
 					.map(query => deepQuery(query)[0])
 					.every(v => v);
 			if (isComplete && nextElementsVisible) {
-				this.stepI++;
+				do
+					this.stepI++;
+				while (this.steps[this.stepI].complete?.());
 				this.update();
 			}
 		});
