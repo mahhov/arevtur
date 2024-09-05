@@ -29,8 +29,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@精靈王的小黃瓜 Hi, I would like to buy your Pain Charm Gold Amulet listed for 30 chaos in Settlers (stash tab "5"; position: left 2, top 9)',
 		'date': '2024-08-07T05:06:57Z',
 		'note': '~b/o 30 chaos',
-		'evalValue': 314.1,
-		'evalValueDetails': {
+		'weightedValue': 314.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 314.1,
@@ -41,7 +41,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 20.7,
 				'text': '@bold,blue Effective Hit Pool -4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -87\n@bold,red Full DPS 33.4%\n@bold,green Value 20.7\n------------------------------\nPain Charm\nGold Amulet\nRequires Level 64\n12% increased Rarity of Items found\n+50% to Damage over Time Multiplier\nAdds 28 to 60 Physical Damage to Attacks\nAdds 36 to 67 Fire Damage to Attacks against you\n36% increased Lightning Damage\n-141 to maximum Mana\n@bold,orange -76% to Chaos Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+2,447.0 Average Damage (+8.9%)\n+15,253.8 Hit DPS (+8.9%)\n+259,579.5 Poison DPS (+39.8%)\n+41,641.9 Total Damage per Poison (+39.8%)\n+274,833.3 Total DPS inc. Poison (+33.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,163 Effective Hit Pool (-4.0%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-154 Total Mana (-19.6%)\n-52 Unreserved Mana (-19.8%)\n+0% Unreserved Mana\n+11.1 Mana Recovery\n-50.0 Mana Leech/On Hit Rate (-19.6%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,orange -76% Chaos Res. Over Max\n@bold,red +274,833.3 Full DPS (+33.4%)',
@@ -304,8 +304,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@GrahaTiasSharpClaw Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 18 chaos in Settlers (stash tab "shop"; position: left 22, top 4)',
 		'date': '2024-08-06T06:49:32Z',
 		'note': '~price 18 chaos',
-		'evalValue': 305.9,
-		'evalValueDetails': {
+		'weightedValue': 305.9,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 305.9,
@@ -316,7 +316,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 27.6,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 32.8%\n@bold,green Value 27.6\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n66% increased Damage\n+32% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+5,093.6 Average Damage (+18.5%)\n+31,751.7 Hit DPS (+18.5%)\n+238,427.2 Poison DPS (+36.6%)\n+38,248.7 Total Damage per Poison (+36.6%)\n+270,178.8 Total DPS inc. Poison (+32.8%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +270,178.8 Full DPS (+32.8%)',
@@ -500,8 +500,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@SET_TENGGGGG Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 20 chaos in Settlers (stash tab "ขายของ"; position: left 10, top 6)',
 		'date': '2024-08-05T11:41:31Z',
 		'note': '~price 20 chaos',
-		'evalValue': 305.9,
-		'evalValueDetails': {
+		'weightedValue': 305.9,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 305.9,
@@ -512,7 +512,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 27.6,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 32.8%\n@bold,green Value 27.6\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n66% increased Damage\n+32% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+5,093.6 Average Damage (+18.5%)\n+31,751.7 Hit DPS (+18.5%)\n+238,427.2 Poison DPS (+36.6%)\n+38,248.7 Total Damage per Poison (+36.6%)\n+270,178.8 Total DPS inc. Poison (+32.8%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +270,178.8 Full DPS (+32.8%)',
@@ -697,8 +697,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@RighteousIcy Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 30 chaos in Settlers (stash tab "50c"; position: left 3, top 10)',
 		'date': '2024-08-03T13:15:15Z',
 		'note': '~price 30 chaos',
-		'evalValue': 301,
-		'evalValueDetails': {
+		'weightedValue': 301,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 301,
@@ -709,7 +709,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 27.1,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 32.3%\n@bold,green Value 27.1\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n64% increased Damage\n+32% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,939.7 Average Damage (+18.0%)\n+30,792.0 Hit DPS (+18.0%)\n+234,797.5 Poison DPS (+36.0%)\n+37,666.4 Total Damage per Poison (+36.0%)\n+265,589.5 Total DPS inc. Poison (+32.3%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +265,589.5 Full DPS (+32.3%)',
@@ -895,8 +895,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'ScorePOE > ScoreAM',
 		'whisper': '@ScoreAM Hi, I would like to buy your Behemoth Torc Turquoise Amulet listed for 40 chaos in Settlers (stash tab "~price 40 chaos"; position: left 13, top 13)',
 		'date': '2024-08-06T07:36:35Z',
-		'evalValue': 293.8,
-		'evalValueDetails': {
+		'weightedValue': 293.8,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 293.8,
@@ -907,7 +907,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -91\n@bold,red Full DPS 29.4%\n@bold,green Value 16.2\n------------------------------\nBehemoth Torc\nTurquoise Amulet\nRequires Level 65\n+17 to Dexterity and Intelligence\n+65% to Damage over Time Multiplier\n22% increased maximum Energy Shield\n@bold,orange -80% to Lightning Resistance\nLose 5 Life per Enemy Hit with Attacks\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+241,799.8 Poison DPS (+37.1%)\n+38,789.7 Total Damage per Poison (+37.1%)\n+241,799.8 Total DPS inc. Poison (+29.4%)\n-27 Strength\n+14 Dexterity\n-10 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-147.0 Life Leech/On Hit Rate (-6.3%)\n-5 Total Mana (-0.6%)\n-2 Unreserved Mana (-0.8%)\n+0% Unreserved Mana\n-1.2 Mana Recovery\n-1.6 Mana Leech/On Hit Rate (-0.6%)\n+94 Evasion rating (+0.7%)\n@bold,orange -11% Cold Res. Over Max\n@bold,orange -80% Lightning Res. Over Max\n@bold,red +241,799.8 Full DPS (+29.4%)',
@@ -1129,8 +1129,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': '끄니끄니 > Settlers_Goney',
 		'whisper': '@Settlers_Goney 안녕하세요, 20 chaos(으)로 올려놓은 Settlers 리그의 지옥 묵주 청금석 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 20 chaos", 위치: 왼쪽 21, 상단 4)',
 		'date': '2024-08-05T13:01:49Z',
-		'evalValue': 288.7,
-		'evalValueDetails': {
+		'weightedValue': 288.7,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 288.7,
@@ -1141,7 +1141,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 24.3,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -291\n@bold,orange Total Resist -11\n@bold,red Full DPS 29.5%\n@bold,green Value 24.3\n------------------------------\nDamnation Rosary\nLapis Amulet\nRequires Level 65\n+26 to Intelligence\n-2 to all Attributes\n+59% to Damage over Time Multiplier\nAdds 9 to 13 Physical Damage to Attacks\n-59 to maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+612.0 Average Damage (+2.2%)\n+3,814.9 Hit DPS (+2.2%)\n+238,614.1 Poison DPS (+36.6%)\n+38,278.7 Total Damage per Poison (+36.6%)\n+242,429.1 Total DPS inc. Poison (+29.5%)\n-29 Strength\n-5 Dexterity\n-3 Intelligence\n@bold,blue -2,255 Effective Hit Pool (-4.1%)\n-338 Phys Max Hit (-3.7%)\n-1,164 Elemental Max Hit (-4.1%)\n-1,164 Chaos Max Hit (-4.1%)\n@bold,blue -291 Total Life (-6.0%)\n-5.8 Life Regen\n-117.1 Life Leech/On Hit Rate (-5.0%)\n-1 Total Mana (-0.1%)\n-1 Unreserved Mana (-0.4%)\n+0% Unreserved Mana\n-1.5 Mana Recovery\n-0.3 Mana Leech/On Hit Rate (-0.1%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +242,429.1 Full DPS (+29.5%)',
@@ -1365,8 +1365,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'dylanstanford31 > tito___',
 		'whisper': '@tito___ Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 40 chaos in Settlers (stash tab "~price 40 chaos"; position: left 11, top 8)',
 		'date': '2024-08-06T22:15:23Z',
-		'evalValue': 283.4,
-		'evalValueDetails': {
+		'weightedValue': 283.4,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 283.4,
@@ -1377,7 +1377,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 23.1,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 28.3%\n@bold,green Value 23.1\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n68% increased Damage\n48% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+8,951.9 Average Damage (+32.6%)\n+55,802.4 Hit DPS (+32.6%)\n+177,434.5 Poison DPS (+27.2%)\n+28,464.2 Total Damage per Poison (+27.2%)\n+233,236.9 Total DPS inc. Poison (+28.3%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +233,236.9 Full DPS (+28.3%)',
@@ -1561,8 +1561,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'GuRan_RuRu > Settler_Ranger',
 		'whisper': '@Settler_Ranger 안녕하세요, 50 chaos(으)로 올려놓은 Settlers 리그의 영혼 부적 산호 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 50 chaos", 위치: 왼쪽 12, 상단 1)',
 		'date': '2024-08-06T15:16:46Z',
-		'evalValue': 280.2,
-		'evalValueDetails': {
+		'weightedValue': 280.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 280.2,
@@ -1573,7 +1573,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': -4.4,
 				'text': '@bold,blue Effective Hit Pool -4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 0.7%\n@bold,green Value -4.4\n------------------------------\nSoul Charm\nCoral Amulet\nRequires Level 65\nRegenerate 3.2 Life per second\n47% increased Spell Damage\n+62% to Damage over Time Multiplier\nAdds 40 to 70 Fire Damage to Attacks against you\n-657 to Accuracy Rating\n-35 to maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-5,953.3 Average Damage (-21.7%)\n-1.76% Effective Crit Chance\n-21% Hit Chance\n-37,110.6 Hit DPS (-21.7%)\n+42,747.3 Poison DPS (+6.6%)\n+36,473.1 Total Damage per Poison (+34.9%)\n+5,636.7 Total DPS inc. Poison (+0.7%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,158 Effective Hit Pool (-4.0%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-2.6 Life Regen\n-260.4 Life Leech/On Hit Rate (-11.1%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-24.5 Mana Leech/On Hit Rate (-9.6%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +5,636.7 Full DPS (+0.7%)',
@@ -1814,8 +1814,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@LacBglad Hi, I would like to buy your Torment Medallion Citrine Amulet listed for 50 chaos in Settlers (stash tab "sell"; position: left 9, top 6)',
 		'date': '2024-08-06T04:01:54Z',
 		'note': '~b/o 50 chaos',
-		'evalValue': 280.2,
-		'evalValueDetails': {
+		'weightedValue': 280.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 280.2,
@@ -1826,7 +1826,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.3,
 				'text': '@bold,blue Effective Hit Pool -4.6%\n@bold,blue Flat Life -258\n@bold,orange Total Resist -11\n@bold,red Full DPS 28%\n@bold,green Value 22.3\n------------------------------\nTorment Medallion\nCitrine Amulet\nRequires Level 65\n+23 to Strength and Dexterity\n+62% to Damage over Time Multiplier\nAdds 19 to 31 Physical Damage to Attacks against you\n45% reduced Cast Speed\n+112 to maximum Mana\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+230,639.8 Poison DPS (+35.4%)\n+36,999.4 Total Damage per Poison (+35.4%)\n+230,639.8 Total DPS inc. Poison (+28.0%)\n-4 Strength\n+20 Dexterity\n-27 Intelligence\n@bold,blue -2,530 Effective Hit Pool (-4.6%)\n-299 Phys Max Hit (-3.3%)\n-1,032 Elemental Max Hit (-3.7%)\n-1,032 Chaos Max Hit (-3.7%)\n@bold,blue -258 Total Life (-5.3%)\n-5.2 Life Regen\n-103.8 Life Leech/On Hit Rate (-4.4%)\n+99 Total Mana (+12.6%)\n+33 Unreserved Mana (+12.6%)\n+0% Unreserved Mana\n-9.8 Mana Recovery\n+32.1 Mana Leech/On Hit Rate (+12.6%)\n+125 Evasion rating (+0.9%)\n-1% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +230,639.8 Full DPS (+28.0%)',
@@ -2052,8 +2052,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Neph_Bonk Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 30 chaos in Settlers (stash tab "Sale"; position: left 1, top 6)',
 		'date': '2024-08-04T03:55:46Z',
 		'note': '~price 30 chaos',
-		'evalValue': 275.8,
-		'evalValueDetails': {
+		'weightedValue': 275.8,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 275.8,
@@ -2064,7 +2064,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 24.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 29.4%\n@bold,green Value 24.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n50% increased Damage\n+34% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,859.2 Average Damage (+14.0%)\n+24,056.6 Hit DPS (+14.0%)\n+217,808.4 Poison DPS (+33.4%)\n+34,941.0 Total Damage per Poison (+33.4%)\n+241,865.1 Total DPS inc. Poison (+29.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +241,865.1 Full DPS (+29.4%)',
@@ -2248,8 +2248,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Valkir47 > AintersGonnaAint',
 		'whisper': '@AintersGonnaAint Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 17 chaos in Settlers (stash tab "~b/o 17 chaos"; position: left 11, top 1)',
 		'date': '2024-08-06T05:24:06Z',
-		'evalValue': 273.6,
-		'evalValueDetails': {
+		'weightedValue': 273.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 273.6,
@@ -2260,7 +2260,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.4%\n@bold,green Value 22.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n64% increased Damage\n48% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+8,643.0 Average Damage (+31.5%)\n+53,877.2 Hit DPS (+31.5%)\n+171,321.8 Poison DPS (+26.3%)\n+27,483.6 Total Damage per Poison (+26.3%)\n+225,198.9 Total DPS inc. Poison (+27.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +225,198.9 Full DPS (+27.4%)',
@@ -2442,8 +2442,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Daggr > DaggrSettlers',
 		'whisper': '@DaggrSettlers Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 50 chaos in Settlers (stash tab "~price 50 chaos"; position: left 12, top 1)',
 		'date': '2024-07-29T14:12:44Z',
-		'evalValue': 273.2,
-		'evalValueDetails': {
+		'weightedValue': 273.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 273.2,
@@ -2454,7 +2454,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 23.9,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 29.1%\n@bold,green Value 23.9\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n60% increased Damage\n+28% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,629.9 Average Damage (+16.9%)\n+28,860.9 Hit DPS (+16.9%)\n+210,593.2 Poison DPS (+32.3%)\n+33,783.5 Total Damage per Poison (+32.3%)\n+239,454.0 Total DPS inc. Poison (+29.1%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +239,454.0 Full DPS (+29.1%)',
@@ -2638,8 +2638,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@ChiShoa Здравствуйте, хочу купить у вас Глаза Великого волка Талисман Великого волка за 40 chaos в лиге Settlers (секция "S"; позиция: 24 столбец, 23 ряд)',
 		'date': '2024-08-02T15:00:14Z',
 		'note': '~price 40 chaos',
-		'evalValue': 272.4,
-		'evalValueDetails': {
+		'weightedValue': 272.4,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 272.4,
@@ -2650,7 +2650,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 23.8,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 29%\n@bold,green Value 23.8\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n56% increased Damage\n+30% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,322.0 Average Damage (+15.7%)\n+26,941.5 Hit DPS (+15.7%)\n+211,936.2 Poison DPS (+32.5%)\n+33,999.0 Total Damage per Poison (+32.5%)\n+238,877.8 Total DPS inc. Poison (+29.0%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +238,877.8 Full DPS (+29.0%)',
@@ -2840,8 +2840,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': '캣파파 > 카자이스키야',
 		'whisper': '@카자이스키야 안녕하세요, 10 chaos(으)로 올려놓은 Settlers 리그의 마엘스트롬 묵주 파우아 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 10 chaos", 위치: 왼쪽 1, 상단 20)',
 		'date': '2024-08-02T16:35:08Z',
-		'evalValue': 271.2,
-		'evalValueDetails': {
+		'weightedValue': 271.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 271.2,
@@ -2852,7 +2852,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 20.2,
 				'text': '@bold,blue Effective Hit Pool -5.8%\n@bold,blue Flat Life -134\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.1%\n@bold,green Value 20.2\n------------------------------\nMaelstrom Rosary\nPaua Amulet\nRequires Level 65\n24% increased Mana Regeneration Rate\n+124 to Strength\n-79 to Intelligence\n+60% to Damage over Time Multiplier\nAdds 16 to 40 Physical Damage to Attacks against you\nAdds 2 to 12 Lightning Damage to Attacks\n74% reduced Evasion Rating\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+223,199.8 Poison DPS (+34.2%)\n+35,805.9 Total Damage per Poison (+34.2%)\n+223,199.8 Total DPS inc. Poison (+27.1%)\n+97 Strength\n-3 Dexterity\n-106 Intelligence\n@bold,blue -3,162 Effective Hit Pool (-5.8%)\n-155 Phys Max Hit (-1.7%)\n-536 Elemental Max Hit (-1.9%)\n-536 Chaos Max Hit (-1.9%)\n@bold,blue -134 Total Life (-2.8%)\n-2.7 Life Regen\n-53.9 Life Leech/On Hit Rate (-2.3%)\n-53 Total Mana (-6.7%)\n-18 Unreserved Mana (-6.9%)\n+0% Unreserved Mana\n+5.8 Mana Recovery\n-17.2 Mana Leech/On Hit Rate (-6.7%)\n-2,351 Evasion rating (-17.4%)\n-4% Evade Chance\n-1% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +223,199.8 Full DPS (+27.1%)',
@@ -3124,8 +3124,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'TrustyDaft > COMRADE_MELINA',
 		'whisper': '@COMRADE_MELINA Hi, I would like to buy your Beast Pendant Onyx Amulet listed for 20 chaos in Settlers (stash tab "~price 20 chaos"; position: left 5, top 7)',
 		'date': '2024-08-06T19:24:08Z',
-		'evalValue': 271.2,
-		'evalValueDetails': {
+		'weightedValue': 271.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 271.2,
@@ -3136,7 +3136,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 11.1,
 				'text': '@bold,blue Effective Hit Pool -3.9%\n@bold,blue Flat Life -273\n@bold,orange Total Resist -121\n@bold,red Full DPS 27.1%\n@bold,green Value 11.1\n------------------------------\nBeast Pendant\nOnyx Amulet\nRequires Level 65\n+11 to all Attributes\n+60% to Damage over Time Multiplier\n12% increased Cast Speed\n27% reduced Rarity of Items found\n@bold,orange -110% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+223,199.8 Poison DPS (+34.2%)\n+35,805.9 Total Damage per Poison (+34.2%)\n+223,199.8 Total DPS inc. Poison (+27.1%)\n-16 Strength\n+8 Dexterity\n-16 Intelligence\n@bold,blue -2,116 Effective Hit Pool (-3.9%)\n-317 Phys Max Hit (-3.5%)\n-1,092 Elemental Max Hit (-3.9%)\n-1,092 Chaos Max Hit (-3.9%)\n@bold,blue -273 Total Life (-5.7%)\n-5.5 Life Regen\n-109.8 Life Leech/On Hit Rate (-4.7%)\n-8 Total Mana (-1.0%)\n-3 Unreserved Mana (-1.1%)\n+0% Unreserved Mana\n-1.0 Mana Recovery\n-2.6 Mana Leech/On Hit Rate (-1.0%)\n+31 Evasion rating (+0.2%)\n@bold,orange -110% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +223,199.8 Full DPS (+27.1%)',
@@ -3361,8 +3361,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Sprinkler Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 30 chaos in Settlers (stash tab "Sells"; position: left 21, top 19)',
 		'date': '2024-08-04T14:09:27Z',
 		'note': '~price 30 chaos',
-		'evalValue': 268.7,
-		'evalValueDetails': {
+		'weightedValue': 268.7,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 268.7,
@@ -3373,7 +3373,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.7,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 26.9%\n@bold,green Value 21.7\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n58% increased Damage\n52% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+8,489.1 Average Damage (+30.9%)\n+52,917.5 Hit DPS (+30.9%)\n+168,252.7 Poison DPS (+25.8%)\n+26,991.2 Total Damage per Poison (+25.8%)\n+221,170.2 Total DPS inc. Poison (+26.9%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +221,170.2 Full DPS (+26.9%)',
@@ -3561,8 +3561,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@SmellLikeGasoline Hi, I would like to buy your Spirit Noose Coral Amulet listed for 50 chaos in Settlers (stash tab "$$$"; position: left 12, top 18)',
 		'date': '2024-08-06T06:00:40Z',
 		'note': '~price 50 chaos',
-		'evalValue': 268.6,
-		'evalValueDetails': {
+		'weightedValue': 268.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 268.6,
@@ -3573,7 +3573,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.1,
 				'text': '@bold,blue Effective Hit Pool 1.9%\n@bold,blue Flat Life -315\n@bold,orange Total Resist -11\n@bold,red Full DPS 20.3%\n@bold,green Value 21.1\n------------------------------\nSpirit Noose\nCoral Amulet\nRequires Level 61\nRegenerate 3.5 Life per second\n-22 to all Attributes\n+45% to Damage over Time Multiplier\n10% reduced Fire Damage\n85% increased Armour\n25% increased Evasion Rating\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+167,399.9 Poison DPS (+25.7%)\n+26,854.4 Total Damage per Poison (+25.7%)\n+167,399.9 Total DPS inc. Poison (+20.3%)\n-49 Strength\n-25 Dexterity\n-49 Intelligence\n@bold,blue +1,023 Effective Hit Pool (+1.9%)\n-64 Phys Max Hit (-0.7%)\n-1,260 Elemental Max Hit (-4.5%)\n-1,260 Chaos Max Hit (-4.5%)\n@bold,blue -315 Total Life (-6.5%)\n-2.8 Life Regen\n-126.7 Life Leech/On Hit Rate (-5.4%)\n-24 Total Mana (-3.0%)\n-8 Unreserved Mana (-3.1%)\n+0% Unreserved Mana\n+0.4 Mana Recovery\n-7.8 Mana Leech/On Hit Rate (-3.0%)\n+627 Evasion rating (+4.6%)\n+1% Evade Chance\n+1,638 Armour (+34.3%)\n+7% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +167,399.9 Full DPS (+20.3%)',
@@ -3816,8 +3816,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'IAmShiny > ShinyTheSailor',
 		'whisper': '@ShinyTheSailor Hi, I would like to buy your Torment Choker Onyx Amulet listed for 10 chaos in Settlers (stash tab "~price 10 chaos"; position: left 3, top 5)',
 		'date': '2024-08-07T00:30:47Z',
-		'evalValue': 266.7,
-		'evalValueDetails': {
+		'weightedValue': 266.7,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 266.7,
@@ -3828,7 +3828,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.5,
 				'text': '@bold,blue Effective Hit Pool -3.8%\n@bold,blue Flat Life -271\n@bold,orange Total Resist -44\n@bold,red Full DPS 26.7%\n@bold,green Value 18.5\n------------------------------\nTorment Choker\nOnyx Amulet\nRequires Level 65\n+14 to all Attributes\n+59% to Damage over Time Multiplier\n+101 to maximum Energy Shield\n29% reduced Rarity of Items found\n@bold,orange -11% to all Elemental Resistances\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+219,479.8 Poison DPS (+33.7%)\n+35,209.1 Total Damage per Poison (+33.7%)\n+219,479.8 Total DPS inc. Poison (+26.7%)\n-13 Strength\n+11 Dexterity\n-13 Intelligence\n@bold,blue -2,100 Effective Hit Pool (-3.8%)\n-315 Phys Max Hit (-3.5%)\n-1,084 Elemental Max Hit (-3.8%)\n-1,084 Chaos Max Hit (-3.9%)\n@bold,blue -271 Total Life (-5.6%)\n-5.4 Life Regen\n-109.0 Life Leech/On Hit Rate (-4.6%)\n-6 Total Mana (-0.8%)\n-2 Unreserved Mana (-0.8%)\n-1.1 Mana Recovery\n-1.9 Mana Leech/On Hit Rate (-0.8%)\n+63 Evasion rating (+0.5%)\n@bold,orange -11% Fire Res. Over Max\n@bold,orange -22% Cold Res. Over Max\n@bold,orange -11% Lightning Res. Over Max\n@bold,red +219,479.8 Full DPS (+26.7%)',
@@ -4053,8 +4053,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Dissent Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 30 chaos in Settlers (stash tab "Sell"; position: left 8, top 6)',
 		'date': '2024-08-06T21:19:23Z',
 		'note': '~price 30 chaos',
-		'evalValue': 263.8,
-		'evalValueDetails': {
+		'weightedValue': 263.8,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 263.8,
@@ -4065,7 +4065,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 26.4%\n@bold,green Value 21.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n70% increased Damage\n38% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+8,334.2 Average Damage (+30.3%)\n+51,951.9 Hit DPS (+30.3%)\n+165,196.3 Poison DPS (+25.3%)\n+26,500.9 Total Damage per Poison (+25.3%)\n+217,148.2 Total DPS inc. Poison (+26.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +217,148.2 Full DPS (+26.4%)',
@@ -4248,8 +4248,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': '오서스 > Kal_So',
 		'whisper': '@Kal_So 안녕하세요, 65 chaos(으)로 올려놓은 Settlers 리그의 위대한 늑대의 눈 위대한 늑대 부적(을)를 구매하고 싶습니다 (보관함 탭 "~price 65 chaos", 위치: 왼쪽 12, 상단 12)',
 		'date': '2024-08-05T03:12:58Z',
-		'evalValue': 261.9,
-		'evalValueDetails': {
+		'weightedValue': 261.9,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 261.9,
@@ -4260,7 +4260,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.6,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.8%\n@bold,green Value 22.6\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+32% to Damage over Time Multiplier\n48% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,704.3 Average Damage (+13.5%)\n+23,091.1 Hit DPS (+13.5%)\n+205,865.6 Poison DPS (+31.6%)\n+33,025.1 Total Damage per Poison (+31.6%)\n+228,956.7 Total DPS inc. Poison (+27.8%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +228,956.7 Full DPS (+27.8%)',
@@ -4443,8 +4443,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@มรองดูววัว สวัสดี เราต้องการซื้อ Eyes of the Greatwolf Greatwolf Talisman ที่คุณตั้งขายไว้ในราคา 20 chaos ในลีก Settlers (แท็บ "$$$$" ตำแหน่ง: ซ้าย 8, บน 7)',
 		'date': '2024-08-04T02:15:45Z',
 		'note': '~price 20 chaos',
-		'evalValue': 260,
-		'evalValueDetails': {
+		'weightedValue': 260,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 260,
@@ -4455,7 +4455,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.4,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.6%\n@bold,green Value 22.4\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n62% increased Damage\n+24% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,784.8 Average Damage (+17.4%)\n+29,826.4 Hit DPS (+17.4%)\n+197,093.1 Poison DPS (+30.2%)\n+31,617.8 Total Damage per Poison (+30.2%)\n+226,919.5 Total DPS inc. Poison (+27.6%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +226,919.5 Full DPS (+27.6%)',
@@ -4638,8 +4638,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@KALGUUR_GOD_FATHER 안녕하세요, 50 chaos(으)로 올려놓은 Settlers 리그의 위대한 늑대의 눈 위대한 늑대 부적(을)를 구매하고 싶습니다 (보관함 탭 "~price 1 chaos", 위치: 왼쪽 6, 상단 1)',
 		'date': '2024-08-01T07:50:04Z',
 		'note': '~price 50 chaos',
-		'evalValue': 257.8,
-		'evalValueDetails': {
+		'weightedValue': 257.8,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.8,
@@ -4650,7 +4650,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.4%\n@bold,green Value 22.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n50% increased Damage\n+30% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,859.2 Average Damage (+14.0%)\n+24,056.6 Hit DPS (+14.0%)\n+201,182.2 Poison DPS (+30.9%)\n+32,273.8 Total Damage per Poison (+30.9%)\n+225,238.8 Total DPS inc. Poison (+27.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +225,238.8 Full DPS (+27.4%)',
@@ -4833,8 +4833,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Scream_Boat_William Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 50 chaos in Settlers (stash tab "Sandwhich"; position: left 2, top 12)',
 		'date': '2024-08-03T22:54:58Z',
 		'note': '~price 50 chaos',
-		'evalValue': 257.7,
-		'evalValueDetails': {
+		'weightedValue': 257.7,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.7,
@@ -4845,7 +4845,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.4%\n@bold,green Value 22.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+30% to Damage over Time Multiplier\n50% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,859.2 Average Damage (+14.0%)\n+24,056.6 Hit DPS (+14.0%)\n+201,182.2 Poison DPS (+30.9%)\n+32,273.8 Total Damage per Poison (+30.9%)\n+225,238.8 Total DPS inc. Poison (+27.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +225,238.8 Full DPS (+27.4%)',
@@ -5031,8 +5031,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'blackpeoplefromouterspace > LettuceFetish',
 		'whisper': '@LettuceFetish Hi, I would like to buy your Sorrow Choker Amber Amulet listed for 20 chaos in Settlers (stash tab "~price 20 chaos"; position: left 12, top 3)',
 		'date': '2024-08-06T15:35:47Z',
-		'evalValue': 257.6,
-		'evalValueDetails': {
+		'weightedValue': 257.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.6,
@@ -5043,7 +5043,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 23.9,
 				'text': '@bold,blue Effective Hit Pool -3.5%\n@bold,blue Flat Life -261\n@bold,orange Total Resist 16\n@bold,red Full DPS 25.8%\n@bold,green Value 23.9\n------------------------------\nSorrow Choker\nAmber Amulet\nRequires Level 65\n+21 to Strength\n+57% to Damage over Time Multiplier\nAdds 9 to 139 Lightning Damage to Attacks against you\n@bold,orange -7% to all Elemental Resistances\n@bold,orange +48% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+212,039.8 Poison DPS (+32.5%)\n+34,015.6 Total Damage per Poison (+32.5%)\n+212,039.8 Total DPS inc. Poison (+25.8%)\n-6 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -1,923 Effective Hit Pool (-3.5%)\n-303 Phys Max Hit (-3.3%)\n-1,044 Elemental Max Hit (-3.7%)\n-1,044 Chaos Max Hit (-3.7%)\n@bold,blue -261 Total Life (-5.4%)\n-5.2 Life Regen\n-105.0 Life Leech/On Hit Rate (-4.5%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange +41% Fire Res. Over Max\n@bold,orange -18% Cold Res. Over Max\n@bold,orange -7% Lightning Res. Over Max\n@bold,red +212,039.8 Full DPS (+25.8%)',
@@ -5275,8 +5275,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'keighen > WHATISITHEBRAIDS',
 		'whisper': '@WHATISITHEBRAIDS Hi, I would like to buy your Victory Medallion Lapis Amulet listed for 38 chaos in Settlers (stash tab "~price 38 chaos"; position: left 2, top 18)',
 		'date': '2024-08-06T19:51:24Z',
-		'evalValue': 257.6,
-		'evalValueDetails': {
+		'weightedValue': 257.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.6,
@@ -5287,7 +5287,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 9,
 				'text': '@bold,blue Effective Hit Pool -7.6%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -92\n@bold,red Full DPS 25.8%\n@bold,green Value 9\n------------------------------\nVictory Medallion\nLapis Amulet\nRequires Level 61\n+20 to Intelligence\n+57% to Damage over Time Multiplier\n82% reduced Evasion Rating\n+65 to maximum Mana\n@bold,orange -37% to all Elemental Resistances\n@bold,orange +30% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+212,039.8 Poison DPS (+32.5%)\n+34,015.6 Total Damage per Poison (+32.5%)\n+212,039.8 Total DPS inc. Poison (+25.8%)\n-27 Strength\n-3 Dexterity\n-7 Intelligence\n@bold,blue -4,155 Effective Hit Pool (-7.6%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n+62 Total Mana (+7.9%)\n+20 Unreserved Mana (+7.6%)\n+0% Unreserved Mana\n-6.7 Mana Recovery\n+20.1 Mana Leech/On Hit Rate (+7.9%)\n-2,602 Evasion rating (-19.2%)\n-5% Evade Chance\n@bold,orange -7% Fire Res. Over Max\n@bold,orange -48% Cold Res. Over Max\n@bold,orange -37% Lightning Res. Over Max\n@bold,red +212,039.8 Full DPS (+25.8%)',
@@ -5526,8 +5526,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@BlackMambaa_boubou Hi, I would like to buy your Doom Choker Coral Amulet listed for 50 chaos in Settlers (stash tab "Sell"; position: left 10, top 3)',
 		'date': '2024-08-06T07:16:57Z',
 		'note': '~price 50 chaos',
-		'evalValue': 257.6,
-		'evalValueDetails': {
+		'weightedValue': 257.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.6,
@@ -5538,7 +5538,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 20.6,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 25.8%\n@bold,green Value 20.6\n------------------------------\nDoom Choker\nCoral Amulet\nRequires Level 65\nRegenerate 2.2 Life per second\n+57% to Damage over Time Multiplier\n+84 to maximum Energy Shield\n-168 to maximum Mana\nLose 14 Mana per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+212,039.8 Poison DPS (+32.5%)\n+34,015.6 Total Damage per Poison (+32.5%)\n+212,039.8 Total DPS inc. Poison (+25.8%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-3.6 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-181 Total Mana (-23.0%)\n-61 Unreserved Mana (-23.3%)\n+0% Unreserved Mana\n+13.3 Mana Recovery\n-58.8 Mana Leech/On Hit Rate (-23.0%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +212,039.8 Full DPS (+25.8%)',
@@ -5755,8 +5755,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Erradium > JohnZenith',
 		'whisper': '@JohnZenith Hi, I would like to buy your Armageddon Choker Lapis Amulet listed for 85 chaos in Settlers (stash tab "~price 85 chaos"; position: left 1, top 8)',
 		'date': '2024-08-04T09:46:06Z',
-		'evalValue': 257.6,
-		'evalValueDetails': {
+		'weightedValue': 257.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.6,
@@ -5767,7 +5767,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 13.1,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -86\n@bold,red Full DPS 25.8%\n@bold,green Value 13.1\n------------------------------\nArmageddon Choker\nLapis Amulet\nRequires Level 65\n+23 to Intelligence\n+57% to Damage over Time Multiplier\n18% reduced maximum Energy Shield\n+98 to maximum Mana\n@bold,orange -25% to all Elemental Resistances\nLose 6 Life per Enemy Hit with Attacks\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+212,039.8 Poison DPS (+32.5%)\n+34,015.6 Total Damage per Poison (+32.5%)\n+212,039.8 Total DPS inc. Poison (+25.8%)\n-27 Strength\n-3 Dexterity\n-4 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-153.3 Life Leech/On Hit Rate (-6.5%)\n+96 Total Mana (+12.2%)\n+32 Unreserved Mana (+12.2%)\n+0% Unreserved Mana\n-9.5 Mana Recovery\n+31.2 Mana Leech/On Hit Rate (+12.2%)\n-31 Evasion rating (-0.2%)\n@bold,orange -25% Fire Res. Over Max\n@bold,orange -36% Cold Res. Over Max\n@bold,orange -25% Lightning Res. Over Max\n@bold,red +212,039.8 Full DPS (+25.8%)',
@@ -6009,8 +6009,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@射貓吸奶 Bonjour, je souhaiterais t\'acheter Torque glyphique Amulette de citrine pour 100 chaos dans la ligue Settlers (onglet de réserve "小東西" ; 21e en partant de la gauche, 9e en partant du haut)',
 		'date': '2024-08-04T07:27:04Z',
 		'note': '~price 100 chaos',
-		'evalValue': 257.6,
-		'evalValueDetails': {
+		'weightedValue': 257.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 257.6,
@@ -6021,7 +6021,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 14.4,
 				'text': '@bold,blue Effective Hit Pool -4.8%\n@bold,blue Flat Life -263\n@bold,orange Total Resist -66\n@bold,red Full DPS 25.8%\n@bold,green Value 14.4\n------------------------------\nGlyph Torc\nCitrine Amulet\nRequires Level 65\n+20 to Strength and Dexterity\n+57% to Damage over Time Multiplier\nAdds 21 to 43 Physical Damage to Attacks against you\n@bold,orange -55% to Lightning Resistance\n+2 to Level of all Lightning Skill Gems\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+212,039.8 Poison DPS (+32.5%)\n+34,015.6 Total Damage per Poison (+32.5%)\n+212,039.8 Total DPS inc. Poison (+25.8%)\n-7 Strength\n+17 Dexterity\n-27 Intelligence\n@bold,blue -2,601 Effective Hit Pool (-4.8%)\n-305 Phys Max Hit (-3.4%)\n-1,052 Elemental Max Hit (-3.7%)\n-1,052 Chaos Max Hit (-3.7%)\n@bold,blue -263 Total Life (-5.4%)\n-5.3 Life Regen\n-105.8 Life Leech/On Hit Rate (-4.5%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n+94 Evasion rating (+0.7%)\n-1% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,orange -55% Lightning Res. Over Max\n@bold,red +212,039.8 Full DPS (+25.8%)',
@@ -6252,8 +6252,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@TradeMinMax Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 40 chaos in Settlers (stash tab "1"; position: left 10, top 4)',
 		'date': '2024-08-06T21:26:33Z',
 		'note': '~price 40 chaos',
-		'evalValue': 256.3,
-		'evalValueDetails': {
+		'weightedValue': 256.3,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 256.3,
@@ -6264,7 +6264,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.9,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.1%\n@bold,green Value 21.9\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+34% to Damage over Time Multiplier\n42% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,241.5 Average Damage (+11.8%)\n+20,206.2 Hit DPS (+11.8%)\n+203,180.0 Poison DPS (+31.2%)\n+32,594.3 Total Damage per Poison (+31.2%)\n+223,386.2 Total DPS inc. Poison (+27.1%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +223,386.2 Full DPS (+27.1%)',
@@ -6449,8 +6449,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Zetsentu > ๏Tits',
 		'whisper': '@๏Tits Hi, I would like to buy your Armageddon Idol Amber Amulet listed for 18 chaos in Settlers (stash tab "~price 18 chaos"; position: left 6, top 20)',
 		'date': '2024-08-05T15:18:59Z',
-		'evalValue': 251,
-		'evalValueDetails': {
+		'weightedValue': 251,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 251,
@@ -6461,7 +6461,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.1,
 				'text': '@bold,blue Effective Hit Pool -3.5%\n@bold,blue Flat Life -258\n@bold,orange Total Resist -11\n@bold,red Full DPS 25.7%\n@bold,green Value 21.1\n------------------------------\nArmageddon Idol\nAmber Amulet\nRequires Level 60\n+24 to Strength\n+50% to Damage over Time Multiplier\nAdds 9 to 16 Physical Damage to Attacks\nAdds 25 to 48 Fire Damage to Attacks against you\nAdds 18 to 41 Cold Damage to Attacks against you\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+694.7 Average Damage (+2.5%)\n+4,330.3 Hit DPS (+2.5%)\n+206,919.7 Poison DPS (+31.7%)\n+33,194.2 Total Damage per Poison (+31.7%)\n+211,250.0 Total DPS inc. Poison (+25.7%)\n-3 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -1,911 Effective Hit Pool (-3.5%)\n-299 Phys Max Hit (-3.3%)\n-1,032 Elemental Max Hit (-3.7%)\n-1,032 Chaos Max Hit (-3.7%)\n@bold,blue -258 Total Life (-5.3%)\n-5.2 Life Regen\n-103.8 Life Leech/On Hit Rate (-4.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +211,250.0 Full DPS (+25.7%)',
@@ -6698,8 +6698,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@nomiliagn Hi, I would like to buy your Corpse Noose Amber Amulet listed for 20 chaos in Settlers (stash tab "T3"; position: left 12, top 6)',
 		'date': '2024-08-02T09:20:44Z',
 		'note': '~b/o 20 chaos',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -6710,7 +6710,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 20.3,
 				'text': '@bold,blue Effective Hit Pool -3.5%\n@bold,blue Flat Life -251\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.9%\n@bold,green Value 20.3\n------------------------------\nCorpse Noose\nAmber Amulet\nRequires Level 60\n+29 to Strength\n-75 to Intelligence\n+55% to Damage over Time Multiplier\nAdds 12 to 30 Cold Damage to Attacks against you\nAdds 5 to 105 Lightning Damage to Attacks\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n+2 Strength\n-3 Dexterity\n-102 Intelligence\n@bold,blue -1,917 Effective Hit Pool (-3.5%)\n-291 Phys Max Hit (-3.2%)\n-1,004 Elemental Max Hit (-3.6%)\n-1,004 Chaos Max Hit (-3.6%)\n@bold,blue -251 Total Life (-5.2%)\n-5.0 Life Regen\n-101.0 Life Leech/On Hit Rate (-4.3%)\n-51 Total Mana (-6.5%)\n-17 Unreserved Mana (-6.5%)\n+0% Unreserved Mana\n+2.6 Mana Recovery\n-16.6 Mana Leech/On Hit Rate (-6.5%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -6944,8 +6944,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@TheOz_EnriqueMorales Hi, I would like to buy your Skull Noose Gold Amulet listed for 25 chaos in Settlers (stash tab "amulet"; position: left 4, top 9)',
 		'date': '2024-08-06T22:17:10Z',
 		'note': '~price 25 chaos',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -6956,7 +6956,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.7,
 				'text': '@bold,blue Effective Hit Pool -4.7%\n@bold,blue Flat Life -333\n@bold,orange Total Resist 15\n@bold,red Full DPS 24.9%\n@bold,green Value 21.7\n------------------------------\nSkull Noose\nGold Amulet\nRequires Level 65\n18% increased Rarity of Items found\n-37 to Strength\n+55% to Damage over Time Multiplier\n19% reduced maximum Energy Shield\n@bold,orange +26% to Cold Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n-64 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,581 Effective Hit Pool (-4.7%)\n-387 Phys Max Hit (-4.3%)\n-1,332 Elemental Max Hit (-4.7%)\n-1,332 Chaos Max Hit (-4.7%)\n@bold,blue -333 Total Life (-6.9%)\n-6.7 Life Regen\n-134.0 Life Leech/On Hit Rate (-5.7%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange +15% Cold Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -7185,8 +7185,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Frousse_ > widepeepoBOAT',
 		'whisper': '@widepeepoBOAT Hi, I would like to buy your Spirit Braid Agate Amulet listed for 25 chaos in Settlers (stash tab "~price 25 chaos"; position: left 1, top 23)',
 		'date': '2024-08-02T17:43:20Z',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -7197,7 +7197,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.2,
 				'text': '@bold,blue Effective Hit Pool -6.6%\n@bold,blue Flat Life -261\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.9%\n@bold,green Value 17.2\n------------------------------\nSpirit Braid\nAgate Amulet\nRequires Level 60\n+22 to Strength and Intelligence\n-36 to Dexterity\n+55% to Damage over Time Multiplier\n57% reduced Evasion Rating\n9% increased maximum Energy Shield\n+86 to maximum Mana\nLose 28 Life per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n-5 Strength\n-39 Dexterity\n-5 Intelligence\n@bold,blue -3,579 Effective Hit Pool (-6.6%)\n-303 Phys Max Hit (-3.3%)\n-1,044 Elemental Max Hit (-3.7%)\n-1,044 Chaos Max Hit (-3.7%)\n@bold,blue -261 Total Life (-5.4%)\n-5.2 Life Regen\n-105.0 Life Leech/On Hit Rate (-4.5%)\n+84 Total Mana (+10.7%)\n+28 Unreserved Mana (+10.7%)\n+0% Unreserved Mana\n-8.6 Mana Recovery\n+27.3 Mana Leech/On Hit Rate (+10.7%)\n-2,038 Evasion rating (-15.0%)\n-4% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -7455,8 +7455,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@PhDCandidate Hi, I would like to buy your Honour Locket Paua Amulet listed for 39 chaos in Settlers (stash tab "Sale"; position: left 11, top 6)',
 		'date': '2024-08-06T06:49:03Z',
 		'note': '~price 39 chaos',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -7467,7 +7467,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19.7,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.9%\n@bold,green Value 19.7\n------------------------------\nHonour Locket\nPaua Amulet\nRequires Level 65\n27% increased Mana Regeneration Rate\n+55% to Damage over Time Multiplier\nLose 6.8 Life per second\n29% reduced Rarity of Items found\n16% increased Elemental Damage with Attack Skills\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-12.6 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n+3.1 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -7684,8 +7684,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'gnafou45 > Taartouf',
 		'whisper': '@Taartouf Hi, I would like to buy your Damnation Locket Jade Amulet listed for 50 chaos in Settlers (stash tab "~price 50 chaos"; position: left 11, top 12)',
 		'date': '2024-08-03T12:27:27Z',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -7696,7 +7696,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.4,
 				'text': '@bold,blue Effective Hit Pool -3.4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -31\n@bold,red Full DPS 24.9%\n@bold,green Value 18.4\n------------------------------\nDamnation Locket\nJade Amulet\nRequires Level 60\n+20 to Dexterity\n55% reduced Spell Damage\n+55% to Damage over Time Multiplier\nAdds 2 to 37 Lightning Damage to Attacks\n15% increased Evasion Rating\n@bold,orange -20% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n-27 Strength\n+17 Dexterity\n-27 Intelligence\n@bold,blue -1,829 Effective Hit Pool (-3.4%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n+564 Evasion rating (+4.2%)\n+1% Evade Chance\n@bold,orange -20% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -7942,8 +7942,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Stszan Hi, I would like to buy your Armageddon Gorget Coral Amulet listed for 100 chaos in Settlers (stash tab "Sell $"; position: left 3, top 12)',
 		'date': '2024-08-06T19:12:50Z',
 		'note': '~price 100 chaos',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -7954,7 +7954,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.7,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist 9\n@bold,red Full DPS 24.9%\n@bold,green Value 21.7\n------------------------------\nArmageddon Gorget\nCoral Amulet\nRequires Level 65\nRegenerate 2.9 Life per second\n+55% to Damage over Time Multiplier\n-158 to maximum Mana\n@bold,orange -28% to Cold Resistance\n@bold,orange +48% to Lightning Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-2.9 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-171 Total Mana (-21.7%)\n-57 Unreserved Mana (-21.8%)\n+0% Unreserved Mana\n+12.5 Mana Recovery\n-55.5 Mana Leech/On Hit Rate (-21.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -39% Cold Res. Over Max\n@bold,orange +48% Lightning Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -8177,8 +8177,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@MagireSettlers Hi, I would like to buy your Brood Pendant Amber Amulet listed for 100 chaos in Settlers (stash tab "SALE"; position: left 12, top 7)',
 		'date': '2024-08-02T08:52:50Z',
 		'note': '~b/o 100 chaos',
-		'evalValue': 248.6,
-		'evalValueDetails': {
+		'weightedValue': 248.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 248.6,
@@ -8189,7 +8189,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.5,
 				'text': '@bold,blue Effective Hit Pool -5.3%\n@bold,blue Flat Life -372\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.9%\n@bold,green Value 18.5\n------------------------------\nBrood Pendant\nAmber Amulet\nRequires Level 65\n+25 to Strength\n-94 to Strength\n+55% to Damage over Time Multiplier\n15% increased maximum Energy Shield\n46% reduced Rarity of Items found\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+204,599.9 Poison DPS (+31.4%)\n+32,822.1 Total Damage per Poison (+31.4%)\n+204,599.9 Total DPS inc. Poison (+24.9%)\n-96 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,883 Effective Hit Pool (-5.3%)\n-432 Phys Max Hit (-4.8%)\n-1,488 Elemental Max Hit (-5.3%)\n-1,488 Chaos Max Hit (-5.3%)\n@bold,blue -372 Total Life (-7.7%)\n-7.5 Life Regen\n-149.7 Life Leech/On Hit Rate (-6.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +204,599.9 Full DPS (+24.9%)',
@@ -8410,8 +8410,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Misha_Pudge Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 44 chaos in Settlers (stash tab "sale"; position: left 10, top 5)',
 		'date': '2024-08-06T13:52:26Z',
 		'note': '~price 44 chaos',
-		'evalValue': 247.9,
-		'evalValueDetails': {
+		'weightedValue': 247.9,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 247.9,
@@ -8422,7 +8422,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.1,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 26.3%\n@bold,green Value 21.1\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+30% to Damage over Time Multiplier\n46% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,549.4 Average Damage (+12.9%)\n+22,125.5 Hit DPS (+12.9%)\n+194,022.8 Poison DPS (+29.8%)\n+31,125.3 Total Damage per Poison (+29.8%)\n+216,148.2 Total DPS inc. Poison (+26.3%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +216,148.2 Full DPS (+26.3%)',
@@ -8609,8 +8609,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Lordowl99 > LonelyLeagueStart',
 		'whisper': '@LonelyLeagueStart Hi, I would like to buy your Kraken Charm Citrine Amulet listed for 19 chaos in Settlers (stash tab "~price 19 chaos"; position: left 12, top 10)',
 		'date': '2024-08-06T11:51:06Z',
-		'evalValue': 247.2,
-		'evalValueDetails': {
+		'weightedValue': 247.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 247.2,
@@ -8621,7 +8621,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.1,
 				'text': '@bold,blue Effective Hit Pool -2.7%\n@bold,blue Flat Life -258\n@bold,orange Total Resist -11\n@bold,red Full DPS 19.9%\n@bold,green Value 16.1\n------------------------------\nKraken Charm\nCitrine Amulet\nRequires Level 61\n+24 to Strength and Dexterity\n+44% to Damage over Time Multiplier\nAdds 4 to 8 Physical Damage to Attacks against you\n63% increased Armour\n71% reduced Evasion Rating\nLose 3.3 Life per second\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+163,679.9 Poison DPS (+25.1%)\n+26,257.6 Total Damage per Poison (+25.1%)\n+163,679.9 Total DPS inc. Poison (+19.9%)\n-3 Strength\n+21 Dexterity\n-27 Intelligence\n@bold,blue -1,487 Effective Hit Pool (-2.7%)\n-74 Phys Max Hit (-0.8%)\n-1,032 Elemental Max Hit (-3.7%)\n-1,032 Chaos Max Hit (-3.7%)\n@bold,blue -258 Total Life (-5.3%)\n-8.5 Life Regen\n-103.8 Life Leech/On Hit Rate (-4.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-2,100 Evasion rating (-15.5%)\n-4% Evade Chance\n+1,214 Armour (+25.4%)\n+5% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +163,679.9 Full DPS (+19.9%)',
@@ -8863,8 +8863,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Verdjinald > WaLAKEKW',
 		'whisper': '@WaLAKEKW Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 80 chaos in Settlers (stash tab "~b/o 80 chaos"; position: left 1, top 6)',
 		'date': '2024-08-01T16:01:08Z',
-		'evalValue': 244.6,
-		'evalValueDetails': {
+		'weightedValue': 244.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 244.6,
@@ -8875,7 +8875,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 20.7,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 25.9%\n@bold,green Value 20.7\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n52% increased Damage\n+26% to Damage over Time Multiplier\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,013.1 Average Damage (+14.6%)\n+25,016.3 Hit DPS (+14.6%)\n+188,051.3 Poison DPS (+28.9%)\n+30,167.3 Total Damage per Poison (+28.9%)\n+213,067.6 Total DPS inc. Poison (+25.9%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +213,067.6 Full DPS (+25.9%)',
@@ -9056,8 +9056,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'wajjang > Settler_RFyongdu',
 		'whisper': '@Settler_RFyongdu 안녕하세요, 20 chaos(으)로 올려놓은 Settlers 리그의 위대한 늑대의 눈 위대한 늑대 부적(을)를 구매하고 싶습니다 (보관함 탭 "~price 20 chaos", 위치: 왼쪽 1, 상단 1)',
 		'date': '2024-08-05T02:03:00Z',
-		'evalValue': 244.3,
-		'evalValueDetails': {
+		'weightedValue': 244.3,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 244.3,
@@ -9068,7 +9068,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.4%\n@bold,green Value 19.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n50% increased Damage\n50% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+7,717.4 Average Damage (+28.1%)\n+48,107.4 Hit DPS (+28.1%)\n+152,945.4 Poison DPS (+23.5%)\n+24,535.6 Total Damage per Poison (+23.5%)\n+201,052.8 Total DPS inc. Poison (+24.4%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +201,052.8 Full DPS (+24.4%)',
@@ -9253,8 +9253,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Grimstone > SettlersGrimRF',
 		'whisper': '@SettlersGrimRF Hi, I would like to buy your Blood Beads Citrine Amulet listed for 20 chaos in Settlers (stash tab "~price 20 chaos"; position: left 12, top 9)',
 		'date': '2024-08-04T16:51:18Z',
-		'evalValue': 244.1,
-		'evalValueDetails': {
+		'weightedValue': 244.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 244.1,
@@ -9265,7 +9265,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 11,
 				'text': '@bold,blue Effective Hit Pool -6.5%\n@bold,blue Flat Life -258\n@bold,orange Total Resist -69\n@bold,red Full DPS 24.4%\n@bold,green Value 11\n------------------------------\nBlood Beads\nCitrine Amulet\nRequires Level 65\n+23 to Strength and Dexterity\n+54% to Damage over Time Multiplier\n71% reduced Evasion Rating\nRegenerate 76.2 Life per second\n@bold,orange -58% to Cold Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+200,879.9 Poison DPS (+30.8%)\n+32,225.3 Total Damage per Poison (+30.8%)\n+200,879.9 Total DPS inc. Poison (+24.4%)\n-4 Strength\n+20 Dexterity\n-27 Intelligence\n@bold,blue -3,556 Effective Hit Pool (-6.5%)\n-299 Phys Max Hit (-3.3%)\n-1,032 Elemental Max Hit (-3.7%)\n-1,032 Chaos Max Hit (-3.7%)\n@bold,blue -258 Total Life (-5.3%)\n+71.0 Life Regen\n-103.8 Life Leech/On Hit Rate (-4.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-2,100 Evasion rating (-15.5%)\n-4% Evade Chance\n@bold,orange -69% Cold Res. Over Max\n@bold,red +200,879.9 Full DPS (+24.4%)',
@@ -9492,8 +9492,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'ixidakonixi > BleedLemao',
 		'whisper': '@BleedLemao Hi, I would like to buy your Tempest Rosary Agate Amulet listed for 50 chaos in Settlers (stash tab "~price 50 chaos"; position: left 24, top 14)',
 		'date': '2024-08-02T11:33:15Z',
-		'evalValue': 244.1,
-		'evalValueDetails': {
+		'weightedValue': 244.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 244.1,
@@ -9504,7 +9504,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19.6,
 				'text': '@bold,blue Effective Hit Pool -3.7%\n@bold,blue Flat Life -266\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.4%\n@bold,green Value 19.6\n------------------------------\nTempest Rosary\nAgate Amulet\nRequires Level 65\n+18 to Strength and Intelligence\n+54% to Damage over Time Multiplier\nAdds 14 to 21 Cold Damage to Attacks against you\n75% increased Mana Regeneration Rate\nLose 6 Life per Enemy Hit with Attacks\n86% reduced Elemental Damage with Attack Skills\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+200,879.9 Poison DPS (+30.8%)\n+32,225.3 Total Damage per Poison (+30.8%)\n+200,879.9 Total DPS inc. Poison (+24.4%)\n-9 Strength\n-3 Dexterity\n-9 Intelligence\n@bold,blue -2,038 Effective Hit Pool (-3.7%)\n-309 Phys Max Hit (-3.4%)\n-1,064 Elemental Max Hit (-3.8%)\n-1,064 Chaos Max Hit (-3.8%)\n@bold,blue -266 Total Life (-5.5%)\n-5.3 Life Regen\n-144.4 Life Leech/On Hit Rate (-6.2%)\n-4 Total Mana (-0.5%)\n-2 Unreserved Mana (-0.8%)\n+0% Unreserved Mana\n+9.0 Mana Recovery\n-1.3 Mana Leech/On Hit Rate (-0.5%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +200,879.9 Full DPS (+24.4%)',
@@ -9750,8 +9750,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'K0T1978 > Why_Not_Melee',
 		'whisper': '@Why_Not_Melee Hi, I would like to buy your Brimstone Noose Citrine Amulet listed for 60 chaos in Settlers (stash tab "~b/o 60 chaos"; position: left 10, top 1)',
 		'date': '2024-08-06T11:33:57Z',
-		'evalValue': 244.1,
-		'evalValueDetails': {
+		'weightedValue': 244.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 244.1,
@@ -9762,7 +9762,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 15.4,
 				'text': '@bold,blue Effective Hit Pool -3.7%\n@bold,blue Flat Life -263\n@bold,orange Total Resist -53\n@bold,red Full DPS 24.4%\n@bold,green Value 15.4\n------------------------------\nBrimstone Noose\nCitrine Amulet\nRequires Level 65\n+20 to Strength and Dexterity\n+54% to Damage over Time Multiplier\n27% increased maximum Energy Shield\n-123 to maximum Mana\n@bold,orange -14% to all Elemental Resistances\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+200,879.9 Poison DPS (+30.8%)\n+32,225.3 Total Damage per Poison (+30.8%)\n+200,879.9 Total DPS inc. Poison (+24.4%)\n-7 Strength\n+17 Dexterity\n-27 Intelligence\n@bold,blue -2,038 Effective Hit Pool (-3.7%)\n-305 Phys Max Hit (-3.4%)\n-1,052 Elemental Max Hit (-3.7%)\n-1,052 Chaos Max Hit (-3.7%)\n@bold,blue -263 Total Life (-5.4%)\n-5.3 Life Regen\n-105.8 Life Leech/On Hit Rate (-4.5%)\n-136 Total Mana (-17.3%)\n-46 Unreserved Mana (-17.6%)\n+0% Unreserved Mana\n+9.6 Mana Recovery\n-44.2 Mana Leech/On Hit Rate (-17.3%)\n+94 Evasion rating (+0.7%)\n@bold,orange -14% Fire Res. Over Max\n@bold,orange -25% Cold Res. Over Max\n@bold,orange -14% Lightning Res. Over Max\n@bold,red +200,879.9 Full DPS (+24.4%)',
@@ -9987,8 +9987,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@CoCoSmille Здравствуйте, хочу купить у вас Серный медальон Амулет с нефритом за 70 chaos в лиге Settlers (секция "shop"; позиция: 23 столбец, 11 ряд)',
 		'date': '2024-08-04T20:47:55Z',
 		'note': '~price 70 chaos',
-		'evalValue': 244.1,
-		'evalValueDetails': {
+		'weightedValue': 244.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 244.1,
@@ -9999,7 +9999,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.5,
 				'text': '@bold,blue Effective Hit Pool -1.8%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.4%\n@bold,green Value 21.5\n------------------------------\nBrimstone Medallion\nJade Amulet\nRequires Level 65\n+20 to Dexterity\n+54% to Damage over Time Multiplier\n63% increased Evasion Rating\n-37 to maximum Energy Shield\nLose 48.6 Life per second\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+200,879.9 Poison DPS (+30.8%)\n+32,225.3 Total Damage per Poison (+30.8%)\n+200,879.9 Total DPS inc. Poison (+24.4%)\n-27 Strength\n+17 Dexterity\n-27 Intelligence\n@bold,blue -1,006 Effective Hit Pool (-1.8%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-54.4 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n+2,069 Evasion rating (+15.3%)\n+3% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +200,879.9 Full DPS (+24.4%)',
@@ -10213,8 +10213,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@SK_AMP Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 30 chaos in Settlers (stash tab "for Sell"; position: left 12, top 7)',
 		'date': '2024-08-03T19:39:59Z',
 		'note': '~price 30 chaos',
-		'evalValue': 243.2,
-		'evalValueDetails': {
+		'weightedValue': 243.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 243.2,
@@ -10225,7 +10225,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19.9,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 25.1%\n@bold,green Value 19.9\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n70% increased Damage\n16% increased Attack and Cast Speed\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+5,402.5 Average Damage (+19.7%)\n+0.43 Attack Rate (+6.9%)\n+47,734.2 Hit DPS (+27.9%)\n+159,123.4 Poison DPS (+24.4%)\n+17,177.0 Total Damage per Poison (+16.4%)\n+206,857.6 Total DPS inc. Poison (+25.1%)\n+10.69 Mana Cost per second (+6.9%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-68.7 Life Leech/On Hit Rate (-2.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n+2.4 Mana Leech/On Hit Rate (+0.9%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +206,857.6 Full DPS (+25.1%)',
@@ -10414,8 +10414,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Bane_Ravenlocke Hi, I would like to buy your Fate Heart Jade Amulet listed for 50 chaos in Settlers (stash tab "Sell"; position: left 2, top 2)',
 		'date': '2024-08-06T10:06:16Z',
 		'note': '~price 50 chaos',
-		'evalValue': 241.7,
-		'evalValueDetails': {
+		'weightedValue': 241.7,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 241.7,
@@ -10426,7 +10426,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 29,
 				'text': '@bold,blue Effective Hit Pool 2.4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.7%\n@bold,green Value 29\n------------------------------\nFate Heart\nJade Amulet\nRequires Level 60\nAllocates Disciple of the Unyielding\n+30 to Dexterity\n+37 to Dexterity\nAdds 10 to 21 Physical Damage to Attacks\n22% increased Global Critical Strike Chance\n9% increased Armour\n60% increased Damage while Leeching\n+1 to Minimum Frenzy Charges\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+7,816.6 Average Damage (+28.5%)\n+0.11 Attack Rate (+1.8%)\n+1.54% Crit Chance\n+52,696.8 Hit DPS (+30.8%)\n+175,342.0 Poison DPS (+26.9%)\n+25,776.0 Total Damage per Poison (+24.7%)\n+228,038.8 Total DPS inc. Poison (+27.7%)\n+2.81 Mana Cost per second (+1.8%)\n-27 Strength\n+64 Dexterity\n-27 Intelligence\n@bold,blue +1,285 Effective Hit Pool (+2.4%)\n+127 Phys Max Hit (+1.4%)\n-27 Elemental Max Hit (-0.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-103.4 Life Leech/On Hit Rate (-4.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-2.5 Mana Leech/On Hit Rate (-1.0%)\n+407 Evasion rating (+3.0%)\n+173 Armour (+3.6%)\n+5% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +228,038.8 Full DPS (+27.7%)',
@@ -10740,8 +10740,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': '백선행 > Settlers_bsun',
 		'whisper': '@Settlers_bsun 안녕하세요, 90 chaos(으)로 올려놓은 Settlers 리그의 운명의 끈 호박 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 90 chaos", 위치: 왼쪽 1, 상단 4)',
 		'date': '2024-08-07T04:42:29Z',
-		'evalValue': 239.6,
-		'evalValueDetails': {
+		'weightedValue': 239.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 239.6,
@@ -10752,7 +10752,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 8.5,
 				'text': '@bold,blue Effective Hit Pool 0.1%\n@bold,blue Flat Life 5\n@bold,orange Total Resist -119\n@bold,red Full DPS 20.3%\n@bold,green Value 8.5\n------------------------------\nFate Braid\nAmber Amulet\nRequires Level 57\n+29 to Strength\n+45% to Damage over Time Multiplier\n40% increased maximum Energy Shield\n+103 to maximum Life\n@bold,orange -108% to Fire Resistance\nLose 12 Life per Enemy Killed\n26% increased Elemental Damage with Attack Skills\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+167,399.9 Poison DPS (+25.7%)\n+26,854.4 Total Damage per Poison (+25.7%)\n+167,399.9 Total DPS inc. Poison (+20.3%)\n+2 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue +39 Effective Hit Pool (+0.1%)\n+6 Phys Max Hit (+0.1%)\n+20 Elemental Max Hit (+0.1%)\n+20 Chaos Max Hit (+0.1%)\n@bold,blue +5 Total Life (+0.1%)\n+0.1 Life Regen\n+2.0 Life Leech/On Hit Rate (+0.1%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -108% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +167,399.9 Full DPS (+20.3%)',
@@ -11023,8 +11023,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Yobgnorb Hi, I would like to buy your Empyrean Scarab Deadhand Talisman listed for 45 chaos in Settlers (stash tab "Shop"; position: left 23, top 5)',
 		'date': '2024-08-07T05:23:36Z',
 		'note': '~price 45 chaos',
-		'evalValue': 239,
-		'evalValueDetails': {
+		'weightedValue': 239,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 239,
@@ -11035,7 +11035,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 29.6,
 				'text': '@bold,blue Effective Hit Pool 4.6%\n@bold,blue Flat Life -288\n@bold,orange Total Resist 19\n@bold,red Full DPS 23.1%\n@bold,green Value 29.6\n------------------------------\nEmpyrean Scarab\nDeadhand Talisman\nTalisman Tier 1\nRequires Level 65\nAllocates Testudo\n29% increased Chaos Damage\n+26% to Damage over Time Multiplier\nAdds 9 to 14 Physical Damage to Attacks\n+38% to Global Critical Strike Multiplier\n36% increased Armour\n19% increased maximum Energy Shield\n@bold,orange +15% to Fire and Chaos Resistances\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,856.3 Average Damage (+14.0%)\n+37% Crit Multiplier\n+24,038.5 Hit DPS (+14.0%)\n+165,924.1 Poison DPS (+25.5%)\n+26,617.7 Total Damage per Poison (+25.5%)\n+189,962.5 Total DPS inc. Poison (+23.1%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue +2,506 Effective Hit Pool (+4.6%)\n-205 Phys Max Hit (-2.3%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n+694 Armour (+14.5%)\n+3% Phys. Damage Reduction\n+10% Block Chance\n@bold,orange +15% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,orange +15% Chaos Res. Over Max\n@bold,red +189,962.5 Full DPS (+23.1%)',
@@ -11371,8 +11371,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@MaskSpider Hi, I would like to buy your Damnation Choker Paua Amulet listed for 5 chaos in Settlers (stash tab "4"; position: left 7, top 11)',
 		'date': '2024-08-04T12:20:31Z',
 		'note': '~price 5 chaos',
-		'evalValue': 236.3,
-		'evalValueDetails': {
+		'weightedValue': 236.3,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 236.3,
@@ -11383,7 +11383,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 25.6,
 				'text': '@bold,blue Effective Hit Pool -3.6%\n@bold,blue Flat Life -256\n@bold,orange Total Resist 43\n@bold,red Full DPS 24.9%\n@bold,green Value 25.6\n------------------------------\nDamnation Choker\nPaua Amulet\nRequires Level 68\n23% increased Mana Regeneration Rate\n+25 to Strength\n+22% to Damage over Time Multiplier\nAdds 8 to 14 Cold Damage to Attacks\n@bold,orange +18% to all Elemental Resistances\n56% increased Damage while Leeching\n26% increased Elemental Damage with Attack Skills\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,322.0 Average Damage (+15.7%)\n+26,941.5 Hit DPS (+15.7%)\n+178,264.5 Poison DPS (+27.4%)\n+28,597.3 Total Damage per Poison (+27.4%)\n+205,206.0 Total DPS inc. Poison (+24.9%)\n-2 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -1,984 Effective Hit Pool (-3.6%)\n-297 Phys Max Hit (-3.3%)\n-1,024 Elemental Max Hit (-3.6%)\n-1,024 Chaos Max Hit (-3.6%)\n@bold,blue -256 Total Life (-5.3%)\n-5.1 Life Regen\n-103.0 Life Leech/On Hit Rate (-4.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n+2.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange +18% Fire Res. Over Max\n@bold,orange +7% Cold Res. Over Max\n@bold,orange +18% Lightning Res. Over Max\n@bold,red +205,206.0 Full DPS (+24.9%)',
@@ -11650,8 +11650,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Risterral > Risterral_Settlers',
 		'whisper': '@Risterral_Settlers Hi, I would like to buy your Brimstone Torc Coral Amulet listed for 10 chaos in Settlers (stash tab "~price 10 chaos"; position: left 11, top 16)',
 		'date': '2024-08-05T06:31:15Z',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -11662,7 +11662,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19,
 				'text': '@bold,blue Effective Hit Pool -3.4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.5%\n@bold,green Value 19\n------------------------------\nBrimstone Torc\nCoral Amulet\nRequires Level 65\nRegenerate 2.2 Life per second\n-33 to Dexterity\n+52% to Damage over Time Multiplier\n28% increased Evasion Rating\n-8 to maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+193,439.9 Total DPS inc. Poison (+23.5%)\n-27 Strength\n-36 Dexterity\n-27 Intelligence\n@bold,blue -1,829 Effective Hit Pool (-3.4%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-3.6 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n+658 Evasion rating (+4.9%)\n+1% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +193,439.9 Full DPS (+23.5%)',
@@ -11875,8 +11875,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'nickrei3 > 兔兔乐乐球',
 		'whisper': '@兔兔乐乐球 Hi, I would like to buy your Damnation Idol Paua Amulet listed for 10 chaos in Settlers (stash tab "~price 10 chaos"; position: left 11, top 1)',
 		'date': '2024-08-05T08:30:20Z',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -11887,7 +11887,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.5,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.7%\n@bold,green Value 17.5\n------------------------------\nDamnation Idol\nPaua Amulet\nRequires Level 65\n29% increased Mana Regeneration Rate\n+52% to Damage over Time Multiplier\nAdds 4 to 46 Lightning Damage to Attacks\n-54% to Global Critical Strike Multiplier\nLose 10 Life per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-1,107.4 Average Damage (-4.0%)\n-50% Crit Multiplier\n-6,903.1 Hit DPS (-4.0%)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+186,536.7 Total DPS inc. Poison (+22.7%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n+3.4 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +186,536.7 Full DPS (+22.7%)',
@@ -12107,8 +12107,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'kbnguyen314 > WoodForUrSheep',
 		'whisper': '@WoodForUrSheep Hi, I would like to buy your Loath Locket Amber Amulet listed for 10 chaos in Settlers (stash tab "~price 10 chaos"; position: left 4, top 1)',
 		'date': '2024-08-06T00:39:52Z',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -12119,7 +12119,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.7,
 				'text': '@bold,blue Effective Hit Pool -3.7%\n@bold,blue Flat Life -261\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.5%\n@bold,green Value 18.7\n------------------------------\nLoath Locket\nAmber Amulet\nRequires Level 65\n+22 to Strength\n+52% to Damage over Time Multiplier\n-105 to maximum Energy Shield\n39% reduced Rarity of Items found\nGain 8 Mana per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+193,439.9 Total DPS inc. Poison (+23.5%)\n-5 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,023 Effective Hit Pool (-3.7%)\n-303 Phys Max Hit (-3.3%)\n-1,044 Elemental Max Hit (-3.7%)\n-1,044 Chaos Max Hit (-3.7%)\n@bold,blue -261 Total Life (-5.4%)\n-5.2 Life Regen\n-105.0 Life Leech/On Hit Rate (-4.5%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +193,439.9 Full DPS (+23.5%)',
@@ -12340,8 +12340,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'awaaka > FrozenBallsak',
 		'whisper': '@FrozenBallsak Hi, I would like to buy your Chimeric Beads Amber Amulet listed for 30 chaos in Settlers (stash tab "~price 30 chaos"; position: left 6, top 17)',
 		'date': '2024-08-05T23:29:55Z',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -12352,7 +12352,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.9,
 				'text': '@bold,blue Effective Hit Pool -3.6%\n@bold,blue Flat Life -251\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.6%\n@bold,green Value 17.9\n------------------------------\nChimeric Beads\nAmber Amulet\nRequires Level 60\n+30 to Strength\n+52% to Damage over Time Multiplier\nAdds 2 to 96 Lightning Damage to Attacks\n38% reduced Global Critical Strike Chance\n19% reduced Rarity of Items found\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-350.7 Average Damage (-1.3%)\n-2.66% Crit Chance\n-2,186.0 Hit DPS (-1.3%)\n+188,492.3 Poison DPS (+28.9%)\n+30,238.1 Total Damage per Poison (+28.9%)\n+186,306.3 Total DPS inc. Poison (+22.6%)\n+3 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -1,945 Effective Hit Pool (-3.6%)\n-291 Phys Max Hit (-3.2%)\n-1,004 Elemental Max Hit (-3.6%)\n-1,004 Chaos Max Hit (-3.6%)\n@bold,blue -251 Total Life (-5.2%)\n-5.0 Life Regen\n-101.0 Life Leech/On Hit Rate (-4.3%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +186,306.3 Full DPS (+22.6%)',
@@ -12579,8 +12579,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@漆黑天使 Hi, I would like to buy your Dire Rosary Jade Amulet listed for 30 chaos in Settlers (stash tab "瓦裝"; position: left 11, top 1)',
 		'date': '2024-08-04T12:33:09Z',
 		'note': '~price 30 chaos',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -12591,7 +12591,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.8,
 				'text': '@bold,blue Effective Hit Pool -5.2%\n@bold,blue Flat Life -365\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.1%\n@bold,green Value 16.8\n------------------------------\nDire Rosary\nJade Amulet\nRequires Level 65\n+27 to Dexterity\n-63 to Strength\n+52% to Damage over Time Multiplier\n-27% to Global Critical Strike Multiplier\n31% increased maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-598.0 Average Damage (-2.2%)\n-27% Crit Multiplier\n-3,727.7 Hit DPS (-2.2%)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+189,712.2 Total DPS inc. Poison (+23.1%)\n-90 Strength\n+24 Dexterity\n-27 Intelligence\n@bold,blue -2,829 Effective Hit Pool (-5.2%)\n-424 Phys Max Hit (-4.7%)\n-1,460 Elemental Max Hit (-5.2%)\n-1,460 Chaos Max Hit (-5.2%)\n@bold,blue -365 Total Life (-7.6%)\n-7.3 Life Regen\n-146.9 Life Leech/On Hit Rate (-6.3%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n+157 Evasion rating (+1.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +189,712.2 Full DPS (+23.1%)',
@@ -12813,8 +12813,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Killin7Hit > STR_Strike_KH',
 		'whisper': '@STR_Strike_KH 안녕하세요, 30 chaos(으)로 올려놓은 Settlers 리그의 태풍 부적 청금석 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 30 chaos", 위치: 왼쪽 2, 상단 15)',
 		'date': '2024-08-03T00:10:45Z',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -12825,7 +12825,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 6.9,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -125\n@bold,red Full DPS 23.5%\n@bold,green Value 6.9\n------------------------------\nStorm Charm\nLapis Amulet\nRequires Level 65\n+24 to Intelligence\n+52% to Damage over Time Multiplier\nAdds 22 to 40 Cold Damage to Attacks\n@bold,orange -80% to Cold Resistance\n@bold,orange -34% to Chaos Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+193,439.9 Total DPS inc. Poison (+23.5%)\n-27 Strength\n-3 Dexterity\n-3 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-1 Total Mana (-0.1%)\n-1 Unreserved Mana (-0.4%)\n+0% Unreserved Mana\n-1.5 Mana Recovery\n-0.3 Mana Leech/On Hit Rate (-0.1%)\n-31 Evasion rating (-0.2%)\n@bold,orange -91% Cold Res. Over Max\n@bold,orange -34% Chaos Res. Over Max\n@bold,red +193,439.9 Full DPS (+23.5%)',
@@ -13051,8 +13051,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Kiss_Shot > DoraNeko_CowGirlOvO',
 		'whisper': '@DoraNeko_CowGirlOvO Hi, I would like to buy your Spirit Idol Jade Amulet listed for 40 chaos in Settlers (stash tab "~b/o 40 chaos"; position: left 2, top 2)',
 		'date': '2024-08-06T05:36:44Z',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -13063,7 +13063,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.8,
 				'text': '@bold,blue Effective Hit Pool -4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist 33\n@bold,red Full DPS 23.5%\n@bold,green Value 22.8\n------------------------------\nSpirit Idol\nJade Amulet\nRequires Level 65\n+30 to Dexterity\n+52% to Damage over Time Multiplier\nAdds 14 to 30 Fire Damage to Attacks against you\n@bold,orange +76% to Fire Resistance\n@bold,orange -32% to Cold Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+193,439.9 Total DPS inc. Poison (+23.5%)\n-27 Strength\n+27 Dexterity\n-27 Intelligence\n@bold,blue -2,202 Effective Hit Pool (-4.0%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n+157 Evasion rating (+1.2%)\n@bold,orange +76% Fire Res. Over Max\n@bold,orange -43% Cold Res. Over Max\n@bold,red +193,439.9 Full DPS (+23.5%)',
@@ -13289,8 +13289,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@ГенаБатискаф Здравствуйте, хочу купить у вас Штурмовой скарабей Амулет с бирюзой за 66 chaos в лиге Settlers (секция "$"; позиция: 5 столбец, 11 ряд)',
 		'date': '2024-08-04T19:16:03Z',
 		'note': '~price 66 chaos',
-		'evalValue': 235,
-		'evalValueDetails': {
+		'weightedValue': 235,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 235,
@@ -13301,7 +13301,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.4,
 				'text': '@bold,blue Effective Hit Pool -4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.5%\n@bold,green Value 18.4\n------------------------------\nOnslaught Scarab\nTurquoise Amulet\nRequires Level 65\n+21 to Dexterity and Intelligence\n+52% to Damage over Time Multiplier\n6% reduced Fire Damage\nAdds 11 to 24 Fire Damage to Attacks against you\n-2 to maximum Energy Shield\nGain 22 Life per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+193,439.9 Total DPS inc. Poison (+23.5%)\n-27 Strength\n+18 Dexterity\n-6 Intelligence\n@bold,blue -2,208 Effective Hit Pool (-4.0%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-3 Total Mana (-0.4%)\n-1 Unreserved Mana (-0.4%)\n-1.4 Mana Recovery\n-1.0 Mana Leech/On Hit Rate (-0.4%)\n+94 Evasion rating (+0.7%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +193,439.9 Full DPS (+23.5%)',
@@ -13540,8 +13540,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@SisterRavara Hi, I would like to buy your Loath Rosary Coral Amulet listed for 30 chaos in Settlers (stash tab "Munni"; position: left 4, top 7)',
 		'date': '2024-08-04T09:04:50Z',
 		'note': '~price 30 chaos',
-		'evalValue': 234.6,
-		'evalValueDetails': {
+		'weightedValue': 234.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 234.6,
@@ -13552,7 +13552,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 15.6,
 				'text': '@bold,blue Effective Hit Pool -3.3%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 20%\n@bold,green Value 15.6\n------------------------------\nLoath Rosary\nCoral Amulet\nRequires Level 60\nRegenerate 3.2 Life per second\n-79 to Dexterity\n+48% to Damage over Time Multiplier\n21% reduced Global Critical Strike Chance\n23% increased Armour\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-475.6 Average Damage (-1.7%)\n-1.47% Crit Chance\n-1.54% Effective Crit Chance\n-1% Hit Chance\n-2,965.0 Hit DPS (-1.7%)\n+167,422.4 Poison DPS (+25.7%)\n+28,185.4 Total Damage per Poison (+27.0%)\n+164,457.4 Total DPS inc. Poison (+20.0%)\n-27 Strength\n-82 Dexterity\n-27 Intelligence\n@bold,blue -1,797 Effective Hit Pool (-3.3%)\n-251 Phys Max Hit (-2.8%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-2.6 Life Regen\n-122.8 Life Leech/On Hit Rate (-5.2%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-5.2 Mana Leech/On Hit Rate (-2.0%)\n-533 Evasion rating (-3.9%)\n-1% Evade Chance\n+443 Armour (+9.3%)\n+2% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +164,457.4 Full DPS (+20.0%)',
@@ -13765,8 +13765,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'tremerr_by > wertbofficialTTV',
 		'whisper': '@wertbofficialTTV Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 45 chaos in Settlers (stash tab "~b/o 45 chaos"; position: left 1, top 2)',
 		'date': '2024-08-06T06:10:59Z',
-		'evalValue': 234.5,
-		'evalValueDetails': {
+		'weightedValue': 234.5,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 234.5,
@@ -13777,7 +13777,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.3,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.5%\n@bold,green Value 18.3\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n52% increased Damage\n44% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+7,407.6 Average Damage (+27.0%)\n+46,176.2 Hit DPS (+27.0%)\n+146,832.7 Poison DPS (+22.5%)\n+23,555.0 Total Damage per Poison (+22.5%)\n+193,008.9 Total DPS inc. Poison (+23.5%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +193,008.9 Full DPS (+23.5%)',
@@ -13962,8 +13962,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'denislav87 > SmiteLS',
 		'whisper': '@SmiteLS Hi, I would like to buy your Rune Noose Turquoise Amulet listed for 100 chaos in Settlers (stash tab "~price 100 chaos"; position: left 4, top 10)',
 		'date': '2024-08-05T17:26:46Z',
-		'evalValue': 233.2,
-		'evalValueDetails': {
+		'weightedValue': 233.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 233.2,
@@ -13974,7 +13974,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 10.8,
 				'text': '@bold,blue Effective Hit Pool 2.2%\n@bold,blue Flat Life 210\n@bold,orange Total Resist -68\n@bold,red Full DPS 15.4%\n@bold,green Value 10.8\n------------------------------\nRune Noose\nTurquoise Amulet\nRequires Level 54\n+18 to Dexterity and Intelligence\n-50 to all Attributes\n+34% to Damage over Time Multiplier\n+226 to maximum Life\n@bold,orange -57% to Lightning Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+126,479.9 Poison DPS (+19.4%)\n+20,290.0 Total Damage per Poison (+19.4%)\n+126,479.9 Total DPS inc. Poison (+15.4%)\n-77 Strength\n-35 Dexterity\n-59 Intelligence\n@bold,blue +1,202 Effective Hit Pool (+2.2%)\n+244 Phys Max Hit (+2.7%)\n+840 Elemental Max Hit (+3.0%)\n+840 Chaos Max Hit (+3.0%)\n@bold,blue +210 Total Life (+4.3%)\n+4.2 Life Regen\n+84.5 Life Leech/On Hit Rate (+3.6%)\n-29 Total Mana (-3.7%)\n-10 Unreserved Mana (-3.8%)\n+0% Unreserved Mana\n+0.8 Mana Recovery\n-9.4 Mana Leech/On Hit Rate (-3.7%)\n-220 Evasion rating (-1.6%)\n-1% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,orange -57% Lightning Res. Over Max\n@bold,red +126,479.9 Full DPS (+15.4%)',
@@ -14197,8 +14197,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'akidakix > NoqualmLS',
 		'whisper': '@NoqualmLS Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 50 chaos in Settlers (stash tab "~price 50 chaos"; position: left 7, top 9)',
 		'date': '2024-08-04T20:38:38Z',
-		'evalValue': 229.6,
-		'evalValueDetails': {
+		'weightedValue': 229.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 229.6,
@@ -14209,7 +14209,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.8,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23%\n@bold,green Value 17.8\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n52% increased Damage\n42% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+7,253.7 Average Damage (+26.4%)\n+45,216.5 Hit DPS (+26.4%)\n+143,789.1 Poison DPS (+22.1%)\n+23,066.7 Total Damage per Poison (+22.1%)\n+189,005.6 Total DPS inc. Poison (+23.0%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +189,005.6 Full DPS (+23.0%)',
@@ -14391,8 +14391,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@拓荒者_藍鳥_魔幻小豬 Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 100 chaos in Settlers (stash tab "刷ㄚㄚㄚㄚㄚㄚㄚㄚㄚㄚㄚㄚㄚ"; position: left 24, top 6)',
 		'date': '2024-08-03T02:32:00Z',
 		'note': '~price 100 chaos',
-		'evalValue': 229.1,
-		'evalValueDetails': {
+		'weightedValue': 229.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 229.1,
@@ -14403,7 +14403,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.2%\n@bold,green Value 19\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+28% to Damage over Time Multiplier\n42% increased Chaos Damage\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+3,241.5 Average Damage (+11.8%)\n+20,206.2 Hit DPS (+11.8%)\n+178,660.2 Poison DPS (+27.4%)\n+28,660.8 Total Damage per Poison (+27.4%)\n+198,866.4 Total DPS inc. Poison (+24.2%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +198,866.4 Full DPS (+24.2%)',
@@ -14595,8 +14595,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@NovaIsColdLike Hi, I would like to buy your Rift Locket Agate Amulet listed for 80 chaos in Settlers (stash tab "Sales"; position: left 1, top 12)',
 		'date': '2024-08-03T20:01:49Z',
 		'note': '~price 80 chaos',
-		'evalValue': 228.5,
-		'evalValueDetails': {
+		'weightedValue': 228.5,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 228.5,
@@ -14607,7 +14607,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 20.3,
 				'text': '@bold,blue Effective Hit Pool -3.1%\n@bold,blue Flat Life -216\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.5%\n@bold,green Value 20.3\n------------------------------\nRift Locket\nAgate Amulet\nRequires Level 64\nAllocates Harvester of Foes\n+19 to Strength and Intelligence\nQuality (Attack Modifiers): +20%\n+39 to Strength\n+47 to Intelligence\n+19% to Damage over Time Multiplier\nAdds 13 to 27 Physical Damage to Attacks\n0.34% of Physical Attack Damage Leeched as Mana\n42% increased Damage while Leeching\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,473.1 Average Damage (+16.3%)\n+27,883.4 Hit DPS (+16.3%)\n+173,373.1 Poison DPS (+26.6%)\n+27,812.6 Total Damage per Poison (+26.6%)\n+201,256.5 Total DPS inc. Poison (+24.5%)\n+31 Strength\n-3 Dexterity\n+39 Intelligence\n@bold,blue -1,674 Effective Hit Pool (-3.1%)\n-251 Phys Max Hit (-2.8%)\n-864 Elemental Max Hit (-3.1%)\n-864 Chaos Max Hit (-3.1%)\n@bold,blue -216 Total Life (-4.5%)\n-4.3 Life Regen\n-86.9 Life Leech/On Hit Rate (-3.7%)\n+20 Total Mana (+2.5%)\n+6 Unreserved Mana (+2.3%)\n+0% Unreserved Mana\n-3.3 Mana Recovery\n+6.5 Mana Leech/On Hit Rate (+2.5%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +201,256.5 Full DPS (+24.5%)',
@@ -14940,8 +14940,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Bajjan Hi, I would like to buy your Dusk Clasp Coral Amulet listed for 40 chaos in Settlers (stash tab "S3"; position: left 6, top 3)',
 		'date': '2024-08-06T15:53:39Z',
 		'note': '~price 40 chaos',
-		'evalValue': 228.3,
-		'evalValueDetails': {
+		'weightedValue': 228.3,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 228.3,
@@ -14952,7 +14952,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 14.6,
 				'text': '@bold,blue Effective Hit Pool -2.5%\n@bold,blue Flat Life -177\n@bold,orange Total Resist -41\n@bold,red Full DPS 21.2%\n@bold,green Value 14.6\n------------------------------\nDusk Clasp\nCoral Amulet\nRequires Level 54\nRegenerate 2.2 Life per second\n+47% to Damage over Time Multiplier\n+45 to maximum Life\n-135 to maximum Mana\n77% increased Mana Regeneration Rate\n@bold,orange -30% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+174,839.9 Poison DPS (+26.8%)\n+28,047.9 Total Damage per Poison (+26.8%)\n+174,839.9 Total DPS inc. Poison (+21.2%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -1,372 Effective Hit Pool (-2.5%)\n-205 Phys Max Hit (-2.3%)\n-708 Elemental Max Hit (-2.5%)\n-708 Chaos Max Hit (-2.5%)\n@bold,blue -177 Total Life (-3.7%)\n-1.4 Life Regen\n-71.2 Life Leech/On Hit Rate (-3.0%)\n-148 Total Mana (-18.8%)\n-50 Unreserved Mana (-19.1%)\n+0% Unreserved Mana\n+19.2 Mana Recovery\n-48.1 Mana Leech/On Hit Rate (-18.8%)\n-31 Evasion rating (-0.2%)\n@bold,orange -30% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +174,839.9 Full DPS (+21.2%)',
@@ -15200,8 +15200,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': '김날두 > 칼구르_여왕',
 		'whisper': '@칼구르_여왕 안녕하세요, 30 chaos(으)로 올려놓은 Settlers 리그의 시신의 부적 호박 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 30 chaos", 위치: 왼쪽 9, 상단 19)',
 		'date': '2024-08-07T05:36:23Z',
-		'evalValue': 227.2,
-		'evalValueDetails': {
+		'weightedValue': 227.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 227.2,
@@ -15212,7 +15212,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 21.5,
 				'text': '@bold,blue Effective Hit Pool -4.5%\n@bold,blue Flat Life -318\n@bold,orange Total Resist 16\n@bold,red Full DPS 24.4%\n@bold,green Value 21.5\n------------------------------\nCorpse Charm\nAmber Amulet\nRequires Level 65\n+28 to Strength\n+44 to Strength\n+54% to Damage over Time Multiplier\nAdds 27 to 63 Fire Damage to Attacks\n-48 to maximum Life\n@bold,orange +27% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+200,879.9 Poison DPS (+30.8%)\n+32,225.3 Total Damage per Poison (+30.8%)\n+200,879.9 Total DPS inc. Poison (+24.4%)\n+45 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,464 Effective Hit Pool (-4.5%)\n-369 Phys Max Hit (-4.1%)\n-1,272 Elemental Max Hit (-4.5%)\n-1,272 Chaos Max Hit (-4.5%)\n@bold,blue -318 Total Life (-6.6%)\n-6.4 Life Regen\n-127.9 Life Leech/On Hit Rate (-5.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange +27% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +200,879.9 Full DPS (+24.4%)',
@@ -15460,8 +15460,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Lucius_SK Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 60 chaos in Settlers (stash tab "T"; position: left 9, top 7)',
 		'date': '2024-08-04T22:50:04Z',
 		'note': '~price 60 chaos',
-		'evalValue': 227,
-		'evalValueDetails': {
+		'weightedValue': 227,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 227,
@@ -15472,7 +15472,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 18.3,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.5%\n@bold,green Value 18.3\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n56% increased Chaos Damage\n20% increased Attack and Cast Speed\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,322.0 Average Damage (+15.7%)\n+0.54 Attack Rate (+8.7%)\n+44,114.6 Hit DPS (+25.8%)\n+149,558.4 Poison DPS (+22.9%)\n+13,742.8 Total Damage per Poison (+13.1%)\n+193,673.0 Total DPS inc. Poison (+23.5%)\n+13.50 Mana Cost per second (+8.7%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-56.2 Life Leech/On Hit Rate (-2.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n+4.1 Mana Leech/On Hit Rate (+1.6%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +193,673.0 Full DPS (+23.5%)',
@@ -15659,8 +15659,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Mindfreak90 > MindFreezingMaBallz',
 		'whisper': '@MindFreezingMaBallz Hi, I would like to buy your Hypnotic Charm Coral Amulet listed for 10 chaos in Settlers (stash tab "~b/o 10 chaos"; position: left 12, top 12)',
 		'date': '2024-08-04T18:39:44Z',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -15671,7 +15671,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 8,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -105\n@bold,red Full DPS 22.6%\n@bold,green Value 8\n------------------------------\nHypnotic Charm\nCoral Amulet\nRequires Level 60\nRegenerate 2.6 Life per second\n+50% to Damage over Time Multiplier\nAdds 4 to 8 Physical Damage to Attacks against you\nAdds 2 to 59 Lightning Damage to Attacks\n35% reduced maximum Energy Shield\n@bold,orange -94% to Lightning Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,259 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-3.2 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,orange -94% Lightning Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -15919,8 +15919,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Mindfreak90 > MindFreezingMaBallz',
 		'whisper': '@MindFreezingMaBallz Hi, I would like to buy your Doom Collar Gold Amulet listed for 10 chaos in Settlers (stash tab "~b/o 10 chaos"; position: left 3, top 4)',
 		'date': '2024-08-06T06:52:23Z',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -15931,7 +15931,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.4,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.6%\n@bold,green Value 17.4\n------------------------------\nDoom Collar\nGold Amulet\nRequires Level 65\n17% increased Rarity of Items found\n+50% to Damage over Time Multiplier\n30% reduced Lightning Damage\nAdds 2 to 10 Lightning Damage to Attacks\nLose 2.7 Life per second\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-8.5 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -16153,8 +16153,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Groot8875 > 보홀게일',
 		'whisper': '@보홀게일 안녕하세요, 25 chaos(으)로 올려놓은 Settlers 리그의 폭풍 거머쥠 파우아 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 25 chaos", 위치: 왼쪽 1, 상단 2)',
 		'date': '2024-08-05T04:45:45Z',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -16165,7 +16165,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 5.9,
 				'text': '@bold,blue Effective Hit Pool -8.8%\n@bold,blue Flat Life -375\n@bold,orange Total Resist -66\n@bold,red Full DPS 21.3%\n@bold,green Value 5.9\n------------------------------\nTempest Clasp\nPaua Amulet\nRequires Level 61\n29% increased Mana Regeneration Rate\n-71 to all Attributes\n+50% to Damage over Time Multiplier\n64% reduced Evasion Rating\n11% increased maximum Energy Shield\n@bold,orange -55% to Cold Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-285.7 Average Damage (-1.0%)\n-0.08% Effective Crit Chance\n-1% Hit Chance\n-1,781.0 Hit DPS (-1.0%)\n+177,467.8 Poison DPS (+27.2%)\n+29,813.2 Total Damage per Poison (+28.5%)\n+175,686.8 Total DPS inc. Poison (+21.3%)\n-98 Strength\n-74 Dexterity\n-98 Intelligence\n@bold,blue -4,805 Effective Hit Pool (-8.8%)\n-435 Phys Max Hit (-4.8%)\n-1,500 Elemental Max Hit (-5.3%)\n-1,500 Chaos Max Hit (-5.3%)\n@bold,blue -375 Total Life (-7.8%)\n-7.5 Life Regen\n-157.7 Life Leech/On Hit Rate (-6.7%)\n-49 Total Mana (-6.2%)\n-17 Unreserved Mana (-6.5%)\n+0% Unreserved Mana\n+6.2 Mana Recovery\n-16.8 Mana Leech/On Hit Rate (-6.6%)\n-2,477 Evasion rating (-18.3%)\n-5% Evade Chance\n@bold,orange -66% Cold Res. Over Max\n@bold,red +175,686.8 Full DPS (+21.3%)',
@@ -16411,8 +16411,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Choccy3 > Choccy_Settler_Bow',
 		'whisper': '@Choccy_Settler_Bow Hi, I would like to buy your Brimstone Braid Lapis Amulet listed for 29 chaos in Settlers (stash tab "~price 29 chaos"; position: left 1, top 10)',
 		'date': '2024-08-05T09:31:04Z',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -16423,7 +16423,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 8.4,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -101\n@bold,red Full DPS 22.6%\n@bold,green Value 8.4\n------------------------------\nBrimstone Braid\nLapis Amulet\nRequires Level 65\n+21 to Intelligence\n+50% to Damage over Time Multiplier\n+60 to maximum Energy Shield\n@bold,orange -30% to all Elemental Resistances\nLose 8 Life per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-6 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-3 Total Mana (-0.4%)\n-1 Unreserved Mana (-0.4%)\n-1.4 Mana Recovery\n-1.0 Mana Leech/On Hit Rate (-0.4%)\n-31 Evasion rating (-0.2%)\n@bold,orange -30% Fire Res. Over Max\n@bold,orange -41% Cold Res. Over Max\n@bold,orange -30% Lightning Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -16644,8 +16644,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'uptown13 > Divix_tank',
 		'whisper': '@Divix_tank Hi, I would like to buy your Brood Braid Paua Amulet listed for 30 chaos in Settlers (stash tab "~b/o 30 chaos"; position: left 1, top 3)',
 		'date': '2024-08-05T17:15:11Z',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -16656,7 +16656,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.4,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.6%\n@bold,green Value 17.4\n------------------------------\nBrood Braid\nPaua Amulet\nRequires Level 60\n22% increased Mana Regeneration Rate\n+50% to Damage over Time Multiplier\n-43 to maximum Energy Shield\n32% reduced maximum Energy Shield\nRegenerate 3.2 Life per second\n+124 to maximum Mana\nLose 13 Mana per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-2.6 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n+111 Total Mana (+14.1%)\n+37 Unreserved Mana (+14.1%)\n+0% Unreserved Mana\n-7.3 Mana Recovery\n+36.0 Mana Leech/On Hit Rate (+14.1%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -16910,8 +16910,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@GiGa_IceBoomShakalaka Hi, I would like to buy your Blight Torc Lapis Amulet listed for 35 chaos in Settlers (stash tab "~price 30 chaos"; position: left 22, top 2)',
 		'date': '2024-08-04T16:48:50Z',
 		'note': '~price 35 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -16922,7 +16922,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 8.1,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -104\n@bold,red Full DPS 22.6%\n@bold,green Value 8.1\n------------------------------\nBlight Torc\nLapis Amulet\nRequires Level 60\n+24 to Intelligence\n+50% to Damage over Time Multiplier\n+43 to maximum Energy Shield\n24% reduced Mana Regeneration Rate\n@bold,orange -31% to all Elemental Resistances\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-3 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-1 Total Mana (-0.1%)\n-1 Unreserved Mana (-0.4%)\n+0% Unreserved Mana\n-4.8 Mana Recovery\n-0.3 Mana Leech/On Hit Rate (-0.1%)\n-31 Evasion rating (-0.2%)\n@bold,orange -31% Fire Res. Over Max\n@bold,orange -42% Cold Res. Over Max\n@bold,orange -31% Lightning Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -17143,8 +17143,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@失落方舟貳肆捌陸 Hi, I would like to buy your Kraken Beads Turquoise Amulet listed for 35 chaos in Settlers (stash tab "sell"; position: left 6, top 2)',
 		'date': '2024-08-05T06:27:29Z',
 		'note': '~b/o 35 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -17155,7 +17155,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.5,
 				'text': '@bold,blue Effective Hit Pool -4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.6%\n@bold,green Value 17.5\n------------------------------\nKraken Beads\nTurquoise Amulet\nRequires Level 60\n+18 to Dexterity and Intelligence\n+50% to Damage over Time Multiplier\nAdds 28 to 48 Cold Damage to Attacks against you\n33% increased Mana Regeneration Rate\n1.76% of Physical Attack Damage Leeched by Enemy as Life\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n+15 Dexterity\n-9 Intelligence\n@bold,blue -2,181 Effective Hit Pool (-4.0%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-4 Total Mana (-0.5%)\n-2 Unreserved Mana (-0.8%)\n+0% Unreserved Mana\n+3.2 Mana Recovery\n-1.3 Mana Leech/On Hit Rate (-0.5%)\n+94 Evasion rating (+0.7%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -17378,8 +17378,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@balabolosik Здравствуйте, хочу купить у вас Агонический кулон Амулет с ониксом за 40 chaos в лиге Settlers (секция "~price 5 chaos"; позиция: 12 столбец, 4 ряд)',
 		'date': '2024-08-03T16:35:37Z',
 		'note': '~price 40 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -17390,7 +17390,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 1.5,
 				'text': '@bold,blue Effective Hit Pool -3.8%\n@bold,blue Flat Life -271\n@bold,orange Total Resist 14\n@bold,red Full DPS 3.9%\n@bold,green Value 1.5\n------------------------------\nAgony Pendant\nOnyx Amulet\nRequires Level 60\n+14 to all Attributes\n+50% to Damage over Time Multiplier\nAdds 16 to 27 Cold Damage to Attacks against you\n-577 to Accuracy Rating\n@bold,orange +25% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-4,262.3 Average Damage (-15.5%)\n-1.26% Effective Crit Chance\n-15% Hit Chance\n-26,569.7 Hit DPS (-15.5%)\n+58,346.3 Poison DPS (+9.0%)\n+29,462.3 Total Damage per Poison (+28.2%)\n+31,776.6 Total DPS inc. Poison (+3.9%)\n-13 Strength\n+11 Dexterity\n-13 Intelligence\n@bold,blue -2,071 Effective Hit Pool (-3.8%)\n-315 Phys Max Hit (-3.5%)\n-1,084 Elemental Max Hit (-3.8%)\n-1,084 Chaos Max Hit (-3.9%)\n@bold,blue -271 Total Life (-5.6%)\n-5.4 Life Regen\n-212.4 Life Leech/On Hit Rate (-9.0%)\n-6 Total Mana (-0.8%)\n-2 Unreserved Mana (-0.8%)\n-1.1 Mana Recovery\n-16.6 Mana Leech/On Hit Rate (-6.5%)\n+63 Evasion rating (+0.5%)\n@bold,orange +25% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +31,776.6 Full DPS (+3.9%)',
@@ -17622,8 +17622,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Janarcing Hi, I would like to buy your Horror Rosary Coral Amulet listed for 40 chaos in Settlers (stash tab "High end 2"; position: left 12, top 9)',
 		'date': '2024-08-07T03:04:32Z',
 		'note': '~price 40 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -17634,7 +17634,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.4,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.6%\n@bold,green Value 17.4\n------------------------------\nHorror Rosary\nCoral Amulet\nRequires Level 60\nRegenerate 2.5 Life per second\n+50% to Damage over Time Multiplier\n-92 to maximum Mana\n0.52% of Physical Attack Damage Leeched as Life\nLose 35 Life per Enemy Killed\nGain 15 Mana per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-3.3 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-105 Total Mana (-13.3%)\n-35 Unreserved Mana (-13.4%)\n+0% Unreserved Mana\n+7.0 Mana Recovery\n-34.1 Mana Leech/On Hit Rate (-13.3%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -17868,8 +17868,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Tinker_EBIsTight Hi, I would like to buy your Hypnotic Noose Gold Amulet listed for 40 chaos in Settlers (stash tab "Sale_003"; position: left 14, top 21)',
 		'date': '2024-08-06T01:11:45Z',
 		'note': '~price 40 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -17880,7 +17880,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.4,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.6%\n@bold,green Value 17.4\n------------------------------\nHypnotic Noose\nGold Amulet\nRequires Level 60\n15% increased Rarity of Items found\n-103 to Intelligence\n+50% to Damage over Time Multiplier\n-158 to maximum Mana\n115% increased Mana Regeneration Rate\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n-3 Dexterity\n-130 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-223 Total Mana (-28.3%)\n-75 Unreserved Mana (-28.6%)\n+0% Unreserved Mana\n+28.1 Mana Recovery\n-72.4 Mana Leech/On Hit Rate (-28.3%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -18094,8 +18094,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'thebeardedaxe > SETTLERS_Earthling',
 		'whisper': '@SETTLERS_Earthling Hi, I would like to buy your Pandemonium Choker Coral Amulet listed for 69 chaos in Settlers (stash tab "~b/o 69 chaos"; position: left 3, top 20)',
 		'date': '2024-07-30T02:29:28Z',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -18106,7 +18106,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.4,
 				'text': '@bold,blue Effective Hit Pool -4.8%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.3%\n@bold,green Value 16.4\n------------------------------\nPandemonium Choker\nCoral Amulet\nRequires Level 60\nRegenerate 2.9 Life per second\n-66 to Dexterity\n+50% to Damage over Time Multiplier\n+55% to Global Critical Strike Multiplier\n-8 to maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+908.2 Average Damage (+3.3%)\n-0.08% Effective Crit Chance\n+54% Crit Multiplier\n-1% Hit Chance\n+5,661.4 Hit DPS (+3.3%)\n+177,467.8 Poison DPS (+27.2%)\n+29,813.2 Total Damage per Poison (+28.5%)\n+183,129.1 Total DPS inc. Poison (+22.3%)\n-27 Strength\n-69 Dexterity\n-27 Intelligence\n@bold,blue -2,628 Effective Hit Pool (-4.8%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-2.9 Life Regen\n-122.8 Life Leech/On Hit Rate (-5.2%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-5.2 Mana Leech/On Hit Rate (-2.0%)\n-439 Evasion rating (-3.2%)\n-1% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +183,129.1 Full DPS (+22.3%)',
@@ -18324,8 +18324,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@PSettlers_Duelist 안녕하세요, 100 chaos(으)로 올려놓은 Settlers 리그의 복수의 갑충석 터키석 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "Tra", 위치: 왼쪽 12, 상단 1)',
 		'date': '2024-08-04T04:41:32Z',
 		'note': '~price 100 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -18336,7 +18336,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19.7,
 				'text': '@bold,blue Effective Hit Pool 3%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -59\n@bold,red Full DPS 22.6%\n@bold,green Value 19.7\n------------------------------\nVengeance Scarab\nTurquoise Amulet\nRequires Level 65\nAllocates Sanctuary\n+18 to Dexterity and Intelligence\n+50% to Damage over Time Multiplier\nAdds 30 to 52 Fire Damage to Attacks against you\n30% increased Cast Speed\n@bold,orange -48% to Cold Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+185,999.9 Poison DPS (+28.5%)\n+29,838.2 Total Damage per Poison (+28.5%)\n+185,999.9 Total DPS inc. Poison (+22.6%)\n-27 Strength\n+15 Dexterity\n-9 Intelligence\n@bold,blue +1,621 Effective Hit Pool (+3.0%)\n-334 Phys Max Hit (-3.7%)\n-27 Elemental Max Hit (-0.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-4 Total Mana (-0.5%)\n-2 Unreserved Mana (-0.8%)\n+0% Unreserved Mana\n-1.3 Mana Recovery\n-1.3 Mana Leech/On Hit Rate (-0.5%)\n+94 Evasion rating (+0.7%)\n+4% Block Chance\n+4% Spell Block Chance\n@bold,orange +1% Fire Resistance\n@bold,orange -1% Fire Res. Over Max\n@bold,orange +1% Cold Resistance\n@bold,orange -60% Cold Res. Over Max\n@bold,orange +1% Lightning Resistance\n@bold,orange -1% Lightning Res. Over Max\n@bold,red +185,999.9 Full DPS (+22.6%)',
@@ -18612,8 +18612,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Bluebyte_TheSettlers Hi, I would like to buy your Grim Collar Paua Amulet listed for 100 chaos in Settlers (stash tab "12"; position: left 9, top 7)',
 		'date': '2024-07-29T16:44:05Z',
 		'note': '~price 100 chaos',
-		'evalValue': 226,
-		'evalValueDetails': {
+		'weightedValue': 226,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 226,
@@ -18624,7 +18624,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.4,
 				'text': '@bold,blue Effective Hit Pool -5.7%\n@bold,blue Flat Life -397\n@bold,orange Total Resist -11\n@bold,red Full DPS 23.2%\n@bold,green Value 16.4\n------------------------------\nGrim Collar\nPaua Amulet\nRequires Level 60\n25% increased Mana Regeneration Rate\n-88 to Strength\n+50% to Damage over Time Multiplier\nAdds 9 to 14 Physical Damage to Attacks against you\n26% increased Global Critical Strike Chance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+239.9 Average Damage (+0.9%)\n+1.82% Crit Chance\n+1,495.7 Hit DPS (+0.9%)\n+189,385.1 Poison DPS (+29.1%)\n+30,381.3 Total Damage per Poison (+29.1%)\n+190,880.7 Total DPS inc. Poison (+23.2%)\n-115 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -3,128 Effective Hit Pool (-5.7%)\n-461 Phys Max Hit (-5.1%)\n-1,588 Elemental Max Hit (-5.6%)\n-1,588 Chaos Max Hit (-5.6%)\n@bold,blue -397 Total Life (-8.2%)\n-8.0 Life Regen\n-159.7 Life Leech/On Hit Rate (-6.8%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n+2.8 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +190,880.7 Full DPS (+23.2%)',
@@ -18849,8 +18849,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Lastipi Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 40 chaos in Settlers (stash tab "S - 1"; position: left 11, top 3)',
 		'date': '2024-08-06T23:34:44Z',
 		'note': '~price 40 chaos',
-		'evalValue': 225.1,
-		'evalValueDetails': {
+		'weightedValue': 225.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 225.1,
@@ -18861,7 +18861,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.3,
 				'text': '@bold,blue Effective Hit Pool 2.1%\n@bold,blue Flat Life 151\n@bold,orange Total Resist -11\n@bold,red Full DPS 16.3%\n@bold,green Value 17.3\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+36% to Damage over Time Multiplier\n24% increased maximum Life\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+133,919.9 Poison DPS (+20.5%)\n+21,483.5 Total Damage per Poison (+20.5%)\n+133,919.9 Total DPS inc. Poison (+16.3%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue +1,170 Effective Hit Pool (+2.1%)\n+176 Phys Max Hit (+1.9%)\n+604 Elemental Max Hit (+2.1%)\n+604 Chaos Max Hit (+2.1%)\n@bold,blue +151 Total Life (+3.1%)\n+3.0 Life Regen\n+60.8 Life Leech/On Hit Rate (+2.6%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +133,919.9 Full DPS (+16.3%)',
@@ -19044,8 +19044,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@BongoLS Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 50 chaos in Settlers (stash tab "2C"; position: left 4, top 7)',
 		'date': '2024-08-05T13:02:23Z',
 		'note': '~price 50 chaos',
-		'evalValue': 222.2,
-		'evalValueDetails': {
+		'weightedValue': 222.2,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 222.2,
@@ -19056,7 +19056,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.8,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23%\n@bold,green Value 17.8\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n54% increased Damage\n20% increased Attack and Cast Speed\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,167.1 Average Damage (+15.2%)\n+0.54 Attack Rate (+8.7%)\n+43,065.3 Hit DPS (+25.1%)\n+146,223.4 Poison DPS (+22.4%)\n+13,250.5 Total Damage per Poison (+12.7%)\n+189,288.7 Total DPS inc. Poison (+23.0%)\n+13.50 Mana Cost per second (+8.7%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-56.2 Life Leech/On Hit Rate (-2.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n+4.1 Mana Leech/On Hit Rate (+1.6%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +189,288.7 Full DPS (+23.0%)',
@@ -19240,8 +19240,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Marhan Здравствуйте, хочу купить у вас Глаза Великого волка Талисман Великого волка за 25 chaos в лиге Settlers (секция "XXXDA"; позиция: 1 столбец, 8 ряд)',
 		'date': '2024-08-05T01:05:05Z',
 		'note': '~price 25 chaos',
-		'evalValue': 222.1,
-		'evalValueDetails': {
+		'weightedValue': 222.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 222.1,
@@ -19252,7 +19252,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.8,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23%\n@bold,green Value 17.8\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n54% increased Chaos Damage\n20% increased Attack and Cast Speed\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+4,167.1 Average Damage (+15.2%)\n+0.54 Attack Rate (+8.7%)\n+43,065.3 Hit DPS (+25.1%)\n+146,223.4 Poison DPS (+22.4%)\n+13,250.5 Total Damage per Poison (+12.7%)\n+189,288.7 Total DPS inc. Poison (+23.0%)\n+13.50 Mana Cost per second (+8.7%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-56.2 Life Leech/On Hit Rate (-2.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n+4.1 Mana Leech/On Hit Rate (+1.6%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +189,288.7 Full DPS (+23.0%)',
@@ -19441,8 +19441,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'BONBOULOT > BSBOSY',
 		'whisper': '@BSBOSY Hi, I would like to buy your Dread Gorget Rotfeather Talisman listed for 20 chaos in Settlers (stash tab "~price 20 chaos"; position: left 24, top 20)',
 		'date': '2024-08-06T16:45:46Z',
-		'evalValue': 222.1,
-		'evalValueDetails': {
+		'weightedValue': 222.1,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 222.1,
@@ -19453,7 +19453,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 22.4,
 				'text': '@bold,blue Effective Hit Pool -1.5%\n@bold,blue Flat Life -105\n@bold,orange Total Resist 34\n@bold,red Full DPS 20.5%\n@bold,green Value 22.4\n------------------------------\nDread Gorget\nRotfeather Talisman\nTalisman Tier 3\nRequires Level 65\nAllocates Disintegration\n34% increased Damage\n+25% to Damage over Time Multiplier\n+74 to maximum Life\n+38 to maximum Mana\n@bold,orange +15% to all Elemental Resistances\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+2,623.8 Average Damage (+9.5%)\n+16,355.7 Hit DPS (+9.5%)\n+152,415.8 Poison DPS (+23.4%)\n+24,450.7 Total Damage per Poison (+23.4%)\n+168,771.5 Total DPS inc. Poison (+20.5%)\n-27 Strength\n-3 Dexterity\n-7 Intelligence\n@bold,blue -814 Effective Hit Pool (-1.5%)\n-122 Phys Max Hit (-1.3%)\n-420 Elemental Max Hit (-1.5%)\n-420 Chaos Max Hit (-1.5%)\n@bold,blue -105 Total Life (-2.2%)\n-2.1 Life Regen\n-42.2 Life Leech/On Hit Rate (-1.8%)\n+35 Total Mana (+4.4%)\n+11 Unreserved Mana (+4.2%)\n+0% Unreserved Mana\n-4.5 Mana Recovery\n+11.4 Mana Leech/On Hit Rate (+4.4%)\n-31 Evasion rating (-0.2%)\n@bold,orange +15% Fire Res. Over Max\n@bold,orange +4% Cold Res. Over Max\n@bold,orange +15% Lightning Res. Over Max\n@bold,red +168,771.5 Full DPS (+20.5%)',
@@ -19743,8 +19743,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Moka_BM 안녕하세요, 10 chaos(으)로 올려놓은 Settlers 리그의 악마 우상 오닉스 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "거래", 위치: 왼쪽 4, 상단 8)',
 		'date': '2024-08-06T05:50:12Z',
 		'note': '~price 10 chaos',
-		'evalValue': 220.3,
-		'evalValueDetails': {
+		'weightedValue': 220.3,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 220.3,
@@ -19755,7 +19755,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 12.5,
 				'text': '@bold,blue Effective Hit Pool -3.9%\n@bold,blue Flat Life -377\n@bold,orange Total Resist -71\n@bold,red Full DPS 23.5%\n@bold,green Value 12.5\n------------------------------\nDemon Idol\nOnyx Amulet\nRequires Level 65\n+12 to all Attributes\n+52% to Damage over Time Multiplier\n54% increased Evasion Rating\n-42 to maximum Life\n@bold,orange -60% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+193,439.9 Poison DPS (+29.7%)\n+31,031.8 Total Damage per Poison (+29.7%)\n+193,439.9 Total DPS inc. Poison (+23.5%)\n-15 Strength\n+9 Dexterity\n-15 Intelligence\n@bold,blue -2,121 Effective Hit Pool (-3.9%)\n-438 Phys Max Hit (-4.8%)\n-1,508 Elemental Max Hit (-5.4%)\n-1,508 Chaos Max Hit (-5.4%)\n@bold,blue -377 Total Life (-7.8%)\n-7.6 Life Regen\n-151.7 Life Leech/On Hit Rate (-6.5%)\n-7 Total Mana (-0.9%)\n-3 Unreserved Mana (-1.1%)\n+0% Unreserved Mana\n-1.0 Mana Recovery\n-2.3 Mana Leech/On Hit Rate (-0.9%)\n+1,755 Evasion rating (+13.0%)\n+2% Evade Chance\n@bold,orange -60% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +193,439.9 Full DPS (+23.5%)',
@@ -19984,8 +19984,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@Impulse_Mines Hi, I would like to buy your Dragon Beads Paua Amulet listed for 80 chaos in Settlers (stash tab "~price 45 chaos"; position: left 11, top 9)',
 		'date': '2024-08-07T02:56:39Z',
 		'note': '~b/o 80 chaos',
-		'evalValue': 219.3,
-		'evalValueDetails': {
+		'weightedValue': 219.3,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 219.3,
@@ -19996,7 +19996,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 19.3,
 				'text': '@bold,blue Effective Hit Pool -2.4%\n@bold,blue Flat Life -169\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.8%\n@bold,green Value 19.3\n------------------------------\nDragon Beads\nPaua Amulet\nRequires Level 59\n23% increased Mana Regeneration Rate\n+96 to Strength\n+37% to Damage over Time Multiplier\nAdds 21 to 31 Physical Damage to Attacks\nAdds 8 to 16 Cold Damage to Attacks against you\n29% reduced maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+1,445.4 Average Damage (+5.3%)\n+9,010.1 Hit DPS (+5.3%)\n+178,622.2 Poison DPS (+27.4%)\n+28,654.7 Total Damage per Poison (+27.4%)\n+187,632.3 Total DPS inc. Poison (+22.8%)\n+69 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -1,293 Effective Hit Pool (-2.4%)\n-196 Phys Max Hit (-2.2%)\n-676 Elemental Max Hit (-2.4%)\n-676 Chaos Max Hit (-2.4%)\n@bold,blue -169 Total Life (-3.5%)\n-3.4 Life Regen\n-68.0 Life Leech/On Hit Rate (-2.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n+2.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +187,632.3 Full DPS (+22.8%)',
@@ -20250,8 +20250,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@OkunSoK Hi, I would like to buy your Fate Heart Onyx Amulet listed for 75 chaos in Settlers (stash tab "Custom"; position: left 1, top 1)',
 		'date': '2024-08-06T05:56:37Z',
 		'note': '~price 75 chaos',
-		'evalValue': 217.4,
-		'evalValueDetails': {
+		'weightedValue': 217.4,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217.4,
@@ -20262,7 +20262,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 7.5,
 				'text': '@bold,blue Effective Hit Pool -3.6%\n@bold,blue Flat Life -261\n@bold,orange Total Resist -83\n@bold,red Full DPS 19.4%\n@bold,green Value 7.5\n------------------------------\nFate Heart\nOnyx Amulet\nRequires Level 65\n+16 to all Attributes\n+5 to all Attributes\n+43% to Damage over Time Multiplier\n30% increased Armour\n64% reduced Evasion Rating\n@bold,orange -72% to Fire Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+159,959.9 Poison DPS (+24.5%)\n+25,660.9 Total Damage per Poison (+24.5%)\n+159,959.9 Total DPS inc. Poison (+19.4%)\n-6 Strength\n+18 Dexterity\n-6 Intelligence\n@bold,blue -1,956 Effective Hit Pool (-3.6%)\n-195 Phys Max Hit (-2.1%)\n-1,044 Elemental Max Hit (-3.7%)\n-1,044 Chaos Max Hit (-3.7%)\n@bold,blue -261 Total Life (-5.4%)\n-5.2 Life Regen\n-105.0 Life Leech/On Hit Rate (-4.5%)\n-3 Total Mana (-0.4%)\n-1 Unreserved Mana (-0.4%)\n-1.4 Mana Recovery\n-1.0 Mana Leech/On Hit Rate (-0.4%)\n-1,912 Evasion rating (-14.1%)\n-3% Evade Chance\n+578 Armour (+12.1%)\n+3% Phys. Damage Reduction\n@bold,orange -72% Fire Res. Over Max\n@bold,orange -11% Cold Res. Over Max\n@bold,red +159,959.9 Full DPS (+19.4%)',
@@ -20506,8 +20506,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'jimmy860520 > jimmy_sok',
 		'whisper': '@jimmy_sok Hi, I would like to buy your Vengeance Beads Jade Amulet listed for 5 chaos in Settlers (stash tab "~price 5 chaos"; position: left 7, top 9)',
 		'date': '2024-08-05T11:38:13Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -20518,7 +20518,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.4,
 				'text': '@bold,blue Effective Hit Pool -4.2%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.7%\n@bold,green Value 16.4\n------------------------------\nVengeance Beads\nJade Amulet\nRequires Level 65\n+24 to Dexterity\n44% increased Spell Damage\n+48% to Damage over Time Multiplier\nAdds 6 to 10 Physical Damage to Attacks against you\n-142 to maximum Mana\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+178,559.9 Total DPS inc. Poison (+21.7%)\n-27 Strength\n+21 Dexterity\n-27 Intelligence\n@bold,blue -2,269 Effective Hit Pool (-4.2%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-155 Total Mana (-19.7%)\n-52 Unreserved Mana (-19.8%)\n+0% Unreserved Mana\n+11.2 Mana Recovery\n-50.3 Mana Leech/On Hit Rate (-19.7%)\n+125 Evasion rating (+0.9%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +178,559.9 Full DPS (+21.7%)',
@@ -20736,8 +20736,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'SakiDesuyo > BrrAgain_Saki',
 		'whisper': '@BrrAgain_Saki Hi, I would like to buy your Viper Medallion Lapis Amulet listed for 9 chaos in Settlers (stash tab "~price 9 chaos"; position: left 10, top 24)',
 		'date': '2024-08-07T04:16:01Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -20748,7 +20748,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.2%\n@bold,green Value 16\n------------------------------\nViper Medallion\nLapis Amulet\nRequires Level 65\n+22 to Intelligence\n-20 to Intelligence\n+48% to Damage over Time Multiplier\n22% reduced Global Critical Strike Chance\n+122 to maximum Mana\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-203.0 Average Damage (-0.7%)\n-1.54% Crit Chance\n-1.54% Effective Crit Chance\n-1,265.6 Hit DPS (-0.7%)\n+175,695.5 Poison DPS (+27.0%)\n+28,185.2 Total Damage per Poison (+27.0%)\n+174,429.9 Total DPS inc. Poison (+21.2%)\n-27 Strength\n-3 Dexterity\n-25 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n+110 Total Mana (+14.0%)\n+36 Unreserved Mana (+13.7%)\n+0% Unreserved Mana\n-10.7 Mana Recovery\n+35.7 Mana Leech/On Hit Rate (+14.0%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +174,429.9 Full DPS (+21.2%)',
@@ -20963,8 +20963,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'ventree > 벤트리이이이',
 		'whisper': '@벤트리이이이 안녕하세요, 10 chaos(으)로 올려놓은 Settlers 리그의 혼란스러운 구슬 오닉스 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 10 chaos", 위치: 왼쪽 1, 상단 17)',
 		'date': '2024-08-07T04:14:58Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -20975,7 +20975,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.1,
 				'text': '@bold,blue Effective Hit Pool -4.5%\n@bold,blue Flat Life -268\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.7%\n@bold,green Value 16.1\n------------------------------\nHavoc Beads\nOnyx Amulet\nRequires Level 60\n+15 to all Attributes\n31% reduced Spell Damage\n+48% to Damage over Time Multiplier\n12% reduced Evasion Rating\nRegenerate 32.8 Life per second\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+178,559.9 Total DPS inc. Poison (+21.7%)\n-12 Strength\n+12 Dexterity\n-12 Intelligence\n@bold,blue -2,474 Effective Hit Pool (-4.5%)\n-311 Phys Max Hit (-3.4%)\n-1,072 Elemental Max Hit (-3.8%)\n-1,072 Chaos Max Hit (-3.8%)\n@bold,blue -268 Total Life (-5.5%)\n+27.4 Life Regen\n-107.8 Life Leech/On Hit Rate (-4.6%)\n-6 Total Mana (-0.8%)\n-2 Unreserved Mana (-0.8%)\n-1.1 Mana Recovery\n-1.9 Mana Leech/On Hit Rate (-0.8%)\n-314 Evasion rating (-2.3%)\n-1% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +178,559.9 Full DPS (+21.7%)',
@@ -21196,8 +21196,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Mommalover2007 > MrBoba',
 		'whisper': '@MrBoba Здравствуйте, хочу купить у вас Испорченный медальон Золотой амулет за 12 chaos в лиге Settlers (секция "~price 12 chaos"; позиция: 10 столбец, 11 ряд)',
 		'date': '2024-08-06T13:37:11Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -21208,7 +21208,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.1,
 				'text': '@bold,blue Effective Hit Pool -3.5%\n@bold,blue Flat Life -296\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.7%\n@bold,green Value 17.1\n------------------------------\nCorruption Medallion\nGold Amulet\nRequires Level 60\n14% increased Rarity of Items found\n-6 to all Attributes\n-34 to Dexterity\n+48% to Damage over Time Multiplier\n34% increased Evasion Rating\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+178,559.9 Total DPS inc. Poison (+21.7%)\n-33 Strength\n-43 Dexterity\n-33 Intelligence\n@bold,blue -1,892 Effective Hit Pool (-3.5%)\n-344 Phys Max Hit (-3.8%)\n-1,184 Elemental Max Hit (-4.2%)\n-1,184 Chaos Max Hit (-4.2%)\n@bold,blue -296 Total Life (-6.1%)\n-5.9 Life Regen\n-119.1 Life Leech/On Hit Rate (-5.1%)\n-16 Total Mana (-2.0%)\n-6 Unreserved Mana (-2.3%)\n+0% Unreserved Mana\n-0.3 Mana Recovery\n-5.2 Mana Leech/On Hit Rate (-2.0%)\n+784 Evasion rating (+5.8%)\n+1% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +178,559.9 Full DPS (+21.7%)',
@@ -21428,8 +21428,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'SunL4D2 > Sun_Hexblast',
 		'whisper': '@Sun_Hexblast Hi, I would like to buy your Sorrow Pendant Lapis Amulet listed for 29 chaos in Settlers (stash tab "~b/o 29 chaos"; position: left 2, top 10)',
 		'date': '2024-08-07T03:41:51Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -21440,7 +21440,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.6,
 				'text': '@bold,blue Effective Hit Pool -4%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.7%\n@bold,green Value 16.6\n------------------------------\nSorrow Pendant\nLapis Amulet\nRequires Level 60\n+22 to Intelligence\n+48% to Damage over Time Multiplier\nAdds 16 to 31 Fire Damage to Attacks against you\n96% reduced Mana Regeneration Rate\nGain 14 Mana per Enemy Killed\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+178,559.9 Total DPS inc. Poison (+21.7%)\n-27 Strength\n-3 Dexterity\n-5 Intelligence\n@bold,blue -2,200 Effective Hit Pool (-4.0%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-2 Total Mana (-0.3%)\n-1 Unreserved Mana (-0.4%)\n+0% Unreserved Mana\n-14.7 Mana Recovery\n-0.6 Mana Leech/On Hit Rate (-0.3%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +178,559.9 Full DPS (+21.7%)',
@@ -21661,8 +21661,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@DedeniJEEWON Hi, I would like to buy your Pain Torc Onyx Amulet listed for 40 chaos in Settlers (stash tab "Sell"; position: left 11, top 11)',
 		'date': '2024-08-04T16:11:40Z',
 		'note': '~price 40 chaos',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -21673,7 +21673,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.8,
 				'text': '@bold,blue Effective Hit Pool -3.8%\n@bold,blue Flat Life -271\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.7%\n@bold,green Value 16.8\n------------------------------\nPain Torc\nOnyx Amulet\nRequires Level 61\n+14 to all Attributes\n-29 to Intelligence\n+48% to Damage over Time Multiplier\n44% increased maximum Energy Shield\n0.58% of Physical Attack Damage Leeched by Enemy as Life\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+178,559.9 Total DPS inc. Poison (+21.7%)\n-13 Strength\n+11 Dexterity\n-42 Intelligence\n@bold,blue -2,100 Effective Hit Pool (-3.8%)\n-315 Phys Max Hit (-3.5%)\n-1,084 Elemental Max Hit (-3.8%)\n-1,084 Chaos Max Hit (-3.9%)\n@bold,blue -271 Total Life (-5.6%)\n-5.4 Life Regen\n-109.0 Life Leech/On Hit Rate (-4.6%)\n-21 Total Mana (-2.7%)\n-7 Unreserved Mana (-2.7%)\n+0% Unreserved Mana\n+0.1 Mana Recovery\n-6.8 Mana Leech/On Hit Rate (-2.7%)\n+63 Evasion rating (+0.5%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +178,559.9 Full DPS (+21.7%)',
@@ -21894,8 +21894,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'chipzyy > chipzy',
 		'whisper': '@chipzy Hi, I would like to buy your Armageddon Heart Turquoise Amulet listed for 45 chaos in Settlers (stash tab "~price 45 chaos"; position: left 8, top 3)',
 		'date': '2024-08-03T03:50:35Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -21906,7 +21906,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 15,
 				'text': '@bold,blue Effective Hit Pool -5.6%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 21.7%\n@bold,green Value 15\n------------------------------\nArmageddon Heart\nTurquoise Amulet\nRequires Level 65\n+17 to Dexterity and Intelligence\n+48% to Damage over Time Multiplier\nAdds 2 to 4 Physical Damage to Attacks against you\n32% reduced Evasion Rating\n40% increased maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+178,559.9 Total DPS inc. Poison (+21.7%)\n-27 Strength\n+14 Dexterity\n-10 Intelligence\n@bold,blue -3,032 Effective Hit Pool (-5.6%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-5 Total Mana (-0.6%)\n-2 Unreserved Mana (-0.8%)\n+0% Unreserved Mana\n-1.2 Mana Recovery\n-1.6 Mana Leech/On Hit Rate (-0.6%)\n-909 Evasion rating (-6.7%)\n-2% Evade Chance\n@bold,orange -11% Cold Res. Over Max\n@bold,red +178,559.9 Full DPS (+21.7%)',
@@ -22127,8 +22127,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'CrazySokan > LsSokan',
 		'whisper': '@LsSokan Hi, ich möchte \'Chimären-Borte Bernsteinamulett\' zum angebotenen Preis von 50 chaos in der Settlers-Liga kaufen (Truhenfach "~price 50 chaos"; Position: 1 von links, 12 von oben)',
 		'date': '2024-08-03T19:02:55Z',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -22139,7 +22139,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 24.5,
 				'text': '@bold,blue Effective Hit Pool -3.7%\n@bold,blue Flat Life -261\n@bold,orange Total Resist 69\n@bold,red Full DPS 21.3%\n@bold,green Value 24.5\n------------------------------\nChimeric Braid\nAmber Amulet\nRequires Level 65\n+21 to Strength\n+48% to Damage over Time Multiplier\n-24% to Global Critical Strike Multiplier\n30% reduced Rarity of Items found\n@bold,orange +80% to Cold Resistance\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-531.6 Average Damage (-1.9%)\n-24% Crit Multiplier\n-3,313.5 Hit DPS (-1.9%)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+175,246.4 Total DPS inc. Poison (+21.3%)\n-6 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,023 Effective Hit Pool (-3.7%)\n-303 Phys Max Hit (-3.3%)\n-1,044 Elemental Max Hit (-3.7%)\n-1,044 Chaos Max Hit (-3.7%)\n@bold,blue -261 Total Life (-5.4%)\n-5.2 Life Regen\n-105.0 Life Leech/On Hit Rate (-4.5%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange +69% Cold Res. Over Max\n@bold,red +175,246.4 Full DPS (+21.3%)',
@@ -22364,8 +22364,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@CursedScorpion Hi, I would like to buy your Demon Gorget Paua Amulet listed for 75 chaos in Settlers (stash tab "Kartlar"; position: left 10, top 7)',
 		'date': '2024-08-05T19:31:49Z',
 		'note': '~price 75 chaos',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -22376,7 +22376,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.8,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 23%\n@bold,green Value 17.8\n------------------------------\nDemon Gorget\nPaua Amulet\nRequires Level 60\n29% increased Mana Regeneration Rate\n+48% to Damage over Time Multiplier\n37% reduced Cast Speed\n+79% to Global Critical Strike Multiplier\n-123 to maximum Mana\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+1,749.7 Average Damage (+6.4%)\n+79% Crit Multiplier\n+10,907.0 Hit DPS (+6.4%)\n+178,559.9 Poison DPS (+27.4%)\n+28,644.7 Total Damage per Poison (+27.4%)\n+189,466.8 Total DPS inc. Poison (+23.0%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-136 Total Mana (-17.3%)\n-46 Unreserved Mana (-17.6%)\n+0% Unreserved Mana\n+12.9 Mana Recovery\n-44.2 Mana Leech/On Hit Rate (-17.3%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +189,466.8 Full DPS (+23.0%)',
@@ -22591,8 +22591,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@meBONKmeTANKmeWIN Hi, I would like to buy your Havoc Gorget Coral Amulet listed for 100 chaos in Settlers (stash tab "boop"; position: left 8, top 9)',
 		'date': '2024-08-06T07:17:45Z',
 		'note': '~price 100 chaos',
-		'evalValue': 217,
-		'evalValueDetails': {
+		'weightedValue': 217,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 217,
@@ -22603,7 +22603,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 15,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 20.2%\n@bold,green Value 15\n------------------------------\nHavoc Gorget\nCoral Amulet\nRequires Level 61\nRegenerate 3.5 Life per second\n+48% to Damage over Time Multiplier\n24% increased Cast Speed\n64% reduced Global Critical Strike Chance\n52% reduced maximum Energy Shield\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n-590.6 Average Damage (-2.1%)\n-4.48% Crit Chance\n-3,681.7 Hit DPS (-2.1%)\n+170,227.1 Poison DPS (+26.1%)\n+27,308.0 Total Damage per Poison (+26.1%)\n+166,545.4 Total DPS inc. Poison (+20.2%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-2.3 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +166,545.4 Full DPS (+20.2%)',
@@ -22817,8 +22817,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'whisper': '@MarioLSHipster Hi, I would like to buy your Eyes of the Greatwolf Greatwolf Talisman listed for 30 chaos in Settlers (stash tab "P"; position: left 8, top 4)',
 		'date': '2024-08-02T10:40:54Z',
 		'note': '~b/o 30 chaos',
-		'evalValue': 216.8,
-		'evalValueDetails': {
+		'weightedValue': 216.8,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 216.8,
@@ -22829,7 +22829,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.2,
 				'text': '@bold,blue Effective Hit Pool -4.1%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 22.4%\n@bold,green Value 17.2\n------------------------------\nEyes of the Greatwolf\nGreatwolf Talisman\nTalisman Tier 4\nRequires Level 52\n+28% to Damage over Time Multiplier\n20% increased Attack and Cast Speed\nImplicit Modifier magnitudes are doubled\nCorrupted\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+0.54 Attack Rate (+8.7%)\n+14,838.7 Hit DPS (+8.7%)\n+169,653.4 Poison DPS (+26.0%)\n+16,709.4 Total Damage per Poison (+16.0%)\n+184,492.1 Total DPS inc. Poison (+22.4%)\n+13.50 Mana Cost per second (+8.7%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -2,232 Effective Hit Pool (-4.1%)\n-334 Phys Max Hit (-3.7%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-56.2 Life Leech/On Hit Rate (-2.4%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n-0.6 Mana Recovery\n+4.1 Mana Leech/On Hit Rate (+1.6%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +184,492.1 Full DPS (+22.4%)',
@@ -23015,8 +23015,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'jihokim > Mriella_runa_duratle',
 		'whisper': '@Mriella_runa_duratle 안녕하세요, 30 chaos(으)로 올려놓은 Settlers 리그의 황혼 구슬 마노 목걸이(을)를 구매하고 싶습니다 (보관함 탭 "~price 30 chaos", 위치: 왼쪽 3, 상단 6)',
 		'date': '2024-08-06T05:39:25Z',
-		'evalValue': 215.6,
-		'evalValueDetails': {
+		'weightedValue': 215.6,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 215.6,
@@ -23027,7 +23027,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 17.6,
 				'text': '@bold,blue Effective Hit Pool -8.4%\n@bold,blue Flat Life -591\n@bold,orange Total Resist -11\n@bold,red Full DPS 27.1%\n@bold,green Value 17.6\n------------------------------\nDusk Beads\nAgate Amulet\nRequires Level 65\n+21 to Strength and Intelligence\n+50 to Strength\n+60% to Damage over Time Multiplier\n-158 to maximum Life\nLose 139.3 Life per second\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+223,199.8 Poison DPS (+34.2%)\n+35,805.9 Total Damage per Poison (+34.2%)\n+223,199.8 Total DPS inc. Poison (+27.1%)\n+44 Strength\n-3 Dexterity\n-6 Intelligence\n@bold,blue -4,580 Effective Hit Pool (-8.4%)\n-687 Phys Max Hit (-7.6%)\n-2,364 Elemental Max Hit (-8.4%)\n-2,364 Chaos Max Hit (-8.4%)\n@bold,blue -591 Total Life (-12.2%)\n-151.1 Life Regen\n-237.8 Life Leech/On Hit Rate (-10.1%)\n-3 Total Mana (-0.4%)\n-1 Unreserved Mana (-0.4%)\n-1.4 Mana Recovery\n-1.0 Mana Leech/On Hit Rate (-0.4%)\n-31 Evasion rating (-0.2%)\n@bold,orange -11% Cold Res. Over Max\n@bold,red +223,199.8 Full DPS (+27.1%)',
@@ -23248,8 +23248,8 @@ module.exports = resultsElement => resultsElement.joinItems([
 		'accountText': 'Grav1k > Gravi_KAL',
 		'whisper': '@Gravi_KAL Hi, I would like to buy your Oblivion Scarab Paua Amulet listed for 40 chaos in Settlers (stash tab "~b/o 40 chaos 4"; position: left 18, top 3)',
 		'date': '2024-08-07T01:33:32Z',
-		'evalValue': 215.5,
-		'evalValueDetails': {
+		'weightedValue': 215.5,
+		'weightedValueDetails': {
 			'affixes': 0,
 			'defenses': 0,
 			'mods': 215.5,
@@ -23260,7 +23260,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 			'currency': 'chaos',
 			'shifts': {},
 		},
-		'valueBuildPromise': {
+		'buildValuePromise': {
 			'resolved': {
 				'value': 16.2,
 				'text': '@bold,blue Effective Hit Pool -7%\n@bold,blue Flat Life -288\n@bold,orange Total Resist -11\n@bold,red Full DPS 24.3%\n@bold,green Value 16.2\n------------------------------\nOblivion Scarab\nPaua Amulet\nRequires Level 65\n27% increased Mana Regeneration Rate\n25% reduced Spell Damage\n+40% to Damage over Time Multiplier\nAdds 24 to 36 Physical Damage to Attacks\n30% increased Fire Damage\n-51% to Global Critical Strike Multiplier\n33% reduced Armour\nMirrored\n@bold,green Equipping this item in Amulet will give you:\n(replacing Demon Choker, Agate Amulet)\n+494.1 Average Damage (+1.8%)\n-50% Crit Multiplier\n+3,079.8 Hit DPS (+1.8%)\n+196,743.7 Poison DPS (+30.2%)\n+31,561.8 Total Damage per Poison (+30.2%)\n+199,823.5 Total DPS inc. Poison (+24.3%)\n-27 Strength\n-3 Dexterity\n-27 Intelligence\n@bold,blue -3,829 Effective Hit Pool (-7.0%)\n-456 Phys Max Hit (-5.0%)\n-1,152 Elemental Max Hit (-4.1%)\n-1,152 Chaos Max Hit (-4.1%)\n@bold,blue -288 Total Life (-6.0%)\n-5.8 Life Regen\n-115.9 Life Leech/On Hit Rate (-4.9%)\n-13 Total Mana (-1.7%)\n-5 Unreserved Mana (-1.9%)\n+0% Unreserved Mana\n+3.1 Mana Recovery\n-4.2 Mana Leech/On Hit Rate (-1.7%)\n-31 Evasion rating (-0.2%)\n-636 Armour (-13.3%)\n-3% Phys. Damage Reduction\n@bold,orange -11% Cold Res. Over Max\n@bold,red +199,823.5 Full DPS (+24.3%)',
@@ -23490,7 +23490,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 		},
 	},
 ].map(x => {
-	x.valueBuildPromise = new Promise(() => 0);
+	x.buildValuePromise = new Promise(() => 0);
 	x.fracturedMods = [];
 	x.enchantMods = x.enchantMods.length ? x.enchantMods : ['enchant mod placeholder'];
 	x.implicitMods = x.implicitMods.length ? x.implicitMods : ['implicit mod placeholder'];

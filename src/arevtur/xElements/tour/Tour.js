@@ -143,7 +143,7 @@ customElements.define(name, class Tour extends XElement {
 					lines: ['6/6',
 						'The weighted-sum value of this item; i.e. this is how pathofexile.com/trade would sort the items.'],
 					elementQueries: [
-						'#value-eval',
+						'#weight-value',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
@@ -151,7 +151,7 @@ customElements.define(name, class Tour extends XElement {
 					lines: ['6/6',
 						'The build value of this item; i.e. this is how PoB would sort this item.'],
 					elementQueries: [
-						'#value-build',
+						'#build-value',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
@@ -159,7 +159,7 @@ customElements.define(name, class Tour extends XElement {
 					lines: ['6/6',
 						'The build value of this item after bench crafting the most valuable mod.'],
 					elementQueries: [
-						'#value-craft',
+						'#craft-value',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},

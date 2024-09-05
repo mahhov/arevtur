@@ -45,7 +45,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set itemData(itemData) {
-		// should only be called once to avoid a late-resolved, stale itemData.valueBuildPromise
+		// should only be called once to avoid a late-resolved, stale itemData.buildValuePromise
 		// overwriting the correct one
 		this.itemData_ = itemData;
 
@@ -68,23 +68,22 @@ customElements.define(name, class extends XElement {
 
 		this.$('#prefixes-text').textContent = itemData.affixes.prefix;
 		this.$('#suffixes-text').textContent = itemData.affixes.suffix;
-		this.$('#affix-value-text').textContent = itemData.evalValueDetails.affixes;
-		this.$('#defense-value-text').textContent = itemData.evalValueDetails.defenses;
-		this.$('#weight-value-text').textContent = itemData.evalValueDetails.mods;
+		this.$('#affix-value-text').textContent = itemData.weightedValueDetails.affixes;
+		this.$('#defense-value-text').textContent = itemData.weightedValueDetails.defenses;
+		this.$('#weight-value-text').textContent = itemData.weightedValueDetails.mods;
 
-		// todo[blocking] rename 'eval' to 'weighted'
-		this.$('#value-eval').text = `Eval: ${round(itemData.evalValue)}`;
-		let expandedValues = Object.entries(itemData.evalValueDetails)
+		this.$('#weight-value').text = `Weighted: ${round(itemData.weightedValue)}`;
+		let expandedValues = Object.entries(itemData.weightedValueDetails)
 			.filter(([_, value]) => value);
-		this.$('#value-eval').tooltip = expandedValues.length > 1 ?
+		this.$('#weight-value').tooltip = expandedValues.length > 1 ?
 			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
-		itemData.valueBuildPromise.then(valueBuild => {
-			this.$('#value-build').text = `Build: ${valueBuild.value}`;
-			this.$('#value-build').tooltip = valueBuild.text;
+		itemData.buildValuePromise.then(buildValue => {
+			this.$('#build-value').text = `Build: ${buildValue.value}`;
+			this.$('#build-value').tooltip = buildValue.text;
 		});
-		itemData.valueCraftPromise.then(valueCraft => {
-			this.$('#value-craft').text = `Craft: ${valueCraft.value}`;
-			this.$('#value-craft').tooltip = valueCraft.text;
+		itemData.craftValuePromise.then(craftValue => {
+			this.$('#craft-value').text = `Craft: ${craftValue.value}`;
+			this.$('#craft-value').tooltip = craftValue.text;
 		});
 
 		this.$('#price').text = `${round(itemData.price)} chaos`;

@@ -23,7 +23,7 @@ class ItemData {
 		this.accountText =
 			`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`;
 		this.whisper = tradeApiItemData.listing.whisper;
-		// todo[medium] add a config; if enabled; do direct whisper
+		// todo[blocking] add a config; if enabled; do direct whisper
 		this.directWhisper = tradeApiItemData.listing.whisper_token;
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
@@ -56,21 +56,21 @@ class ItemData {
 				.filter(([_, value]) => value);
 		this.defenseProperties = defenseProperties.map(nameValue => nameValue.join(' '));
 
-		// Eval value
-		this.evalValueDetails = {
+		// Weighted value
+		this.weightedValueDetails = {
 			affixes: affixValueShift,
 			defenses: ItemData.evalDefensePropertiesValue(defenseProperties,
 				queryDefenseProperties),
-			mods: ItemData.evalValue(this.pseudoMods),
+			mods: ItemData.weightedValue(this.pseudoMods),
 		};
-		this.evalValue = Object.values(this.evalValueDetails).reduce((sum, v) => sum + v);
+		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
 		// value build
-		this.valueBuildPromise = pobApi.evalItem(this.text);
-		this.valueBuildPromise.then(resolved => this.valueBuildPromise.resolved = resolved);
+		this.buildValuePromise = pobApi.evalItem(this.text);
+		this.buildValuePromise.then(resolved => this.buildValuePromise.resolved = resolved);
 
-		this.valueCraftPromise = this.craftValue();
-		this.valueCraftPromise.then(resolved => this.valueCraftPromise.resolved = resolved);
+		this.craftValuePromise = this.craftValue();
+		this.craftValuePromise.then(resolved => this.craftValuePromise.resolved = resolved);
 
 		this.priceDetails = {
 			count: tradeApiItemData.listing.price.amount,
@@ -92,7 +92,7 @@ class ItemData {
 			.reduce((sum, v) => sum + v, 0);
 	}
 
-	static evalValue(pseudoMods) {
+	static weightedValue(pseudoMods) {
 		let pseudoSumI = pseudoMods.findIndex(mod => mod.startsWith('Sum: '));
 		if (pseudoSumI === -1)
 			return 0;
@@ -116,8 +116,8 @@ class ItemData {
 	async craftValue() {
 		// todo[high] do extra trade requests to get uncorrupted + open affix items
 		if (this.rarity === 'Unique' || this.corrupted || this.mirrored || this.split)
-			return this.valueBuildPromise.then(valueBuild =>
-				({value: valueBuild.value, text: 'Unmodifiable'}));
+			return this.buildValuePromise.then(buildValue =>
+				({value: buildValue.value, text: 'Unmodifiable'}));
 
 		let openAffixes = [];
 		if (this.affixes.prefix < 3)
@@ -125,8 +125,8 @@ class ItemData {
 		if (this.affixes.suffix < 3)
 			openAffixes.push('Suffix');
 		if (!openAffixes.length)
-			return this.valueBuildPromise.then(valueBuild =>
-				({value: valueBuild.value, text: 'No open affix'}));
+			return this.buildValuePromise.then(buildValue =>
+				({value: buildValue.value, text: 'No open affix'}));
 
 		// '0.52% of ...' -> '#% of ...'
 		let existingMods = [this.fracturedMods, this.explicitMods]
@@ -137,8 +137,8 @@ class ItemData {
 
 		// todo[blocking] consider replacing crafted mod
 		if (this.craftedMods.length)
-			return this.valueBuildPromise.then(valueBuild =>
-				({value: valueBuild.value, text: 'Already crafted'}));
+			return this.buildValuePromise.then(buildValue =>
+				({value: buildValue.value, text: 'Already crafted'}));
 
 		let craftableMods = (await pobApi
 			.getCraftedMods())
@@ -182,8 +182,8 @@ class ItemData {
 			.filter((craftableMod, i, a) => craftableMod.eval.value > a[0].eval.value - 1);
 
 		if (!craftableMods.length)
-			return this.valueBuildPromise.then(valueBuild =>
-				({value: valueBuild.value, text: 'No craftable mods'}));
+			return this.buildValuePromise.then(buildValue =>
+				({value: buildValue.value, text: 'No craftable mods'}));
 
 		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
 			pobApi.evalItemWithCraft(this.text, craftableMod)));

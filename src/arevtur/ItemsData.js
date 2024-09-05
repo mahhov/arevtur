@@ -5,23 +5,23 @@ const pobApi = require('../services/pobApi/pobApi');
 class ItemsData extends Emitter {
 	static valueHandlers = [
 		{
-			name: 'Eval sorting',
+			name: 'Weight sorting',
 			description: 'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set above. Less accurate in predicting health & DMG affects on build.',
-			sortY: item => item.evalValue,
+			sortY: item => item.weightedValue,
 			showFilter: item => true,
 			trigger: null,
 		}, {
 			name: 'Build sorting',
 			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above. Does not consider craftable affixes.',
-			sortY: item => item.valueBuildPromise.resolved.value,
-			showFilter: item => item.valueBuildPromise.resolved,
-			trigger: item => item.valueBuildPromise,
+			sortY: item => item.buildValuePromise.resolved.value,
+			showFilter: item => item.buildValuePromise.resolved,
+			trigger: item => item.buildValuePromise,
 		}, {
 			name: 'Build + craft sorting',
 			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above. Considers craftable affixes.',
-			sortY: item => item.valueCraftPromise.resolved.value,
-			showFilter: item => item.valueCraftPromise.resolved,
-			trigger: item => item.valueCraftPromise,
+			sortY: item => item.craftValuePromise.resolved.value,
+			showFilter: item => item.craftValuePromise.resolved,
+			trigger: item => item.craftValuePromise,
 		},
 	];
 
@@ -65,13 +65,13 @@ class ItemsData extends Emitter {
 				let copies = a.filter((vv, i) => vv.id === v.id);
 				if (copies[0] !== v)
 					return false;
-				v.evalValue = Math.max(...copies.map(vv => vv.evalValue));
+				v.weightedValue = Math.max(...copies.map(vv => vv.weightedValue));
 				v.price = Math.min(...copies.map(vv => vv.price));
 				// todo[low] is it ok to take the max of each, or should the values of the max-sum
 				//  be taken?
-				v.evalValueDetails = Object.fromEntries(Object.keys(v.evalValueDetails).map(
+				v.weightedValueDetails = Object.fromEntries(Object.keys(v.weightedValueDetails).map(
 					valueKey => [valueKey,
-						Math.max(...copies.map(copy => copy.evalValueDetails[valueKey]))]));
+						Math.max(...copies.map(copy => copy.weightedValueDetails[valueKey]))]));
 				return true;
 			});
 
