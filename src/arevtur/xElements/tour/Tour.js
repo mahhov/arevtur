@@ -73,6 +73,7 @@ customElements.define(name, class Tour extends XElement {
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
+					complete: () => deepQuery('#type-input')[0].value !== 'Any',
 				}, {
 					lines: ['4/6', 'Use PoB magic to jump start your query.'],
 					elementQueries: [
@@ -196,10 +197,12 @@ customElements.define(name, class Tour extends XElement {
 			this.update();
 		});
 		this.$('#next').addEventListener('click', () => {
-			if (this.stepI === this.steps.length - 1 ||
+			let isComplete = !this.steps[this.stepI].complete || this.steps[this.stepI].complete();
+			let nextElementsVisible = this.stepI === this.steps.length - 1 ||
 				this.steps[this.stepI + 1].elementQueries
 					.map(query => deepQuery(query)[0])
-					.every(v => v)) {
+					.every(v => v);
+			if (isComplete && nextElementsVisible) {
 				this.stepI++;
 				this.update();
 			}
