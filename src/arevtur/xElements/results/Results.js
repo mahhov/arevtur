@@ -40,7 +40,6 @@ customElements.define(name, class extends XElement {
 
 		this.$('#results-chart').addEventListener('action', e =>
 			this.emit('submit', {overridePrice: e.detail.x || null}));
-
 		this.$('#results-chart').addEventListener('select', async e => {
 			let itemIndex = this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
 				e.detail.width);
@@ -51,7 +50,6 @@ customElements.define(name, class extends XElement {
 					{behavior: 'smooth', block: 'nearest'});
 			}
 		});
-
 		this.$('#results-chart').addEventListener('hover', async e => {
 			let itemIndex = e.detail &&
 				this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
@@ -59,9 +57,19 @@ customElements.define(name, class extends XElement {
 			this.itemsData.hoverItem(itemIndex);
 			this.renderItemsData(true);
 		});
+		this.$('#results-chart').addEventListener('mouseenter', () => {
+			this.$('#results-chart').width = 450;
+			this.$('#results-chart').height = 450;
+		});
+		this.$('#results-chart').addEventListener('mouseleave', () => {
+			this.$('#results-chart').width = 300;
+			this.$('#results-chart').height = 300;
+		});
+
 
 		this.expectedCount = 0;
 		this.updateResultsCount();
+
 		// testData(this);
 	}
 

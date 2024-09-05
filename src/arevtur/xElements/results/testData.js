@@ -23491,6 +23491,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 	},
 ].map(x => {
 	x.buildValuePromise = new Promise(() => 0);
+	x.craftValuePromise = new Promise(() => 0);
 	x.fracturedMods = [];
 	x.enchantMods = x.enchantMods.length ? x.enchantMods : ['enchant mod placeholder'];
 	x.implicitMods = x.implicitMods.length ? x.implicitMods : ['implicit mod placeholder'];
