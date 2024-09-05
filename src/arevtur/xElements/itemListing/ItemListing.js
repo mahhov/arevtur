@@ -72,7 +72,7 @@ customElements.define(name, class extends XElement {
 		this.$('#defense-value-text').textContent = itemData.evalValueDetails.defenses;
 		this.$('#weight-value-text').textContent = itemData.evalValueDetails.mods;
 
-		// todo[high] rename 'eval' to 'weighted'
+		// todo[blocking] rename 'eval' to 'weighted'
 		this.$('#value-eval').text = `Eval: ${round(itemData.evalValue)}`;
 		let expandedValues = Object.entries(itemData.evalValueDetails)
 			.filter(([_, value]) => value);

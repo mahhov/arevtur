@@ -39,7 +39,7 @@ class ItemData {
 		}, []);
 
 		// affixes
-		// todo[high] need to consider fractured
+		// todo[blocking] need to consider fractured
 		let extendedExplicitMods = tradeApiItemData.item.extended.mods?.explicit || [];
 		this.affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
 			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
@@ -135,7 +135,7 @@ class ItemData {
 
 		// todo[high] consider cost of crafts
 
-		// todo[high] consider replacing crafted mod
+		// todo[blocking] consider replacing crafted mod
 		if (this.craftedMods.length)
 			return this.valueBuildPromise.then(valueBuild =>
 				({value: valueBuild.value, text: 'Already crafted'}));

@@ -64,7 +64,7 @@ customElements.define(name, class Tour extends XElement {
 					corner: {x: 1, y: 1},
 					align: {x: -1, y: 1},
 				}, {
-					// todo[high] don't allow proceeding if user hasn't set type
+					// todo[blocking] don't allow proceeding if user hasn't set type
 					lines: ['3/6', 'Select an item type and max price; e.g. amulet for under 50c.'],
 					elementQueries: [
 						'#type-input',

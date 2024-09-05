@@ -28,7 +28,7 @@ customElements.define(name, class extends XElement {
 	}
 });
 
-// todo[high] this import isn't working:
+// todo[blocking] this import isn't working:
 //  50% reduced Amount Recovered
 //  135% increased Recovery rate
 //  50% of Recovery applied Instantly
