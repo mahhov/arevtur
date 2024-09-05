@@ -9,6 +9,7 @@ class ElectronWindow {
 	constructor(name, htmlPath, width = 10000, height = 10000) {
 		this.name = name;
 
+		// todo[low] add a taskbar icon
 		this.window = appReadyPromise.then(() => {
 			let window = new BrowserWindow({
 				title: `${name} - ${app.getVersion()}`,

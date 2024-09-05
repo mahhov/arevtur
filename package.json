@@ -36,6 +36,6 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/icons/fa-dollar-sign-solid-256.png"
+    "icon": "./resources/icon.png"
   }
 }

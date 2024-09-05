@@ -13,7 +13,7 @@ let windows = [
 	require('./arevtur/arevtur'),
 ];
 
-let trayIcon = path.join(__dirname, '../resources/icons/fa-dollar-sign-solid-256.png');
+let trayIcon = path.join(__dirname, '../resources/icon.png');
 TrayHelper.createExitTray(trayIcon, 'Arevtur', [
 	...keySnippet.trayOptions,
 	...windows.flatMap(w => w.trayOptions),
