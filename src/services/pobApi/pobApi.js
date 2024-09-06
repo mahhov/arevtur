@@ -155,7 +155,11 @@ class PobApi extends Emitter {
 	evalItemWithCraft(item, craftedMods) {
 		if (!PobApi.isItemEquippable(item))
 			return Promise.reject('item is unequippable');
-		item = [item, '', ...craftedMods].join('\n');
+		item = [
+			...item.split('\n').filter(line => !line.includes('(crafted)')),
+			'',
+			...craftedMods,
+		].join('\n');
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),

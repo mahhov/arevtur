@@ -135,11 +135,6 @@ class ItemData {
 
 		// todo[high] consider cost of crafts
 
-		// todo[blocking] consider replacing crafted mod
-		if (this.craftedMods.length)
-			return this.buildValuePromise.then(buildValue =>
-				({value: buildValue.value, text: 'Already crafted'}));
-
 		let craftableMods = (await pobApi
 			.getCraftedMods())
 			// check if item has open prefix/suffix
@@ -188,7 +183,12 @@ class ItemData {
 		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
 			pobApi.evalItemWithCraft(this.text, craftableMod)));
 		let bestI = maxIndex(craftableMods.map(craftableMod => craftableMod.value));
-		return craftableMods[bestI];
+		let bestCraftableMod = craftableMods[bestI];
+
+		let buildValue = await this.buildValuePromise;
+		return bestCraftableMod.value > buildValue.value ?
+			bestCraftableMod :
+			{value: buildValue.value, text: 'Existing craft is optimal'};
 	}
 }
 
