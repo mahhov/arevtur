@@ -5,7 +5,7 @@ const apiConstants = require('../../apiConstants');
 const TradeQuery = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../services/pobApi/pobApi');
-const {minIndex, unique, openPath} = require('../../../util/util');
+const {minIndex, unique, escapeRegex, openPath} = require('../../../util/util');
 const ItemData = require('../../ItemData');
 const appData = require('../../../services/appData');
 const BugReport = require('../../BugReport');
@@ -94,7 +94,7 @@ customElements.define(name, class extends XElement {
 				.split('\n')
 				.map(line => line.trim())
 				.map(line => line)
-				.map(line => line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) //todo [blocking] dedupe
+				.map(escapeRegex)
 				.map(line => line.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)'))
 				.map(line => line.replaceAll(/(\d+)/g, '($1|#)'))
 				.map(line => `${line}( \\(\\explicit+\\))?`)

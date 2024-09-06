@@ -1,4 +1,5 @@
 const assert = require('assert');
+const {escapeRegex} = require('./util');
 
 // case insensitive
 // must be at a word boundary
@@ -51,10 +52,7 @@ class Searcher {
 	}
 
 	static toRegex(word) {
-		// escape special regex characters, https://stackoverflow.com/a/6969486/6951428
-		word = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		// replace '_'
-		word = word.replaceAll('_', ' ');
+		word = escapeRegex(word).replaceAll('_', ' ');
 		// word boundary
 		return new RegExp(`(^|[^a-z])${word}`);
 	}

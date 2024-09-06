@@ -8,6 +8,8 @@ let transpose = a => a[0].map((_, i) => a.map(v => v[i]));
 let unique = (v, i, a) => a.indexOf(v) === i;
 let randInt = n => Math.floor(Math.random() * n);
 let randId = () => randInt(1000 ** 2) + 1;
+// https://stackoverflow.com/a/6969486/6951428
+let escapeRegex = stringRegex => stringRegex.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 let deepMerge = (target, source) => {
 	if (typeof source !== 'object' || source === null)
@@ -66,6 +68,7 @@ module.exports = {
 	unique,
 	randInt,
 	randId,
+	escapeRegex,
 
 	deepMerge,
 	deepCopy,
