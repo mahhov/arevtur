@@ -3,7 +3,7 @@ const Searcher = require('../util/Searcher');
 const pobApi = require('../services/pobApi/pobApi');
 
 class Macros {
-	static  Input = {
+	static Input = {
 		removeWeightedEntries: async (unifiedQueryParams, asyncFilter) => {
 			let filtered = [];
 			for (let weightEntry of unifiedQueryParams.weightEntries)
@@ -71,7 +71,7 @@ class Macros {
 			return unifiedQueryParams;
 		},
 
-		// todo[medium] add PoB weights to crafted and pseudo mods
+		// todo[high] add PoB weights to crafted and pseudo mods
 		// todo[medium] this can leave double counted mods. e.g. it'll replace '% attack speed
 		//  (implicit|explicit)' with the pseudo version, but it'll leave '% attack & cast speed
 		//  (implicit|explicit)'.

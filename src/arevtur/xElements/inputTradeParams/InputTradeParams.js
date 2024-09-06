@@ -49,6 +49,7 @@ customElements.define(name, class extends XElement {
 			this.name = this.$('#name-input').value;
 			this.emit('change');
 		});
+
 		apiConstants.typeTexts().then(typeTexts =>
 			this.$('#type-input').autocompletes = typeTexts);
 		this.$('#type-input').addEventListener('change', () => {
@@ -69,17 +70,21 @@ customElements.define(name, class extends XElement {
 		});
 		// todo[high] slow async stuff probably breaks stuff if the user interacts with the UI
 		//  before the query returns.
+		this.$('#smart-build-import-for-type-button').addEventListener('click', async () => {
+			this.setUnifiedQueryParams(await this.buildImport()
+				.then(Macros.Input.replaceResists)
+				.then(Macros.Input.replaceAttributes)
+				.then(Macros.Input.addPseudo)
+				.then(Macros.Input.enableAll));
+		});
 		this.$('#build-import-for-type-button').addEventListener('click', async () => {
 			try {
-				let pobType = await apiConstants.typeToPobType(this.type);
-				let modWeights = await pobApi.getModWeights(pobType, !this.uncorrupted);
-				let unifiedQueryParams = UnifiedQueryParams.fromModWeights(
-					await this.unifiedQueryParams, modWeights);
-				await this.loadQueryParams(unifiedQueryParams);
+				this.setUnifiedQueryParams(await this.buildImport());
 			} catch (e) {
-				console.warn('PoB import', e);
+				// buildImport logs errors, no need to handle it again
 			}
 		});
+
 		[...defensePropertyTuples, ...affixPropertyTuples]
 			.forEach(([property, query]) => {
 				this.$(query).addEventListener('change', () => {
@@ -98,6 +103,7 @@ customElements.define(name, class extends XElement {
 			this.linked = this.$('#linked-check').checked;
 			this.emit('change');
 		});
+
 		this.$('#uncorrupted-check').addEventListener('change', () => {
 			this.uncorrupted = this.$('#uncorrupted-check').checked;
 			this.emit('change');
@@ -111,38 +117,30 @@ customElements.define(name, class extends XElement {
 			this.influences = this.$('#influence-input').valuesAsArray;
 			this.emit('change');
 		});
+
 		document.addEventListener('keydown', e => {
 			if (e.key === 'g' && e.ctrlKey)
 				this.$('#search-input').select();
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
-		this.$('#drop-implicit-mods-button').addEventListener('click', async () => {
-			let unifiedQueryParams = await Macros.Input.dropImplicits(
-				await this.unifiedQueryParams);
-			await this.loadQueryParams(unifiedQueryParams);
-		});
-		this.$('#replace-resist-mods-button').addEventListener('click', async () => {
-			let unifiedQueryParams = await Macros.Input.replaceResists(
-				await this.unifiedQueryParams);
-			await this.loadQueryParams(unifiedQueryParams);
-		});
-		this.$('#replace-attribute-mods-button').addEventListener('click', async () => {
-			let unifiedQueryParams = await Macros.Input.replaceAttributes(
-				await this.unifiedQueryParams);
-			await this.loadQueryParams(unifiedQueryParams);
-		});
-		this.$('#add-crafted-mods-button').addEventListener('click', async () => {
-			let unifiedQueryParams = await Macros.Input.addCrafted(await this.unifiedQueryParams);
-			await this.loadQueryParams(unifiedQueryParams);
-		});
-		this.$('#add-pseudo-mods-button').addEventListener('click', async () => {
-			let unifiedQueryParams = await Macros.Input.addPseudo(await this.unifiedQueryParams);
-			await this.loadQueryParams(unifiedQueryParams);
-		});
-		this.$('#enable-all-mods-button').addEventListener('click', async () => {
-			let unifiedQueryParams = Macros.Input.enableAll(await this.unifiedQueryParams);
-			await this.loadQueryParams(unifiedQueryParams);
-		});
+		this.$('#drop-implicit-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.dropImplicits(await this.unifiedQueryParams)));
+		this.$('#replace-resist-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.replaceResists(await this.unifiedQueryParams)));
+		this.$('#replace-attribute-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.replaceAttributes(await this.unifiedQueryParams)));
+		this.$('#add-crafted-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.addCrafted(await this.unifiedQueryParams)));
+		this.$('#add-pseudo-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.addPseudo(await this.unifiedQueryParams)));
+		this.$('#enable-all-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(Macros.Input.enableAll(await this.unifiedQueryParams)));
+
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
 			this.emit('change');
@@ -242,6 +240,17 @@ customElements.define(name, class extends XElement {
 		return this.$$('#query-properties-list x-query-property');
 	}
 
+	async buildImport() {
+		try {
+			let pobType = await apiConstants.typeToPobType(this.type);
+			let modWeights = await pobApi.getModWeights(pobType, !this.uncorrupted);
+			return UnifiedQueryParams.fromModWeights(await this.unifiedQueryParams, modWeights);
+		} catch (e) {
+			console.warn('PoB import', e);
+			return Promise.reject();
+		}
+	}
+
 	addQueryProperty() {
 		let queryProperty = document.createElement('x-query-property');
 		queryProperty.type = this.type;
@@ -279,7 +288,7 @@ customElements.define(name, class extends XElement {
 			this.emit('change');
 		});
 		return queryProperty;
-	};
+	}
 
 	propagateLockedWeights() {
 		// todo[low] locked isn't working
@@ -322,17 +331,17 @@ customElements.define(name, class extends XElement {
 		});
 	}
 
-	async loadQueryParams(unifiedQueryParams) {
+	get unifiedQueryParams() {
+		return UnifiedQueryParams.fromInputTradeQueryParams(this);
+	}
+
+	async setUnifiedQueryParams(unifiedQueryParams) {
 		await unifiedQueryParams.toInputTradeQueryParams(this);
 		this.addQueryProperty();
 		this.propagateLockedWeights();
 		this.checkProperties();
 		this.applySearch();
 		this.emit('change');
-	}
-
-	get unifiedQueryParams() {
-		return UnifiedQueryParams.fromInputTradeQueryParams(this);
 	}
 
 	refreshBuild() {

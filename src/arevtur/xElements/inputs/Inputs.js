@@ -210,7 +210,7 @@ customElements.define(name, class extends XElement {
 		indexSetEls[this.inputSetIndex].classList.add('selected');
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(
 			this.inputSets[this.inputSetIndex].unifiedQueryParams, this.sharedWeightEntries);
-		await this.$('#input-trade-params').loadQueryParams(unifiedQueryParams);
+		this.$('#input-trade-params').setUnifiedQueryParams(unifiedQueryParams);
 	}
 
 	inputSetIndexFromEl(inputSetEl) {
