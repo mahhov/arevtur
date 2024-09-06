@@ -5,7 +5,7 @@ const apiConstants = require('../../apiConstants');
 const TradeQuery = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const pobApi = require('../../../services/pobApi/pobApi');
-const {minIndex, openPath} = require('../../../util/util');
+const {minIndex, unique, openPath} = require('../../../util/util');
 const ItemData = require('../../ItemData');
 const appData = require('../../../services/appData');
 const BugReport = require('../../BugReport');
@@ -86,22 +86,24 @@ customElements.define(name, class extends XElement {
 		});
 
 		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
-			let typeText = ItemData.typeNameFromItemText(e.detail);
+			let typeText = ItemData.typeNameFromItemText(e.detail) || 'Any';
 			let typeId = await apiConstants.typeTextToId(typeText);
 
 			let propertyTexts = await apiConstants.propertyTexts();
 			let matchedPropertyIds = await Promise.all(e.detail
 				.split('\n')
 				.map(line => line.trim())
-				.map(line => line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-				.map(line => line.replaceAll('decrease', '(decrease|increase)'))
+				.map(line => line)
+				.map(line => line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) //todo [blocking] dedupe
+				.map(line => line.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)'))
 				.map(line => line.replaceAll(/(\d+)/g, '($1|#)'))
-				.map(line => `^${line}( \\(\\explicit+\\))?$`)
+				.map(line => `${line}( \\(\\explicit+\\))?`)
 				.map(line => new RegExp(line))
 				// todo[low] sometimes, there are multiple properties with the same text. should do
 				//   an 'or' between them. e.g. '+# to Strength and Intelligence'
 				.map(regex => propertyTexts.find(pt => pt.match(regex)))
 				.filter(propertyText => propertyText)
+				.filter(unique)
 				.map(propertyText => apiConstants.propertyTextToId(propertyText)));
 
 			let unifiedQueryParams = UnifiedQueryParams.fromPropertyIds(typeId, matchedPropertyIds);

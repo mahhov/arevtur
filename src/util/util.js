@@ -5,6 +5,7 @@ let minIndex = array => array.indexOf(Math.min(...array));
 let maxIndex = array => array.indexOf(Math.max(...array));
 let clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 let transpose = a => a[0].map((_, i) => a.map(v => v[i]));
+let unique = (v, i, a) => a.indexOf(v) === i;
 let randInt = n => Math.floor(Math.random() * n);
 let randId = () => randInt(1000 ** 2) + 1;
 
@@ -62,6 +63,7 @@ module.exports = {
 	maxIndex,
 	clamp,
 	transpose,
+	unique,
 	randInt,
 	randId,
 

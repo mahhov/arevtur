@@ -83,7 +83,7 @@ class ItemData {
 	}
 
 	static typeNameFromItemText(text) {
-		return text.match(/^Item Class: (\w+)/)[1].replace(/s$/, '');
+		return text.match(/^Item Class: (\w+)/)?.[1].replace(/s$/, '');
 	}
 
 	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
