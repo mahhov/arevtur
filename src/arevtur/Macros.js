@@ -52,19 +52,21 @@ class Macros {
 			// remove existing crafted properties
 			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
 				(await apiConstants.propertyById(propertyId)).type !== 'crafted');
+
 			// add crafted properties using explicit mods' weights
 			let craftedProperties = await apiConstants.propertiesByType('crafted');
-			let explicitProperties = await apiConstants.propertiesByType('explicit');
-			craftedProperties.forEach(craftedProperty => {
-				let explicitProperty = explicitProperties.find(explicitProperty =>
-					explicitProperty.originalText === craftedProperty.originalText);
-				if (!explicitProperty) return;
-				let weightEntry = unifiedQueryParams.weightEntries.find(weightEntry =>
-					weightEntry[0] === explicitProperty.id);
-				if (!weightEntry) return;
+			await Promise.all(unifiedQueryParams.weightEntries.map(async weightEntry => {
+				let weightedProperty = (await apiConstants.propertyById(weightEntry[0]));
+				if (weightedProperty.type !== 'explicit') return;
+
+				let craftedProperty = craftedProperties.find(craftedProperty =>
+					craftedProperty.originalText === weightedProperty.originalText);
+				if (!craftedProperty) return;
+
 				unifiedQueryParams.weightEntries.push(
 					[craftedProperty.id, weightEntry[1], false, true]);
-			});
+			}));
+
 			return unifiedQueryParams;
 		},
 
