@@ -35,9 +35,11 @@ document.addEventListener('keydown', e => {
 });
 
 configForRenderer.addListener('change', config => {
-	document.documentElement.classList.toggle('maximize', config.viewMaximize);
+	document.documentElement.classList.toggle('maximize',
+		config.viewMaximize && config.tourComplete);
 	document.documentElement.classList.toggle('horizontal',
-		!config.viewMaximize && config.viewHorizontal);
+		config.viewHorizontal && !config.viewMaximize && config.tourComplete);
 	document.documentElement.classList.toggle('dark', config.darkTheme);
-	document.documentElement.classList.toggle('experimental', config.experimental);
+	document.documentElement.classList.toggle('experimental',
+		config.experimental && config.tourComplete);
 });
