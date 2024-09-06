@@ -135,6 +135,10 @@ customElements.define(name, class extends XElement {
 			let unifiedQueryParams = await Macros.Input.addCrafted(await this.unifiedQueryParams);
 			await this.loadQueryParams(unifiedQueryParams);
 		});
+		this.$('#add-pseudo-mods-button').addEventListener('click', async () => {
+			let unifiedQueryParams = await Macros.Input.addPseudo(await this.unifiedQueryParams);
+			await this.loadQueryParams(unifiedQueryParams);
+		});
 		this.$('#enable-all-mods-button').addEventListener('click', async () => {
 			let unifiedQueryParams = Macros.Input.enableAll(await this.unifiedQueryParams);
 			await this.loadQueryParams(unifiedQueryParams);

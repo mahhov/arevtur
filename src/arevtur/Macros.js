@@ -70,6 +70,53 @@ class Macros {
 			return unifiedQueryParams;
 		},
 
+		// todo[blocking] add PoB weights to crafted and pseudo mods
+		// todo[blocking] this can leave double counted mods. e.g. it'll replace '% attack speed
+		//  (implicit|explicit)' with the pseudo version, but it'll leave '% attack & cast speed
+		//  (implicit|explicit)'.
+		// todo[blocking] crafted & pseudo mods should be sorted adjacent to their explicit
+		//  counterparts to allow enableAll to work correctly
+		addPseudo: async unifiedQueryParams => {
+			let pseudoProperties = await apiConstants.propertiesByType('pseudo');
+			let explicitProperties = await apiConstants.propertiesByType('explicit');
+			let implicitProperties = await apiConstants.propertiesByType('implicit');
+			let craftedProperties = await apiConstants.propertiesByType('crafted');
+			pseudoProperties
+				.map(pseudoProperty => {
+					let cleanedOriginalTexts = [
+						pseudoProperty.originalText,
+						pseudoProperty.originalText.replace('total ', 'to '),
+						pseudoProperty.originalText.replace('total ', ''),
+						pseudoProperty.originalText
+							.replace('total ', 'increased ')
+							.replace('+', ''),
+					];
+					let matchingProperties = [
+						explicitProperties,
+						implicitProperties,
+						craftedProperties,
+					]
+						.flat()
+						.filter(otherProperty =>
+							cleanedOriginalTexts.some(cleanedOriginalText =>
+								otherProperty.originalText === cleanedOriginalText));
+					matchingProperties.push(pseudoProperty);
+					return {pseudoProperty, matchingProperties};
+				})
+				.filter(({_, matchingProperties}) => matchingProperties.length > 2)
+				.forEach(({pseudoProperty, matchingProperties}) => {
+					let weightEntries = unifiedQueryParams.weightEntries.filter(weightEntry =>
+						matchingProperties.some(property => property.id === weightEntry[0]));
+					if (weightEntries.length <= 1) return;
+					let weight = Math.max(...weightEntries.map(weightEntry => weightEntry[1]));
+					unifiedQueryParams.weightEntries = unifiedQueryParams.weightEntries
+						.filter(weightEntry => !weightEntries.includes(weightEntry));
+					unifiedQueryParams.weightEntries.push(
+						[pseudoProperty.id, weight, false, true]);
+				});
+			return unifiedQueryParams;
+		},
+
 		enableAll: unifiedQueryParams => {
 			unifiedQueryParams.weightEntries.forEach(weightEntry =>
 				weightEntry[3] = true);
@@ -91,6 +138,3 @@ class Macros {
 }
 
 module.exports = Macros;
-
-// ^\+#% to .*resist
-// !maximum
