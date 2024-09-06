@@ -93,6 +93,7 @@
 	--maximize-hidden-display: none !important;
 }
 
+/* todo[medium] this removes 'display:block' from 'div.experimental' elements. Possibly likewise for .maximize elements */
 :root:not(.experimental) {
 	--experimental-display: none !important;
 }

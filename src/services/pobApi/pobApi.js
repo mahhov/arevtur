@@ -198,7 +198,6 @@ class PobApi extends Emitter {
 				Number(pobType.match(/\d+/)?.[0]) || 1));
 	}
 
-	// todo[blocking] doesn't include crafted mods
 	async getModWeights(pobType = undefined, includeCorrupted = true) {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
 		if (!pobType)

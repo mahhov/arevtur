@@ -71,7 +71,7 @@ class Macros {
 			return unifiedQueryParams;
 		},
 
-		// todo[blocking] add PoB weights to crafted and pseudo mods
+		// todo[high] add PoB weights to crafted and pseudo mods
 		// todo[medium] this can leave double counted mods. e.g. it'll replace '% attack speed
 		//  (implicit|explicit)' with the pseudo version, but it'll leave '% attack & cast speed
 		//  (implicit|explicit)'.
