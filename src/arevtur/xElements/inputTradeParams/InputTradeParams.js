@@ -99,11 +99,11 @@ customElements.define(name, class extends XElement {
 					this.emit('change');
 				});
 			});
+
 		this.$('#linked-check').addEventListener('change', () => {
 			this.linked = this.$('#linked-check').checked;
 			this.emit('change');
 		});
-
 		this.$('#uncorrupted-check').addEventListener('change', () => {
 			this.uncorrupted = this.$('#uncorrupted-check').checked;
 			this.emit('change');

@@ -46,13 +46,16 @@
 	<x-autocomplete-input id="type-input" placeholder="type"></x-autocomplete-input>
 	<label>
 		Value
-		<x-numeric-input id="min-value-input" class="short-input"></x-numeric-input>
+		<x-numeric-input id="min-value-input" class="short-input"
+		                 title="Min item weight"></x-numeric-input>
 	</label>
 	<label>
 		Price
-		<x-numeric-input id="price-input" class="short-input"></x-numeric-input>
+		<x-numeric-input id="price-input" class="short-input"
+		                 title="Max item price in chaos"></x-numeric-input>
 	</label>
-	<label>Offline<input id="offline-check" type="checkbox"></label>
+	<label>Offline<input id="offline-check" type="checkbox"
+	                     title="Include items from offline accounts"></label>
 	<button id="smart-build-import-for-type-button" class="pob"
 	        title="PoB Import + Replace Resists + Replace Attributes + Add Pseudo + Enable All">
 		Smart PoB Import
@@ -78,6 +81,7 @@
 		<x-tooltip-button id="energy-shield-build-value" class="pob"></x-tooltip-button>
 	</label>
 </div>
+<!-- todo[blocking] experimental divs are losing display:block. might be likewise with maximize -->
 <div class="experimental">
 	<label>
 		Prefix
@@ -87,23 +91,37 @@
 		Suffix
 		<x-numeric-input id="suffix-input" class="short-input"></x-numeric-input>
 	</label>
-	<label>6-link<input id="linked-check" type="checkbox"></label>
 </div>
 <div>
-	<label>Uncorrupted<input id="uncorrupted-check" type="checkbox"></label>
-	<label>Non Unique<input id="non-unique-check" type="checkbox"></label>
+	<label>6-link<input id="linked-check" type="checkbox"
+	                    title="Find items that are either 6-linked or can be 6-linked for under the price range"></label>
+	<label>Uncorrupted<input id="uncorrupted-check" type="checkbox"
+	                         title="Find uncorrupted items only"></label>
+	<label>Non Unique<input id="non-unique-check" type="checkbox"
+	                        title="Find non unique items only"></label>
 	<!-- todo[low] influences not working and not styled dark -->
 	<x-multi-select-lined id="influence-input" class="experimental"
 	                      placeholder="Add influences"></x-multi-select-lined>
 </div>
 <div>
 	<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
-	<button id="drop-implicit-mods-button">Drop Implicits</button>
-	<button id="replace-resist-mods-button">Replace Resists</button>
-	<button id="replace-attribute-mods-button">Replace Attributes</button>
-	<button id="add-crafted-mods-button">Add Crafted</button>
-	<button id="add-pseudo-mods-button">Add Pseudo</button>
-	<button id="enable-all-mods-button">Enable All</button>
+	<button id="drop-implicit-mods-button" title="Remove all implicit mods">Drop Implicits</button>
+	<button id="replace-resist-mods-button"
+	        title="Replace all resist mods with a pseudo total resist mod. Useful when looking for a specific corrupted mod.">
+		Replace Resists
+	</button>
+	<button id="replace-attribute-mods-button"
+	        title="Replace all attribute mods with 3 pseudo attribute mods">Replace Attributes
+	</button>
+	<button id="add-crafted-mods-button" class="experimental"
+	        title="Add all crafted mods matching the existing explicit mods. This isn't very useful since searching for an explicit mode will include crafted mods.">
+		Add Crafted
+	</button>
+	<button id="add-pseudo-mods-button"
+	        title="When possible, merge all duplicate explicit, implicit, and crafted mods into pseudo mods">
+		Add Pseudo
+	</button>
+	<button id="enable-all-mods-button" title="Enable the top 35 mods">Enable All</button>
 </div>
 <x-arrangeable-list id="query-properties-list"></x-arrangeable-list>
 
