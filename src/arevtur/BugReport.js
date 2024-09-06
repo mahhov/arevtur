@@ -3,6 +3,8 @@ const {promises: fs} = require('fs');
 const logging = require('../services/logging');
 const appData = require('../services/appData');
 const {openPath} = require('../util/util');
+const os = require('os');
+const {app} = require('electron');
 
 class BugReport {
 	constructor(data) {
@@ -28,6 +30,8 @@ class BugReport {
 
 	static async fromCurrentState() {
 		return new BugReport({
+			os: os.platform(),
+			version: app.getVersion(),
 			config: configForRenderer.config,
 			local: {...localStorage, 'input-session-id': 'redacted'},
 			build: await fs.readFile(configForRenderer.config.buildParams.buildPath)
@@ -35,7 +39,6 @@ class BugReport {
 				.catch(e => e),
 			logs: logging.logs,
 		});
-		// todo[medium] include version/os info
 	}
 
 	async toCurrentState() {
@@ -45,7 +48,7 @@ class BugReport {
 			this.data.config.buildParams.buildPath = appData.bugReportBuildPath;
 		configForRenderer.config = this.data.config;
 		Object.assign(localStorage, this.data.local);
-		sessionStorage.setItem('bugReportLogs', JSON.stringify(this.data.logs));
+		sessionStorage.setItem('activeBugReport', JSON.stringify(this.data));
 		window.location.reload();
 	}
 
@@ -57,10 +60,13 @@ class BugReport {
 	}
 }
 
-let logs = sessionStorage.getItem('bugReportLogs');
-if (logs) {
-	console.log('BugReport logs:', JSON.parse(logs));
-	sessionStorage.removeItem('bugReportLogs');
+let activeBugReportString = sessionStorage.getItem('activeBugReport');
+if (activeBugReportString) {
+	let activeBugReport = JSON.parse(activeBugReportString);
+	console.log('BugReport os:', activeBugReport.os);
+	console.log('BugReport version:', activeBugReport.version);
+	console.log('BugReport logs:', activeBugReport.logs);
+	sessionStorage.removeItem('activeBugReport');
 }
 
 module.exports = BugReport;
