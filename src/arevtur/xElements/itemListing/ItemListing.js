@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const TradeQuery = require('../../poeTradeApi');
 
 const now = new Date();
 const msInHour = 1000 * 60 * 60;
@@ -28,8 +29,14 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#whisper-button').addEventListener('click', e => {
-			navigator.clipboard.writeText(this.itemData_.whisper);
+		this.$('#direct-whisper').addEventListener('click', e => {
+			navigator.clipboard.writeText(this.itemData_.whisperText);
+			TradeQuery.directWhisper(localStorage.getItem('input-session-id'),
+				this.itemData_.directWhisperToken);
+			e.stopPropagation();
+		});
+		this.$('#copy-whisper').addEventListener('click', e => {
+			navigator.clipboard.writeText(this.itemData_.whisperText);
 			e.stopPropagation();
 		});
 		this.$('#copy-item-button').addEventListener('click', e => {
@@ -93,7 +100,8 @@ customElements.define(name, class extends XElement {
 			itemData.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
 				`${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join(
 					'')}` : '';
-		this.$('#whisper-button').textContent = itemData.accountText;
+		this.$('#account-text').textContent = itemData.accountText;
+		this.$('#account-text').title = itemData.accountText;
 		let dateDiff = (now - new Date(itemData.date)) / msInHour;
 		this.$('#date-text').textContent =
 			dateDiff > 24 ? `${round(dateDiff / 24)} days ago` : `${round(dateDiff)} hours ago`;

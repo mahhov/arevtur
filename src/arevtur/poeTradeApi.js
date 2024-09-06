@@ -6,6 +6,11 @@ const Stream = require('../util/Stream');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
 const ItemData = require('./ItemData');
 
+// todo[medium] when rate limit fails, show invalid indicator on session ID.
+//  response "Query is too complex…rs used.\\nLogging in will increase this limit." indicates bad
+//  session ID. other responses "{"error":{"code":2,"message":"Query is too complex. Please reduce
+//  the amount of filters used."}}" don't indicate bad session IDs.
+
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');
 	let s = state.split(':');
@@ -229,6 +234,13 @@ class TradeQuery {
 			query,
 			sort: {'statgroup.0': 'desc'},
 		};
+	}
+
+	static async directWhisper(sessionId, token) {
+		const endpoint = 'https://www.pathofexile.com/api/trade/whisper';
+		let headers = apiConstants.createRequestHeader(sessionId);
+		await post(endpoint, {token}, headers)
+			.catch(e => console.error('failed to direct whisper:', e));
 	}
 }
 

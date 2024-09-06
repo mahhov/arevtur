@@ -97,7 +97,7 @@ class ApiConstants {
 		let properties = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({id, text, type}) => ({id, text: `${text} (${type})`, originalText: text, type}));
-		properties.unshift({id: '', text: '', originalText: '', type: ''})
+		properties.unshift({id: '', text: '', originalText: '', type: ''});
 		return properties;
 		/*
 		[{
@@ -182,6 +182,8 @@ class ApiConstants {
 			//  to look more like the expected value; e.g. scratch/poeTradeHeader.json
 			'User-Agent': `arevtur_${configForRenderer.config.userId}`,
 			Cookie: sessionId ? `POESESSID=${sessionId}` : '',
+			'content-type': 'application/json',
+			'x-requested-with': 'XMLHttpRequest',
 		};
 	}
 

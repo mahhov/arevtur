@@ -64,13 +64,19 @@
 		font-weight: bold;
 	}
 
-	.bottom-pane {
+	.button-pane {
 		flex: 0 0;
 		position: relative;
 	}
 
-	#date-text {
-		font-size: 14px;
+	.small-info {
+		font-size: 12px;
+	}
+
+	#account-text {
+		overflow: hidden;
+		text-wrap: nowrap;
+		text-overflow: ellipsis;
 	}
 </style>
 
@@ -109,7 +115,8 @@
 		<div class="value">Mod value: <span id="weight-value-text"></span></div>
 	</div>
 </div>
-<div class="bottom-pane">
+
+<div class="button-pane">
 	<!-- todo[medium] show pob value without need to hover -->
 	<div>
 		<x-tooltip-button id="weight-value"></x-tooltip-button>
@@ -120,8 +127,13 @@
 		<x-tooltip-button id="price"></x-tooltip-button>
 	</div>
 	<div>
-		<button id="whisper-button"></button>
+		<button id="direct-whisper">Direct whisper</button>
+		<button id="copy-whisper">Copy whisper</button>
 		<button id="copy-item-button">Copy item</button>
 	</div>
+</div>
+
+<div class="small-info">
+	<div id="account-text"></div>
 	<div id="date-text"></div>
 </div>

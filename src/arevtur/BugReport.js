@@ -70,3 +70,5 @@ if (activeBugReportString) {
 }
 
 module.exports = BugReport;
+
+// todo[blocking] surface errors to the user, clean up consoles messages

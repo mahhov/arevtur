@@ -25,7 +25,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 		],
 		'craftedMods': [],
 		'pseudoMods': [],
-		'accountText': 'as930246 > 精靈王的小黃瓜',
+		'accountText': 'as930246 > 精靈王的小黃瓜as930246 > 精靈王的小黃瓜as930246 > 精靈王的小黃瓜as930246 > 精靈王的小黃瓜as930246 > 精靈王的小黃瓜as930246 > 精靈王的小黃瓜as930246 > 精靈王的小黃瓜',
 		'whisper': '@精靈王的小黃瓜 Hi, I would like to buy your Pain Charm Gold Amulet listed for 30 chaos in Settlers (stash tab "5"; position: left 2, top 9)',
 		'date': '2024-08-07T05:06:57Z',
 		'note': '~b/o 30 chaos',

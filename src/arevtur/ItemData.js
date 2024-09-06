@@ -22,9 +22,8 @@ class ItemData {
 		this.pseudoMods = tradeApiItemData.item.pseudoMods || [];
 		this.accountText =
 			`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`;
-		this.whisper = tradeApiItemData.listing.whisper;
-		// todo[blocking] add a config; if enabled; do direct whisper
-		this.directWhisper = tradeApiItemData.listing.whisper_token;
+		this.directWhisperToken = tradeApiItemData.listing.whisper_token;
+		this.whisperText = tradeApiItemData.listing.whisper;
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
