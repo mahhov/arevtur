@@ -25,7 +25,7 @@ class Macros {
 				!searcher.test(
 					(await apiConstants.propertyById(propertyId))?.originalText));
 			if (pobApi.weights.resist)
-				unifiedQueryParams.weightEntries.push(
+				unifiedQueryParams.weightEntries.unshift(
 					['pseudo.pseudo_total_resistance', pobApi.weights.resist, false, false]);
 			return unifiedQueryParams;
 		},
@@ -44,7 +44,8 @@ class Macros {
 				['pseudo.pseudo_total_intelligence', pobApi.weights.int],
 			]
 				.filter(tuple => tuple[1])
-				.forEach(tuple => unifiedQueryParams.weightEntries.push([...tuple, false, false]));
+				.forEach(tuple =>
+					unifiedQueryParams.weightEntries.unshift([...tuple, false, false]));
 			return unifiedQueryParams;
 		},
 
@@ -70,12 +71,10 @@ class Macros {
 			return unifiedQueryParams;
 		},
 
-		// todo[blocking] add PoB weights to crafted and pseudo mods
-		// todo[blocking] this can leave double counted mods. e.g. it'll replace '% attack speed
+		// todo[medium] add PoB weights to crafted and pseudo mods
+		// todo[medium] this can leave double counted mods. e.g. it'll replace '% attack speed
 		//  (implicit|explicit)' with the pseudo version, but it'll leave '% attack & cast speed
 		//  (implicit|explicit)'.
-		// todo[blocking] crafted & pseudo mods should be sorted adjacent to their explicit
-		//  counterparts to allow enableAll to work correctly
 		addPseudo: async unifiedQueryParams => {
 			let pseudoProperties = await apiConstants.propertiesByType('pseudo');
 			let explicitProperties = await apiConstants.propertiesByType('explicit');
@@ -111,7 +110,7 @@ class Macros {
 					let weight = Math.max(...weightEntries.map(weightEntry => weightEntry[1]));
 					unifiedQueryParams.weightEntries = unifiedQueryParams.weightEntries
 						.filter(weightEntry => !weightEntries.includes(weightEntry));
-					unifiedQueryParams.weightEntries.push(
+					unifiedQueryParams.weightEntries.unshift(
 						[pseudoProperty.id, weight, false, true]);
 				});
 			return unifiedQueryParams;
