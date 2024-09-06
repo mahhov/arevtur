@@ -9,7 +9,6 @@ class Script extends CustomOsScript {
 	constructor(pobPath) {
 		super(pobPath);
 		this.pendingResponses = [];
-		this.cache = {};
 		this.addListener(response => this.onScriptResponse(response));
 		this.cleared = false;
 		this.inProgressResponse = '';
@@ -24,24 +23,18 @@ class Script extends CustomOsScript {
 	}
 
 	onScriptResponse({out, err, exit}) {
-		if (exit || err) {
-			if (!this.cleared) {
-				console.error('PobApi failed:', err, exit);
-				this.clear();
-			}
-			return;
-		}
-		// let maxLength = 200;
-		// console.log('PobApi response:', out.length > maxLength ?
-		// 	`${out.slice(0, maxLength / 2)}...${out.slice(-maxLength / 2)}` : out);
-		if (out && !this.cleared) {
+		if (this.cleared) return;
+		if (err || exit) {
+			console.error('PobApi, lua failed:', err, exit);
+			this.clear();
+		} else if (out)
 			out
 				.split(/(<\.|\.>)/)
 				.filter(v => v)
 				.forEach(part => {
 					if (part === '<.') {
 						if (this.inProgressResponse)
-							console.log('PobApi debug response:', this.inProgressResponse);
+							console.log('PobApi, debug response:', this.inProgressResponse);
 						this.inProgressResponse = '';
 					} else if (part === '.>') {
 						this.pendingResponses.shift().resolve(this.inProgressResponse);
@@ -50,19 +43,13 @@ class Script extends CustomOsScript {
 						this.inProgressResponse += part;
 					}
 				});
-		}
 	}
 
-	send(argsObj) {
+	send(text) {
 		if (this.cleared)
-			return Promise.reject('PobApi script already cleared');
-		let text = JSON.stringify(argsObj);
-		if (this.cache[text])
-			return this.cache[text];
+			return Promise.reject('script already cleared');
 		let promise = new XPromise();
-		this.cache[text] = promise;
 		this.pendingResponses.push(promise);
-		// console.log('PoBApi sending', text);
 		super.send(text);
 		return promise;
 	}
@@ -70,10 +57,7 @@ class Script extends CustomOsScript {
 	async clear() {
 		this.cleared = true;
 		(await this.process).kill('SIGKILL'); // necessary on linux
-		// todo[low] distinguish between error (e.g. lua crashed) and restart (e.g. user changed
-		//  weight).
-		this.pendingResponses.forEach(pendingResponse =>
-			pendingResponse.reject('PoBApi failed'));
+		this.pendingResponses.forEach(promise => promise.reject('clearing script'));
 		this.pendingResponses = [];
 	}
 }
@@ -95,6 +79,7 @@ class PobApi extends Emitter {
 			ignoreEs: false,
 			equalResists: false,
 		};
+		this.cache = {};
 		this.script = null;
 	}
 
@@ -109,15 +94,23 @@ class PobApi extends Emitter {
 			deepEquality(extraMods, this.extraMods))
 			return;
 
+		let clearCache = pobPath !== this.pobPath && buildPath !== this.buildPath;
+
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
 		this.weights = weights;
 		this.extraMods = extraMods;
-		this.restart();
-		// todo[low] support stopping pending commands without having to restart the script
+
+		// restart to cancel pending requests
+		if (clearCache || this.script.pendingResponses.length || this.script.cleared)
+			this.restart(clearCache);
+		else
+			this.emit('change');
 	}
 
-	async restart() {
+	async restart(clearCache = true) {
+		if (clearCache)
+			this.cache = {};
 		await this.script?.clear();
 		if (this.pobPath && this.buildPath) {
 			this.script = new Script(this.pobPath);
@@ -131,23 +124,26 @@ class PobApi extends Emitter {
 
 	async send(argsObj) {
 		if (!this.script)
-			return Promise.reject('Ignoring PoB requests until script has started');
-		let response = this.script.send(argsObj);
+			return Promise.reject('script has not started');
+		let argsString = JSON.stringify(argsObj);
+		if (this.cache[argsString] && !this.cache[argsString].error && argsObj.cmd !== 'build')
+			return this.cache[argsString];
+		this.cache[argsString] = this.script.send(argsString);
 		this.emit('busy', this.script.pendingResponses.length);
-		response
+		this.cache[argsString]
 			.then(() => this.emit('busy', this.script.pendingResponses.length))
 			.catch(e => {
-				console.warn('pobApi send', e);
-				this.emit('not-ready');
+				console.warn('PobApi, send failed:', e);
+				if (this.script.cleared)
+					this.emit('not-ready');
 			});
 		// rejections are expected
-		return response.catch(() => '');
+		return this.cache[argsString].catch(() => null);
 	}
 
 	evalItem(item) {
-		if (!['requirements:', 'sockets:', 'item class: jewels']
-			.some(search => item.toLowerCase().includes(search)))
-			return Promise.reject('Item is unequippable');
+		if (!PobApi.isItemEquippable(item))
+			return Promise.reject('item is unequippable');
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
@@ -157,9 +153,8 @@ class PobApi extends Emitter {
 	}
 
 	evalItemWithCraft(item, craftedMods) {
-		if (!['requirements:', 'sockets:', 'item class: jewels']
-			.some(search => item.toLowerCase().includes(search)))
-			return Promise.reject('Item is unequippable');
+		if (!PobApi.isItemEquippable(item))
+			return Promise.reject('item is unequippable');
 		item = [item, '', ...craftedMods].join('\n');
 		return this.send({
 			cmd: 'item',
@@ -172,7 +167,7 @@ class PobApi extends Emitter {
 	// todo[low] rename evalItemMod
 	async evalItemModSummary(pobType = undefined, itemMod = undefined, pluginNumber = 1) {
 		if (!pobType || !itemMod)
-			return Promise.reject('PoB evalItemModSummary missing type or mod');
+			return Promise.reject('item missing type or mod');
 
 		// not all pseudo mods are mapped; handles the ones with 'total' in their text
 		if (itemMod.toLowerCase().endsWith('(pseudo)'))
@@ -203,7 +198,7 @@ class PobApi extends Emitter {
 	async getModWeights(pobType = undefined, includeCorrupted = true) {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
 		if (!pobType)
-			return Promise.reject('PoB getModWeights missing type');
+			return Promise.reject('missing type');
 		return this.send({
 			cmd: 'getModWeights',
 			type: pobType,
@@ -237,9 +232,6 @@ class PobApi extends Emitter {
 		let strRegex = /([+-]\d+) strength/i;
 		let dexRegex = /([+-]\d+) dexterity/i;
 		let intRegex = /([+-]\d+) intelligence/i;
-
-		if (!itemText.split('Equipping this item').slice(1).forEach)
-			console.error(itemText);
 
 		let diffTexts = itemText.split(/(?=equipping this item)/i).slice(1);
 		if (!diffTexts.length)
@@ -333,6 +325,11 @@ class PobApi extends Emitter {
 		};
 	}
 
+	static isItemEquippable(item) {
+		return ['requirements:', 'sockets:', 'item class: jewels'].some(search =>
+			item.toLowerCase().includes(search));
+	}
+
 	static clean(outString) {
 		return outString
 			.replace(/\^x[\dA-F]{6}/g, '')
@@ -367,5 +364,3 @@ module.exports = new PobApi();
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
 //  /Data/TimelessJewelData/GloriousVanity.bin
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
-// todo[high] way to cancel queue when e.g. running new search or changing item type or changing
-//  weights
