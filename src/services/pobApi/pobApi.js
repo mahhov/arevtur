@@ -94,7 +94,7 @@ class PobApi extends Emitter {
 			deepEquality(extraMods, this.extraMods))
 			return;
 
-		let clearCache = pobPath !== this.pobPath && buildPath !== this.buildPath;
+		let clearCache = pobPath !== this.pobPath || buildPath !== this.buildPath;
 
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
