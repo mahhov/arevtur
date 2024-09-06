@@ -71,10 +71,12 @@ customElements.define(name, class Chart extends XElement {
 
 	set width(value) {
 		this.$('canvas').width = value;
+		this.draw();
 	}
 
 	set height(value) {
 		this.$('canvas').height = value;
+		this.draw();
 	}
 
 	set axisLabelX(value) {
