@@ -39,7 +39,7 @@ class ItemData {
 		}, []);
 
 		// affixes
-		// todo[blocking] need to consider fractured
+		// todo[high] need to consider fractured
 		let extendedExplicitMods = tradeApiItemData.item.extended.mods?.explicit || [];
 		this.affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
 			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));

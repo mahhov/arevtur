@@ -12,13 +12,13 @@ class BugReport {
 	static async fromDownload(path) {
 		let reportString = await fs.readFile(path)
 			.then(r => r.toString())
-			.catch(e => console.warn('BugReport, failed to read bugReport.json', e));
+			.catch(e => console.warn('BugReport, failed to read bugReport.json:', e));
 		if (!reportString) return null;
 		let data;
 		try {
 			data = JSON.parse(reportString);
 		} catch (e) {
-			console.error('BugReport, failed to parse bugReport.json', e);
+			console.error('BugReport, failed to parse bugReport.json:', e);
 			return null;
 		}
 		delete data?.local['input-session-id'];
@@ -35,11 +35,12 @@ class BugReport {
 				.catch(e => e),
 			logs: logging.logs,
 		});
+		// todo[medium] include version/os info
 	}
 
 	async toCurrentState() {
 		await fs.writeFile(appData.bugReportBuildPath, this.data.build)
-			.catch(e => console.error('BugReport, failed to write bugReportBuild.xml', e));
+			.catch(e => console.error('BugReport, failed to write bugReportBuild.xml:', e));
 		if (this.data?.config?.buildParams?.buildPath)
 			this.data.config.buildParams.buildPath = appData.bugReportBuildPath;
 		configForRenderer.config = this.data.config;
@@ -52,7 +53,7 @@ class BugReport {
 		let string = JSON.stringify(this.data, null, 2);
 		fs.writeFile(appData.bugReportPath, string)
 			.then(() => openPath(appData.bugReportPath, true))
-			.catch(e => console.error('BugReport, failed to write to bugReport.json', e));
+			.catch(e => console.error('BugReport, failed to write to bugReport.json:', e));
 	}
 }
 

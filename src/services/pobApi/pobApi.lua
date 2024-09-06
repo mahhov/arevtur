@@ -188,7 +188,7 @@ while true do
             includeCorrupted = args.includeCorrupted,
             includeEldritch = eldritchModSlots[slot.slotName] == true,
             includeTalisman = slot.slotName == 'Amulet',
-            -- todo[blocking] allow influence mods
+            -- todo[high] allow influence mods
             influence1 = 1,
             influence2 = 1,
             maxPrice = 1,

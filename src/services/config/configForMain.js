@@ -13,7 +13,7 @@ class ConfigForMain extends Emitter {
 		try {
 			deepMerge(this.config, require(appData.configPath));
 		} catch (e) {
-			console.warn('config loading', e);
+			console.warn('failed to load config:', e);
 			// for the first run, config.json won't exist
 		}
 		// Initialize userId for first run. Used for google analytics and for PoE trade API for the
