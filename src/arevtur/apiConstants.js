@@ -122,6 +122,11 @@ class ApiConstants {
 		return properties.find(property => property.id === id);
 	}
 
+	async propertiesByType(type) {
+		let properties = await this.properties;
+		return properties.filter(property => property.type === type);
+	}
+
 	// currencies
 
 	static async initCurrencies(league) {
