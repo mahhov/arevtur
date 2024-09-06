@@ -66,8 +66,10 @@ customElements.define(name, class extends XElement {
 			}
 		});
 
-		pobApi.addListener('not-ready', () =>
-			this.$('#loaded-pob-status').classList.add('invalid'));
+		pobApi.addListener('not-ready', () => {
+			this.$('#loaded-pob-status').classList.add('invalid');
+			this.$('#loaded-pob-status #queue-length').textContent = '';
+		});
 		pobApi.addListener('busy', queueLength => {
 			this.$('#loaded-pob-status').classList.remove('invalid');
 			this.$('#loaded-pob-status').classList.toggle('valid', !queueLength);

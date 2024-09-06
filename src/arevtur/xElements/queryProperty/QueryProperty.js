@@ -63,8 +63,6 @@ customElements.define(name, class extends XElement {
 		this.property ||= '';
 		this.weight ||= 0;
 		this.filter ||= 'weight';
-
-		pobApi.addListener('change', () => this.refreshBuild());
 	}
 
 	set type(value) {

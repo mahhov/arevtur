@@ -149,8 +149,7 @@ customElements.define(name, class extends XElement {
 
 	set type(value) {
 		this.$('#type-input').value = value;
-		this.$$('#query-properties-list x-query-property')
-			.forEach(queryProperty => queryProperty.type = this.type);
+		this.queryProperties.forEach(queryProperty => queryProperty.type = this.type);
 		this.refreshBuild();
 	}
 
@@ -231,6 +230,10 @@ customElements.define(name, class extends XElement {
 		this.$('#influence-input').valuesAsArray = value;
 	}
 
+	get queryProperties() {
+		return this.$$('#query-properties-list x-query-property');
+	}
+
 	addQueryProperty() {
 		let queryProperty = document.createElement('x-query-property');
 		queryProperty.type = this.type;
@@ -271,16 +274,15 @@ customElements.define(name, class extends XElement {
 	};
 
 	propagateLockedWeights() {
-		// todo[medium] locked isn't working
-		let queryProperties = this.$$('#query-properties-list x-query-property');
-		queryProperties.forEach((queryProperty, i, a) => {
+		// todo[low] locked isn't working
+		this.queryProperties.forEach((queryProperty, i, a) => {
 			if (queryProperty.locked && i < a.length)
 				a[i + 1].weight = queryProperty.weight;
 		});
 	}
 
 	checkProperties() {
-		let queryProperties = [...this.$$('#query-properties-list x-query-property')];
+		let queryProperties = [...this.queryProperties];
 
 		// check locked checkboxes
 		queryProperties.forEach(queryProperty =>
@@ -306,7 +308,7 @@ customElements.define(name, class extends XElement {
 
 	applySearch() {
 		let searcher = new Searcher(this.$('#search-input').value);
-		[...this.$('#query-properties-list').children].forEach(queryProperty => {
+		this.queryProperties.forEach(queryProperty => {
 			let match = this.$('#search-input').value && searcher.test(queryProperty.property);
 			queryProperty.classList.toggle('search-highlighted', match);
 		});
@@ -326,6 +328,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	refreshBuild() {
+		this.queryProperties.forEach(queryProperty => queryProperty.refreshBuild());
 		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
 			try {
 				this[buildValue] = 0;
