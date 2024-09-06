@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const {shell} = require('electron');
 const {configForRenderer} = require('../../../services/config/configForRenderer');
 const apiConstants = require('../../apiConstants');
 const TradeQuery = require('../../poeTradeApi');
@@ -143,9 +144,11 @@ customElements.define(name, class extends XElement {
 			if (e.key === 'r' && e.ctrlKey)
 				window.location.reload();
 		});
-		this.$('#submit-button')
-			.addEventListener('click', e => this.emit('submit', {add: e.ctrlKey}));
-		this.$('#cancel-button').addEventListener('click', e => this.emit('cancel'));
+		this.$('#search-button').addEventListener('click', e =>
+			this.emit('submit', {add: e.ctrlKey}));
+		this.$('#cancel-button').addEventListener('click', () => this.emit('cancel'));
+		this.$('#search-in-browser-button').addEventListener('click', async () =>
+			shell.openExternal((await this.finalizeTradeQuery())[0].toApiHtmlUrl));
 
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();

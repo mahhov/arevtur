@@ -95,7 +95,7 @@ customElements.define(name, class Tour extends XElement {
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
 				}, {
-					lines: ['4/6', 'You can further fine tune the query with these inputs.'],
+					lines: ['4/6', 'You can further tune the query with these inputs.'],
 					elementQueries: [
 						'#input-trade-params',
 					],
@@ -128,7 +128,7 @@ customElements.define(name, class Tour extends XElement {
 				}, {
 					lines: ['5/6', 'Submit your query.'],
 					elementQueries: [
-						'#submit-button',
+						'#search-button',
 					],
 					corner: {x: -1, y: -1},
 					align: {x: 1, y: -1},
