@@ -1,6 +1,6 @@
 {
   "name": "arevtur",
-  "version": "6.8.8",
+  "version": "6.8.9",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
