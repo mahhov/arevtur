@@ -720,6 +720,65 @@ Note: ~price 1 chaos
 
 
 
+Item Class: Stackable Currency
+Rarity: Currency
+River Rune
+--------
+Stack Size: 6/250
+--------
+All things flow. Stillness is an illusion.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+Shift click to unstack.
+
+Item Class: Stackable Currency
+Rarity: Currency
+Sun Rune
+--------
+Stack Size: 2/250
+--------
+The Sun, magnanimous on its throne, gifts
+heat and light to all those it surveys.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+Shift click to unstack.
+
+Item Class: Stackable Currency
+Rarity: Currency
+War Rune
+--------
+Stack Size: 6/250
+--------
+No energy in this world stands alone.
+There is always an opposite.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+Shift click to unstack.
+
+Item Class: Stackable Currency
+Rarity: Currency
+Bounty Rune
+--------
+Stack Size: 1/250
+--------
+Plenty is a matter of perspective.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+
+
+Item Class: Stackable Currency
+Rarity: Currency
+Life Rune
+--------
+Stack Size: 8/250
+--------
+All living things move and change in patterns
+that cannot be seen until they are gone.
+--------
+Can be used for Runesmithing Weapons at the Kingsmarch Blacksmith.
+Shift click to unstack.
+
+
 // TattooPricer
 
 

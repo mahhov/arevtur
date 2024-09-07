@@ -70,7 +70,7 @@ class Pricer {
 	async price(inputItem) {
 		if (!this.filter(inputItem))
 			return Promise.resolve([]);
-		console.log('Running', this.dataEndpointsByLeague[0](''));
+		console.log('Running', this.dataEndpointsByLeague[0](configForMain.config.league));
 		this.refreshData();
 
 		return (await Promise.all(this.dataArray))
