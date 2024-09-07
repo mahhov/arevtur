@@ -83,7 +83,7 @@ customElements.define(name, class Tour extends XElement {
 				}, {
 					lines: ['4/6', 'Use PoB magic to jump start your query.'],
 					elementQueries: [
-						'#build-import-for-type-button',
+						'#smart-build-import-for-type-button',
 					],
 					corner: {x: -1, y: 1},
 					align: {x: 1, y: 1},
@@ -101,16 +101,6 @@ customElements.define(name, class Tour extends XElement {
 					],
 					corner: {x: -1, y: -1},
 					align: {x: 1, y: -1},
-				}, {
-					lines: ['4/6', 'These buttons bulk modify the query stats.'],
-					elementQueries: [
-						'#drop-implicit-mods-button',
-						'#replace-resist-mods-button',
-						'#replace-attribute-mods-button',
-						'#enable-all-mods-button',
-					],
-					corner: {x: -1, y: 1},
-					align: {x: 1, y: 1},
 				}, {
 					lines: ['4/6', 'You can switch between saved queries with these tabs.'],
 					elementQueries: [
@@ -141,28 +131,28 @@ customElements.define(name, class Tour extends XElement {
 					align: {x: 1, y: 1},
 				}, {
 					lines: ['6/6',
-						'The weighted-sum value of this item; i.e. this is how pathofexile.com/trade would sort the items.'],
+						'The weighted-sum value of this item; this is how pathofexile.com/trade would sort the items.'],
 					elementQueries: [
 						'#weight-value',
 					],
-					corner: {x: -1, y: 1},
-					align: {x: 1, y: 1},
+					corner: {x: 1, y: 1},
+					align: {x: -1, y: 1},
 				}, {
 					lines: ['6/6',
-						'The build value of this item; i.e. this is how PoB would sort this item.'],
+						'The build value of this item; this is how PoB would sort the item.'],
 					elementQueries: [
-						'#build-value',
+						'.button-pane #build-value',
 					],
-					corner: {x: -1, y: 1},
-					align: {x: 1, y: 1},
+					corner: {x: 1, y: 1},
+					align: {x: -1, y: 1},
 				}, {
 					lines: ['6/6',
 						'The build value of this item after bench crafting the most valuable mod.'],
 					elementQueries: [
 						'#craft-value',
 					],
-					corner: {x: -1, y: 1},
-					align: {x: 1, y: 1},
+					corner: {x: 1, y: 1},
+					align: {x: -1, y: 1},
 				}, {
 					lines: ['6/6',
 						'Visualize the value v price tradeoff; items in near the top/left area are the best bang-for-your-buck.'],
@@ -226,6 +216,11 @@ customElements.define(name, class Tour extends XElement {
 	}
 
 	start() {
+		configForRenderer.config = {
+			viewHorizontal: true,
+			viewMaximize: false,
+			experimental: false,
+		};
 		this.classList.remove('hidden');
 		this.stepI = 0;
 		this.updateInterval = setInterval(() => this.update(), 50);
@@ -240,7 +235,6 @@ customElements.define(name, class Tour extends XElement {
 	update() {
 		if (this.stepI >= this.steps.length) {
 			configForRenderer.config = {tourComplete: true};
-			this.end();
 			return;
 		}
 

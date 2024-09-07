@@ -24,22 +24,20 @@ customElements.define(name, class extends XElement {
 });
 
 document.addEventListener('keydown', e => {
-	if (e.key === 'm' && e.ctrlKey)
+	if (e.key === 'm' && e.ctrlKey && configForRenderer.config.tourComplete)
 		toggle('viewMaximize');
-	if (e.key === 'h' && e.ctrlKey)
+	if (e.key === 'h' && e.ctrlKey && configForRenderer.config.tourComplete)
 		toggle('viewHorizontal');
 	if (e.key === 'd' && e.ctrlKey)
 		toggle('darkTheme');
-	if (e.key === 'e' && e.ctrlKey)
+	if (e.key === 'e' && e.ctrlKey && configForRenderer.config.tourComplete)
 		toggle('experimental');
 });
 
 configForRenderer.addListener('change', config => {
-	document.documentElement.classList.toggle('maximize',
-		config.viewMaximize && config.tourComplete);
+	document.documentElement.classList.toggle('maximize', config.viewMaximize);
 	document.documentElement.classList.toggle('horizontal',
-		config.viewHorizontal && !config.viewMaximize && config.tourComplete);
+		config.viewHorizontal && !config.viewMaximize);
 	document.documentElement.classList.toggle('dark', config.darkTheme);
-	document.documentElement.classList.toggle('experimental',
-		config.experimental && config.tourComplete);
+	document.documentElement.classList.toggle('experimental', config.experimental);
 });
