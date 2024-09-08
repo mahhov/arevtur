@@ -129,12 +129,8 @@ progress::-webkit-progress-value {
 
 /* state based */
 
-.maximize-shown {
-	display: var(--maximize-shown-display);
-}
-
 .maximized-hidden {
-	display: var(--maximize-hidden-display);
+	display: var(--maximize-hidden-display) !important;
 }
 
 .experimental {

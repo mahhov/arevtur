@@ -83,17 +83,7 @@
 	--colored-text-background-pink: oklch(.35 .1 340);
 }
 
-:root:not(.maximize) {
-	--maximize-shown-display: none !important;
-	--maximize-hidden-display: '';
-}
-
-:root.maximize {
-	--maximize-shown-display: '';
-	--maximize-hidden-display: none !important;
-}
-
-/* todo[medium] this removes 'display:block' from 'div.experimental' elements. Possibly likewise for .maximize elements */
+/* todo[medium] this removes 'display:block' from 'div.experimental' elements. */
 :root:not(.experimental) {
-	--experimental-display: none !important;
+	--experimental-display: none;
 }
