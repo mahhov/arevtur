@@ -114,6 +114,8 @@ while true do
         loadExtraMods(args.extraMods)
         local item = new('Item', emplaceNewLines(args.text))
         if item.base then
+            item:NormaliseQuality()
+            item:BuildAndParseRaw()
             local tooltip = FakeTooltip:new()
             build.itemsTab:AddItemTooltip(tooltip, item)
             respond(tooltip.text)
