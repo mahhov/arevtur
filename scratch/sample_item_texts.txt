@@ -1248,6 +1248,32 @@ Right click to drink. Can only hold charges while in belt. Refills as you kill m
 // unique jewel
 
 
+Item Class: Abyss Jewels
+Rarity: Unique
+Tecrod's Gaze
+Murderous Eye Jewel
+--------
+Abyss
+--------
+Requirements:
+Level: 40
+--------
+Item Level: 85
+--------
++13 to Strength
+40% increased Main Hand Critical Strike Chance per
+Murderous Eye Jewel affecting you, up to a maximum of 200%
++20% to Off Hand Critical Strike Multiplier per
+Murderous Eye Jewel affecting you, up to a maximum of +100%
+--------
+The Hated Slave seeks dominion over his own kind.
+--------
+Place into an Abyssal Socket on an Item or into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+--------
+Note: ~price 9 chaos
+
+
+
 Item Class: Jewels
 Rarity: Unique
 Megalomaniac

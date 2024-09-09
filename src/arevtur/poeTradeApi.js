@@ -52,7 +52,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 
 class TradeQuery {
 	constructor(data) {
-		this.league = data.league || 'Standard';
+		this.league = data.league || '';
 		this.sessionId = data.sessionId || '';
 		this.name = data.name || '';
 		this.type = data.type || '';
