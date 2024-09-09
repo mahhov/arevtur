@@ -4,7 +4,7 @@ class RateLimitedRetryQueue {
 	constructor(delay = 1000, retries = [1000, 2000, 6000]) {
 		this.delay = delay;
 		this.retries = retries;
-		this.lastTime = Date.now();
+		this.lastTime = performance.now()();
 		this.queue = [];
 		this.active = false;
 	}
@@ -17,18 +17,18 @@ class RateLimitedRetryQueue {
 	}
 
 	async next() {
-		await sleep(this.delay - Date.now() + this.lastTime);
+		await sleep(this.delay - performance.now()() + this.lastTime);
 		let [handler, resolve, reject] = this.queue.shift();
 		for (let retry of this.retries)
 			try {
-				this.lastTime = Date.now();
+				this.lastTime = performance.now()();
 				return resolve(await handler());
 			} catch (e) {
 				console.warn('RateLimitedRetryQueue failed', e, '. Will retry in ', retry);
 				await sleep(retry);
 			}
 		try {
-			this.lastTime = Date.now();
+			this.lastTime = performance.now()();
 			resolve(await handler());
 		} catch (e) {
 			reject(e);
