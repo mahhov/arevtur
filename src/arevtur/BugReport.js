@@ -4,7 +4,6 @@ const logging = require('../services/logging');
 const appData = require('../services/appData');
 const {openPath} = require('../util/util');
 const os = require('os');
-const {app} = require('electron');
 
 class BugReport {
 	constructor(data) {
@@ -31,7 +30,8 @@ class BugReport {
 	static async fromCurrentState() {
 		return new BugReport({
 			os: os.platform(),
-			version: app.getVersion(),
+			// todo[low] electron.app is not available in renderer context
+			// version: app.getVersion(),
 			config: configForRenderer.config,
 			local: {...localStorage, 'input-session-id': 'redacted'},
 			build: await fs.readFile(configForRenderer.config.buildParams.buildPath)
@@ -64,7 +64,7 @@ let activeBugReportString = sessionStorage.getItem('activeBugReport');
 if (activeBugReportString) {
 	let activeBugReport = JSON.parse(activeBugReportString);
 	console.log('BugReport os:', activeBugReport.os);
-	console.log('BugReport version:', activeBugReport.version);
+	// console.log('BugReport version:', activeBugReport.version);
 	console.log('BugReport logs:', activeBugReport.logs);
 	sessionStorage.removeItem('activeBugReport');
 }
