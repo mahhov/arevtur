@@ -18,6 +18,11 @@
       "dex": 0,
       "int": 0
     },
+    "options": {
+      "includeEldritch": false,
+      "includeInfluence": false,
+      "includeTalisman": false
+    },
     "extraMods": {
       "ignoreEs": true,
       "equalElementalResists": true,

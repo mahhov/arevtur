@@ -189,9 +189,8 @@ while true do
         }
         local options = {
             includeCorrupted = args.includeCorrupted,
-            includeEldritch = eldritchModSlots[slot.slotName] == true,
-            includeTalisman = slot.slotName == 'Amulet',
-            -- todo[high] allow influence mods
+            includeEldritch = eldritchModSlots[slot.slotName] == true and args.options.includeEldritch,
+            includeTalisman = slot.slotName == 'Amulet' and args.options.includeTalisman,
             influence1 = 1,
             influence2 = 1,
             maxPrice = 1,
@@ -200,9 +199,15 @@ while true do
         }
         respond('Slot ' .. slot.slotName .. ', Options ' .. dkjson.encode(options), true)
         tradeQueryGenerator:StartQuery(slot, options)
+
+        if args.options.includeInfluence then
+            for _, influence in pairs(itemLib.influenceInfo) do
+                tradeQueryGenerator.calcContext.testItem[influence.key] = true
+            end
+        end
+
         tradeQueryGenerator:OnFrame()
         -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot
-        -- todo[medium] allow picking mod sets, e.g. talisman, corrupted, influence, eldritch
         -- todo[low] json params
         -- todo[low] make sure these all work for characters with empty slots
 

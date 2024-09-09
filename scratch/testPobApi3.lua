@@ -98,91 +98,94 @@ data.readLUT = function()
     return {}
 end
 
+for _, y in pairs(itemLib.influenceInfo) do
+    respond(y.key)
+end
 
-local item7 = [[
-    Item Class: Claws
-    Rarity: Normal
-    Superior Gemini Claw
-    --------
-    Claw
-    Quality: +7% (augmented)
-    Physical Damage: 25-73 (augmented)
-    Critical Strike Chance: 7.50%
-    Attacks per Second: 1.50
-    Weapon Range: 1.1 metres
-    --------
-    Requirements:
-    Level: 72
-    Dex: 121
-    Int: 121
-    --------
-    Sockets: G G R
-    --------
-    Item Level: 83
-    --------
-    Grants 38 Life per Enemy Hit (implicit)
-    Grants 14 Mana per Enemy Hit (implicit)
-]]
-
-local item16 = [[
-    Item Class: Claws
-    Rarity: Normal
-    Superior Gemini Claw
-    --------
-    Claw
-    Quality: +16% (augmented)
-    Physical Damage: 27-79 (augmented)
-    Critical Strike Chance: 7.50%
-    Attacks per Second: 1.50
-    Weapon Range: 1.1 metres
-    --------
-    Requirements:
-    Level: 72
-    Dex: 121
-    Int: 121
-    --------
-    Sockets: B G
-    --------
-    Item Level: 87
-    --------
-    Grants 38 Life per Enemy Hit (implicit)
-    Grants 14 Mana per Enemy Hit (implicit)
-]]
-
-local item0 = [[
-    Item Class: Claws
-    Rarity: Normal
-    Gemini Claw
-    --------
-    Claw
-    Physical Damage: 23-68
-    Critical Strike Chance: 7.50%
-    Attacks per Second: 1.50
-    Weapon Range: 1.1 metres
-    --------
-    Requirements:
-    Level: 72
-    Dex: 121
-    Int: 121
-    --------
-    Sockets: G-G
-    --------
-    Item Level: 86
-    --------
-    Grants 38 Life per Enemy Hit (implicit)
-    Grants 14 Mana per Enemy Hit (implicit)
-
-]]
-
-
-item = new('Item', item0)
-respond(not item.quality and 't' or 'f')
-item:NormaliseQuality()
-item:BuildAndParseRaw()
-
-local tooltip = FakeTooltip:new()
-build.itemsTab:AddItemTooltip(tooltip, item)
-respond(tooltip.text)
+--local item7 = [[
+--    Item Class: Claws
+--    Rarity: Normal
+--    Superior Gemini Claw
+--    --------
+--    Claw
+--    Quality: +7% (augmented)
+--    Physical Damage: 25-73 (augmented)
+--    Critical Strike Chance: 7.50%
+--    Attacks per Second: 1.50
+--    Weapon Range: 1.1 metres
+--    --------
+--    Requirements:
+--    Level: 72
+--    Dex: 121
+--    Int: 121
+--    --------
+--    Sockets: G G R
+--    --------
+--    Item Level: 83
+--    --------
+--    Grants 38 Life per Enemy Hit (implicit)
+--    Grants 14 Mana per Enemy Hit (implicit)
+--]]
+--
+--local item16 = [[
+--    Item Class: Claws
+--    Rarity: Normal
+--    Superior Gemini Claw
+--    --------
+--    Claw
+--    Quality: +16% (augmented)
+--    Physical Damage: 27-79 (augmented)
+--    Critical Strike Chance: 7.50%
+--    Attacks per Second: 1.50
+--    Weapon Range: 1.1 metres
+--    --------
+--    Requirements:
+--    Level: 72
+--    Dex: 121
+--    Int: 121
+--    --------
+--    Sockets: B G
+--    --------
+--    Item Level: 87
+--    --------
+--    Grants 38 Life per Enemy Hit (implicit)
+--    Grants 14 Mana per Enemy Hit (implicit)
+--]]
+--
+--local item0 = [[
+--    Item Class: Claws
+--    Rarity: Normal
+--    Gemini Claw
+--    --------
+--    Claw
+--    Physical Damage: 23-68
+--    Critical Strike Chance: 7.50%
+--    Attacks per Second: 1.50
+--    Weapon Range: 1.1 metres
+--    --------
+--    Requirements:
+--    Level: 72
+--    Dex: 121
+--    Int: 121
+--    --------
+--    Sockets: G-G
+--    --------
+--    Item Level: 86
+--    --------
+--    Grants 38 Life per Enemy Hit (implicit)
+--    Grants 14 Mana per Enemy Hit (implicit)
+--
+--]]
+--
+--
+--item = new('Item', item0)
+--respond(not item.quality and 't' or 'f')
+--item:NormaliseQuality()
+--item:BuildAndParseRaw()
+--
+--local tooltip = FakeTooltip:new()
+--build.itemsTab:AddItemTooltip(tooltip, item)
+--respond(tooltip.text)
 
 -- 47.6   51.7
 

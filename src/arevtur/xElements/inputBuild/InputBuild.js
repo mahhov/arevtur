@@ -27,6 +27,9 @@ customElements.define(name, class extends XElement {
 			this.$('#attribute-str-weight'),
 			this.$('#attribute-dex-weight'),
 			this.$('#attribute-int-weight'),
+			this.$('#include-eldritch-check'),
+			this.$('#include-influence-check'),
+			this.$('#include-talisman-check'),
 			this.$('#ignore-es-check'),
 			this.$('#equal-elemental-resists-check'),
 			this.$('#equal-chaos-resist-check'),
@@ -47,6 +50,9 @@ customElements.define(name, class extends XElement {
 		this.$('#attribute-str-weight').value = buildParams.weights.str;
 		this.$('#attribute-dex-weight').value = buildParams.weights.dex;
 		this.$('#attribute-int-weight').value = buildParams.weights.int;
+		this.$('#include-eldritch-check').value = buildParams.options.includeInfluence;
+		this.$('#include-influence-check').value = buildParams.options.includeInfluence;
+		this.$('#include-talisman-check').value = buildParams.options.includeTalisman;
 		this.$('#ignore-es-check').checked = buildParams.extraMods.ignoreEs;
 		this.$('#equal-elemental-resists-check').checked =
 			buildParams.extraMods.equalElementalResists;
@@ -68,11 +74,15 @@ customElements.define(name, class extends XElement {
 					dex: Number(this.$('#attribute-dex-weight').value) || 0,
 					int: Number(this.$('#attribute-int-weight').value) || 0,
 				},
+				options: {
+					includeEldritch: this.$('#include-eldritch-check').checked,
+					includeInfluence: this.$('#include-influence-check').checked,
+					includeTalisman: this.$('#include-talisman-check').checked,
+				},
 				extraMods: {
-					ignoreEs: Number(this.$('#ignore-es-check').checked) || false,
-					equalElementalResists: Number(
-						this.$('#equal-elemental-resists-check').checked) || false,
-					equalChaosResist: Number(this.$('#equal-chaos-resist-check').checked) || false,
+					ignoreEs: this.$('#ignore-es-check').checked,
+					equalElementalResists: this.$('#equal-elemental-resists-check').checked,
+					equalChaosResist: this.$('#equal-chaos-resist-check').checked,
 				},
 			},
 		};

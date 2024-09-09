@@ -67,20 +67,9 @@ class PobApi extends Emitter {
 		super();
 		this.pobPath = '';
 		this.buildPath = '';
-		this.weights = {
-			life: 0,
-			elementalResist: 0,
-			chaosResist: 0,
-			damage: 0,
-			str: 0,
-			dex: 0,
-			int: 0,
-		};
-		this.extraMods = {
-			ignoreEs: false,
-			equalElementalResists: false,
-			equalChaosResist: false,
-		};
+		this.weights = {};
+		this.options = {};
+		this.extraMods = {};
 		this.cache = {};
 		this.script = null;
 	}
@@ -89,10 +78,12 @@ class PobApi extends Emitter {
 		          pobPath = this.pobPath,
 		          buildPath = this.buildPath,
 		          weights = this.weights,
+		          options = this.options,
 		          extraMods = this.extraMods,
 	          } = {}) {
 		if (pobPath === this.pobPath && buildPath === this.buildPath &&
 			deepEquality(weights, this.weights) &&
+			deepEquality(options, this.options) &&
 			deepEquality(extraMods, this.extraMods))
 			return;
 
@@ -101,6 +92,7 @@ class PobApi extends Emitter {
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
 		this.weights = weights;
+		this.options = options;
 		this.extraMods = extraMods;
 
 		// restart to cancel pending requests
@@ -210,6 +202,7 @@ class PobApi extends Emitter {
 			type: pobType,
 			includeCorrupted,
 			weights: this.weights,
+			options: this.options,
 			extraMods: this.extraModStrings,
 		}).then(JSON.parse);
 	}
