@@ -28,7 +28,7 @@ body {
 	background: var(--valid-back);
 }
 
-.invalid, :invalid {
+.invalid, input:not([type=number]):invalid {
 	color: var(--invalid-primary);
 	border-color: var(--invalid-primary);
 	background: var(--invalid-back);
