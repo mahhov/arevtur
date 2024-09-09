@@ -20,7 +20,6 @@ customElements.define(name, class Chart extends XElement {
 			this.dragged = false;
 			if (!e.ctrlKey)
 				this.mouseDown = {x: e.offsetX, y: e.offsetY};
-			e.preventDefault(); // todo[low] is this needed
 		});
 		this.$('canvas').addEventListener('mousemove', e => {
 			this.emit('hover', this.pixelToCoord(e.offsetX, e.offsetY));
