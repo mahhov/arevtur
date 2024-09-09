@@ -1,5 +1,5 @@
 const {ipcRenderer: ipc, shell} = require('electron');
-const {configForRenderer} = require('../services/config/configForRenderer');
+const configForRenderer = require('../services/config/configForRenderer');
 const appData = require('../services/appData');
 const {openPath} = require('../util/util');
 

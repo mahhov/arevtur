@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
 const appData = require('../../../services/appData');
-const {configForRenderer} = require('../../../services/config/configForRenderer');
+const configForRenderer = require('../../../services/config/configForRenderer');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {

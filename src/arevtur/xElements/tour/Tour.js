@@ -1,5 +1,5 @@
 const {XElement, importUtil} = require('xx-element');
-const {configForRenderer} = require('../../../services/config/configForRenderer');
+const configForRenderer = require('../../../services/config/configForRenderer');
 const {template, name} = importUtil(__filename);
 
 let deepQuery = (selector, el = document) => {

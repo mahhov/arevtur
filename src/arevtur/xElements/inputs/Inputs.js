@@ -1,7 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {shell} = require('electron');
-const {configForRenderer} = require('../../../services/config/configForRenderer');
+const configForRenderer = require('../../../services/config/configForRenderer');
 const apiConstants = require('../../apiConstants');
 const TradeQuery = require('../../poeTradeApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');

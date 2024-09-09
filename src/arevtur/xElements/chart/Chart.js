@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const {configForRenderer} = require('../../../services/config/configForRenderer');
+const configForRenderer = require('../../../services/config/configForRenderer');
 
 customElements.define(name, class Chart extends XElement {
 	static get attributeTypes() {

@@ -1,4 +1,4 @@
-const {configForRenderer} = require('../services/config/configForRenderer');
+const configForRenderer = require('../services/config/configForRenderer');
 const {promises: fs} = require('fs');
 const logging = require('../services/logging');
 const appData = require('../services/appData');
