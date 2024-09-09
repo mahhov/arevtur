@@ -208,7 +208,6 @@ while true do
 
         tradeQueryGenerator:OnFrame()
         -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot
-        -- todo[low] json params
         -- todo[low] make sure these all work for characters with empty slots
 
     elseif args.cmd == 'getCraftedMods' then
