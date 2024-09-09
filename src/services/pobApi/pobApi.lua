@@ -74,6 +74,7 @@ function loadExtraMods(mods)
         return
     end
 
+    respond('loading extra mods: ', itemText, true)
     build.itemsTab:AddItem(item)
     build.buildFlag = true
     build:OnFrame({})
@@ -149,10 +150,10 @@ while true do
 
         tradeQuery.statSortSelectionList = {
             { stat = 'TotalEHP', weightMult = tonumber(args.weights.life) },
-            { stat = 'ChaosResistTotal', weightMult = tonumber(args.weights.resist) },
-            { stat = 'LightningResistTotal', weightMult = tonumber(args.weights.resist) },
-            { stat = 'ColdResistTotal', weightMult = tonumber(args.weights.resist) },
-            { stat = 'FireResistTotal', weightMult = tonumber(args.weights.resist) },
+            { stat = 'LightningResistTotal', weightMult = tonumber(args.weights.elementalResist) },
+            { stat = 'ColdResistTotal', weightMult = tonumber(args.weights.elementalResist) },
+            { stat = 'FireResistTotal', weightMult = tonumber(args.weights.elementalResist) },
+            { stat = 'ChaosResistTotal', weightMult = tonumber(args.weights.chaosResist) },
             { stat = 'FullDPS', weightMult = tonumber(args.weights.damage) },
             { stat = 'Str', weightMult = tonumber(args.weights.str) },
             { stat = 'Dex', weightMult = tonumber(args.weights.dex) },

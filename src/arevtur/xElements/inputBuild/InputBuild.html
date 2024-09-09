@@ -18,7 +18,7 @@
 		background-color: var(--colored-text-background-blue)
 	}
 
-	#resist-weight::part(input) {
+	:is(#elemental-resist-weight, #chaos-resist-weight)::part(input) {
 		background-color: var(--colored-text-background-orange)
 	}
 
@@ -38,40 +38,54 @@
 	               placeholder="Select PoB Build"></x-path-select>
 	<button id="refresh">Refresh Build</button>
 	<div class="tour-pob-configs">
-		<label title="Weight for Effective Hit Pool">
-			Life
-			<x-numeric-input id="life-weight" min="0" max="1" step=".05"></x-numeric-input>
-		</label>
-		<label title="Weight for total resists, including over-cap resists">
-			Resist
-			<x-numeric-input id="resist-weight" min="0" max="1" step=".05"></x-numeric-input>
-		</label>
-		<label title="Weight for Full DPS">
-			Damage
-			<x-numeric-input id="damage-weight" min="0" max="1" step=".05"></x-numeric-input>
-		</label>
-		<label title="Weight for total strength">
-			Str
-			<x-numeric-input id="attribute-str-weight" class="attribute-weight"
-			                 min="0" max="1" step=".05"></x-numeric-input>
-		</label>
-		<label title="Weight for total dexterity">
-			Dex
-			<x-numeric-input id="attribute-dex-weight" class="attribute-weight"
-			                 min="0" max="1" step=".05"></x-numeric-input>
-		</label>
-		<label title="Weight for total intelligence">
-			Int
-			<x-numeric-input id="attribute-int-weight" class="attribute-weight"
-			                 min="0" max="1" step=".05"></x-numeric-input>
-		</label>
-		<label title="Exclude ES from Effective Hit Pool">
-			Ignore ES
-			<input id="ignore-es-check" type="checkbox">
-		</label>
-		<label title="Exclude resists from Effective Hit pool">
-			Equal resists
-			<input id="equal-resists-check" type="checkbox">
-		</label>
+		<div>
+			<label title="Weight for Effective Hit Pool">
+				Life
+				<x-numeric-input id="life-weight" min="0" max="1" step=".05"></x-numeric-input>
+			</label>
+			<label title="Weight for elemental resists, including over-cap resists">
+				Elemental Resist
+				<x-numeric-input id="elemental-resist-weight" min="0" max="1"
+				                 step=".05"></x-numeric-input>
+			</label>
+			<label title="Weight for chaos resist, including over-cap resist">
+				Chaos Resist
+				<x-numeric-input id="chaos-resist-weight" min="0" max="1"
+				                 step=".05"></x-numeric-input>
+			</label>
+			<label title="Weight for Full DPS">
+				Damage
+				<x-numeric-input id="damage-weight" min="0" max="1" step=".05"></x-numeric-input>
+			</label>
+			<label title="Weight for total strength">
+				Str
+				<x-numeric-input id="attribute-str-weight" class="attribute-weight"
+				                 min="0" max="1" step=".05"></x-numeric-input>
+			</label>
+			<label title="Weight for total dexterity">
+				Dex
+				<x-numeric-input id="attribute-dex-weight" class="attribute-weight"
+				                 min="0" max="1" step=".05"></x-numeric-input>
+			</label>
+			<label title="Weight for total intelligence">
+				Int
+				<x-numeric-input id="attribute-int-weight" class="attribute-weight"
+				                 min="0" max="1" step=".05"></x-numeric-input>
+			</label>
+		</div>
+		<div>
+			<label title="Exclude ES from Effective Hit Pool">
+				Ignore ES
+				<input id="ignore-es-check" type="checkbox">
+			</label>
+			<label title="Exclude elemental resists from Effective Hit pool. The resist weight will still apply.">
+				Equal elemental resists
+				<input id="equal-elemental-resists-check" type="checkbox">
+			</label>
+			<label title="Exclude chaos resist from Effective Hit pool. The resist weight will still apply.">
+				Equal chaos resists
+				<input id="equal-chaos-resist-check" type="checkbox">
+			</label>
+		</div>
 	</div>
 </span>

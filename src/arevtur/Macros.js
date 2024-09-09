@@ -24,9 +24,18 @@ class Macros {
 			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
 				!searcher.test(
 					(await apiConstants.propertyById(propertyId))?.originalText));
-			if (pobApi.weights.resist)
+			if (pobApi.weights.elementalResist)
 				unifiedQueryParams.weightEntries.unshift(
-					['pseudo.pseudo_total_resistance', pobApi.weights.resist, false, false]);
+					['pseudo.pseudo_total_all_elemental_resistances',
+						pobApi.weights.elementalResist,
+						false,
+						false]);
+			if (pobApi.weights.chaosResist)
+				unifiedQueryParams.weightEntries.unshift(
+					['pseudo.pseudo_total_chaos_resistance',
+						pobApi.weights.chaosResist,
+						false,
+						false]);
 			return unifiedQueryParams;
 		},
 

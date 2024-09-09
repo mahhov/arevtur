@@ -69,7 +69,8 @@ class PobApi extends Emitter {
 		this.buildPath = '';
 		this.weights = {
 			life: 0,
-			resist: 0,
+			elementalResist: 0,
+			chaosResist: 0,
 			damage: 0,
 			str: 0,
 			dex: 0,
@@ -77,7 +78,8 @@ class PobApi extends Emitter {
 		};
 		this.extraMods = {
 			ignoreEs: false,
-			equalResists: false,
+			equalElementalResists: false,
+			equalChaosResist: false,
 		};
 		this.cache = {};
 		this.script = null;
@@ -222,7 +224,8 @@ class PobApi extends Emitter {
 	get extraModStrings() {
 		return [
 			this.extraMods.ignoreEs ? 'maximum energy shield is 0' : '',
-			this.extraMods.equalResists ? '+1000% to all resistances' : '',
+			this.extraMods.equalElementalResists ? '+1000% to all elemental resistances' : '',
+			this.extraMods.equalChaosResist ? '+1000% to chaos resistance' : '',
 		].filter(v => v).join(' \\n ');
 	}
 
@@ -231,7 +234,8 @@ class PobApi extends Emitter {
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
 		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
-		let anyDiffResistRegex = /([+-]\d+)% (?:fire|lightning|cold|chaos) res(?:\.|istance)/i;
+		let elementalResistRegex = /([+-]\d+)% (?:fire|lightning|cold) res(?:\.|istance)/i;
+		let chaosResistRegex = /([+-]\d+)% chaos res(?:\.|istance)/i;
 		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
 		let strRegex = /([+-]\d+) strength/i;
 		let dexRegex = /([+-]\d+) dexterity/i;
@@ -246,16 +250,18 @@ class PobApi extends Emitter {
 			let equippingText = diffText.match(/equipping this item.*/i)?.[0] || '';
 			let equippingIndex = Number(equippingText.match(/\d+/)?.[0]) || 1;
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
-			let totalResist = diffText
-				.match(new RegExp(anyDiffResistRegex, 'gi'))
-				?.reduce((sum, m) => sum + Number(m.match(anyDiffResistRegex)[1]), 0) || 0;
+			let elementalResist = diffText
+				.match(new RegExp(elementalResistRegex, 'gi'))
+				?.reduce((sum, m) => sum + Number(m.match(elementalResistRegex)[1]), 0) || 0;
+			let chaosResist = Number(diffText.match(chaosResistRegex)?.[1]) || 0;
 			let fullDps = Number(diffText.match(fullDpsRegex)?.[1]) || 0;
 			let str = Number(diffText.match(strRegex)?.[1]) || 0;
 			let dex = Number(diffText.match(dexRegex)?.[1]) || 0;
 			let int = Number(diffText.match(intRegex)?.[1]) || 0;
 			let unscaledValue =
 				effectiveHitPool * this.weights.life +
-				totalResist * this.weights.resist +
+				elementalResist * this.weights.elementalResist +
+				chaosResist * this.weights.chaosResist +
 				fullDps * this.weights.damage +
 				str * this.weights.str +
 				dex * this.weights.dex +
@@ -265,7 +271,8 @@ class PobApi extends Emitter {
 				equippingText,
 				equippingIndex,
 				effectiveHitPool,
-				totalResist,
+				elementalResist,
+				chaosResist,
 				str,
 				dex,
 				int,
@@ -284,8 +291,10 @@ class PobApi extends Emitter {
 			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
 			this.weights.life && diff.effectiveHitPool ?
 				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
-			this.weights.resist && diff.totalResist ?
-				`@bold,orange Total Resist ${diff.totalResist}` : '',
+			this.weights.elementalResist && diff.elementalResist ?
+				`@bold,orange Elemental Resist ${diff.elementalResist}` : '',
+			this.weights.chaosResist && diff.chaosResist ?
+				`@bold,orange Chaos Resist ${diff.chaosResist}` : '',
 			this.weights.damage && diff.fullDps ?
 				`@bold,red Full DPS ${diff.fullDps}%` : '',
 			this.weights.str && diff.str ?
@@ -303,7 +312,9 @@ class PobApi extends Emitter {
 					return `@bold,blue ${itemTextLine}`;
 				if (itemTextLine.match(anyItemResistRegex))
 					return `@bold,orange ${itemTextLine}`;
-				if (itemTextLine.match(anyDiffResistRegex))
+				if (itemTextLine.match(elementalResistRegex))
+					return `@bold,orange ${itemTextLine}`;
+				if (itemTextLine.match(chaosResistRegex))
 					return `@bold,orange ${itemTextLine}`;
 				if (itemTextLine.match(fullDpsRegex))
 					return `@bold,red ${itemTextLine}`;
