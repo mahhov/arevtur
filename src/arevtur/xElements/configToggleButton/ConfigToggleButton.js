@@ -34,6 +34,11 @@ document.addEventListener('keydown', e => {
 		toggle('experimental');
 });
 
+document.addEventListener('mousedown', e => {
+	if ((e.button === 3 || e.button === 4) && configForRenderer.config.tourComplete)
+		toggle('viewMaximize');
+});
+
 configForRenderer.addListener('change', config => {
 	document.documentElement.classList.toggle('maximize', config.viewMaximize);
 	document.documentElement.classList.toggle('horizontal',
