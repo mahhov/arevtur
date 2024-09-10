@@ -83,7 +83,7 @@ customElements.define(name, class extends XElement {
 			let apiQueryParams =
 				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
 			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
-			this.importInputSet(unifiedQueryParams);
+			this.addInputSet(`imported from URL ${timestamp()}`, unifiedQueryParams);
 		});
 
 		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
@@ -108,7 +108,7 @@ customElements.define(name, class extends XElement {
 				.map(propertyText => apiConstants.propertyTextToId(propertyText)));
 
 			let unifiedQueryParams = UnifiedQueryParams.fromPropertyIds(typeId, matchedPropertyIds);
-			this.importInputSet(unifiedQueryParams);
+			this.addInputSet(`imported from text ${timestamp()}`, unifiedQueryParams);
 		});
 
 		this.$('#input-set-list').addEventListener('arrange', e => {
@@ -123,6 +123,9 @@ customElements.define(name, class extends XElement {
 			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
 			this.store();
 		});
+		this.$('#duplicate-input-set-button').addEventListener('click', e =>
+			this.addInputSet(`${this.inputSets[this.inputSetIndex].name} (copy)`,
+				this.inputSets[this.inputSetIndex].unifiedQueryParams));
 		this.$('#clear-all-input-sets-button').addEventListener('click', e => {
 			this.clearChildren('#input-set-list');
 			this.inputSets = [{name: timestamp()}];
@@ -184,13 +187,12 @@ customElements.define(name, class extends XElement {
 		);
 	}
 
-	importInputSet(unifiedQueryParams) {
-		this.inputSets.push(
-			{
-				name: `imported ${timestamp()}`,
-				active: false,
-				unifiedQueryParams,
-			});
+	addInputSet(name, unifiedQueryParams) {
+		this.inputSets.push({
+			name,
+			active: false,
+			unifiedQueryParams,
+		});
 		this.addInputSetEl();
 		this.setInputSetIndex(this.inputSets.length - 1);
 		this.store();
