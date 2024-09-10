@@ -211,7 +211,7 @@ customElements.define(name, class Chart extends XElement {
 		let offset = this.tooltip_.offset;
 		this.tooltip_.points.forEach(p => {
 			let {x, y} = this.coordToPixel(p);
-			this.ctx.fillText(`(${round(x, 0)}, ${round(y, 0)})`, x + offset, y - offset);
+			this.ctx.fillText(`(${round(p.x, 0)}, ${round(p.y, 1)})`, x + offset, y - offset);
 		});
 	}
 
