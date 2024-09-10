@@ -1,15 +1,10 @@
 const poeNinjaApi = require('../services/poeNinjaApi');
 const configForMain = require('../services/config/configForMain');
 const Filter = require('./Filter');
-
-// todo[medium] dedupe the multiple round util functions
-const round = (number, decimals = 2) => {
-	let factor = Math.pow(10, decimals);
-	return Math.round(number * factor) / factor;
-};
+const {round} = require('../util/util');
 
 const price = (number, invert) => Number.isNaN(number) ? '?' :
-	`${round(invert ? 1 / number : number)}${invert ? '/c' : 'c'}`;
+	`${round(invert ? 1 / number : number, 2)}${invert ? '/c' : 'c'}`;
 
 class TextItem {
 	constructor(text) {

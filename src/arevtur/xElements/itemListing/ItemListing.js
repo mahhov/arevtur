@@ -1,11 +1,10 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const TradeQuery = require('../../poeTradeApi');
+const {round} = require('../../../util/util');
 
 const now = new Date();
 const msInHour = 1000 * 60 * 60;
-
-const round = n => Math.round(n * 10) / 10;
 
 const listTuples = [
 	['#influence-list', 'influences'],
@@ -79,11 +78,11 @@ customElements.define(name, class extends XElement {
 		this.$('#defense-value-text').textContent = itemData.weightedValueDetails.defenses;
 		this.$('#weight-value-text').textContent = itemData.weightedValueDetails.mods;
 
-		this.$('#weight-value').text = `Weighted: ${round(itemData.weightedValue)}`;
+		this.$('#weight-value').text = `Weighted: ${round(itemData.weightedValue, 1)}`;
 		let expandedValues = Object.entries(itemData.weightedValueDetails)
 			.filter(([_, value]) => value);
 		this.$('#weight-value').tooltip = expandedValues.length > 1 ?
-			expandedValues.map(([name, value]) => `${round(value)} ${name}`).join(' + ') : '';
+			expandedValues.map(([name, value]) => `${round(value, 1)} ${name}`).join(' + ') : '';
 		itemData.buildValuePromise.then(buildValue => {
 			this.$('#build-value').text = `Build: ${buildValue.value}`;
 			this.$('#build-value').tooltip = buildValue.text;
@@ -93,9 +92,9 @@ customElements.define(name, class extends XElement {
 			this.$('#craft-value').tooltip = craftValue.text;
 		});
 
-		this.$('#price').text = `${round(itemData.price)} chaos`;
+		this.$('#price').text = `${round(itemData.price, 1)} chaos`;
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
-			.map(([name, value]) => ` + ${name} (${round(value)} chaos)`);
+			.map(([name, value]) => ` + ${name} (${round(value, 1)} chaos)`);
 		this.$('#price').tooltip =
 			itemData.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
 				`${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join(
@@ -103,8 +102,9 @@ customElements.define(name, class extends XElement {
 		this.$('#account-text').textContent = itemData.accountText;
 		this.$('#account-text').title = itemData.accountText;
 		let dateDiff = (now - new Date(itemData.date)) / msInHour;
-		this.$('#date-text').textContent =
-			dateDiff > 24 ? `${round(dateDiff / 24)} days ago` : `${round(dateDiff)} hours ago`;
+		this.$('#date-text').textContent = dateDiff > 24 ?
+			`${round(dateDiff / 24, 1)} days ago` :
+			`${round(dateDiff, 1)} hours ago`;
 
 		this.selected = itemData.selected;
 		this.hovered = itemData.hovered;

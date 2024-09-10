@@ -3,7 +3,7 @@ const os = require('os');
 const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
 const Emitter = require('../../util/Emitter');
-const {deepEquality} = require('../../util/util');
+const {round, deepEquality} = require('../../util/util');
 
 class Script extends CustomOsScript {
 	constructor(pobPath) {
@@ -298,7 +298,7 @@ class PobApi extends Emitter {
 				`@bold,light-green Dex ${diff.dex}` : '',
 			this.weights.int && diff.int ?
 				`@bold,light-green Int ${diff.int}` : '',
-			`@bold,green Value ${PobApi.round(diff.unscaledValue, 3)}`,
+			`@bold,green Value ${round(diff.unscaledValue, 3)}`,
 			'-'.repeat(30),
 			...itemText.split('\n').map(itemTextLine => {
 				if (textPrefixes.some(textPrefix => itemTextLine === textPrefix))
@@ -330,7 +330,7 @@ class PobApi extends Emitter {
 		].filter(v => v).join('\n');
 
 		return {
-			value: PobApi.round(diff.unscaledValue * valueScale, 3),
+			value: round(diff.unscaledValue * valueScale, 3),
 			text: summaryText,
 		};
 	}
@@ -359,11 +359,6 @@ class PobApi extends Emitter {
 			}
 		});
 		return array[maxI];
-	}
-
-	static round(number, precision) {
-		let m = 10 ** precision;
-		return Math.round(number * m) / m;
 	}
 }
 

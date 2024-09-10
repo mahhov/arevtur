@@ -1,6 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const configForRenderer = require('../../../services/config/configForRenderer');
+const {round} = require('../../../util/util');
 
 customElements.define(name, class Chart extends XElement {
 	static get attributeTypes() {
@@ -183,8 +184,8 @@ customElements.define(name, class Chart extends XElement {
 		for (let i = 2; i < n; i += 2) {
 			let x = i * step;
 			let y = (n - i) * stepY;
-			let xText = Chart.numToPrint(this.minX + i / n * this.deltaX);
-			let yText = Chart.numToPrint(this.minY + i / n * this.deltaY);
+			let xText = round(this.minX + i / n * this.deltaX, 1);
+			let yText = round(this.minY + i / n * this.deltaY, 1);
 			this.ctx.textAlign = 'center';
 			this.ctx.textBaseline = 'top';
 			this.ctx.fillText(xText, x, stepY * 18.5 + tickLength); // x axis text
@@ -232,10 +233,6 @@ customElements.define(name, class Chart extends XElement {
 		let max = values.length ? Math.max(...values) : 10;
 		let delta = max - min + .001;
 		return [min - delta * buffer, delta + delta * buffer * 2];
-	}
-
-	static numToPrint(n) {
-		return Math.round(n * 10) / 10;
 	}
 });
 

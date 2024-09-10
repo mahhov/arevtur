@@ -3,6 +3,7 @@ const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
 const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const apiConstants = require('../../apiConstants');
+const {round} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -99,7 +100,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValue(value) {
-		this.$('#build-value').text = value && Math.round(Number(value) * 1000) / 1000;
+		this.$('#build-value').text = value && round(Number(value), 3);
 	}
 
 	focus() {
