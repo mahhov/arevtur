@@ -133,6 +133,7 @@ class ItemData {
 			.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
 
 		// todo[high] consider cost of crafts
+		// todo[high] consider non-veiled craftable mods only
 
 		let craftableMods = (await pobApi
 			.getCraftedMods())

@@ -238,3 +238,5 @@ customElements.define(name, class Chart extends XElement {
 		return Math.round(n * 10) / 10;
 	}
 });
+
+// todo[medium] on hover, display x/y

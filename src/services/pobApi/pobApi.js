@@ -195,6 +195,7 @@ class PobApi extends Emitter {
 
 	async getModWeights(pobType = undefined, includeCorrupted = true) {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
+		// todo[high] get a starter min weight
 		if (!pobType)
 			return Promise.reject('missing type');
 		return this.send({
