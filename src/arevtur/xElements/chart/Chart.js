@@ -66,6 +66,7 @@ customElements.define(name, class Chart extends XElement {
 		].join('\n');
 
 		this.pointSets_ = [];
+		this.tooltip_ = {points: []};
 		this.resetRange();
 	}
 
@@ -89,6 +90,11 @@ customElements.define(name, class Chart extends XElement {
 
 	set pointSets(value) {
 		this.pointSets_ = value;
+		this.draw();
+	}
+
+	set tooltip(value) {
+		this.tooltip_ = value;
 		this.draw();
 	}
 
@@ -131,6 +137,7 @@ customElements.define(name, class Chart extends XElement {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 		this.drawPoints();
 		this.drawAxis();
+		this.drawTooltip();
 	}
 
 	drawPoints() {
@@ -142,7 +149,7 @@ customElements.define(name, class Chart extends XElement {
 				this.ctx.lineWidth = size;
 				this.ctx.beginPath();
 				points.forEach((p, i) => {
-					let {x, y} = this.coordToPixel(p.x, p.y);
+					let {x, y} = this.coordToPixel(p);
 					if (!i)
 						this.ctx.moveTo(x, y);
 					else
@@ -154,7 +161,7 @@ customElements.define(name, class Chart extends XElement {
 					this.ctx.stroke();
 			} else {
 				points.forEach(p => {
-					let {x, y} = this.coordToPixel(p.x, p.y);
+					let {x, y} = this.coordToPixel(p);
 					this.ctx[fill ? 'fillRect' : 'strokeRect'](x - size / 2, y - size / 2, size,
 						size);
 				});
@@ -197,6 +204,17 @@ customElements.define(name, class Chart extends XElement {
 		}
 	}
 
+	drawTooltip() {
+		this.ctx.textAlign = 'left';
+		this.ctx.textBaseline = 'bottom';
+		this.ctx.font = '14px arial';
+		let offset = this.tooltip_.offset;
+		this.tooltip_.points.forEach(p => {
+			let {x, y} = this.coordToPixel(p);
+			this.ctx.fillText(`(${round(x, 0)}, ${round(y, 0)})`, x + offset, y - offset);
+		});
+	}
+
 	verticalText(text, x, y) {
 		this.ctx.save();
 		this.ctx.translate(x, y);
@@ -221,7 +239,7 @@ customElements.define(name, class Chart extends XElement {
 		};
 	}
 
-	coordToPixel(x, y) {
+	coordToPixel({x, y}) {
 		return {
 			x: x === Infinity ? this.width : (x - this.minX) / this.deltaX * this.width,
 			y: y === Infinity ? 0 : (1 - (y - this.minY) / this.deltaY) * this.height,
@@ -235,5 +253,3 @@ customElements.define(name, class Chart extends XElement {
 		return [min - delta * buffer, delta + delta * buffer * 2];
 	}
 });
-
-// todo[medium] on hover, display x/y

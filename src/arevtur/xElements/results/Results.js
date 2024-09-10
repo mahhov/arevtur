@@ -160,6 +160,11 @@ customElements.define(name, class extends XElement {
 				points: this.itemsData.itemsToPoints(this.itemsData.hoveredItems),
 			},
 		];
+		this.$('#results-chart').tooltip =
+			{
+				offset: 3,
+				points: this.itemsData.itemsToPoints(this.itemsData.hoveredItems),
+			};
 		if (resetChartRange)
 			this.$('#results-chart').resetRange();
 	}
