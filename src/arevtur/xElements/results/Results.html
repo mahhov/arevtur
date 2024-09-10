@@ -17,6 +17,10 @@
 		margin-left: 5px;
 	}
 
+	#price-per-value-input::part(input) {
+		width: 60px;
+	}
+
 	#search-input {
 		flex: 1;
 	}
@@ -62,10 +66,12 @@
 
 <div>
 	<div id="top-row">
-		<span title="how many items are being shown / how many items have been received and are being sorted / how many items are expected">
+		<span title="# of ready items / # of items received / # of items in current query">
 			Count: <span id="results-count"></span></span>
 		<x-autocomplete-input id="sort-build-value-input" placeholder="sort"
 		                      size="3"></x-autocomplete-input>
+		<x-numeric-input id="price-per-value-input" min="0"
+		                 title="How much chaos you're willing to pay per +1 value.&#10;If 0, sorts items by value only.&#10;Otherwise, sorts by a combination of value & price."></x-numeric-input>
 		<!-- todo[medium] allow searching tags e.g. crafted-->
 		<input id="search-input" placeholder="search (e.g. energyshield, !evasion, !armour)"
 		       title="ctrl+f">

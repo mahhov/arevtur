@@ -32,6 +32,15 @@ customElements.define(name, class extends XElement {
 			localStorage.getItem('results-sort') || ItemsData.valueHandlers[0].name;
 		this.itemsData.setValueHandlerByName(this.$('#sort-build-value-input').value);
 
+		this.$('#price-per-value-input').addEventListener('change', () => {
+			localStorage.setItem('results-price-per-value', this.$('#price-per-value-input').value);
+			this.itemsData.pricePerValue =
+				Number(this.$('#price-per-value-input').value) || Infinity;
+			this.renderItemsData(false, true);
+		});
+		this.$('#price-per-value-input').value = localStorage.getItem('results-price-per-value');
+		this.itemsData.pricePerValue = Number(this.$('#price-per-value-input').value) || Infinity;
+
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
 				this.$('#search-input').select();

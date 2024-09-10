@@ -29,6 +29,7 @@ class ItemsData extends Emitter {
 		super();
 		this.clear();
 		this.valueHandler = ItemsData.valueHandlers[0];
+		this.pricePerValue_ = Infinity;
 		pobApi.addListener('change', () => this.refresh());
 	}
 
@@ -50,6 +51,11 @@ class ItemsData extends Emitter {
 	setValueHandlerByName(name) {
 		this.valueHandler_ =
 			ItemsData.valueHandlers.find(valueHandler => valueHandler.name === name);
+	}
+
+	set pricePerValue(pricePerValue) {
+		this.pricePerValue_ = pricePerValue;
+		this.refresh();
 	}
 
 	get y() {
@@ -110,18 +116,22 @@ class ItemsData extends Emitter {
 		return this.allItems
 			.filter(this.valueHandler_.showFilter)
 			// high to low values, low to high prices
-			.sort((a, b) => this.y(b) - this.y(a) || a.price - b.price);
+			.sort((a, b) =>
+				this.y(b) - this.y(a) - (b.price - a.price) / this.pricePerValue_ ||
+				this.y(b) - this.y(a));
 	}
 
 	get bestBoundItems() {
 		let minPriceFound = Infinity;
 		// ordered top right to bottom left
-		return this.shownItems.filter(item => {
-			if (item.price >= minPriceFound)
-				return false;
-			minPriceFound = item.price;
-			return true;
-		});
+		return this.shownItems
+			.sort((a, b) => this.y(b) - this.y(a) || a.price - b.price)
+			.filter(item => {
+				if (item.price >= minPriceFound)
+					return false;
+				minPriceFound = item.price;
+				return true;
+			});
 	}
 
 	get selectedItems() {
