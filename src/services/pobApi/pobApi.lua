@@ -172,7 +172,8 @@ while true do
         tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
                 tradeQuery.statSortSelectionList, function(context, query, errMsg)
                     respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
-                    respond(dkjson.encode(tradeQueryGenerator.modWeights))
+                    local minValue = dkjson.decode(query).query.stats[1].value.min
+                    respond(dkjson.encode({ minValue, tradeQueryGenerator.modWeights }))
                 end)
 
         -- TradeQueryGeneratorClass:RequestQuery execute

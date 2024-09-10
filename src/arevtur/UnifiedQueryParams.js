@@ -348,9 +348,10 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	static fromModWeights(baseUnifiedQueryParams, modWeights) {
+	static fromModWeights(baseUnifiedQueryParams, minValue, modWeights) {
 		let unifiedQueryParams = new UnifiedQueryParams();
 		Object.assign(unifiedQueryParams, deepCopy(baseUnifiedQueryParams));
+		unifiedQueryParams.minValue = minValue;
 		unifiedQueryParams.weightEntries = modWeights.map(modWeight =>
 			[modWeight.tradeModId, modWeight.weight * (modWeight.invert ? -1 : 1), false, true]);
 		return unifiedQueryParams;

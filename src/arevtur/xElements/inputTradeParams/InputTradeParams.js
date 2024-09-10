@@ -243,8 +243,9 @@ customElements.define(name, class extends XElement {
 	async buildImport() {
 		try {
 			let pobType = await apiConstants.typeToPobType(this.type);
-			let modWeights = await pobApi.getModWeights(pobType, !this.uncorrupted);
-			return UnifiedQueryParams.fromModWeights(await this.unifiedQueryParams, modWeights);
+			let {minValue, modWeights} = await pobApi.getModWeights(pobType, !this.uncorrupted);
+			return UnifiedQueryParams.fromModWeights(await this.unifiedQueryParams, minValue,
+				modWeights);
 		} catch (e) {
 			console.warn('PoB import', e);
 			return Promise.reject();
