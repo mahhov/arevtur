@@ -140,7 +140,7 @@ customElements.define(name, class extends XElement {
 
 		document.addEventListener('keydown', e => {
 			if (e.key === 'Enter' && e.ctrlKey)
-				this.emit('submit', {add: false});
+				this.emit('submit', {add: e.shiftKey});
 			if (e.key === 'r' && e.ctrlKey)
 				window.location.reload();
 		});
