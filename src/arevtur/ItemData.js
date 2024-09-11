@@ -133,7 +133,6 @@ class ItemData {
 			.map(mod => mod.replaceAll(/\d+(\.\d+)?/g, '#'));
 
 		// todo[high] consider cost of crafts
-		// todo[high] consider non-veiled craftable mods only
 
 		let craftableMods = (await pobApi
 			.getCraftedMods())
@@ -143,6 +142,8 @@ class ItemData {
 			.filter(craftableMod => craftableMod.types[this.itemClass])
 			// add key to dedupe different tiers of similar crafts
 			.map(craftableMod => {
+				if (craftableMod.modTags.includes('unveiled_mod'))
+					craftableMod[1] += ` (veiled)`;
 				craftableMod.key = Object.values(craftableMod.statOrder).join();
 				return craftableMod;
 			});
