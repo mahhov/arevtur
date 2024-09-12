@@ -1,7 +1,7 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
 const poeNinjaApi = require('../services/poeNinjaApi');
 const configForRenderer = require('../services/config/configForRenderer');
-const PobConsts = require('../services/pobApi/PobConsts');
+const pobConsts = require('../services/pobApi/pobConsts');
 
 class ApiConstants {
 
@@ -78,7 +78,7 @@ class ApiConstants {
 
 	async typeToPobType(text) {
 		let typeId = await this.typeTextToId(text);
-		return PobConsts.slots[typeId];
+		return pobConsts.slots[typeId];
 	}
 
 	async typeIdToText(id) {

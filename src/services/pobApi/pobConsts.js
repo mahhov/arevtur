@@ -37,6 +37,35 @@ const slots = {
 	'jewel.abyss': 'Jewel Abyss',
 };
 
+// maps from item text: 'Item Class: ...'
+const itemClassToPobType = {
+	'Rings': 'Ring',
+	'Quivers': 'Quiver',
+	'Boots': 'Boots',
+	'Amulets': 'Amulet',
+	'Body Armours': 'Body Armour',
+	'Helmets': 'Helmet',
+	'Gloves': 'Gloves',
+	'Belts': 'Belt',
+	'Shields': 'Shield',
+	'Bows': 'Bow',
+	'Claws': 'Claw',
+	'Staves': 'Staff',
+	'Warstaves': 'Staff',
+	'One Hand Maces': 'One Handed Mace',
+	'One Hand Swords': 'One Handed Sword',
+	'Sceptres': 'Sceptre',
+	'Thrusting One Hand Swords': 'Thrusting One Handed Sword',
+	'Wands': 'Wand',
+	'Two Hand Axes': 'Two Handed Axe',
+	'Two Hand Swords': 'Two Handed Sword',
+	'Two Hand Maces': 'Two Handed Mace',
+	'Daggers': 'Dagger',
+	'Rune Daggers': 'Dagger',
+	'One Hand Axes': 'One Handed Axe',
+	'Utility Flasks': 'Flask',
+};
+
 // map trade api type to pob crafting type
 // const craftTypes = {
 // 	'weapon': 'One Handed Axe',
@@ -75,4 +104,4 @@ const slots = {
 // 	'jewel.abyss': 'not craftable',
 // };
 
-module.exports = {slots};
+module.exports = {slots, itemClassToPobType};

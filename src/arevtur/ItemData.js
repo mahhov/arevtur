@@ -1,6 +1,7 @@
 const apiConstants = require('./apiConstants');
 const pobApi = require('../services/pobApi/pobApi');
 const {maxIndex} = require('../util/util');
+const pobConsts = require('../services/pobApi/pobConsts');
 
 class ItemData {
 	constructor(league, affixValueShift, queryDefenseProperties, priceShifts,
@@ -27,7 +28,7 @@ class ItemData {
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
-		this.itemClass = ItemData.typeNameFromItemText(this.text); // e.g. 'Amulet'
+		this.itemClass = ItemData.itemClassFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
 		// sockets
@@ -81,8 +82,8 @@ class ItemData {
 		this.pricePromise.then(price => this.price = price);
 	}
 
-	static typeNameFromItemText(text) {
-		return text.match(/^Item Class: (\w+)/)?.[1].replace(/s$/, '');
+	static itemClassFromItemText(text) {
+		return text.match(/^Item Class: (\w+)/)?.[1] || '';
 	}
 
 	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
@@ -141,7 +142,8 @@ class ItemData {
 			// check if item has open prefix/suffix
 			.filter(craftableMod => openAffixes.includes(craftableMod.type))
 			// check if craft applies to item type
-			.filter(craftableMod => craftableMod.types[this.itemClass])
+			.filter(
+				craftableMod => craftableMod.types[pobConsts.itemClassToPobType[this.itemClass]])
 			// add key to dedupe different tiers of similar crafts
 			.map(craftableMod => {
 				if (craftableMod.modTags.includes('unveiled_mod'))
