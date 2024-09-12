@@ -271,7 +271,7 @@ class UnifiedQueryParams {
 		return {
 			query: {
 				status: {option: overridden.online ? 'online' : 'any'},
-				term: overridden.name,
+				type: overridden.name,
 				stats: [
 					{
 						type: 'weight',
@@ -321,7 +321,7 @@ class UnifiedQueryParams {
 		let andStats = stats?.find(stats => stats.type === 'and');
 		let notStats = stats?.find(stats => stats.type === 'not');
 		let data = {
-			name: apiQueryParams.term || '',
+			name: apiQueryParams.type || '',
 			type: filters?.type_filters?.filters?.category?.option || '',
 			minValue: weightedStats?.value?.min || 0,
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 0,
