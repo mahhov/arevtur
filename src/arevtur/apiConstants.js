@@ -171,9 +171,11 @@ class ApiConstants {
 
 	static async initItems() {
 		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/items');
-		return JSON.parse(response.string).result
+		let items = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({name, text, type}) => name || text || type);
+		items.unshift('');
+		return items;
 		/* ['Pledge of Hands', ...] */
 	}
 
