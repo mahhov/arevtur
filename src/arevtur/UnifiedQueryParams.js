@@ -24,8 +24,9 @@ class UnifiedQueryParams {
 	nonUnique = false;
 	influences = [];
 	weightEntries = [];            // (propertyId, weight, locked, enabled)[]
-	// todo[high] don't default '' to 0 in order to not break negated mods; e.g. 'Socketed Attacks
+	// todo[blocking 4] don't default '' to 0 in order to not break negated mods; e.g. 'Socketed Attacks
 	//  have +# to Total Mana Cost'
+	// todo[blocking 5] support annointments and other properties with 'options'
 	andEntries = [];               // (propertyId, weight, locked, enabled)[]
 	notEntries = [];               // (propertyId, enabled)[]
 	conditionalPrefixEntries = []; // (propertyId, weight, locked, enabled)[]
@@ -242,6 +243,7 @@ class UnifiedQueryParams {
 			id: property,
 			value: {min},
 		}));
+		// andFilters.push({id: 'enchant.stat_2954116742', disabled: false, value: {option: 22535}});
 		let notFilters = Object.entries(overridden.nots).map(([property]) => ({
 			id: property,
 		}));
@@ -271,7 +273,7 @@ class UnifiedQueryParams {
 		return {
 			query: {
 				status: {option: overridden.online ? 'online' : 'any'},
-				type: overridden.name,
+				type: overridden.name || undefined,
 				stats: [
 					{
 						type: 'weight',

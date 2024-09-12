@@ -28,9 +28,11 @@ const influenceProperties = [
 const queryPropertyFilters = [
 	// queryParamsKey, queryPropertyFilter, hasWeight
 	['weightEntries', 'weight', true],
+	// todo[blocking 1] show min/max input for and filters
 	['andEntries', 'and', true],
-	// todo[low] disable weight input for filters without weight
+	// todo[blocking 2] disable weight input for filters without weight
 	['notEntries', 'not'],
+	// todo[blocking 3] add 'or' filter
 	// todo[medium] get pob weight recommendations for conditional affixes
 	['conditionalPrefixEntries', 'conditional prefix', true],
 	['conditionalSuffixEntries', 'conditional suffix', true],
