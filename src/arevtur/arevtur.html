@@ -60,58 +60,28 @@
 	const {clamp, transpose} = require('../util/util');
 	const googleAnalyticsForRenderer = require(
 		'../services/googleAnalytics/googleAnalyticsForRenderer');
+	const TradeQueryQueue = require('./TradeQueryQueue');
 
 	const $ = document.querySelector.bind(document);
 
-	let lastTradeQueries;
-	let submitQueries = async tradeQueries => {
-		let startTime = performance.now();
-
-		cancelQueries();
-		lastTradeQueries = tradeQueries;
-		let [itemStreams, progressStreams] = transpose(
-			tradeQueries.map(tradeQuery => tradeQuery.getItemsStream()));
-		itemStreams.forEach(itemStream => itemStream.forEach(items =>
-			$('x-results').joinItems(items)));
-		progressStreams.forEach(progressStream => progressStream.forEach(progress => {
-				console.log('progress', progress.text, progress.ratio);
-				let progresses = progressStreams
-					.map(progressStream => progressStream.lastValue)
-					.filter(progress => progress);
-				let queriesComplete = progresses.reduce((sum, progress) =>
-					sum + progress.queriesComplete, 0);
-				let queriesTotal = progresses.reduce((sum, progress) =>
-					sum + progress.queriesTotal, 0);
-				let itemCount = progresses.reduce((sum, progress) =>
-					sum + progress.itemCount, 0);
-				$('x-results').updateItemsProgress(queriesComplete / queriesTotal, itemCount);
-			}),
-		);
-		await itemStreams[0].promise;
-		googleAnalyticsForRenderer.emit('arevturQueryComplete', {
-			queryCount: tradeQueries.length,
-			type: tradeQueries[0].type,
-			maxPrice: tradeQueries[0].maxPrice,
-			itemCount: $('x-results').expectedCount,
-			elapsedTime: performance.now() - startTime, // todo[low] measure PoB craft time
-		});
-	};
-
-	let cancelQueries = () => {
-		lastTradeQueries?.forEach(tradeQuery => tradeQuery.stop());
-		lastTradeQueries = null;
-	};
+	let tradeQueryQueue = new TradeQueryQueue();
+	tradeQueryQueue.addListener('items', items => $('x-results').joinItems(items));
+	tradeQueryQueue.addListener('progress', ({ratio, itemCount}) =>
+		$('x-results').updateItemsProgress(ratio, itemCount));
 
 	$('x-inputs').addEventListener('submit', async e => {
-		if (!e.detail.add)
+		if (!e.detail.add) {
 			$('x-results').clearItems();
-		submitQueries(await $('x-inputs').finalizeTradeQuery());
+			tradeQueryQueue.cancel();
+		}
+		tradeQueryQueue.addQueries(await $('x-inputs').finalizeTradeQuery());
 	});
 
-	$('x-inputs').addEventListener('cancel', cancelQueries);
+	$('x-inputs').addEventListener('cancel', () => tradeQueryQueue.cancel());
 
 	$('x-results').addEventListener('submit', async e =>
-		submitQueries(await $('x-inputs').finalizeTradeQuery(e.detail.overridePrice)));
+		tradeQueryQueue.addQueries(
+			await $('x-inputs').finalizeTradeQuery(e.detail.overridePrice)));
 
 	document.addEventListener('wheel', e => {
 		if (!e.ctrlKey)
@@ -128,4 +98,5 @@
 	// todo[low] items sometimes coming back without pseudo mod 'Sum: '
 	// todo[medium] make UI easier to understand and add tooltips
 	// todo[medium] catch JSON and pob and https request failures
+	// todo[blocking] queued searches
 </script>

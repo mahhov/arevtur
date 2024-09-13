@@ -82,6 +82,10 @@ class TradeQuery {
 		this.sort = data.sort || apiConstants.sort.value;
 		this.affixValueShift = data.affixValueShift || 0;
 		this.priceShifts = data.priceShifts || {};
+
+		this.itemStream = new Stream();
+		this.progressStream = new Stream();
+		this.stopObj = {};
 	}
 
 	getQuery(overrides = {}) {
@@ -100,21 +104,16 @@ class TradeQuery {
 		};
 	}
 
-	getItemsStream() {
-		this.stopObj = {};
-		let itemStream = new Stream();
-		let progressStream = new Stream();
-		this.writeItemsToStream(itemStream, progressStream)
-			.then(() => itemStream.done());
-		return [itemStream, progressStream];
+	start() {
+		this.writeItemsToStream().then(() => this.itemStream.done());
 	}
 
 	stop() {
 		this.stopObj.stop = true;
 	}
 
-	async writeItemsToStream(itemStream, progressStream) {
-		let items = await this.queryAndParseItems(this.getQuery(), itemStream, progressStream);
+	async writeItemsToStream() {
+		let items = await this.queryAndParseItems(this.getQuery());
 
 		// todo[low] this doesn't work for hybrid (e.g. es + evasion) bases
 		let defenseProperty = Object.entries(this.defenseProperties)
@@ -137,20 +136,19 @@ class TradeQuery {
 				let overrides = this.overrideDefenseProperty(defenseProperty[0],
 					minDefensePropertyValue);
 				let query = this.getQuery(overrides);
-				// todo[low] resets the progress stream to 0/11 instead of appending to it 12/22
-				newItems = await this.queryAndParseItems(query, itemStream, progressStream);
+				newItems = await this.queryAndParseItems(query);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);
 		}
 	}
 
-	async queryAndParseItems(query, itemStream, progressStream) {
+	async queryAndParseItems(query) {
 		// todo[medium] more selective try/catch
 		try {
 			const api = 'https://www.pathofexile.com/api/trade';
 			let endpoint = `${api}/search/${this.league}`;
 			let headers = apiConstants.createRequestHeader(this.sessionId);
-			progressStream.write({
+			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
 				queriesTotal: 11,
@@ -160,7 +158,7 @@ class TradeQuery {
 			let response = await rlrPost(endpoint, query, headers, this.stopObj);
 			let data = JSON.parse(response.string);
 			let itemCount = data.result.length;
-			progressStream.write({
+			this.progressStream.write({
 				text: `Received ${data.result.length} items.`,
 				queriesComplete: 0,
 				queriesTotal: 11,
@@ -170,7 +168,7 @@ class TradeQuery {
 			let requestGroups = [];
 			while (data.result.length)
 				requestGroups.push(data.result.splice(0, 10));
-			progressStream.write({
+			this.progressStream.write({
 				text: `Will make ${requestGroups.length} grouped item queries.`,
 				queriesComplete: 1,
 				queriesTotal: requestGroups.length + 1,
@@ -187,9 +185,9 @@ class TradeQuery {
 					],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let response2 = await rlrGet(endpoint2, params, headers, this.stopObj);
+				let response2 = await rlrGet(endpoint2, params, headers, this.stopObj, this.id);
 				let data2 = JSON.parse(response2.string);
-				progressStream.write({
+				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
 					queriesComplete: 1 + ++receivedCount,
 					queriesTotal: requestGroups.length + 1,
@@ -200,11 +198,11 @@ class TradeQuery {
 						this.priceShifts, itemData));
 				// todo[high] let users wait on pricePromise and rm this await
 				await Promise.all(items.map(item => item.pricePromise));
-				itemStream.write(items);
+				this.itemStream.write(items);
 				return items;
 			});
 			let items = (await Promise.all(promises)).flat();
-			progressStream.write({
+			this.progressStream.write({
 				text: 'All grouped item queries completed.',
 				queriesComplete: requestGroups.length + 1,
 				queriesTotal: requestGroups.length + 1,
