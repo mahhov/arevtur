@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const TradeQuery = require('../../poeTradeApi');
+const TradeQuery = require('../../TradeQuery');
 const {round} = require('../../../util/util');
 
 const now = new Date();

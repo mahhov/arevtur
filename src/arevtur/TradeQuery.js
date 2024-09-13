@@ -242,5 +242,4 @@ class TradeQuery {
 	}
 }
 
-// todo[high] rename class to PoeTradeApi, capitalize filename
 module.exports = TradeQuery;
