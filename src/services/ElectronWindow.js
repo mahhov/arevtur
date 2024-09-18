@@ -6,7 +6,7 @@ const {appReadyPromise} = require('js-desktop-base');
 app.allowRendererProcessReuse = false;
 
 class ElectronWindow {
-	constructor(name, htmlPath, width = 10000, height = 10000) {
+	constructor(name, htmlPath, width, height, exitOnClose = false) {
 		this.name = name;
 
 		// todo[low] add a taskbar icon
@@ -25,9 +25,15 @@ class ElectronWindow {
 			window.loadFile(htmlPath);
 
 			window.on('close', e => {
-				e.preventDefault();
-				window.hide();
+				if (exitOnClose)
+					app.exit();
+				else {
+					e.preventDefault();
+					window.hide();
+				}
 			});
+
+			window.on('minimize', () => window.hide());
 
 			return window;
 		});
