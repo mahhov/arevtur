@@ -47,8 +47,6 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 
-		this.$('#results-chart').addEventListener('action', e =>
-			this.emit('submit', {overridePrice: e.detail.x || null}));
 		this.$('#results-chart').addEventListener('select', async e => {
 			let itemIndex = this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
 				e.detail.width);

@@ -79,10 +79,6 @@
 
 	$('x-inputs').addEventListener('cancel', () => tradeQueryQueue.cancel());
 
-	$('x-results').addEventListener('submit', async e =>
-		tradeQueryQueue.addQueries(
-			await $('x-inputs').finalizeTradeQuery(e.detail.overridePrice)));
-
 	document.addEventListener('wheel', e => {
 		if (!e.ctrlKey)
 			return;
