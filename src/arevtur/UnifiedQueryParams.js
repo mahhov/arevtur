@@ -22,6 +22,25 @@ class Entry {
 	get property() {
 		return apiConstants.propertyByText(this.propertyText);
 	}
+
+	async toApiQueryParams(weightKey = null) {
+		if (!this.enabled)
+			return null;
+		let property = await this.property;
+		if (!property)
+			return null;
+		let ret = {
+			id: property.id,
+		};
+		if (weightKey || property.optionId) {
+			ret.value = {};
+			if (weightKey)
+				ret.value[weightKey] = this.weight;
+			if (property.optionId)
+				ret.value.option = property.optionId;
+		}
+		return ret;
+	}
 }
 
 class UnifiedQueryParams {
@@ -53,6 +72,19 @@ class UnifiedQueryParams {
 			this.defenseProperties[property] = {weight: 0, min: 0});
 		affixPropertyTuples.forEach(([property]) =>
 			this.affixProperties[property] = 0);
+	}
+
+	get copy() {
+		let copy = new UnifiedQueryParams();
+		Object.assign(copy, deepCopy(this));
+		queryPropertyFilters.forEach(([key]) => {
+			copy[key] = copy[key].map(entry => {
+				let entryCopy = new Entry();
+				Object.assign(entryCopy, deepCopy(entry));
+				return entryCopy;
+			});
+		});
+		return copy;
 	}
 
 	static fromStorageQueryParams(storageQueryParams, sharedWeightEntriesData = []) {
@@ -175,8 +207,7 @@ class UnifiedQueryParams {
 
 		// cross product all combinations of linking and craftable affixes
 		linkedOptions.forEach(lo => affixOptions.forEach(ao => {
-			let copy = new UnifiedQueryParams();
-			Object.assign(copy, deepCopy(this));
+			let copy = this.copy;
 			if (lo) {
 				copy.linked = false;
 				copy.uncorrupted = true;
@@ -208,26 +239,14 @@ class UnifiedQueryParams {
 		let weightFilters = (await Promise.all(
 			[overridden.weightEntries, overridden.sharedWeightEntries]
 				.flat()
-				.map(async entry => ({
-					id: (await entry.property)?.id,
-					value: {weight: entry.weight},
-				}))))
-			.filter(filter => filter.id);
-		let andFilters = (await Promise.all(Object.entries(overridden.andEntries)
-			.map(async entry => ({
-				id: (await entry.property)?.id,
-				value: {min: entry.value},
-			}))))
-			.filter(filter => filter.id);
-		let notFilters = (await Promise.all(Object.entries(overridden.notEntries)
-			.map(async entry => ({
-				id: (await entry.property)?.id,
-			}))))
-			.filter(filter => filter.id);
-
-		// todo[blocking] support options
-		// andFilters.push({id: 'enchant.stat_2954116742', disabled: false, value: {option:
-		// 22535}});
+				.map(entry => entry.toApiQueryParams('weight'))))
+			.filter(v => v);
+		let andFilters = (await Promise.all(overridden.andEntries
+			.map(entry => entry.toApiQueryParams('min'))))
+			.filter(v => v);
+		let notFilters = (await Promise.all(overridden.notEntries
+			.map(entry => entry.toApiQueryParams())))
+			.filter(v => v);
 
 		if (overridden.affixProperties.prefix)
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_prefix_mods'});
@@ -335,8 +354,7 @@ class UnifiedQueryParams {
 	}
 
 	static async fromModWeights(baseUnifiedQueryParams, minValue, modWeights) {
-		let unifiedQueryParams = new UnifiedQueryParams();
-		Object.assign(unifiedQueryParams, deepCopy(baseUnifiedQueryParams));
+		let unifiedQueryParams = baseUnifiedQueryParams.copy;
 		unifiedQueryParams.minValue = minValue;
 		unifiedQueryParams.weightEntries = await Promise.all(modWeights.map(async modWeight => {
 			let property = await apiConstants.propertyById(modWeight.tradeModId);
@@ -358,8 +376,6 @@ class UnifiedQueryParams {
 module.exports = UnifiedQueryParams;
 
 // todo[blocking]
-//   min weight not respected? or random items being returned
 //   prefix / suffix always showing 0
 //   NaN in build values
-//   hide pob raw import
 //   empty weight entries being added

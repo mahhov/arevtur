@@ -112,7 +112,8 @@ customElements.define(name, class extends XElement {
 			this.buildValue = '';
 			let pobType = await apiConstants.typeToPobType(this.type);
 			let {modWeights} = await pobApi.getModWeights(pobType);
-			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights({}, 0, modWeights);
+			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights(
+				new UnifiedQueryParams(), 0, modWeights);
 			this.buildValue = unifiedQueryParams.weightEntries
 				.find(entry => entry.propertyText === this.property)
 				?.weight;
