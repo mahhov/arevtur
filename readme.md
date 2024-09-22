@@ -272,12 +272,12 @@ do, it'll get a lower priority.
 
 This wouldn't be possible without:
 
+- Discord user Nchi for the app icon
 - [poe.ninja](https://poe.ninja/) for price information
-- [Openarl/PathOfBuilding](https://github.com/Openarl/PathOfBuilding) for item and mod evaluation in
-  Arevtur
+- [Openarl](https://github.com/Openarl/PathOfBuilding) & [PathOfBuildingCommunity](https://github.com/PathOfBuildingCommunity/PathOfBuilding)
+  for item and mod evaluations
 - [VolatilePulse/PoB-Item-Tester](https://github.com/VolatilePulse/PoB-Item-Tester) for help with
   PoB integration
-- [poedb](https://poedb.tw/us/) for sourcing Mod Viewer
 - [pathofexile.com/api/trade](https://pathofexile.com/api/trade) for sourcing Arevtur outputs
 - Path of Exile's APIs for sourcing Arevtur inputs
 - [Path of Exile](https://pathofexile.com)
