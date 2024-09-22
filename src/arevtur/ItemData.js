@@ -8,7 +8,7 @@ class ItemData {
 	            tradeApiItemData) {
 		this.id = tradeApiItemData.id;
 		this.name = tradeApiItemData.item.name;
-		this.type = tradeApiItemData.item.typeLine; // e.g. 'Gold Amulet'
+		this.subtype = tradeApiItemData.item.typeLine; // e.g. 'Gold Amulet'
 		this.itemLevel = tradeApiItemData.item.ilvl;
 		this.rarity = tradeApiItemData.item.rarity;
 		this.corrupted = tradeApiItemData.item.corrupted;
@@ -28,7 +28,7 @@ class ItemData {
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
-		this.itemClass = ItemData.itemClassFromItemText(this.text); // e.g. 'Amulet'
+		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
 		// sockets
@@ -82,8 +82,8 @@ class ItemData {
 		this.pricePromise.then(price => this.price = price);
 	}
 
-	static itemClassFromItemText(text) {
-		return text.match(/^Item Class: (\w+)/)?.[1] || '';
+	static typeFromItemText(text) {
+		return pobConsts.itemClassToPobType[text.match(/^Item Class: (\w+)/)?.[1]];
 	}
 
 	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
@@ -143,7 +143,7 @@ class ItemData {
 			.filter(craftableMod => openAffixes.includes(craftableMod.type))
 			// check if craft applies to item type
 			.filter(
-				craftableMod => craftableMod.types[pobConsts.itemClassToPobType[this.itemClass]])
+				craftableMod => craftableMod.types[this.type])
 			// add key to dedupe different tiers of similar crafts
 			.map(craftableMod => {
 				if (craftableMod.modTags.includes('unveiled_mod'))

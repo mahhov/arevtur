@@ -82,16 +82,15 @@ customElements.define(name, class extends XElement {
 		this.$('#input-import-trade-search-url').addEventListener('import-url', async e => {
 			let apiQueryParams =
 				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
-			let unifiedQueryParams = UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
+			let unifiedQueryParams = await UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
 			this.addInputSet(`imported from URL ${timestamp()}`, unifiedQueryParams);
 		});
 
 		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
-			let typeText = ItemData.typeNameFromItemText(e.detail) || 'Any';
-			let typeId = await apiConstants.typeTextToId(typeText);
+			let typeText = ItemData.typeFromItemText(e.detail) || 'Any';
 
 			let propertyTexts = await apiConstants.propertyTexts();
-			let matchedPropertyIds = await Promise.all(e.detail
+			let matchedPropertyTexts = (await Promise.all(e.detail
 				.split('\n')
 				.map(line => line.trim())
 				.map(line => line)
@@ -100,14 +99,17 @@ customElements.define(name, class extends XElement {
 				.map(line => line.replaceAll(/(\d+)/g, '($1|#)'))
 				.map(line => `(^|\n)${line}( \\(\\explicit+\\))?($|\n)`)
 				.map(line => new RegExp(line))
-				// todo[low] sometimes, there are multiple properties with the same text. should do
-				//   an 'or' between them. e.g. '+# to Strength and Intelligence'
+				// todo[low] sometimes, there are multiple properties with the same text.
+				// should do an 'or' between them. e.g. '+# to Strength and Intelligence'
 				.map(regex => propertyTexts.find(pt => pt.match(regex)))
 				.filter(propertyText => propertyText)
 				.filter(unique)
-				.map(propertyText => apiConstants.propertyTextToId(propertyText)));
+				.map(propertyText => apiConstants.propertyByText(propertyText))))
+				.filter(property => property)
+				.map(property => property.text);
 
-			let unifiedQueryParams = UnifiedQueryParams.fromPropertyIds(typeId, matchedPropertyIds);
+			let unifiedQueryParams =
+				await UnifiedQueryParams.fromPropertyIds(typeText, matchedPropertyTexts);
 			this.addInputSet(`imported from text ${timestamp()}`, unifiedQueryParams);
 		});
 
@@ -134,8 +136,8 @@ customElements.define(name, class extends XElement {
 			this.store();
 		});
 
-		this.$('#input-trade-params').addEventListener('change', async () => {
-			let unifiedQueryParams = await this.$('#input-trade-params').unifiedQueryParams;
+		this.$('#input-trade-params').addEventListener('change', () => {
+			let unifiedQueryParams = this.$('#input-trade-params').unifiedQueryParams;
 			this.inputSets[this.inputSetIndex].unifiedQueryParams = unifiedQueryParams;
 			this.sharedWeightEntries = unifiedQueryParams.sharedWeightEntries;
 			this.store();
@@ -151,7 +153,7 @@ customElements.define(name, class extends XElement {
 			this.emit('submit', {add: e.ctrlKey}));
 		this.$('#cancel-button').addEventListener('click', () => this.emit('cancel'));
 		this.$('#search-in-browser-button').addEventListener('click', async () =>
-			shell.openExternal((await this.finalizeTradeQuery())[0].toApiHtmlUrl));
+			shell.openExternal(await (await this.finalizeTradeQuery())[0].toApiHtmlUrl()));
 
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
@@ -261,7 +263,7 @@ customElements.define(name, class extends XElement {
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
 	}
 
-	async finalizeTradeQuery(overridePrice = null) {
+	async finalizeTradeQuery() {
 		let currencyPrices = await apiConstants.currencyPrices(
 			configForRenderer.config.league);
 		let manual6LinkOptions = [
@@ -273,14 +275,14 @@ customElements.define(name, class extends XElement {
 
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
-		let tradeQueries = this.inputSets
+		let tradeQueries = await Promise.all(this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet =>
 				UnifiedQueryParams
 					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-					.toTradeQueryData(league, sessionId, overridePrice,
-						manual6LinkCheapestOption[0], manual6LinkCheapestOption[1])
-					.map(data => new TradeQuery(data)));
+					.toTradeQueryData(manual6LinkCheapestOption[0], manual6LinkCheapestOption[1])
+					.map(async data => new TradeQuery((await data), league, sessionId,
+						(await data).affixValueShift, (await data).priceShifts))));
 
 		// todo[medium] move this to InputTradeParams and remove import button, instead
 		//  automatically update url <-> form when either one changes

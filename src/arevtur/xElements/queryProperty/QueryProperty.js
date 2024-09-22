@@ -112,10 +112,10 @@ customElements.define(name, class extends XElement {
 			this.buildValue = '';
 			let pobType = await apiConstants.typeToPobType(this.type);
 			let {modWeights} = await pobApi.getModWeights(pobType);
-			let unifiedQueryParams = UnifiedQueryParams.fromModWeights({}, 0, modWeights);
-			let propertyId = await apiConstants.propertyTextToId(this.property);
-			this.buildValue =
-				unifiedQueryParams.weightEntries.find(entry => entry[0] === propertyId)[1];
+			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights({}, 0, modWeights);
+			this.buildValue = unifiedQueryParams.weightEntries
+				.find(entry => entry.propertyText === this.property)
+				?.weight;
 		} catch (e) {
 			console.warn('Refresh query property build values', e);
 		}

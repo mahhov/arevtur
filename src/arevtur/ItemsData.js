@@ -1,7 +1,6 @@
 const Emitter = require('../util/Emitter');
 const pobApi = require('../services/pobApi/pobApi');
 
-
 class ItemsData extends Emitter {
 	static valueHandlers = [
 		{

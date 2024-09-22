@@ -125,21 +125,21 @@ customElements.define(name, class extends XElement {
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 		this.$('#drop-implicit-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
-				await Macros.Input.dropImplicits(await this.unifiedQueryParams)));
+				await Macros.Input.dropImplicits(this.unifiedQueryParams)));
 		this.$('#replace-resist-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
-				await Macros.Input.replaceResists(await this.unifiedQueryParams)));
+				await Macros.Input.replaceResists(this.unifiedQueryParams)));
 		this.$('#replace-attribute-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
-				await Macros.Input.replaceAttributes(await this.unifiedQueryParams)));
+				await Macros.Input.replaceAttributes(this.unifiedQueryParams)));
 		this.$('#add-crafted-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
-				await Macros.Input.addCrafted(await this.unifiedQueryParams)));
+				await Macros.Input.addCrafted(this.unifiedQueryParams)));
 		this.$('#add-pseudo-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
-				await Macros.Input.addPseudo(await this.unifiedQueryParams)));
+				await Macros.Input.addPseudo(this.unifiedQueryParams)));
 		this.$('#enable-all-mods-button').addEventListener('click', async () =>
-			this.setUnifiedQueryParams(Macros.Input.enableAll(await this.unifiedQueryParams)));
+			this.setUnifiedQueryParams(Macros.Input.enableAll(this.unifiedQueryParams)));
 
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
@@ -244,7 +244,7 @@ customElements.define(name, class extends XElement {
 		try {
 			let pobType = await apiConstants.typeToPobType(this.type);
 			let {minValue, modWeights} = await pobApi.getModWeights(pobType, !this.uncorrupted);
-			return UnifiedQueryParams.fromModWeights(await this.unifiedQueryParams, minValue,
+			return await UnifiedQueryParams.fromModWeights(this.unifiedQueryParams, minValue,
 				modWeights);
 		} catch (e) {
 			console.warn('PoB import', e);

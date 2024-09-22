@@ -26,16 +26,17 @@ const influenceProperties = [
 ];
 
 const queryPropertyFilters = [
-	// queryParamsKey, queryPropertyFilter, hasWeight
-	['weightEntries', 'weight', true],
+	// key, filter, hasWeight, isShared
+	['weightEntries', 'weight', true, false],
 	// todo[blocking 1] show min/max input for and filters
-	['andEntries', 'and', true],
+	['andEntries', 'and', true, false],
 	// todo[blocking 2] disable weight input for filters without weight
-	['notEntries', 'not'],
+	['notEntries', 'not', false, false],
 	// todo[blocking 3] add 'or' filter
 	// todo[medium] get pob weight recommendations for conditional affixes
-	['conditionalPrefixEntries', 'conditional prefix', true],
-	['conditionalSuffixEntries', 'conditional suffix', true],
+	['conditionalPrefixEntries', 'conditional prefix', true, false],
+	['conditionalSuffixEntries', 'conditional suffix', true, false],
+	['sharedWeightEntries', 'weight', true, true],
 ];
 
 module.exports = {

@@ -96,15 +96,15 @@ class ApiConstants {
 		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/stats');
 		let properties = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
-			.map(({id, text, type}) => ({id, text: `${text} (${type})`, originalText: text, type}));
+			.flatMap(({id, text, type, options}) => {
+				let property = {id, text: `${text} (${type})`, originalText: text, type};
+				return options ?
+					options.map(o =>
+						({...property, optionId: o.id, text: `${text} (${type}) = ${o.text}`})) :
+					property;
+			});
 		properties.unshift({id: '', text: '', originalText: '', type: ''});
 		return properties;
-		/*
-		[{
-	      id: 'pseudo.pseudo_total_cold_resistance',
-	      text: '+#% total to Cold Resistance (pseudo)',
-	    }, ...]
-		*/
 	}
 
 	async propertyTexts() {
@@ -112,14 +112,14 @@ class ApiConstants {
 		return properties.map(({text}) => text);
 	}
 
-	async propertyTextToId(text) {
-		let properties = await this.properties;
-		return properties.find(property => property.text === text)?.id;
-	}
-
 	async propertyById(id) {
 		let properties = await this.properties;
 		return properties.find(property => property.id === id);
+	}
+
+	async propertyByText(text) {
+		let properties = await this.properties;
+		return properties.find(property => property.text === text);
 	}
 
 	async propertiesByType(type) {

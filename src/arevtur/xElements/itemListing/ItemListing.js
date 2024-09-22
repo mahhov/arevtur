@@ -56,7 +56,7 @@ customElements.define(name, class extends XElement {
 		this.itemData_ = itemData;
 
 		this.$('#name-text').textContent = itemData.name;
-		this.$('#type-text').textContent = itemData.type;
+		this.$('#type-text').textContent = itemData.subtype;
 		this.$('#item-level-text').textContent = itemData.itemLevel;
 
 		this.$('#corrupted-text').classList.toggle('hidden', !itemData.corrupted);

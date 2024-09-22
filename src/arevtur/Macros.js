@@ -1,41 +1,37 @@
 const apiConstants = require('./apiConstants');
 const Searcher = require('../util/Searcher');
 const pobApi = require('../services/pobApi/pobApi');
+const UnifiedQueryParams = require('./UnifiedQueryParams.js');
 
 class Macros {
 	static Input = {
 		removeWeightedEntries: async (unifiedQueryParams, asyncFilter) => {
 			let filtered = [];
 			for (let weightEntry of unifiedQueryParams.weightEntries)
-				if (await asyncFilter(weightEntry[0]))
+				if (await asyncFilter(weightEntry))
 					filtered.push(weightEntry);
 			unifiedQueryParams.weightEntries = filtered;
 			return unifiedQueryParams;
 		},
 
 		dropImplicits: async unifiedQueryParams => {
-			return Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
-				(await apiConstants.propertyById(propertyId))?.type !== 'implicit');
+			return Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>
+				(await weightEntry.property)?.type !== 'implicit');
 		},
 
 		replaceResists: async unifiedQueryParams => {
 			let searcher = new Searcher(
 				'= +#% total to all and cold fire lightning chaos elemental resistance resistances');
-			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
-				!searcher.test(
-					(await apiConstants.propertyById(propertyId))?.originalText));
+			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>
+				!searcher.test((await weightEntry.property)?.originalText));
 			if (pobApi.weights.elementalResist)
 				unifiedQueryParams.weightEntries.unshift(
-					['pseudo.pseudo_total_all_elemental_resistances',
-						pobApi.weights.elementalResist,
-						false,
-						false]);
+					new UnifiedQueryParams.Entry('+#% total to all Elemental Resistances (pseudo)',
+						pobApi.weights.elementalResist));
 			if (pobApi.weights.chaosResist)
 				unifiedQueryParams.weightEntries.unshift(
-					['pseudo.pseudo_total_chaos_resistance',
-						pobApi.weights.chaosResist,
-						false,
-						false]);
+					new UnifiedQueryParams.Entry('+#% total to Chaos Resistance (pseudo)',
+						pobApi.weights.chaosResist));
 			return unifiedQueryParams;
 		},
 
@@ -43,30 +39,30 @@ class Macros {
 			let searchers = ['strength', 'dexterity', 'intelligence'].map(
 				attribute => new Searcher(`+# to !gem !passive !per !while !with ${attribute}`));
 			for (let searcher of searchers) {
-				await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
-					!searcher.test(
-						(await apiConstants.propertyById(propertyId))?.originalText));
+				await Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>
+					!searcher.test((await weightEntry.property)?.originalText));
 			}
 			[
-				['pseudo.pseudo_total_strength', pobApi.weights.str],
-				['pseudo.pseudo_total_dexterity', pobApi.weights.dex],
-				['pseudo.pseudo_total_intelligence', pobApi.weights.int],
+				['+# total to Strength (pseudo)', pobApi.weights.str],
+				['+# total to Dexterity (pseudo)', pobApi.weights.dex],
+				['+# total to Intelligence (pseudo)', pobApi.weights.int],
 			]
 				.filter(tuple => tuple[1])
 				.forEach(tuple =>
-					unifiedQueryParams.weightEntries.unshift([...tuple, false, false]));
+					unifiedQueryParams.weightEntries.unshift(
+						new UnifiedQueryParams.Entry(...tuple)));
 			return unifiedQueryParams;
 		},
 
 		addCrafted: async unifiedQueryParams => {
 			// remove existing crafted properties
-			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async propertyId =>
-				(await apiConstants.propertyById(propertyId)).type !== 'crafted');
+			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>
+				(await weightEntry.property)?.type !== 'crafted');
 
 			// add crafted properties using explicit mods' weights
 			let craftedProperties = await apiConstants.propertiesByType('crafted');
 			await Promise.all(unifiedQueryParams.weightEntries.map(async weightEntry => {
-				let weightedProperty = (await apiConstants.propertyById(weightEntry[0]));
+				let weightedProperty = await weightEntry.property;
 				if (weightedProperty.type !== 'explicit') return;
 
 				let craftedProperty = craftedProperties.find(craftedProperty =>
@@ -74,7 +70,7 @@ class Macros {
 				if (!craftedProperty) return;
 
 				unifiedQueryParams.weightEntries.push(
-					[craftedProperty.id, weightEntry[1], false, true]);
+					new UnifiedQueryParams.Entry(craftedProperty.text, weightEntry.weight));
 			}));
 
 			return unifiedQueryParams;
@@ -114,30 +110,25 @@ class Macros {
 				.filter(({_, matchingProperties}) => matchingProperties.length > 2)
 				.forEach(({pseudoProperty, matchingProperties}) => {
 					let weightEntries = unifiedQueryParams.weightEntries.filter(weightEntry =>
-						matchingProperties.some(property => property.id === weightEntry[0]));
+						matchingProperties.some(
+							property => property.text === weightEntry.propertyText));
 					if (weightEntries.length <= 1) return;
-					let weight = Math.max(...weightEntries.map(weightEntry => weightEntry[1]));
+					let weight = Math.max(...weightEntries.map(weightEntry => weightEntry.weight));
 					unifiedQueryParams.weightEntries = unifiedQueryParams.weightEntries
 						.filter(weightEntry => !weightEntries.includes(weightEntry));
 					unifiedQueryParams.weightEntries.unshift(
-						[pseudoProperty.id, weight, false, true]);
+						new UnifiedQueryParams.Entry(pseudoProperty.text, weight));
 				});
 			return unifiedQueryParams;
 		},
 
 		enableAll: unifiedQueryParams => {
-			unifiedQueryParams.weightEntries.forEach(weightEntry =>
-				weightEntry[3] = true);
-			unifiedQueryParams.andEntries.forEach(weightEntry =>
-				weightEntry[3] = true);
-			unifiedQueryParams.notEntries.forEach(weightEntry =>
-				weightEntry[1] = true);
-			unifiedQueryParams.conditionalPrefixEntries.forEach(weightEntry =>
-				weightEntry[3] = true);
-			unifiedQueryParams.conditionalSuffixEntries.forEach(weightEntry =>
-				weightEntry[3] = true);
-			unifiedQueryParams.sharedWeightEntries.forEach(weightEntry =>
-				weightEntry[3] = true);
+			unifiedQueryParams.weightEntries.forEach(entry => entry.enabled = true);
+			unifiedQueryParams.andEntries.forEach(entry => entry.enabled = true);
+			unifiedQueryParams.notEntries.forEach(entry => entry.enabled = true);
+			unifiedQueryParams.conditionalPrefixEntries.forEach(entry => entry.enabled = true);
+			unifiedQueryParams.conditionalSuffixEntries.forEach(entry => entry.enabled = true);
+			unifiedQueryParams.sharedWeightEntries.forEach(entry => entry.enabled = true);
 			return unifiedQueryParams;
 		},
 	};

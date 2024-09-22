@@ -51,53 +51,27 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 });
 
 class TradeQuery {
-	constructor(data) {
-		this.league = data.league || '';
-		this.sessionId = data.sessionId || '';
-		this.name = data.name || '';
-		this.type = data.type || '';
-		this.minValue = data.minValue || 0;
-		this.maxPrice = data.maxPrice || 0;
-		this.online = data.online || false;
-		this.defenseProperties = data.defenseProperties || {
-			armour: {min: 0, weight: 0},
-			evasion: {min: 0, weight: 0},
-			energyShield: {min: 0, weight: 0},
-		};
-		this.affixProperties = data.affixProperties || {
-			prefix: false,
-			suffix: false,
-		};
-		this.linked = data.linked || false;
-		this.uncorrupted = data.uncorrupted || false;
-		this.nonUnique = data.nonUnique || false;
-		this.influences = [...data.influences || []];
-		this.uncrafted = data.uncrafted || false;
-		// {property: weight, ...}
-		this.weights = data.weights || {};
-		// {property: min, ...}
-		this.ands = data.ands || {};
-		// {property: undefined, ...}
-		this.nots = data.nots || {};
-		this.sort = data.sort || apiConstants.sort.value;
-		this.affixValueShift = data.affixValueShift || 0;
-		this.priceShifts = data.priceShifts || {};
-
+	constructor(unifiedQueryParams, league, sessionId, affixValueShift = 0, priceShifts = {}) {
+		this.unifiedQueryParams = unifiedQueryParams;
+		this.league = league;
+		this.sessionId = sessionId;
+		this.affixValueShift = affixValueShift;
+		this.priceShifts = priceShifts;
 		this.itemStream = new Stream();
 		this.progressStream = new Stream();
 		this.stopObj = {};
 	}
 
 	getQuery(overrides = {}) {
-		return UnifiedQueryParams.toApiQueryParams(this, overrides);
+		return this.unifiedQueryParams.toApiQueryParams(overrides);
 	}
 
 	overrideDefenseProperty(name, min) {
 		return {
 			defenseProperties: {
-				...this.defenseProperties,
+				...this.unifiedQueryParams.defenseProperties,
 				[name]: {
-					...this.defenseProperties[name],
+					...this.unifiedQueryParams.defenseProperties[name],
 					min,
 				},
 			},
@@ -113,10 +87,10 @@ class TradeQuery {
 	}
 
 	async writeItemsToStream() {
-		let items = await this.queryAndParseItems(this.getQuery());
+		let items = await this.queryAndParseItems(await this.getQuery());
 
 		// todo[low] this doesn't work for hybrid (e.g. es + evasion) bases
-		let defenseProperty = Object.entries(this.defenseProperties)
+		let defenseProperty = Object.entries(this.unifiedQueryParams.defenseProperties)
 			.find(([_, {weight}]) => weight);
 		if (defenseProperty) {
 			let newItems = items;
@@ -135,7 +109,7 @@ class TradeQuery {
 
 				let overrides = this.overrideDefenseProperty(defenseProperty[0],
 					minDefensePropertyValue);
-				let query = this.getQuery(overrides);
+				let query = await this.getQuery(overrides);
 				newItems = await this.queryAndParseItems(query);
 				items = items.concat(newItems);
 			} while (newItems.length > 0);
@@ -185,7 +159,7 @@ class TradeQuery {
 					],
 				};
 				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let response2 = await rlrGet(endpoint2, params, headers, this.stopObj, this.id);
+				let response2 = await rlrGet(endpoint2, params, headers, this.stopObj);
 				let data2 = JSON.parse(response2.string);
 				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
@@ -194,8 +168,8 @@ class TradeQuery {
 					itemCount,
 				});
 				let items = data2.result.map(itemData =>
-					new ItemData(this.league, this.affixValueShift, this.defenseProperties,
-						this.priceShifts, itemData));
+					new ItemData(this.league, this.affixValueShift,
+						this.unifiedQueryParams.defenseProperties, this.priceShifts, itemData));
 				// todo[high] let users wait on pricePromise and rm this await
 				await Promise.all(items.map(item => item.pricePromise));
 				this.itemStream.write(items);
@@ -215,10 +189,10 @@ class TradeQuery {
 		}
 	}
 
-	get toApiHtmlUrl() {
+	async toApiHtmlUrl() {
 		const api = 'https://www.pathofexile.com/trade';
 		let endpoint = `${api}/search/${this.league}`;
-		let queryParams = {q: JSON.stringify(this.getQuery())};
+		let queryParams = {q: JSON.stringify(await this.getQuery())};
 		let queryParamsString = querystring.stringify(queryParams);
 		return `${endpoint}?${queryParamsString}`;
 	}
