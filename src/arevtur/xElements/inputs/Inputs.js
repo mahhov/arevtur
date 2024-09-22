@@ -160,9 +160,6 @@ customElements.define(name, class extends XElement {
 			inputSetEl.name = inputSet.name;
 		});
 		this.setInputSetIndex(this.inputSetIndex);
-
-		// todo[high] replace this with explicit calls when inputs change
-		setInterval(() => this.finalizeTradeQuery(), 1000);
 	}
 
 	updateStatusIndicator(promise, element, league) {
@@ -275,7 +272,7 @@ customElements.define(name, class extends XElement {
 
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
-		let tradeQueries = await Promise.all(this.inputSets
+		return await Promise.all(this.inputSets
 			.filter(inputSet => inputSet.active)
 			.flatMap(inputSet =>
 				UnifiedQueryParams
@@ -283,11 +280,5 @@ customElements.define(name, class extends XElement {
 					.toTradeQueryData(manual6LinkCheapestOption[0], manual6LinkCheapestOption[1])
 					.map(async data => new TradeQuery((await data), league, sessionId,
 						(await data).affixValueShift, (await data).priceShifts))));
-
-		// todo[medium] move this to InputTradeParams and remove import button, instead
-		//  automatically update url <-> form when either one changes
-		this.$('#input-import-trade-search-url').url = tradeQueries[0].toApiHtmlUrl;
-
-		return tradeQueries;
 	}
 });
