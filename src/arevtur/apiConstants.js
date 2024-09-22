@@ -55,8 +55,8 @@ class ApiConstants {
 		let data = JSON.parse(cleanStr);
 		let types = data.propertyFilters
 			.find(({id}) => id === 'type_filters').filters
-			.find(({id}) => id === 'category').option.options;
-		types.find(({id}) => id === 'armour.chest').text += ' chest';
+			.find(({id}) => id === 'category').option.options
+			.map(type => ({id: type.id, text: type.text.replaceAll('-', ' ')}));
 		return types;
 		/*
 			[{
