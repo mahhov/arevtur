@@ -40,9 +40,8 @@ class UnifiedQueryParams {
 	uncrafted = false;
 	influences = [];
 	weightEntries = [];
-	// todo[blocking 4] don't default '' to 0 in order to not break negated mods; e.g. 'Socketed
+	// todo[high] don't default '' to 0 in order to not break negated mods; e.g. 'Socketed
 	//  Attacks have +# to Total Mana Cost'
-	// todo[blocking 5] support annointments and other properties with 'options'
 	andEntries = [];
 	notEntries = [];
 	conditionalPrefixEntries = [];
