@@ -336,7 +336,7 @@ class PobApi extends Emitter {
 	}
 
 	static isItemEquippable(item) {
-		return ['requirements:', 'sockets:', 'item class: jewels'].some(search =>
+		return ['requirements:', 'sockets:', 'item class: jewels', 'rarity: unique'].some(search =>
 			item.toLowerCase().includes(search));
 	}
 
