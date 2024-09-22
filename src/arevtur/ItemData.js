@@ -83,7 +83,7 @@ class ItemData {
 	}
 
 	static typeFromItemText(text) {
-		return pobConsts.itemClassToPobType[text.match(/^Item Class: (\w+)/)?.[1]];
+		return pobConsts.itemClassToPobType[text.match(/^Item Class: ([\w ]+)/)?.[1]];
 	}
 
 	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
