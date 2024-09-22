@@ -96,10 +96,10 @@ class ApiConstants {
 		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/stats');
 		let properties = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
-			.flatMap(({id, text, type, options}) => {
+			.flatMap(({id, text, type, option}) => {
 				let property = {id, text: `${text} (${type})`, originalText: text, type};
-				return options ?
-					options.map(o =>
+				return option?.options ?
+					option.options.map(o =>
 						({...property, optionId: o.id, text: `${text} (${type}) = ${o.text}`})) :
 					property;
 			});
