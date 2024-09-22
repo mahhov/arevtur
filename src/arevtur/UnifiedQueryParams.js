@@ -374,8 +374,3 @@ class UnifiedQueryParams {
 }
 
 module.exports = UnifiedQueryParams;
-
-// todo[blocking]
-//   prefix / suffix always showing 0
-//   NaN in build values
-//   empty weight entries being added

@@ -100,7 +100,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValue(value) {
-		this.$('#build-value').text = value && round(Number(value), 3);
+		this.$('#build-value').text = value && round(Number(value), 3) || '';
 	}
 
 	focus() {

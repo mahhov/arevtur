@@ -135,7 +135,7 @@ class ItemData {
 
 		// todo[high] consider cost of crafts
 
-		// todo[blocking 6] support best annointment and its price
+		// todo[high] support best annointment and its price
 
 		let craftableMods = (await pobApi
 			.getCraftedMods())
