@@ -145,6 +145,7 @@ class UnifiedQueryParams {
 
 		let propertyEntryDatas =
 			[...inputElement.$$('#query-properties-list x-query-property')]
+				.filter(queryProperty => queryProperty.property)
 				.map(queryProperty => ({
 					propertyText: queryProperty.property,
 					weight: Number(queryProperty.weight),
