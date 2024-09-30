@@ -24,10 +24,10 @@ class Entry {
 	}
 
 	async toApiQueryParams(weightKey = null) {
-		if (!this.enabled)
+		if (!this.enabled || !this.propertyText)
 			return null;
 		let property = await this.property;
-		if (!property)
+		if (!property?.id)
 			return null;
 		let ret = {
 			id: property.id,
@@ -254,8 +254,9 @@ class UnifiedQueryParams {
 			andFilters.push({id: 'pseudo.pseudo_number_of_empty_suffix_mods'});
 
 		let typeFilters = {};
-		if (overridden.typeText)
-			typeFilters.category = {option: await apiConstants.typeTextToId(overridden.typeText)};
+		let typeId = await apiConstants.typeTextToId(overridden.typeText);
+		if (typeId)
+			typeFilters.category = {option: typeId};
 		if (overridden.nonUnique)
 			typeFilters.rarity = {option: 'nonunique'};
 
