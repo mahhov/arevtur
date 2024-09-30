@@ -137,17 +137,15 @@ class ItemData {
 
 		// todo[high] support best annointment and its price
 
-		let craftableMods = (await pobApi
-			.getCraftedMods())
+		let craftableMods = (await pobApi.getCraftedMods())
 			// check if item has open prefix/suffix
 			.filter(craftableMod => openAffixes.includes(craftableMod.type))
 			// check if craft applies to item type
-			.filter(
-				craftableMod => craftableMod.types[this.type])
-			// add key to dedupe different tiers of similar crafts
+			.filter(craftableMod => craftableMod.types[this.type])
 			.map(craftableMod => {
-				if (craftableMod.modTags.includes('unveiled_mod'))
-					craftableMod[1] += ` (veiled)`;
+				// add stats as an array
+				craftableMod.stats = [craftableMod[1], craftableMod[2]].filter(v => v);
+				// add key to dedupe different tiers of similar crafts
 				craftableMod.key = Object.values(craftableMod.statOrder).join();
 				return craftableMod;
 			});
@@ -159,23 +157,23 @@ class ItemData {
 		craftableMods = craftableMods
 			// skip lower tier crafts
 			.filter(craftableMod => craftableMod.level === seenCraftableMods[craftableMod.key])
-			// map to stats
-			.map(craftableMod => [craftableMod[1], craftableMod[2]].filter(v => v))
 			// skip stats the item already has
-			.filter(craftableMod => craftableMod
+			.filter(craftableMod => craftableMod.stats
 				// 'Regenerate (1.8-3) ...' -> 'Regenerate # ...'
 				.map(craftableStat => craftableStat.replaceAll(/\(\d+(\.\d+)?-\d+(\.\d+)?\)/g, '#'))
+				// '+1 to Minimum ...' -> '+# to Minimum ...'
+				.map(craftableStat => craftableStat.replaceAll(/\d+/g, '#'))
 				.every(craftableStat => !existingMods.includes(craftableStat)));
 
 		// skip crafts that don't benefit build
-		craftableMods = await Promise.all(craftableMods.map(
-			async craftableMod => {
-				// todo[high] use correct slot
-				let pobType = await apiConstants.typeToPobType('Amulet');
-				craftableMod.eval =
-					await pobApi.evalItemModSummary(pobType, craftableMod.join('\n'));
-				return craftableMod;
-			}));
+		craftableMods = await Promise.all(craftableMods.map(async craftableMod => {
+			// todo[medium] use correct slot; amulet won't correctly eval e.g. local evasion or dmg.
+			let pobType = await apiConstants.typeToPobType('Amulet');
+			craftableMod.eval =
+				await pobApi.evalItemModSummary(pobType, craftableMod.stats.join('\n'));
+			return craftableMod;
+		}));
+		// pick the best mod
 		craftableMods = craftableMods
 			.filter(craftableMod => craftableMod.eval.value)
 			.sort((a, b) => b.eval.value - a.eval.value)
@@ -185,10 +183,14 @@ class ItemData {
 			return this.buildValuePromise.then(buildValue =>
 				({value: buildValue.value, text: 'No craftable mods'}));
 
-		craftableMods = await Promise.all(craftableMods.map(craftableMod =>
-			pobApi.evalItemWithCraft(this.text, craftableMod)));
-		let bestI = maxIndex(craftableMods.map(craftableMod => craftableMod.value));
-		let bestCraftableMod = craftableMods[bestI];
+		let craftableModEvals = await Promise.all(craftableMods.map(craftableMod => {
+			let evalStats = craftableMod.stats;
+			if (craftableMod.modTags.includes('unveiled_mod'))
+				evalStats[0] += ` (veiled)`;
+			return pobApi.evalItemWithCraft(this.text, evalStats);
+		}));
+		let bestI = maxIndex(craftableModEvals.map(craftableModEval => craftableModEval.value));
+		let bestCraftableMod = craftableModEvals[bestI];
 
 		let buildValue = await this.buildValuePromise;
 		return bestCraftableMod.value > buildValue.value ?
