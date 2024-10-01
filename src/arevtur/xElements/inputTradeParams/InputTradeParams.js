@@ -336,13 +336,14 @@ customElements.define(name, class extends XElement {
 		return UnifiedQueryParams.fromInputTradeQueryParams(this);
 	}
 
-	async setUnifiedQueryParams(unifiedQueryParams) {
+	async setUnifiedQueryParams(unifiedQueryParams, external = false) {
 		await unifiedQueryParams.toInputTradeQueryParams(this);
 		this.addQueryProperty();
 		this.propagateLockedWeights();
 		this.checkProperties();
 		this.applySearch();
-		this.emit('change');
+		if (!external)
+			this.emit('change');
 	}
 
 	refreshBuild() {
