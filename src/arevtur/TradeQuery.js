@@ -51,8 +51,9 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 });
 
 class TradeQuery {
-	constructor(unifiedQueryParams, league, sessionId, affixValueShift = 0, priceShifts = {}) {
+	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {
 		this.unifiedQueryParams = unifiedQueryParams;
+		this.version2 = version2;
 		this.league = league;
 		this.sessionId = sessionId;
 		this.affixValueShift = affixValueShift;
@@ -116,11 +117,15 @@ class TradeQuery {
 		}
 	}
 
+	api
+
 	async queryAndParseItems(query) {
 		// todo[medium] more selective try/catch
 		try {
-			const api = 'https://www.pathofexile.com/api/trade';
-			let endpoint = `${api}/search/${this.league}`;
+			const api = 'https://www.pathofexile.com/api';
+			let endpoint = this.version2 ?
+				`${api}/trade2/search/poe2/${this.league}` :
+				`${api}/trade/search/${this.league}`;
 			let headers = apiConstants.createRequestHeader(this.sessionId);
 			this.progressStream.write({
 				text: 'Initial query.',
@@ -190,8 +195,10 @@ class TradeQuery {
 	}
 
 	async toApiHtmlUrl() {
-		const api = 'https://www.pathofexile.com/trade';
-		let endpoint = `${api}/search/${this.league}`;
+		const api = 'https://www.pathofexile.com';
+		let endpoint = this.version2 ?
+			`${api}/trade2/search/poe2/${this.league}` :
+			`${api}/trade/search/${this.league}`;
 		let queryParams = {q: JSON.stringify(await this.getQuery())};
 		let queryParamsString = querystring.stringify(queryParams);
 		return `${endpoint}?${queryParamsString}`;

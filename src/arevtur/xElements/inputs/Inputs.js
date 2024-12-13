@@ -51,6 +51,7 @@ customElements.define(name, class extends XElement {
 			apiConstants.items,
 			this.$('#loaded-items-status'));
 
+		this.$('#version-2-check').addEventListener('change', () => this.store());
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('change', () => this.store());
 
@@ -177,6 +178,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	onConfigChange(config) {
+		this.$('#version-2-check').checked = config.version2;
 		this.$('#league-input').value = config.league;
 		this.$('#loaded-currencies-status').classList.remove('valid', 'invalid');
 		this.updateStatusIndicator(
@@ -253,7 +255,10 @@ customElements.define(name, class extends XElement {
 	}
 
 	store() {
-		configForRenderer.config = {'league': this.$('#league-input').value};
+		configForRenderer.config = {
+			version2: this.$('#version-2-check').value,
+			league: this.$('#league-input').value,
+		};
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
@@ -270,6 +275,7 @@ customElements.define(name, class extends XElement {
 		let manual6LinkCheapestOption = manual6LinkOptions[
 			minIndex(manual6LinkOptions.map(v => v[1]))];
 
+		let version2 = this.$('#version-2-check').value;
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
 		return await Promise.all(this.inputSets
@@ -278,7 +284,7 @@ customElements.define(name, class extends XElement {
 				UnifiedQueryParams
 					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
 					.toTradeQueryData(manual6LinkCheapestOption[0], manual6LinkCheapestOption[1])
-					.map(async data => new TradeQuery((await data), league, sessionId,
+					.map(async data => new TradeQuery((await data), version2, league, sessionId,
 						(await data).affixValueShift, (await data).priceShifts))));
 	}
 });
