@@ -69,12 +69,12 @@
 		<span title="# of ready items / # of items received / # of items in current query">
 			Count: <span id="results-count"></span></span>
 		<x-autocomplete-input id="sort-build-value-input" placeholder="sort"
-		                      size="3"></x-autocomplete-input>
+							  size="3"></x-autocomplete-input>
 		<x-numeric-input id="price-per-value-input" min="0"
-		                 title="How much chaos you're willing to pay per +1 value.&#10;If 0, sorts items by value only.&#10;Otherwise, sorts by a combination of value & price."></x-numeric-input>
+						 title="How much chaos you're willing to pay per +1 value.&#10;If 0, sorts items by value only.&#10;Otherwise, sorts by a combination of value & price."></x-numeric-input>
 		<!-- todo[medium] allow searching tags e.g. crafted-->
 		<input id="search-input" placeholder="search (e.g. energyshield, !evasion, !armour)"
-		       title="ctrl+f">
+			   title="ctrl+f">
 	</div>
 	<progress id="results-progress-bar" max="1" value="1"></progress>
 </div>
@@ -83,5 +83,5 @@
 	<div id="results-list"></div>
 	<!-- position after results list so that the ItemListing .pane doesn't bleed through -->
 	<x-chart id="results-chart" axis-label-x="Chaos" axis-label-y="Value" width="300"
-	         height="300"></x-chart>
+			 height="300"></x-chart>
 </div>

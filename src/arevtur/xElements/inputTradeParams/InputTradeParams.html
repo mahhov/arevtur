@@ -47,21 +47,21 @@
 	<label>
 		Value
 		<x-numeric-input id="min-value-input" class="short-input"
-		                 title="Min item weight"></x-numeric-input>
+						 title="Min item weight"></x-numeric-input>
 	</label>
 	<label>
 		Price
 		<x-numeric-input id="price-input" class="short-input"
-		                 title="Max item price in chaos"></x-numeric-input>
+						 title="Max item price in chaos"></x-numeric-input>
 	</label>
 	<label>Offline<input id="offline-check" type="checkbox"
-	                     title="Include items from offline accounts"></label>
+						 title="Include items from offline accounts"></label>
 	<button id="smart-build-import-for-type-button" class="pob"
-	        title="PoB Import + Replace Resists + Replace Attributes + Add Pseudo + Enable All">
+			title="PoB Import + Replace Resists + Replace Attributes + Add Pseudo + Enable All">
 		Smart PoB Import
 	</button>
 	<button id="build-import-for-type-button" class="pob experimental"
-	        title="Get the mods that are useful to this build">PoB Import
+			title="Get the mods that are useful to this build">PoB Import
 	</button>
 </div>
 <div>
@@ -97,14 +97,14 @@
 </div>
 <div>
 	<label>6-link<input id="linked-check" type="checkbox"
-	                    title="Find items that are either 6-linked or can be 6-linked for under the price range"></label>
+						title="Find items that are either 6-linked or can be 6-linked for under the price range"></label>
 	<label>Uncorrupted<input id="uncorrupted-check" type="checkbox"
-	                         title="Find uncorrupted items only"></label>
+							 title="Find uncorrupted items only"></label>
 	<label>Non Unique<input id="non-unique-check" type="checkbox"
-	                        title="Find non unique items only"></label>
+							title="Find non unique items only"></label>
 	<!-- todo[low] influences not working and not styled dark -->
 	<x-multi-select-lined id="influence-input" class="experimental"
-	                      placeholder="Add influences"></x-multi-select-lined>
+						  placeholder="Add influences"></x-multi-select-lined>
 </div>
 <div>
 	<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
@@ -112,18 +112,18 @@
 		<button id="drop-implicit-mods-button" title="Remove all implicit mods">Drop Implicits
 		</button>
 		<button id="replace-resist-mods-button"
-		        title="Replace all resist mods with a pseudo total resist mod. Useful when looking for a specific corrupted mod.">
+				title="Replace all resist mods with a pseudo total resist mod. Useful when looking for a specific corrupted mod.">
 			Replace Resists
 		</button>
 		<button id="replace-attribute-mods-button"
-		        title="Replace all attribute mods with 3 pseudo attribute mods">Replace Attributes
+				title="Replace all attribute mods with 3 pseudo attribute mods">Replace Attributes
 		</button>
 		<button id="add-crafted-mods-button" class="experimental"
-		        title="Add all crafted mods matching the existing explicit mods. This isn't very useful since searching for an explicit mode will include crafted mods.">
+				title="Add all crafted mods matching the existing explicit mods. This isn't very useful since searching for an explicit mode will include crafted mods.">
 			Add Crafted
 		</button>
 		<button id="add-pseudo-mods-button"
-		        title="When possible, merge all duplicate explicit, implicit, and crafted mods into pseudo mods">
+				title="When possible, merge all duplicate explicit, implicit, and crafted mods into pseudo mods">
 			Add Pseudo
 		</button>
 		<button id="enable-all-mods-button" title="Enable the top 35 mods">Enable All</button>
