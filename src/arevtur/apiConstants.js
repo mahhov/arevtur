@@ -46,18 +46,12 @@ class ApiConstants {
 	}
 
 	static async initTypes() {
-		let response = await ApiConstants.get('https://web.poecdn.com/js/PoE/Trade/Data/Static.js');
-		let str = response.string.match(/return(.*)}\)\);/)[1];
-		let cleanStr = str
-			.replace(/e\.translate\("(.*?)"\)/g, '"$1"')
-			.replace(/([{,])(\w+):/g, '$1"$2":')
-			.replace(/!(\d)/g, `"!${1}}}"`);
-		let data = JSON.parse(cleanStr);
-		let types = data.propertyFilters
+		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/filters');
+		let data = JSON.parse(response.string);
+		return data.result
 			.find(({id}) => id === 'type_filters').filters
 			.find(({id}) => id === 'category').option.options
 			.map(type => ({id: type.id, text: type.text.replaceAll('-', ' ')}));
-		return types;
 		/*
 			[{
 				id: 'weapon.claw',
