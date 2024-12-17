@@ -292,10 +292,9 @@ customElements.define(name, class extends XElement {
 	}
 
 	propagateLockedWeights() {
-		// todo[low] locked isn't working
 		this.queryProperties.forEach((queryProperty, i, a) => {
-			if (queryProperty.locked && i < a.length)
-				a[i + 1].weight = queryProperty.weight;
+			if (queryProperty.locked && i)
+				queryProperty.weight = a[i - 1].weight;
 		});
 	}
 
