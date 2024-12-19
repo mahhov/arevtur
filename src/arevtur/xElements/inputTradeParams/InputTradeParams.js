@@ -5,6 +5,7 @@ const UnifiedQueryParams = require('../../UnifiedQueryParams');
 const {
 	defensePropertyTuples,
 	defenseBuildValueTuples,
+	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
 } = require('./Properties');
@@ -29,6 +30,10 @@ customElements.define(name, class extends XElement {
 			armourBuildValueTooltip: {},
 			evasionBuildValueTooltip: {},
 			energyShieldBuildValueTooltip: {},
+			maxLevelRequirement: {},
+			maxStrengthRequirement: {},
+			maxDexterityRequirement: {},
+			maxIntelligenceRequirement: {},
 			prefix: {},
 			suffix: {},
 			linked: {boolean: true},
@@ -85,7 +90,7 @@ customElements.define(name, class extends XElement {
 			}
 		});
 
-		[...defensePropertyTuples, ...affixPropertyTuples]
+		[...defensePropertyTuples, ...maxRequirementPropertyTuples, ...affixPropertyTuples]
 			.forEach(([property, query]) => {
 				this.$(query).addEventListener('change', () => {
 					this[property] = this.$(query).value;
@@ -181,6 +186,22 @@ customElements.define(name, class extends XElement {
 
 	set energyShield(value) {
 		this.$('#energy-shield-input').value = value;
+	}
+
+	set maxLevelRequirement(value) {
+		this.$('#max-level-requirement-input').value = value;
+	}
+
+	set maxStrengthRequirement(value) {
+		this.$('#max-strength-requirement-input').value = value;
+	}
+
+	set maxDexterityRequirement(value) {
+		this.$('#max-dexterity-requirement-input').value = value;
+	}
+
+	set maxIntelligenceRequirement(value) {
+		this.$('#max-intelligence-requirement-input').value = value;
 	}
 
 	set armourBuildValue(value) {

@@ -11,6 +11,13 @@ const defenseBuildValueTuples = [
 	['energyShieldBuildValue', '#energy-shield-build-value', 'energyShield', '# Energy shield'],
 ];
 
+const maxRequirementPropertyTuples = [
+	['maxLevelRequirement', '#max-level-requirement-input'],
+	['maxStrengthRequirement', '#max-strength-requirement-input'],
+	['maxDexterityRequirement', '#max-dexterity-requirement-input'],
+	['maxIntelligenceRequirement', '#max-intelligence-requirement-input'],
+];
+
 const affixPropertyTuples = [
 	['prefix', '#prefix-input'],
 	['suffix', '#suffix-input'],
@@ -39,6 +46,7 @@ const queryPropertyFilters = [
 module.exports = {
 	defensePropertyTuples,
 	defenseBuildValueTuples,
+	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
 	queryPropertyFilters,

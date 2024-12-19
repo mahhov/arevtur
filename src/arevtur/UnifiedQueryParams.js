@@ -3,6 +3,7 @@ const {XElement} = require('xx-element');
 const {deepCopy} = require('../util/util');
 const {
 	defensePropertyTuples,
+	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
 	queryPropertyFilters,
@@ -52,6 +53,7 @@ class UnifiedQueryParams {
 	maxPrice = 0;
 	offline = false;
 	defenseProperties = {}; // {armour, evasion, energyShield: {weight: 0, min: 0}}
+	maxRequirementProperties = {}; // {max*Requirement: -1}
 	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
 	linked = false;
 	uncorrupted = false;
@@ -70,6 +72,8 @@ class UnifiedQueryParams {
 	constructor() {
 		defensePropertyTuples.forEach(([property]) =>
 			this.defenseProperties[property] = {weight: 0, min: 0});
+		maxRequirementPropertyTuples.forEach(([property]) =>
+			this.maxRequirementProperties[property] = 0);
 		affixPropertyTuples.forEach(([property]) =>
 			this.affixProperties[property] = 0);
 	}
@@ -109,6 +113,8 @@ class UnifiedQueryParams {
 		inputElement.offline = this.offline;
 		defensePropertyTuples.forEach(([property]) =>
 			inputElement[property] = this.defenseProperties[property].weight);
+		maxRequirementPropertyTuples.forEach(([property]) =>
+			inputElement[property] = this.maxRequirementProperties[property]);
 		affixPropertyTuples.forEach(([property]) =>
 			inputElement[property] = this.affixProperties[property]);
 		inputElement.linked = this.linked;
@@ -139,6 +145,12 @@ class UnifiedQueryParams {
 				weight: Number(inputElement[property]),
 				min: 0,
 			}]));
+
+		let maxRequirementProperties = Object.fromEntries(maxRequirementPropertyTuples
+			.map(([property]) => [
+				property,
+				inputElement[property] ? Number(inputElement[property]) : 0,
+			]));
 
 		let affixProperties = Object.fromEntries(affixPropertyTuples
 			.map(([property]) => [property, Number(inputElement[property])]));
@@ -171,6 +183,7 @@ class UnifiedQueryParams {
 		unifiedQueryParams.maxPrice = Number(inputElement.price);
 		unifiedQueryParams.offline = inputElement.offline;
 		unifiedQueryParams.defenseProperties = defenseProperties;
+		unifiedQueryParams.maxRequirementProperties = maxRequirementProperties;
 		unifiedQueryParams.affixProperties = affixProperties;
 		unifiedQueryParams.linked = inputElement.linked;
 		unifiedQueryParams.uncorrupted = inputElement.uncorrupted;
@@ -333,6 +346,7 @@ class UnifiedQueryParams {
 			offline: apiQueryParams?.query?.status !== 'online' &&
 				apiQueryParams?.query?.status?.option !== 'online',
 			// defenseProperties
+			// maxRequirementProperties
 			// affixProperties
 			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,
 			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,
