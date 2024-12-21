@@ -27,7 +27,7 @@ class ItemData {
 		this.whisperText = tradeApiItemData.listing.whisper;
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
-		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
+		this.text = ItemData.decode64(tradeApiItemData.item.extended.text || '');
 		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
@@ -67,7 +67,9 @@ class ItemData {
 
 		// value build
 		this.buildValuePromise = pobApi.evalItem(this.text);
-		this.buildValuePromise.then(resolved => this.buildValuePromise.resolved = resolved);
+		this.buildValuePromise
+			.then(resolved => this.buildValuePromise.resolved = resolved)
+			.catch(() => 0);
 
 		this.craftValuePromise = this.craftValue();
 		this.craftValuePromise.then(resolved => this.craftValuePromise.resolved = resolved);
@@ -101,6 +103,8 @@ class ItemData {
 	}
 
 	static async price(league, {currency: currencyId, count, shifts}) {
+		return currencyId === 'exalted' ? count : Infinity;
+
 		let currencyPrices = (await apiConstants.currencyPrices(league))[currencyId];
 		if (currencyPrices)
 			return currencyPrices * count +
