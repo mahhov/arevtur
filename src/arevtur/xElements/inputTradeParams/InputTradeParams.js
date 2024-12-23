@@ -9,6 +9,7 @@ const {
 	affixPropertyTuples,
 	influenceProperties,
 } = require('./Properties');
+const configForRenderer = require('../../../services/config/configForRenderer');
 const pobApi = require('../../../services/pobApi/pobApi');
 const Searcher = require('../../../util/Searcher');
 const Macros = require('../../Macros');
@@ -48,15 +49,10 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		apiConstants.items.then(items =>
-			this.$('#name-input').autocompletes = items);
 		this.$('#name-input').addEventListener('change', () => {
 			this.name = this.$('#name-input').value;
 			this.emit('change');
 		});
-
-		apiConstants.typeTexts().then(typeTexts =>
-			this.$('#type-input').autocompletes = typeTexts);
 		this.$('#type-input').addEventListener('change', () => {
 			this.type = this.$('#type-input').value;
 			this.emit('change');
@@ -151,7 +147,17 @@ customElements.define(name, class extends XElement {
 			this.emit('change');
 		});
 
+		configForRenderer.addListener('change', () => this.onConfigChange());
+		this.onConfigChange();
+
 		pobApi.addListener('change', () => this.refreshBuild());
+	}
+
+	async onConfigChange() {
+		this.$('#name-input').autocompletes = await apiConstants.items;
+		this.$('#type-input').autocompletes = await apiConstants.typeTexts();
+		this.queryProperties.forEach(async queryProperty =>
+			queryProperty.properties = await apiConstants.propertyTexts());
 	}
 
 	set name(value) {

@@ -1,5 +1,6 @@
 {
   "league": "Standard",
+  "version2": false,
   "restrictToPoeWindow": true,
   "darkTheme": true,
   "viewHorizontal": true,

@@ -30,26 +30,11 @@ customElements.define(name, class extends XElement {
 		configForRenderer.addListener('change', config => this.onConfigChange(config));
 		this.onConfigChange(configForRenderer.config);
 
-		apiConstants.leagues.then(leagues =>
-			this.$('#league-input').autocompletes = leagues);
 		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo[high] try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
-
-		this.updateStatusIndicator(
-			apiConstants.leagues,
-			this.$('#loaded-leagues-status'));
-		this.updateStatusIndicator(
-			apiConstants.types,
-			this.$('#loaded-types-status'));
-		this.updateStatusIndicator(
-			apiConstants.properties,
-			this.$('#loaded-properties-status'));
-		this.updateStatusIndicator(
-			apiConstants.items,
-			this.$('#loaded-items-status'));
 
 		this.$('#version-2-check').addEventListener('change', () => this.store());
 		this.$('#league-input').addEventListener('change', () => this.store());
@@ -163,29 +148,45 @@ customElements.define(name, class extends XElement {
 		this.setInputSetIndex(this.inputSetIndex);
 	}
 
-	updateStatusIndicator(promise, element, league) {
+	updateStatusIndicator(promise, element) {
+		let version2 = configForRenderer.config.version2;
+		let league = configForRenderer.config.league;
+		let stillCurrent = () => league === configForRenderer.config.league && version2 === configForRenderer.config.version2;
+
 		element.classList.add('busy');
 		element.classList.remove('valid', 'invalid');
 		promise
 			.then(() => {
-				if (!league || league === configForRenderer.config.league)
+				if (stillCurrent())
 					element.classList.add('valid');
 			})
 			.catch(() => {
-				if (!league || league === configForRenderer.config.league)
+				if (stillCurrent())
 					element.classList.add('invalid');
 			});
 	}
 
-	onConfigChange(config) {
+	async onConfigChange(config) {
 		this.$('#version-2-check').checked = config.version2;
 		this.$('#league-input').value = config.league;
-		this.$('#loaded-currencies-status').classList.remove('valid', 'invalid');
+
+		this.$('#league-input').autocompletes = await apiConstants.leagues;
+
+		this.updateStatusIndicator(
+			apiConstants.leagues,
+			this.$('#loaded-leagues-status'));
+		this.updateStatusIndicator(
+			apiConstants.types,
+			this.$('#loaded-types-status'));
+		this.updateStatusIndicator(
+			apiConstants.properties,
+			this.$('#loaded-properties-status'));
 		this.updateStatusIndicator(
 			apiConstants.currencyPrices(config.league),
-			this.$('#loaded-currencies-status'),
-			config.league,
-		);
+			this.$('#loaded-currencies-status'));
+		this.updateStatusIndicator(
+			apiConstants.items,
+			this.$('#loaded-items-status'));
 	}
 
 	addInputSet(name, unifiedQueryParams) {
@@ -256,7 +257,7 @@ customElements.define(name, class extends XElement {
 
 	store() {
 		configForRenderer.config = {
-			version2: this.$('#version-2-check').value,
+			version2: this.$('#version-2-check').checked,
 			league: this.$('#league-input').value,
 		};
 		localStorage.setItem('input-session-id', this.$('#session-id-input').value);

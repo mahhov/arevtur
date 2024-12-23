@@ -21,18 +21,19 @@ class ApiConstants {
 		// todo[low] need to make it accessible on the singleton. Should figure out a more elegant
 		//  syntax. Likewise for the fake-static constants above.
 		this.createRequestHeader = ApiConstants.createRequestHeader;
+		this.cache = {};
 	}
 
 	// leagues
 
 	get leagues() {
-		return (this.leagues_ ||= ApiConstants.retry(ApiConstants.initLeagues))();
+		return this.cachedRequest('leagues', ApiConstants.initLeagues);
 	}
 
-	static async initLeagues() {
-		let response = await ApiConstants.get('https://api.pathofexile.com/leagues');
-		return JSON.parse(response.string)
-			.filter(league => !league.rules.some(rule => rule.id === 'NoParties'))
+	static async initLeagues(version2) {
+		let response = await ApiConstants.get(ApiConstants.endpoint('leagues', version2));
+		return JSON.parse(response.string).result
+			.filter(league => league.realm === 'pc' || league.realm === 'poe2')
 			.map(league => league.id);
 		/*
 			['Harvest', ...]
@@ -42,11 +43,11 @@ class ApiConstants {
 	// types
 
 	get types() {
-		return (this.types_ ||= ApiConstants.retry(ApiConstants.initTypes))();
+		return this.cachedRequest('types', ApiConstants.initTypes);
 	}
 
-	static async initTypes() {
-		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/filters');
+	static async initTypes(version2) {
+		let response = await ApiConstants.get(ApiConstants.endpoint('filters', version2));
 		let data = JSON.parse(response.string);
 		return data.result
 			.find(({id}) => id === 'type_filters').filters
@@ -83,11 +84,11 @@ class ApiConstants {
 	// properties
 
 	get properties() {
-		return (this.properties_ ||= ApiConstants.retry(ApiConstants.initProperties))();
+		return this.cachedRequest('properties', ApiConstants.initProperties);
 	}
 
-	static async initProperties() {
-		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/stats');
+	static async initProperties(version2) {
+		let response = await ApiConstants.get(ApiConstants.endpoint('stats', version2));
 		let properties = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.flatMap(({id, text, type, option}) => {
@@ -123,11 +124,16 @@ class ApiConstants {
 
 	// currencies
 
-	static async initCurrencies(league) {
+	currencyPrices(league) {
+		return this.cachedRequest(['currencies', league], version2 => ApiConstants.initCurrencies(version2, league));
+	}
+
+	static async initCurrencies(version2, league) {
+		// todo[high] support currencies for version2
 		let currencyPrices = poeNinjaApi.getData(
 			poeNinjaApi.endpointsByLeague.CURRENCY(league));
 		let beastPrices = poeNinjaApi.getData(poeNinjaApi.endpointsByLeague.BEAST(league));
-		let staticDataStr = ApiConstants.get('https://www.pathofexile.com/api/trade/data/static');
+		let staticDataStr = ApiConstants.get(ApiConstants.endpoint('static', version2));
 		currencyPrices = await currencyPrices;
 		staticDataStr = await staticDataStr;
 		beastPrices = await beastPrices;
@@ -151,20 +157,14 @@ class ApiConstants {
 		/* {alt: .125, ...} */
 	}
 
-	currencyPrices(league) {
-		this.currencyPrices_ ||= {};
-		return (this.currencyPrices_[league] ||=
-			ApiConstants.retry(() => ApiConstants.initCurrencies(league)))();
-	}
-
 	// items
 
 	get items() {
-		return (this.items_ ||= ApiConstants.retry(ApiConstants.initItems))();
+		return this.cachedRequest('items', ApiConstants.initItems);
 	}
 
-	static async initItems() {
-		let response = await ApiConstants.get('https://www.pathofexile.com/api/trade/data/items');
+	static async initItems(version2) {
+		let response = await ApiConstants.get(ApiConstants.endpoint('items', version2));
 		let items = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({name, text, type}) => name || text || type);
@@ -188,22 +188,25 @@ class ApiConstants {
 		};
 	}
 
+	static endpoint(name, version2) {
+		return `https://pathofexile.com/api/trade${version2 ? 2 : ''}/data/${name}`;
+	}
+
 	static get(endpoint) {
 		return httpRequest.get(endpoint, {}, ApiConstants.createRequestHeader());
 	}
 
-	static retry(handler) {
+	cachedRequest(cacheKey, initializer) {
 		let duration3hours = 3 * 60 * 60 * 1000;
-		let lastRequest;
-		let promise;
-		return () => {
-			if (!promise || promise.error || performance.now() - lastRequest > duration3hours) {
-				lastRequest = performance.now();
-				promise = new XPromise(handler());
-			}
-			return promise;
-		};
-	};
+		cacheKey = [cacheKey, configForRenderer.config.version2].join(',');
+		if (!this.cache[cacheKey] || performance.now() - this.cache[cacheKey].lastRequest > duration3hours || this.cache[cacheKey].promise.error) {
+			this.cache[cacheKey] = {
+				lastRequest: performance.now(),
+				promise: new XPromise(initializer(configForRenderer.config.version2)),
+			};
+		}
+		return this.cache[cacheKey].promise;
+	}
 }
 
 module.exports = new ApiConstants();
