@@ -3,9 +3,6 @@ const {template, name} = importUtil(__filename);
 const TradeQuery = require('../../TradeQuery');
 const {round} = require('../../../util/util');
 
-const now = new Date();
-const msInHour = 1000 * 60 * 60;
-
 const listTuples = [
 	['#influence-list', 'influences'],
 	['#sockets-list', 'sockets'],
@@ -101,7 +98,8 @@ customElements.define(name, class extends XElement {
 					'')}` : '';
 		this.$('#account-text').textContent = itemData.accountText;
 		this.$('#account-text').title = itemData.accountText;
-		let dateDiff = (now - new Date(itemData.date)) / msInHour;
+		const msInHour = 1000 * 60 * 60;
+		let dateDiff = (new Date() - new Date(itemData.date)) / msInHour;
 		this.$('#date-text').textContent = dateDiff > 24 ?
 			`${round(dateDiff / 24, 1)} days ago` :
 			`${round(dateDiff, 1)} hours ago`;
