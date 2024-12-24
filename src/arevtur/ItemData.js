@@ -16,6 +16,7 @@ class ItemData {
 		this.split = tradeApiItemData.item.split;
 		this.influences = Object.keys(tradeApiItemData.item.influences || {});
 		this.enchantMods = tradeApiItemData.item.enchantMods || [];
+		this.runeMods = tradeApiItemData.item.runeMods || [];
 		this.implicitMods = tradeApiItemData.item.implicitMods || [];
 		this.fracturedMods = tradeApiItemData.item.fracturedMods || [];
 		this.explicitMods = tradeApiItemData.item.explicitMods || [];

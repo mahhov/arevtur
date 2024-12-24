@@ -8,6 +8,7 @@ const listTuples = [
 	['#sockets-list', 'sockets'],
 	['#defense-list', 'defenseProperties'],
 	['#enchant-list', 'enchantMods'],
+	['#rune-list', 'runeMods'],
 	['#implicit-list', 'implicitMods'],
 	['#fractured-list', 'fracturedMods'],
 	['#explicit-list', 'explicitMods'],

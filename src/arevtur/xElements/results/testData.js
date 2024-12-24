@@ -23493,11 +23493,12 @@ module.exports = resultsElement => resultsElement.joinItems([
 	x.buildValuePromise = new Promise(() => 0);
 	x.craftValuePromise = new Promise(() => 0);
 	x.fracturedMods = [];
-	x.enchantMods = x.enchantMods.length ? x.enchantMods : ['enchant mod placeholder'];
-	x.implicitMods = x.implicitMods.length ? x.implicitMods : ['implicit mod placeholder'];
-	x.fracturedMods = x.fracturedMods.length ? x.fracturedMods : ['fractured mod placeholder'];
-	x.explicitMods = x.explicitMods.length ? x.explicitMods : ['explicit mod placeholder'];
-	x.craftedMods = x.craftedMods.length ? x.craftedMods : ['crafted mod placeholder'];
-	x.pseudoMods = x.pseudoMods.length ? x.pseudoMods : ['pseudo mod placeholder'];
+	x.enchantMods = x.enchantMods?.length ? x.enchantMods : ['enchant mod placeholder'];
+	x.runeMods = x.runeMods?.length ? x.runeMods : ['rune mod placeholder'];
+	x.implicitMods = x.implicitMods?.length ? x.implicitMods : ['implicit mod placeholder'];
+	x.fracturedMods = x.fracturedMods?.length ? x.fracturedMods : ['fractured mod placeholder'];
+	x.explicitMods = x.explicitMods?.length ? x.explicitMods : ['explicit mod placeholder'];
+	x.craftedMods = x.craftedMods?.length ? x.craftedMods : ['crafted mod placeholder'];
+	x.pseudoMods = x.pseudoMods?.length ? x.pseudoMods : ['pseudo mod placeholder'];
 	return x;
 }));
