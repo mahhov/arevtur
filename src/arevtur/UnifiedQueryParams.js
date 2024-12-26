@@ -324,6 +324,18 @@ class UnifiedQueryParams {
 								{min: overridden.defenseProperties.energyShield.min} : undefined,
 						},
 					}),
+					req_filters: pruneIfEmptyFilters({
+						filters: {
+							lvl: overridden.maxRequirementProperties.maxLevelRequirement > 0 ?
+								{max: overridden.maxRequirementProperties.maxLevelRequirement} : undefined,
+							str: overridden.maxRequirementProperties.maxStrengthRequirement > 0 ?
+								{max: overridden.maxRequirementProperties.maxStrengthRequirement} : undefined,
+							dex: overridden.maxRequirementProperties.maxDexterityRequirement > 0 ?
+								{max: overridden.maxRequirementProperties.maxDexterityRequirement} : undefined,
+							int: overridden.maxRequirementProperties.maxIntelligenceRequirement > 0 ?
+								{max: overridden.maxRequirementProperties.maxIntelligenceRequirement} : undefined,
+						},
+					}),
 					misc_filters: pruneIfEmptyFilters({filters: miscFilters}),
 				},
 			},
