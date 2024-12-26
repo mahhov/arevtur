@@ -31,7 +31,7 @@ class ApiConstants {
 	}
 
 	static async initLeagues(version2) {
-		let response = await ApiConstants.get(ApiConstants.endpoint('leagues', version2));
+		let response = await ApiConstants.get('leagues', version2);
 		return JSON.parse(response.string).result
 			.filter(league => league.realm === 'pc' || league.realm === 'poe2')
 			.map(league => league.id);
@@ -47,7 +47,7 @@ class ApiConstants {
 	}
 
 	static async initTypes(version2) {
-		let response = await ApiConstants.get(ApiConstants.endpoint('filters', version2));
+		let response = await ApiConstants.get('filters', version2);
 		let data = JSON.parse(response.string);
 		return data.result
 			.find(({id}) => id === 'type_filters').filters
@@ -88,7 +88,7 @@ class ApiConstants {
 	}
 
 	static async initProperties(version2) {
-		let response = await ApiConstants.get(ApiConstants.endpoint('stats', version2));
+		let response = await ApiConstants.get('stats', version2);
 		let properties = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.flatMap(({id, text, type, option}) => {
@@ -133,7 +133,7 @@ class ApiConstants {
 		let currencyPrices = poeNinjaApi.getData(
 			poeNinjaApi.endpointsByLeague.CURRENCY(league));
 		let beastPrices = poeNinjaApi.getData(poeNinjaApi.endpointsByLeague.BEAST(league));
-		let staticDataStr = ApiConstants.get(ApiConstants.endpoint('static', version2));
+		let staticDataStr = ApiConstants.get('static', version2);
 		currencyPrices = await currencyPrices;
 		staticDataStr = await staticDataStr;
 		beastPrices = await beastPrices;
@@ -164,7 +164,7 @@ class ApiConstants {
 	}
 
 	static async initItems(version2) {
-		let response = await ApiConstants.get(ApiConstants.endpoint('items', version2));
+		let response = await ApiConstants.get('items', version2);
 		let items = JSON.parse(response.string).result
 			.flatMap(({entries}) => entries)
 			.map(({name, text, type}) => name || text || type);
@@ -192,20 +192,26 @@ class ApiConstants {
 		return `https://pathofexile.com/api/trade${version2 ? 2 : ''}/data/${name}`;
 	}
 
-	static get(endpoint) {
+	static get(name, version2) {
+		let endpoint = `https://pathofexile.com/api/trade${version2 ? 2 : ''}/data/${name}`;
 		return httpRequest.get(endpoint, {}, ApiConstants.createRequestHeader());
 	}
 
-	cachedRequest(cacheKey, initializer) {
+	async cachedRequest(cacheKey, initializer) {
 		let duration3hours = 3 * 60 * 60 * 1000;
-		cacheKey = [cacheKey, configForRenderer.config.version2].join(',');
-		if (!this.cache[cacheKey] || performance.now() - this.cache[cacheKey].lastRequest > duration3hours || this.cache[cacheKey].promise.error) {
-			this.cache[cacheKey] = {
-				lastRequest: performance.now(),
-				promise: new XPromise(initializer(configForRenderer.config.version2)),
-			};
+		while (true) {
+			let version2 = configForRenderer.config.version2;
+			cacheKey = [cacheKey, version2].join(',');
+			if (!this.cache[cacheKey] || performance.now() - this.cache[cacheKey].lastRequest > duration3hours || this.cache[cacheKey].promise.error) {
+				this.cache[cacheKey] = {
+					lastRequest: performance.now(),
+					promise: new XPromise(initializer(version2)),
+				};
+			}
+			await this.cache[cacheKey].promise;
+			if (version2 === configForRenderer.config.version2)
+				return this.cache[cacheKey].promise;
 		}
-		return this.cache[cacheKey].promise;
 	}
 }
 
