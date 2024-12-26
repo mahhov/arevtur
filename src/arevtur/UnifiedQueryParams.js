@@ -52,7 +52,7 @@ class UnifiedQueryParams {
 	minValue = 0;
 	maxPrice = 0;
 	offline = false;
-	defenseProperties = {}; // {armour, evasion, energyShield: {weight: 0, min: 0}}
+	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
 	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
 	linked = false;
@@ -322,6 +322,8 @@ class UnifiedQueryParams {
 								{min: overridden.defenseProperties.evasion.min} : undefined,
 							es: overridden.defenseProperties.energyShield.min ?
 								{min: overridden.defenseProperties.energyShield.min} : undefined,
+							block: overridden.defenseProperties.block.min ?
+								{min: overridden.defenseProperties.block.min} : undefined,
 						},
 					}),
 					req_filters: pruneIfEmptyFilters({

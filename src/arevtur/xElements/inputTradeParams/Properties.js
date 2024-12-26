@@ -2,6 +2,7 @@ const defensePropertyTuples = [
 	['armour', '#armour-input'],
 	['evasion', '#evasion-input'],
 	['energyShield', '#energy-shield-input'],
+	['block', '#block-input'],
 ];
 
 const defenseBuildValueTuples = [
@@ -9,6 +10,7 @@ const defenseBuildValueTuples = [
 	['armourBuildValue', '#armour-build-value', 'armour', '# Armour'],
 	['evasionBuildValue', '#evasion-build-value', 'evasion', '# Evasion'],
 	['energyShieldBuildValue', '#energy-shield-build-value', 'energyShield', '# Energy shield'],
+	['blockBuildValue', '#block-build-value', 'block', 'Block'],
 ];
 
 const maxRequirementPropertyTuples = [

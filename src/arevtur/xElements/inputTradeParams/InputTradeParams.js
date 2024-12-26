@@ -25,12 +25,15 @@ customElements.define(name, class extends XElement {
 			armour: {},
 			evasion: {},
 			energyShield: {},
+			block: {},
 			armourBuildValue: {},
 			evasionBuildValue: {},
 			energyShieldBuildValue: {},
+			blockBuildValue: {},
 			armourBuildValueTooltip: {},
 			evasionBuildValueTooltip: {},
 			energyShieldBuildValueTooltip: {},
+			blockBuildValueTooltip: {},
 			maxLevelRequirement: {},
 			maxStrengthRequirement: {},
 			maxDexterityRequirement: {},
@@ -194,6 +197,10 @@ customElements.define(name, class extends XElement {
 		this.$('#energy-shield-input').value = value;
 	}
 
+	set block(value) {
+		this.$('#block-input').value = value;
+	}
+
 	set maxLevelRequirement(value) {
 		this.$('#max-level-requirement-input').value = value;
 	}
@@ -222,6 +229,10 @@ customElements.define(name, class extends XElement {
 		this.$('#energy-shield-build-value').text = value;
 	}
 
+	set blockBuildValue(value) {
+		this.$('#block-build-value').text = value;
+	}
+
 	set armourBuildValueTooltip(value) {
 		this.$('#armour-build-value').tooltip = value;
 	}
@@ -232,6 +243,10 @@ customElements.define(name, class extends XElement {
 
 	set energyShieldBuildValueTooltip(value) {
 		this.$('#energy-shield-build-value').tooltip = value;
+	}
+
+	set blockBuildValueTooltip(value) {
+		this.$('#block-build-value').tooltip = value;
 	}
 
 	set prefix(value) {

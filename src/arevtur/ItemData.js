@@ -51,17 +51,23 @@ class ItemData {
 				['ar', 'armour'],
 				['ev', 'evasion'],
 				['es', 'energyShield'],
-			].map(
-				([responseName, fullName]) => [fullName,
-					tradeApiItemData.item.extended[responseName] || 0])
-				.filter(([_, value]) => value);
-		this.defenseProperties = defenseProperties.map(nameValue => nameValue.join(' '));
+			].map(([responseName, fullName]) =>
+				[fullName, tradeApiItemData.item.extended[responseName] || 0]);
+		defenseProperties.push([
+			'block',
+			Number(tradeApiItemData.item.properties
+				.find(property => property.name === 'Chance to Block' || property.name === '[Block] chance')
+				?.values[0][0]
+				.replace('%', '') || 0),
+		]);
+		this.defenseProperties = defenseProperties
+			.filter(([_, value]) => value)
+			.map(nameValue => nameValue.join(' '));
 
 		// Weighted value
 		this.weightedValueDetails = {
 			affixes: affixValueShift,
-			defenses: ItemData.evalDefensePropertiesValue(defenseProperties,
-				queryDefenseProperties),
+			defenses: ItemData.evalDefensePropertiesValue(defenseProperties, queryDefenseProperties),
 			mods: ItemData.weightedValue(this.pseudoMods),
 		};
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);

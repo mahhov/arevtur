@@ -113,9 +113,9 @@ weighted one.
   could add a second conditional prefix mod with a lower weight.
   ![affix.gif](./screenshots/affix.gif)
 
-#### Weighting armour, energy shield, and evasion
+#### Weighting armour, energy shield, evasion, and block
 
-Can search for item defense (i.e. armour, ES, and evasion) with weights.
+Can search for item defense (i.e. armour, ES, evasion, and block) with weights.
 
 - E.g. here we want evasion gloves; say we value 200 flat life equal to 65 evasion (this is not
   typical, excuse the bad example).
