@@ -99,6 +99,15 @@ customElements.define(name, class extends XElement {
 			this.addInputSet(`imported from text ${timestamp()}`, unifiedQueryParams);
 		});
 
+		this.$('#input-import-trade-search-url').addEventListener('import-weight-text', e => {
+			let weights = e.detail.split('\n');
+			this.inputSets[this.inputSetIndex].unifiedQueryParams.weightEntries
+				.filter(weightEntry => !weightEntry.locked)
+				.forEach((weightEntry, i) => weightEntry.weight = Number(weights[i]) || 0);
+			this.setInputSetIndex(this.inputSetIndex);
+			this.store();
+		});
+
 		this.$('#input-set-list').addEventListener('arrange', e => {
 			let [removed] = this.inputSets.splice(e.detail.from, 1);
 			this.inputSets.splice(e.detail.to, 0, removed);
