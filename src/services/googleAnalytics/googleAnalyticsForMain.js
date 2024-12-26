@@ -6,7 +6,7 @@ const appData = require('../appData');
 const {flattenObject, randId} = require('../../util/util');
 
 let debug = appData.isDev;
-let endpoint = `https://www.google-analytics.com/${debug ? 'debug/' : ''}mp/collect`;
+let endpoint = `https://google-analytics.com/${debug ? 'debug/' : ''}mp/collect`;
 let apiSecret = 'B3I4WMgISoWkw-MNBv7mtw';
 let measurementId = 'G-4F5V3VE4B6';
 let clientId = 'arevtur-app';

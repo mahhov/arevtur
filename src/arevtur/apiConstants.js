@@ -178,13 +178,9 @@ class ApiConstants {
 	static createRequestHeader(sessionId = undefined) {
 		return {
 			// Without a non-empty user-agent header, PoE will return 403.
-			// todo[high] userId will be empty before config has loaded. If PoE API starts blocking
-			//  'arevtur_', we'll need to wait for the actual userId to load or flush out headers
-			//  to look more like the expected value; e.g. scratch/poeTradeHeader.json
-			'User-Agent': `arevtur_${configForRenderer.config.userId}`,
+			'User-Agent': `arevtur}`,
 			Cookie: sessionId ? `POESESSID=${sessionId}` : '',
 			'content-type': 'application/json',
-			'x-requested-with': 'XMLHttpRequest',
 		};
 	}
 

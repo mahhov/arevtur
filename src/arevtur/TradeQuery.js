@@ -3,7 +3,6 @@ const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('../util/RateLimitedRetryQueue');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
-const UnifiedQueryParams = require('./UnifiedQueryParams');
 const ItemData = require('./ItemData');
 
 // todo[medium] when rate limit fails, show invalid indicator on session ID.
@@ -120,7 +119,7 @@ class TradeQuery {
 	async queryAndParseItems(query) {
 		// todo[medium] more selective try/catch
 		try {
-			const api = 'https://www.pathofexile.com/api';
+			const api = 'https://pathofexile.com/api';
 			let endpoint = this.version2 ?
 				`${api}/trade2/search/poe2/${this.league}` :
 				`${api}/trade/search/${this.league}`;
@@ -193,7 +192,7 @@ class TradeQuery {
 	}
 
 	async toApiHtmlUrl() {
-		const api = 'https://www.pathofexile.com';
+		const api = 'https://pathofexile.com';
 		let endpoint = this.version2 ?
 			`${api}/trade2/search/poe2/${this.league}` :
 			`${api}/trade/search/${this.league}`;
