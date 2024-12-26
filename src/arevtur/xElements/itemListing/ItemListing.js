@@ -84,11 +84,11 @@ customElements.define(name, class extends XElement {
 		itemData.buildValuePromise.then(buildValue => {
 			this.$('#build-value').text = `Build: ${buildValue.value}`;
 			this.$('#build-value').tooltip = buildValue.text;
-		});
+		}).catch(e => 0);
 		itemData.craftValuePromise.then(craftValue => {
 			this.$('#craft-value').text = `Craft: ${craftValue.value}`;
 			this.$('#craft-value').tooltip = craftValue.text;
-		});
+		}).catch(e => 0);
 
 		this.$('#price').text = `${round(itemData.price, 1)} chaos`;
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)

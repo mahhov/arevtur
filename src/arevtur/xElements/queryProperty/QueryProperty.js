@@ -118,7 +118,7 @@ customElements.define(name, class extends XElement {
 				.find(entry => entry.propertyText === this.property)
 				?.weight;
 		} catch (e) {
-			console.warn('Refresh query property build values', e);
+			// console.warn('Refresh query property build values', e);
 		}
 	}
 });

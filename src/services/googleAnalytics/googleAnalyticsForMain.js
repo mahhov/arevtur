@@ -30,7 +30,7 @@ class GoogleAnalyticsForMain {
 				},
 			}],
 		};
-		console.log('google analytics logging:', eventName, JSON.stringify(body));
+		// console.log('google analytics logging:', eventName, JSON.stringify(body));
 		let response = await post2(endpoint, {
 			api_secret: apiSecret,
 			measurement_id: measurementId,

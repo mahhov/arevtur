@@ -117,8 +117,6 @@ class TradeQuery {
 		}
 	}
 
-	api
-
 	async queryAndParseItems(query) {
 		// todo[medium] more selective try/catch
 		try {

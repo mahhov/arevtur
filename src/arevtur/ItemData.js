@@ -79,7 +79,9 @@ class ItemData {
 			.catch(() => 0);
 
 		this.craftValuePromise = this.craftValue();
-		this.craftValuePromise.then(resolved => this.craftValuePromise.resolved = resolved);
+		this.craftValuePromise
+			.then(resolved => this.craftValuePromise.resolved = resolved)
+			.catch(() => 0);
 
 		this.priceDetails = {
 			count: tradeApiItemData.listing.price.amount,

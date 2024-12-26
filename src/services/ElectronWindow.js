@@ -21,6 +21,7 @@ class ElectronWindow {
 					contextIsolation: false,
 				},
 			});
+
 			window.setMenu(null);
 			window.loadFile(htmlPath);
 
