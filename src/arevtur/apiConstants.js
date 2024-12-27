@@ -181,11 +181,8 @@ class ApiConstants {
 			'User-Agent': `arevtur}`,
 			Cookie: sessionId ? `POESESSID=${sessionId}` : '',
 			'content-type': 'application/json',
+			'x-requested-with': 'XMLHttpRequest',
 		};
-	}
-
-	static endpoint(name, version2) {
-		return `https://pathofexile.com/api/trade${version2 ? 2 : ''}/data/${name}`;
 	}
 
 	static get(name, version2) {
