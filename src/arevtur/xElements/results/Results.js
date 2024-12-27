@@ -116,7 +116,7 @@ customElements.define(name, class extends XElement {
 		this.updateResultsCount();
 
 		XElement.clearChildren(this.$('#results-list'));
-		this.itemsData.shownItems.slice(0, 200).forEach((itemData, i) => {
+		this.itemsData.shownItems.forEach((itemData, i) => {
 			let itemListing = document.createElement('x-item-listing');
 			this.$('#results-list').appendChild(itemListing);
 			itemListing.addEventListener('select', () => {

@@ -23501,4 +23501,9 @@ module.exports = resultsElement => resultsElement.joinItems([
 	x.craftedMods = x.craftedMods?.length ? x.craftedMods : ['crafted mod placeholder'];
 	x.pseudoMods = x.pseudoMods?.length ? x.pseudoMods : ['pseudo mod placeholder'];
 	return x;
+}).flatMap(x => {
+	let a = [];
+	for (let i = 0; i < 20; i++)
+		a.push({...x, id: Math.random()});
+	return a;
 }));

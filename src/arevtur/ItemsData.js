@@ -27,6 +27,7 @@ class ItemsData extends Emitter {
 	constructor() {
 		super();
 		this.clear();
+		this.shownItemsCache = null;
 		this.valueHandler = ItemsData.valueHandlers[0];
 		this.pricePerValue_ = Infinity;
 		pobApi.addListener('change', () => this.refresh());
@@ -43,16 +44,19 @@ class ItemsData extends Emitter {
 	}
 
 	set valueHandler(valueHandler) {
+		this.shownItemsCache = null;
 		this.valueHandler_ = valueHandler;
 		this.refresh();
 	}
 
 	setValueHandlerByName(name) {
+		this.shownItemsCache = null;
 		this.valueHandler_ =
 			ItemsData.valueHandlers.find(valueHandler => valueHandler.name === name);
 	}
 
 	set pricePerValue(pricePerValue) {
+		this.shownItemsCache = null;
 		this.pricePerValue_ = pricePerValue;
 		this.refresh();
 	}
@@ -62,7 +66,7 @@ class ItemsData extends Emitter {
 	}
 
 	join(items) {
-		// update items
+		this.shownItemsCache = null;
 		let oldLength = this.allItems.length;
 		this.allItems = this.allItems
 			.concat(items)
@@ -112,12 +116,13 @@ class ItemsData extends Emitter {
 	}
 
 	get shownItems() {
-		return this.allItems
+		return (this.shownItemsCache ||= this.allItems
 			.filter(this.valueHandler_.showFilter)
 			// high to low values, low to high prices
 			.sort((a, b) =>
 				this.y(b) - this.y(a) - (b.price - a.price) / this.pricePerValue_ ||
-				this.y(b) - this.y(a));
+				this.y(b) - this.y(a)))
+			.slice(0, 100);
 	}
 
 	get bestBoundItems() {
