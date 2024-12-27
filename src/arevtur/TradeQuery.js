@@ -68,6 +68,7 @@ class TradeQuery {
 
 	overrideDefenseProperty(name, min) {
 		return {
+			minValue: 0,
 			defenseProperties: {
 				...this.unifiedQueryParams.defenseProperties,
 				[name]: {
@@ -96,19 +97,15 @@ class TradeQuery {
 			let newItems = items;
 			let lastMinDefensePropertyValue = 0;
 			do {
-				let newItemsMinValue = Math.min(
-					...newItems.map(itemData => itemData.weightedValue));
+				let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.weightedValue));
 				let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
 				let minModValue = Math.min(...items.map(item => item.weightedValueDetails.mods));
-				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) /
-					defenseProperty[1].weight;
+				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
 
-				minDefensePropertyValue =
-					Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
+				minDefensePropertyValue = Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
 				lastMinDefensePropertyValue = minDefensePropertyValue;
 
-				let overrides = this.overrideDefenseProperty(defenseProperty[0],
-					minDefensePropertyValue);
+				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
 				let query = await this.getQuery(overrides);
 				newItems = await this.queryAndParseItems(query);
 				items = items.concat(newItems);
