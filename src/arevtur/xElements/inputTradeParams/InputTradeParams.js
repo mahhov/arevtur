@@ -144,6 +144,8 @@ customElements.define(name, class extends XElement {
 				await Macros.Input.addPseudo(this.unifiedQueryParams)));
 		this.$('#enable-all-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(Macros.Input.enableAll(this.unifiedQueryParams)));
+		this.$('#share-all-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(Macros.Input.shareAll(this.unifiedQueryParams)));
 
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();

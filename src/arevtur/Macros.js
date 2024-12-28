@@ -131,6 +131,15 @@ class Macros {
 			unifiedQueryParams.sharedWeightEntries.forEach(entry => entry.enabled = true);
 			return unifiedQueryParams;
 		},
+
+		shareAll: unifiedQueryParams => {
+			unifiedQueryParams.sharedWeightEntries = [
+				unifiedQueryParams.weightEntries,
+				unifiedQueryParams.sharedWeightEntries,
+			].flat();
+			unifiedQueryParams.weightEntries = [];
+			return unifiedQueryParams;
+		},
 	};
 
 	static Output = {};
