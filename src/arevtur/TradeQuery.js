@@ -96,7 +96,7 @@ class TradeQuery {
 		if (defenseProperty) {
 			let newItems = items;
 			let lastMinDefensePropertyValue = 0;
-			do {
+			while (newItems.length > 0) {
 				let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.weightedValue));
 				let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
 				let minModValue = Math.min(...items.map(item => item.weightedValueDetails.mods));
@@ -109,7 +109,7 @@ class TradeQuery {
 				let query = await this.getQuery(overrides);
 				newItems = await this.queryAndParseItems(query);
 				items = items.concat(newItems);
-			} while (newItems.length > 0);
+			}
 		}
 	}
 
