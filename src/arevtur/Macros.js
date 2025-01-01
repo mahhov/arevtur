@@ -1,7 +1,7 @@
 const apiConstants = require('./apiConstants');
 const Searcher = require('../util/Searcher');
 const pobApi = require('../services/pobApi/pobApi');
-const UnifiedQueryParams = require('./UnifiedQueryParams.js');
+const UnifiedQueryParams = require('./UnifiedQueryParams');
 
 class Macros {
 	static Input = {
@@ -123,12 +123,32 @@ class Macros {
 		},
 
 		enableAll: unifiedQueryParams => {
-			unifiedQueryParams.weightEntries.forEach(entry => entry.enabled = true);
-			unifiedQueryParams.andEntries.forEach(entry => entry.enabled = true);
-			unifiedQueryParams.notEntries.forEach(entry => entry.enabled = true);
-			unifiedQueryParams.conditionalPrefixEntries.forEach(entry => entry.enabled = true);
-			unifiedQueryParams.conditionalSuffixEntries.forEach(entry => entry.enabled = true);
-			unifiedQueryParams.sharedWeightEntries.forEach(entry => entry.enabled = true);
+			[
+				unifiedQueryParams.weightEntries,
+				unifiedQueryParams.andEntries,
+				unifiedQueryParams.notEntries,
+				unifiedQueryParams.conditionalPrefixEntries,
+				unifiedQueryParams.conditionalSuffixEntries,
+				unifiedQueryParams.sharedWeightEntries,
+			].flat().forEach(entry => entry.enabled = true);
+			return unifiedQueryParams;
+		},
+
+		enableAllForItemType: async (unifiedQueryParams, itemType) => {
+			let mods = await apiConstants.propertiesByItemType(itemType);
+			[
+				unifiedQueryParams.weightEntries,
+				unifiedQueryParams.andEntries,
+				unifiedQueryParams.notEntries,
+				unifiedQueryParams.conditionalPrefixEntries,
+				unifiedQueryParams.conditionalSuffixEntries,
+				unifiedQueryParams.sharedWeightEntries,
+			].flat().forEach(entry => {
+				let propertyText = entry.propertyText
+					.replaceAll(/\[.*?([^|]*?)]/g, '$1')
+					.replaceAll(/ \(.*\)$/g, '');
+				entry.enabled = mods.includes(propertyText);
+			});
 			return unifiedQueryParams;
 		},
 

@@ -1,4 +1,3 @@
-const os = require('os');
 const {shell} = require('electron');
 
 let minIndex = array => array.indexOf(Math.min(...array));
