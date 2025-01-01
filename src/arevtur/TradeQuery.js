@@ -18,12 +18,12 @@ let parseRateLimitResponseHeader = ({rule, state}) => {
 
 let getRateLimitHeaders = responseHeaders => {
 	let rules = [
-		...responseHeaders['x-rate-limit-account'].split(','),
-		...responseHeaders['x-rate-limit-ip'].split(','),
+		...(responseHeaders['x-rate-limit-account'] || '').split(','),
+		...(responseHeaders['x-rate-limit-ip'] || '').split(','),
 	];
 	let states = [
-		...responseHeaders['x-rate-limit-account-state'].split(','),
-		...responseHeaders['x-rate-limit-ip-state'].split(','),
+		...(responseHeaders['x-rate-limit-account-state'] || '').split(','),
+		...(responseHeaders['x-rate-limit-ip-state'] || '').split(','),
 	];
 	return rules.map((rule, i) => ({rule, state: states[i]}));
 };
