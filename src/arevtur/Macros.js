@@ -123,14 +123,16 @@ class Macros {
 		},
 
 		enableAll: unifiedQueryParams => {
-			[
+			let entries = [
 				unifiedQueryParams.weightEntries,
 				unifiedQueryParams.andEntries,
 				unifiedQueryParams.notEntries,
 				unifiedQueryParams.conditionalPrefixEntries,
 				unifiedQueryParams.conditionalSuffixEntries,
 				unifiedQueryParams.sharedWeightEntries,
-			].flat().forEach(entry => entry.enabled = true);
+			].flat();
+			let enabled = entries.some(entry => !entry.enabled);
+			entries.forEach(entry => entry.enabled = enabled);
 			return unifiedQueryParams;
 		},
 
@@ -153,11 +155,13 @@ class Macros {
 		},
 
 		shareAll: unifiedQueryParams => {
-			unifiedQueryParams.sharedWeightEntries = [
+			let entries = [
 				unifiedQueryParams.weightEntries,
 				unifiedQueryParams.sharedWeightEntries,
 			].flat();
-			unifiedQueryParams.weightEntries = [];
+			let shared = unifiedQueryParams.weightEntries.length;
+			unifiedQueryParams.sharedWeightEntries = shared ? entries : [];
+			unifiedQueryParams.weightEntries = shared ? [] : entries;
 			return unifiedQueryParams;
 		},
 	};
