@@ -3,6 +3,7 @@ const {template, name} = importUtil(__filename);
 const ItemsData = require('../../ItemsData');
 const Searcher = require('../../../util/Searcher');
 const Debouncer = require('../../../util/Debouncer');
+const {updateElementChildren} = require('../../../util/util');
 const testData = require('./testData');
 
 customElements.define(name, class extends XElement {
@@ -53,7 +54,7 @@ customElements.define(name, class extends XElement {
 			if (itemIndex !== -1) {
 				this.itemsData.selectItem(itemIndex);
 				this.renderItemsData(true);
-				this.$('#results-list').children[itemIndex].scrollIntoView(
+				this.$('#results-list').children[itemIndex]?.scrollIntoView(
 					{behavior: 'smooth', block: 'nearest'});
 			}
 		});
@@ -115,21 +116,23 @@ customElements.define(name, class extends XElement {
 	renderItemsDataList() {
 		this.updateResultsCount();
 
-		XElement.clearChildren(this.$('#results-list'));
-		this.itemsData.shownItems.forEach((itemData, i) => {
-			let itemListing = document.createElement('x-item-listing');
-			this.$('#results-list').appendChild(itemListing);
-			itemListing.addEventListener('select', () => {
-				this.itemsData.selectItem(i);
-				itemListing.selected = itemData.selected;
-				this.renderItemsDataChart();
-			});
-			itemListing.addEventListener('hover', e => {
-				this.itemsData.hoverItem(e.detail && i);
-				this.renderItemsData(true);
-			});
-			itemListing.itemData = itemData;
-		});
+		updateElementChildren(
+			this.$('#results-list'),
+			this.itemsData.shownItems.slice(0, 100),
+			(i, items) => {
+				let itemListing = document.createElement('x-item-listing');
+				itemListing.addEventListener('select', () => {
+					this.itemsData.selectItem(i);
+					itemListing.selected = items[i].selected;
+					this.renderItemsDataChart();
+				});
+				itemListing.addEventListener('hover', e => {
+					this.itemsData.hoverItem(e.detail && i);
+					this.renderItemsData(true);
+				});
+				return itemListing;
+			},
+			(itemListing, i, item) => itemListing.itemData = item);
 
 		this.applySearch();
 	}

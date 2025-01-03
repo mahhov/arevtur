@@ -121,14 +121,13 @@ class ItemsData extends Emitter {
 			// high to low values, low to high prices
 			.sort((a, b) =>
 				this.y(b) - this.y(a) - (b.price - a.price) / this.pricePerValue_ ||
-				this.y(b) - this.y(a)))
-			.slice(0, 100);
+				this.y(b) - this.y(a)));
 	}
 
 	get bestBoundItems() {
 		let minPriceFound = Infinity;
 		// ordered top right to bottom left
-		return this.shownItems
+		return [...this.shownItems]
 			.sort((a, b) => this.y(b) - this.y(a) || a.price - b.price)
 			.filter(item => {
 				if (item.price >= minPriceFound)

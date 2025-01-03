@@ -60,6 +60,15 @@ let openPath = (path, isFile = false) => {
 		shell.openPath(path);
 };
 
+// todo[low] use this instead of `clearChildren()` and re-creating elements
+let updateElementChildren = (parentEl, values, creator, updater) => {
+	while (parentEl.children.length < values.length)
+		parentEl.appendChild(creator(parentEl.children.length, values));
+	while (parentEl.children.length > values.length)
+		parentEl.removeChild(parentEl.lastChild);
+	values.forEach((value, i) => updater(parentEl.children[i], i, value));
+};
+
 module.exports = {
 	minIndex,
 	maxIndex,
@@ -77,6 +86,8 @@ module.exports = {
 	deepEquality,
 
 	openPath,
+
+	updateElementChildren,
 
 	// todo[low] move un-classed & static methods like decode64 here
 	//  (const|let) \w+ = (\w+|\([^)]*\)) =>
