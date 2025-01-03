@@ -295,7 +295,7 @@ class ApiConstants {
 	static createRequestHeader(sessionId = undefined) {
 		return {
 			// Without a non-empty user-agent header, PoE will return 403.
-			'User-Agent': `arevtur}`,
+			'User-Agent': `arevtur2`,
 			Cookie: sessionId ? `POESESSID=${sessionId}` : '',
 			'content-type': 'application/json',
 			'x-requested-with': 'XMLHttpRequest',
