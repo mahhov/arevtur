@@ -178,7 +178,9 @@ class TradeQuery {
 						apiConstants.shortProperties.flatLife,
 					],
 				};
-				let endpoint2 = `${apiConstants.api}/trade2/fetch/${requestGroup.join()}`;
+				let endpoint2 = this.version2 ?
+					`${apiConstants.api}/trade2/fetch/${requestGroup.join()}` :
+					`${apiConstants.api}/api/trade/fetch/${requestGroup.join()}`;
 				let data2 = await rlrGet(endpoint2, params, headers, this.stopObj);
 				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
