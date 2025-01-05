@@ -22,6 +22,7 @@ class ApiConstants {
 	constructor() {
 		// todo[low] need to make it accessible on the singleton. Should figure out a more elegant
 		//  syntax. Likewise for the fake-static constants above.
+		this.api = ApiConstants.api;
 		this.createRequestHeader = ApiConstants.createRequestHeader;
 		this.cache = {};
 	}
@@ -293,6 +294,10 @@ class ApiConstants {
 
 	// utility
 
+	static get api() {
+		return 'https://pathofexile.com';
+	}
+
 	static createRequestHeader(sessionId = undefined) {
 		return {
 			// Without a non-empty user-agent header, PoE will return 403.
@@ -304,7 +309,7 @@ class ApiConstants {
 	}
 
 	static get(name, version2) {
-		let endpoint = `https://pathofexile.com/api/trade${version2 ? 2 : ''}/data/${name}`;
+		let endpoint = `${ApiConstants.api}/api/trade${version2 ? 2 : ''}/data/${name}`;
 		return httpRequest.get(endpoint, {}, ApiConstants.createRequestHeader());
 	}
 

@@ -1,6 +1,6 @@
 const querystring = require('querystring');
 const nodeFetch = require('node-fetch');
-const {httpRequest: {get, post}} = require('js-desktop-base');
+const {httpRequest} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('../util/RateLimitedRetryQueue');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
@@ -139,10 +139,9 @@ class TradeQuery {
 	async queryAndParseItems(query) {
 		// todo[medium] more selective try/catch
 		try {
-			const api = 'https://pathofexile.com/api';
 			let endpoint = this.version2 ?
-				`${api}/trade2/search/poe2/${this.league}` :
-				`${api}/trade/search/${this.league}`;
+				`${apiConstants.api}/api/trade2/search/poe2/${this.league}` :
+				`${apiConstants.api}/api/trade/search/${this.league}`;
 			let headers = apiConstants.createRequestHeader(this.sessionId);
 			this.progressStream.write({
 				text: 'Initial query.',
@@ -179,7 +178,7 @@ class TradeQuery {
 						apiConstants.shortProperties.flatLife,
 					],
 				};
-				let endpoint2 = `${api}/trade2/fetch/${requestGroup.join()}`;
+				let endpoint2 = `${apiConstants.api}/trade2/fetch/${requestGroup.join()}`;
 				let data2 = await rlrGet(endpoint2, params, headers, this.stopObj);
 				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
@@ -210,10 +209,9 @@ class TradeQuery {
 	}
 
 	async toApiHtmlUrl() {
-		const api = 'https://pathofexile.com';
 		let endpoint = this.version2 ?
-			`${api}/trade2/search/poe2/${this.league}` :
-			`${api}/trade/search/${this.league}`;
+			`${apiConstants.api}/trade2/search/poe2/${this.league}` :
+			`${apiConstants.api}/trade/search/${this.league}`;
 		let queryParams = {q: JSON.stringify(await this.getQuery())};
 		let queryParamsString = querystring.stringify(queryParams);
 		return `${endpoint}?${queryParamsString}`;
@@ -221,7 +219,7 @@ class TradeQuery {
 
 	static async fromApiHtmlUrl(sessionId, tradeSearchUrl) {
 		tradeSearchUrl = tradeSearchUrl.replace('.com/trade', '.com/api/trade');
-		let response = await get(tradeSearchUrl, {}, apiConstants.createRequestHeader(sessionId));
+		let response = await httpRequest.get(tradeSearchUrl, {}, apiConstants.createRequestHeader(sessionId));
 		let jsonString = response.string;
 		let {query} = JSON.parse(jsonString);
 		return {
@@ -230,10 +228,12 @@ class TradeQuery {
 		};
 	}
 
-	static async directWhisper(sessionId, token) {
-		const endpoint = 'https://www.pathofexile.com/api/trade/whisper';
+	static async directWhisper(version2, sessionId, token) {
+		let endpoint = version2 ?
+			`${apiConstants.api}/api/trade2/whisper` :
+			`${apiConstants.api}/api/trade/whisper`;
 		let headers = apiConstants.createRequestHeader(sessionId);
-		await post(endpoint, {token}, headers)
+		await httpRequest.post(endpoint, {token}, headers)
 			.catch(e => console.error('failed to direct whisper:', e));
 	}
 }
