@@ -295,7 +295,7 @@ customElements.define(name, class extends XElement {
 			.filter(inputSet => inputSet.active)
 			.map(inputSet => UnifiedQueryParams
 				.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-				.toTradeQueryData(league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
+				.toTradeQueryData(version2, league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
 		return (await Promise.all(tradeQueryDatas))
 			.flat()
 			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));

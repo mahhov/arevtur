@@ -195,7 +195,7 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	async toTradeQueryData(league) {
+	async toTradeQueryData(version2, league) {
 		let queries = [];
 
 		let divinePrice = (await apiConstants.currencyPrices(league))['divine'];
@@ -203,7 +203,7 @@ class UnifiedQueryParams {
 			// query in exalts
 			0,
 			// query in divines
-			this.maxPrice >= divinePrice * .9 ? divinePrice : null,
+			version2 && this.maxPrice >= divinePrice * .9 ? divinePrice : null,
 		].filter(v => v !== null);
 
 		let affixOptions = [
