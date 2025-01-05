@@ -96,11 +96,15 @@ class TradeQuery {
 		if (defenseProperty) {
 			let newItems = items;
 			let lastMinDefensePropertyValue = 0;
-			while (newItems.length > 0) {
-				let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.weightedValue));
-				let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
-				let minModValue = Math.min(...items.map(item => item.weightedValueDetails.mods));
-				let minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
+			do {
+				let minDefensePropertyValue;
+				if (newItems.length) {
+					let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.weightedValue));
+					let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
+					let minModValue = Math.min(...items.map(item => item.weightedValueDetails.mods));
+					minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
+				} else
+					minDefensePropertyValue = this.unifiedQueryParams.minValue / defenseProperty[1].weight;
 
 				minDefensePropertyValue = Math.max(minDefensePropertyValue, lastMinDefensePropertyValue + 1);
 				lastMinDefensePropertyValue = minDefensePropertyValue;
@@ -109,7 +113,7 @@ class TradeQuery {
 				let query = await this.getQuery(overrides);
 				newItems = await this.queryAndParseItems(query);
 				items = items.concat(newItems);
-			}
+			} while (newItems.length > 0);
 		}
 	}
 
