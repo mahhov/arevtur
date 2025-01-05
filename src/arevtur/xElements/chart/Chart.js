@@ -170,38 +170,17 @@ customElements.define(name, class Chart extends XElement {
 	}
 
 	drawAxis() {
-		let n = 20;
-		let step = this.width / n, stepY = this.height / n;
-		let tickLength = 10;
-
 		this.ctx.lineWidth = 1;
 		let color = getComputedStyle(this).getPropertyValue('--interactable-primary');
 		this.ctx.strokeStyle = color;
 		this.ctx.fillStyle = color;
-		this.line(step * 1.5, stepY * 18.5, step * 18, 0); // x axis line
-		this.line(step * 1.5, stepY * .5, 0, stepY * 18); // y axis line
 		this.ctx.font = '16px arial';
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'bottom';
-		this.ctx.fillText(this.axisLabelX, step * 10, stepY * 20); // x axis label
+		this.ctx.fillText(this.axisLabelX, this.width / 2, this.height); // x axis label
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'top';
-		this.verticalText(this.axisLabelY, 0, stepY * 10); // y axis label
-		this.ctx.font = '14px arial';
-		for (let i = 2; i < n; i += 2) {
-			let x = i * step;
-			let y = (n - i) * stepY;
-			let xText = round(this.minX + i / n * this.deltaX, 1);
-			let yText = round(this.minY + i / n * this.deltaY, 1);
-			this.ctx.textAlign = 'center';
-			this.ctx.textBaseline = 'top';
-			this.ctx.fillText(xText, x, stepY * 18.5 + tickLength); // x axis text
-			this.ctx.textAlign = 'right';
-			this.ctx.textBaseline = 'middle';
-			this.ctx.fillText(yText, step * 1.5 - tickLength, y, 30); // y axis text
-			this.line(x, stepY * 18.5 - tickLength / 2, 0, tickLength); // x axis tick
-			this.line(step * 1.5 - tickLength / 2, y, tickLength, 0); // y axis tick
-		}
+		this.verticalText(this.axisLabelY, 0, this.height / 2); // y axis label
 	}
 
 	drawTooltip() {
