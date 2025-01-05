@@ -158,9 +158,9 @@ customElements.define(name, class extends XElement {
 	}
 
 	updateStatusIndicator(promise, element) {
-		let version2 = configForRenderer.config.version2;
-		let league = configForRenderer.config.league;
-		let stillCurrent = () => league === configForRenderer.config.league && version2 === configForRenderer.config.version2;
+		let version2 = this.$('#version-2-check').checked;
+		let league = this.$('#league-input').value;
+		let stillCurrent = () => league === this.$('#league-input').value && version2 === this.$('#version-2-check').checked;
 
 		element.classList.add('busy');
 		element.classList.remove('valid', 'invalid');
@@ -283,7 +283,7 @@ customElements.define(name, class extends XElement {
 		let manual6LinkCheapestOption = [];
 		if (!version2) {
 			// todo[medium] re-add 6-link support for poe 1 queries
-			let currencyPrices = await apiConstants.currencyPrices(configForRenderer.config.league);
+			let currencyPrices = await apiConstants.currencyPrices(league);
 			let manual6LinkOptions = [
 				['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],
 				['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft],
@@ -295,7 +295,7 @@ customElements.define(name, class extends XElement {
 			.filter(inputSet => inputSet.active)
 			.map(inputSet => UnifiedQueryParams
 				.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-				.toTradeQueryData(configForRenderer.config.league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
+				.toTradeQueryData(league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
 		return (await Promise.all(tradeQueryDatas))
 			.flat()
 			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));
