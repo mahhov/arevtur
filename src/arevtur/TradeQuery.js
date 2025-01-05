@@ -1,4 +1,5 @@
 const querystring = require('querystring');
+const nodeFetch = require('node-fetch');
 const {httpRequest: {get, post}} = require('js-desktop-base');
 const RateLimitedRetryQueue = require('../util/RateLimitedRetryQueue');
 const apiConstants = require('./apiConstants');
@@ -34,19 +35,37 @@ let rlrPostQueue = new RateLimitedRetryQueue(1500 * 1.2, [5000, 15000, 60000]);
 let rlrGet = (endpoint, params, headers, stopObj) => rlrGetQueue.add(async () => {
 	if (stopObj.stop)
 		return;
-	let g = await get(endpoint, params, headers);
-	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(g.response.headers)[0]);
-	console.log('got, made requests', rateLimitStr);
-	return g;
+	if (params)
+		endpoint += `?${querystring.stringify(params)}`;
+	let response = await nodeFetch(endpoint, {
+		method: 'get',
+		headers,
+	});
+	let responseHeaders = Object.fromEntries(response.headers);
+	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(responseHeaders)[0]);
+	console.log('got, made requests', responseHeaders, rateLimitStr);
+	let responseBody = await response.json();
+	if (responseBody.error)
+		console.error('response error', responseBody.error);
+	return responseBody;
 });
 
 let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () => {
 	if (stopObj.stop)
 		return;
-	let p = await post(endpoint, query, headers);
-	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(p.response.headers)[0]);
-	console.log('posted, made requests', rateLimitStr);
-	return p;
+	let body = JSON.stringify(query);
+	let response = await nodeFetch(endpoint, {
+		method: 'post',
+		body,
+		headers,
+	});
+	let responseHeaders = Object.fromEntries(response.headers);
+	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(responseHeaders)[0]);
+	console.log('posted, made requests', response.headers, rateLimitStr);
+	let responseBody = await response.json();
+	if (responseBody.error)
+		console.error('response error', responseBody.error);
+	return responseBody;
 });
 
 class TradeQuery {
@@ -131,9 +150,8 @@ class TradeQuery {
 				queriesTotal: 11,
 				itemCount: 0,
 			});
-			console.log('initial query', query);
-			let response = await rlrPost(endpoint, query, headers, this.stopObj);
-			let data = JSON.parse(response.string);
+			console.log('initial query', endpoint, query, headers);
+			let data = await rlrPost(endpoint, query, headers, this.stopObj);
 			let itemCount = data.result.length;
 			this.progressStream.write({
 				text: `Received ${data.result.length} items.`,
@@ -161,9 +179,8 @@ class TradeQuery {
 						apiConstants.shortProperties.flatLife,
 					],
 				};
-				let endpoint2 = `${api}/fetch/${requestGroup.join()}`;
-				let response2 = await rlrGet(endpoint2, params, headers, this.stopObj);
-				let data2 = JSON.parse(response2.string);
+				let endpoint2 = `${api}/trade2/fetch/${requestGroup.join()}`;
+				let data2 = await rlrGet(endpoint2, params, headers, this.stopObj);
 				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
 					queriesComplete: 1 + ++receivedCount,

@@ -14,6 +14,7 @@
     "electron-updater": "^6.2.1",
     "env-paths": "^2.2.0",
     "js-desktop-base": "^5.5.1",
+    "node-fetch": "^2.7.0",
     "xx-element": "^2.0.2"
   },
   "devDependencies": {
