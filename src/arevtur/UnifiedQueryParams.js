@@ -244,7 +244,7 @@ class UnifiedQueryParams {
 		return queries;
 	}
 
-	async toApiQueryParams(overrides = {}) {
+	async toApiQueryParams(version2, overrides = {}) {
 		let overridden = {...this, ...overrides};
 
 		let weightFilters = (await Promise.all(
@@ -270,6 +270,13 @@ class UnifiedQueryParams {
 			typeFilters.category = {option: typeId};
 		if (overridden.nonUnique)
 			typeFilters.rarity = {option: 'nonunique'};
+
+		let price = version2 ? {
+			max: overridden.divine ? overridden.maxPrice / overridden.divine : overridden.maxPrice,
+			option: overridden.divine ? 'divine' : 'exalted',
+		} : {
+			max: overridden.maxPrice,
+		};
 
 		let miscFilters = {};
 		if (overridden.uncorrupted)
@@ -301,20 +308,13 @@ class UnifiedQueryParams {
 				].map(pruneIfEmptyFilters).filter(v => v),
 				filters: {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
-					trade_filters: {
-						filters: {
-							price: {
-								max: overridden.divine ? overridden.maxPrice / overridden.divine : overridden.maxPrice,
-								option: overridden.divine ? 'divine' : 'exalted',
-							},
-						},
-					},
+					trade_filters: {filters: {price}},
 					socket_filters: overridden.linked ? {
 						filters: {
 							links: {min: 6},
 						},
 					} : undefined,
-					armour_filters: pruneIfEmptyFilters({
+					[version2 ? 'equipment_filters' : 'armour_filters']: pruneIfEmptyFilters({
 						filters: {
 							ar: overridden.defenseProperties.armour.min ?
 								{min: overridden.defenseProperties.armour.min} : undefined,

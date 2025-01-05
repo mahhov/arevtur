@@ -82,7 +82,7 @@ class TradeQuery {
 	}
 
 	getQuery(overrides = {}) {
-		return this.unifiedQueryParams.toApiQueryParams(overrides);
+		return this.unifiedQueryParams.toApiQueryParams(this.version2, overrides);
 	}
 
 	overrideDefenseProperty(name, min) {
