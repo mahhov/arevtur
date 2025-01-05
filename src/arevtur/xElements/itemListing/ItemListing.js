@@ -1,6 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const TradeQuery = require('../../TradeQuery');
+const configForRenderer = require('../../../services/config/configForRenderer');
 const {round} = require('../../../util/util');
 
 const listTuples = [
@@ -90,13 +91,11 @@ customElements.define(name, class extends XElement {
 			this.$('#craft-value').tooltip = craftValue.text;
 		}).catch(e => 0);
 
-		this.$('#price').text = `${round(itemData.price, 1)} chaos`;
+		let currency = configForRenderer.config.version2 ? 'exalt' : 'chaos';
+		this.$('#price').text = `${round(itemData.price, 1)} ${currency}`;
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
-			.map(([name, value]) => ` + ${name} (${round(value, 1)} chaos)`);
-		this.$('#price').tooltip =
-			itemData.priceDetails.currency !== 'chaos' || expandedPriceShifts.length ?
-				`${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join(
-					'')}` : '';
+			.map(([name, value]) => ` + ${name} (${round(value, 1)} ${currency})`);
+		this.$('#price').tooltip = `${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join('')}`;
 		this.$('#account-text').textContent = itemData.accountText;
 		this.$('#account-text').title = itemData.accountText;
 		const msInHour = 1000 * 60 * 60;
