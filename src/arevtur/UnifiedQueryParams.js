@@ -51,6 +51,7 @@ class UnifiedQueryParams {
 	typeText = 'Any';
 	minValue = 0;
 	maxPrice = 0;
+	divine = 0;
 	offline = false;
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
@@ -194,16 +195,17 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	/*async*/
-	toTradeQueryData(manual6LinkName, manual6LinkPrice) {
+	async toTradeQueryData(league) {
 		let queries = [];
 
-		let linkedOptions = [
-			// query with the intended links
-			false,
-			// query unlinked + uncorrupted items
-			this.linked && this.maxPrice > manual6LinkPrice ? true : null,
+		let divinePrice = (await apiConstants.currencyPrices(league))['divine'];
+		let divineOptions = [
+			// query in exalts
+			0,
+			// query in divines
+			this.maxPrice >= divinePrice * .9 ? divinePrice : null,
 		].filter(v => v !== null);
+
 		let affixOptions = [
 			// query without affixes
 			false,
@@ -220,23 +222,18 @@ class UnifiedQueryParams {
 		].filter(v => v !== null);
 
 		// cross product all combinations of linking and craftable affixes
-		linkedOptions.forEach(lo => affixOptions.forEach(ao => {
+		divineOptions.forEach(divineOption => affixOptions.forEach(affixOption => {
 			let copy = this.copy;
-			if (lo) {
-				copy.linked = false;
-				copy.uncorrupted = true;
-				copy.maxPrice -= manual6LinkPrice;
-				copy.priceShifts[manual6LinkName] = manual6LinkPrice;
-			}
-			if (ao) {
-				copy.affixProperties[ao[0]] = true;
+			copy.divine = divineOption;
+			if (affixOption) {
+				copy.affixProperties[affixOption[0]] = true;
 				copy.uncorrupted = true;
 				copy.uncrafted = true;
-				if (ao.length === 1)
-					copy.affixValueShift += this.affixProperties[ao[0]];
+				if (affixOption.length === 1)
+					copy.affixValueShift += this.affixProperties[affixOption[0]];
 				else {
-					copy.notEntries[ao[1]] = undefined;
-					copy.affixValueShift += ao[2];
+					copy.notEntries[affixOption[1]] = undefined;
+					copy.affixValueShift += affixOption[2];
 				}
 			}
 			queries.push(copy);
@@ -306,7 +303,10 @@ class UnifiedQueryParams {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
 					trade_filters: {
 						filters: {
-							price: {max: overridden.maxPrice || undefined},
+							price: {
+								max: overridden.divine ? overridden.maxPrice / overridden.divine : overridden.maxPrice,
+								option: overridden.divine ? 'divine' : 'exalted',
+							},
 						},
 					},
 					socket_filters: overridden.linked ? {

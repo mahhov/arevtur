@@ -270,6 +270,7 @@ class ApiConstants {
 			});
 
 		let currencies = Object.fromEntries(tuples);
+		currencies.exalted = 1;
 		return currencies;
 		/* {alt: .125, ...} */
 	}

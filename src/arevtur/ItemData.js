@@ -4,8 +4,7 @@ const {maxIndex} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
 
 class ItemData {
-	constructor(league, affixValueShift, queryDefenseProperties, priceShifts,
-	            tradeApiItemData) {
+	constructor(league, affixValueShift, queryDefenseProperties, priceShifts, tradeApiItemData) {
 		this.id = tradeApiItemData.id;
 		this.name = tradeApiItemData.item.name;
 		this.subtype = tradeApiItemData.item.typeLine; // e.g. 'Gold Amulet'
@@ -112,8 +111,6 @@ class ItemData {
 	}
 
 	static async price(league, {currency: currencyId, count, shifts}) {
-		return currencyId === 'exalted' ? count : Infinity;
-
 		let currencyPrices = (await apiConstants.currencyPrices(league))[currencyId];
 		if (currencyPrices)
 			return currencyPrices * count +

@@ -276,25 +276,28 @@ customElements.define(name, class extends XElement {
 	}
 
 	async finalizeTradeQuery() {
-		let currencyPrices = await apiConstants.currencyPrices(
-			configForRenderer.config.league);
-		let manual6LinkOptions = [
-			['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],
-			['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft],
-		];
-		let manual6LinkCheapestOption = manual6LinkOptions[
-			minIndex(manual6LinkOptions.map(v => v[1]))];
-
-		let version2 = this.$('#version-2-check').value;
+		let version2 = this.$('#version-2-check').checked;
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
-		return await Promise.all(this.inputSets
+
+		let manual6LinkCheapestOption = [];
+		if (!version2) {
+			// todo[medium] re-add 6-link support for poe 1 queries
+			let currencyPrices = await apiConstants.currencyPrices(configForRenderer.config.league);
+			let manual6LinkOptions = [
+				['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],
+				['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft],
+			];
+			manual6LinkCheapestOption = manual6LinkOptions[minIndex(manual6LinkOptions.map(v => v[1]))];
+		}
+
+		let tradeQueryDatas = this.inputSets
 			.filter(inputSet => inputSet.active)
-			.flatMap(inputSet =>
-				UnifiedQueryParams
-					.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-					.toTradeQueryData(manual6LinkCheapestOption[0], manual6LinkCheapestOption[1])
-					.map(async data => new TradeQuery((await data), version2, league, sessionId,
-						(await data).affixValueShift, (await data).priceShifts))));
+			.map(inputSet => UnifiedQueryParams
+				.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
+				.toTradeQueryData(configForRenderer.config.league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
+		return (await Promise.all(tradeQueryDatas))
+			.flat()
+			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));
 	}
 });
