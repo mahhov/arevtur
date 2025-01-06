@@ -30,5 +30,6 @@
       "equalChaosResist": true
     }
   },
-  "userId": ""
+  "userId": "",
+  "sessionId": ""
 }

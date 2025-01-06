@@ -22,7 +22,7 @@ class BugReport {
 			console.error('BugReport, failed to parse bugReport.json:', e);
 			return null;
 		}
-		delete data?.local['input-session-id'];
+		delete data?.config?.sessionId;
 		delete data?.config?.buildParams?.pobPath;
 		return new BugReport(data);
 	}
@@ -33,7 +33,7 @@ class BugReport {
 			// todo[low] electron.app is not available in renderer context
 			// version: app.getVersion(),
 			config: configForRenderer.config,
-			local: {...localStorage, 'input-session-id': 'redacted'},
+			local: localStorage,
 			build: await fs.readFile(configForRenderer.config.buildParams.buildPath)
 				.then(r => r.toString())
 				.catch(e => e),

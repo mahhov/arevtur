@@ -29,7 +29,7 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		this.$('#direct-whisper').addEventListener('click', e => {
 			navigator.clipboard.writeText(this.itemData_.whisperText);
-			TradeQuery.directWhisper(configForRenderer.config.version2, localStorage.getItem('input-session-id'), this.itemData_.directWhisperToken);
+			TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.directWhisperToken);
 			e.stopPropagation();
 		});
 		this.$('#copy-whisper').addEventListener('click', e => {

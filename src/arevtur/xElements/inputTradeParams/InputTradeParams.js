@@ -158,7 +158,6 @@ customElements.define(name, class extends XElement {
 		});
 
 		configForRenderer.addListener('change', () => this.onConfigChange());
-		this.onConfigChange();
 
 		pobApi.addListener('change', () => this.refreshBuild());
 	}

@@ -28,9 +28,7 @@ customElements.define(name, class extends XElement {
 
 	connectedCallback() {
 		configForRenderer.addListener('change', config => this.onConfigChange(config));
-		this.onConfigChange(configForRenderer.config);
 
-		this.$('#session-id-input').value = localStorage.getItem('input-session-id');
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo[high] try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
@@ -178,6 +176,7 @@ customElements.define(name, class extends XElement {
 	async onConfigChange(config) {
 		this.$('#version-2-check').checked = config.version2;
 		this.$('#league-input').value = config.league;
+		this.$('#session-id-input').value = config.sessionId;
 
 		this.$('#league-input').autocompletes = await apiConstants.leagues;
 
@@ -268,8 +267,8 @@ customElements.define(name, class extends XElement {
 		configForRenderer.config = {
 			version2: this.$('#version-2-check').checked,
 			league: this.$('#league-input').value,
+			sessionId: this.$('#session-id-input').value,
 		};
-		localStorage.setItem('input-session-id', this.$('#session-id-input').value);
 		localStorage.setItem('input-set-index', this.inputSetIndex);
 		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
