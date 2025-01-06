@@ -8,6 +8,7 @@ class TradeQueryQueue extends Emitter {
 			this.tradeQueries.push(tradeQuery);
 			tradeQuery.itemStream.forEach(items => this.emit('items', items));
 			tradeQuery.progressStream.forEach(() => this.updateProgress());
+			tradeQuery.errorStream.forEach(error => this.emit('error', error));
 			tradeQuery.start();
 		});
 	}

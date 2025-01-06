@@ -6,11 +6,6 @@ const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');
 
-// todo[medium] when rate limit fails, show invalid indicator on session ID.
-//  response "Query is too complex…rs used.\\nLogging in will increase this limit." indicates bad
-//  session ID. other responses "{"error":{"code":2,"message":"Query is too complex. Please reduce
-//  the amount of filters used."}}" don't indicate bad session IDs.
-
 let parseRateLimitResponseHeader = ({rule, state}) => {
 	let r = rule.split(':');
 	let s = state.split(':');
@@ -44,10 +39,7 @@ let rlrGet = (endpoint, params, headers, stopObj) => rlrGetQueue.add(async () =>
 	let responseHeaders = Object.fromEntries(response.headers);
 	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(responseHeaders)[0]);
 	console.log('got, made requests', responseHeaders, rateLimitStr);
-	let responseBody = await response.json();
-	if (responseBody.error)
-		console.error('response error', responseBody.error);
-	return responseBody;
+	return response.json();
 });
 
 let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () => {
@@ -62,10 +54,7 @@ let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () =
 	let responseHeaders = Object.fromEntries(response.headers);
 	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(responseHeaders)[0]);
 	console.log('posted, made requests', response.headers, rateLimitStr);
-	let responseBody = await response.json();
-	if (responseBody.error)
-		console.error('response error', responseBody.error);
-	return responseBody;
+	return response.json();
 });
 
 class TradeQuery {
@@ -78,6 +67,7 @@ class TradeQuery {
 		this.priceShifts = priceShifts;
 		this.itemStream = new Stream();
 		this.progressStream = new Stream();
+		this.errorStream = new Stream();
 		this.stopObj = {};
 	}
 
@@ -151,6 +141,8 @@ class TradeQuery {
 			});
 			console.log('initial query', endpoint, query, headers);
 			let data = await rlrPost(endpoint, query, headers, this.stopObj);
+			if (data.error)
+				this.errorStream.write(data.error);
 			let itemCount = data.result.length;
 			this.progressStream.write({
 				text: `Received ${data.result.length} items.`,
@@ -182,6 +174,8 @@ class TradeQuery {
 					`${apiConstants.api}/api/trade2/fetch/${requestGroup.join()}` :
 					`${apiConstants.api}/api/trade/fetch/${requestGroup.join()}`;
 				let data2 = await rlrGet(endpoint2, params, headers, this.stopObj);
+				if (data2.error)
+					this.errorStream.write(data2.error);
 				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
 					queriesComplete: 1 + ++receivedCount,
