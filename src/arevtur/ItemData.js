@@ -44,6 +44,13 @@ class ItemData {
 		this.affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
 			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
 
+		// quality
+		let qualityProperty = tradeApiItemData.item.properties
+			.find(property => property.name.includes('Quality'));
+		let qualityNumber = Number(qualityProperty?.values[0][0].replace('%', '') || 0);
+		let qualityText = qualityProperty?.name.match(/\((.*)\)/)[1];
+		this.quality = [`${qualityNumber} quality`, qualityText].filter(v => v).join(' - ');
+
 		// defenses
 		let defenseProperties =
 			[
@@ -63,7 +70,7 @@ class ItemData {
 			.filter(([_, value]) => value)
 			.map(nameValue => nameValue.join(' '));
 
-		// Weighted value
+		// weighted value
 		this.weightedValueDetails = {
 			affixes: affixValueShift,
 			defenses: ItemData.evalDefensePropertiesValue(defenseProperties, queryDefenseProperties),

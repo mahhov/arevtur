@@ -73,6 +73,7 @@ customElements.define(name, class extends XElement {
 		this.$('#prefixes-text').textContent = itemData.affixes.prefix;
 		this.$('#suffixes-text').textContent = itemData.affixes.suffix;
 		this.$('#affix-value-text').textContent = itemData.weightedValueDetails.affixes;
+		this.$('#quality-text').textContent = itemData.quality;
 		this.$('#defense-value-text').textContent = itemData.weightedValueDetails.defenses;
 		this.$('#weight-value-text').textContent = itemData.weightedValueDetails.mods;
 
