@@ -48,7 +48,7 @@ class ItemData {
 		let qualityProperty = tradeApiItemData.item.properties
 			.find(property => property.name.includes('Quality'));
 		let qualityNumber = Number(qualityProperty?.values[0][0].replace('%', '') || 0);
-		let qualityText = qualityProperty?.name.match(/\((.*)\)/)[1];
+		let qualityText = qualityProperty?.name.match(/\((.*)\)/)?.[1];
 		this.quality = [`${qualityNumber} quality`, qualityText].filter(v => v).join(' - ');
 
 		// defenses
