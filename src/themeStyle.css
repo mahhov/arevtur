@@ -83,7 +83,15 @@
 	--colored-text-background-pink: oklch(.35 .1 340);
 }
 
-/* todo[medium] this removes 'display:block' from 'div.experimental' elements. */
+/* todo[blocking] this removes 'display:block' from 'div.experimental' elements. */
 :root:not(.experimental) {
 	--experimental-display: none;
+}
+
+:root.version-2 {
+	--version-1-display: none;
+}
+
+:root:not(.version-2) {
+	--version-2-display: none;
 }

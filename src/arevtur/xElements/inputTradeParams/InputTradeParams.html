@@ -13,8 +13,24 @@
 		width: 200px;
 	}
 
+	:is(label, x-multi-select-lined):not(:last-child) {
+		margin-right: 15px;
+	}
+
 	.short-input::part(input) {
 		width: 60px;
+	}
+
+	x-tooltip-button {
+		position: relative;
+	}
+
+	.macros {
+		margin-top: 15px;
+	}
+
+	#search-input {
+		width: 400px;
 	}
 
 	#query-properties-list x-query-property {
@@ -23,19 +39,6 @@
 
 	#query-properties-list x-query-property:where(:hover, .dragging, .search-highlighted) {
 		border: 1px solid var(--interactable-focus-border);
-	}
-
-	#search-input {
-		width: 400px;
-	}
-
-	label:not(:first-child),
-	x-multi-select-lined {
-		margin-left: 15px;
-	}
-
-	x-tooltip-button {
-		position: relative;
 	}
 </style>
 
@@ -109,7 +112,7 @@
 	</span>
 </div>
 <div>
-	<span class="experimental">
+	<span class="experimental version-1">
 		<label>
 			Prefix
 			<x-numeric-input id="prefix-input" class="short-input"></x-numeric-input>
@@ -121,40 +124,42 @@
 	</span>
 </div>
 <div>
-	<label>6-link<input id="linked-check" type="checkbox"
-						title="Find items that are either 6-linked or can be 6-linked for under the price range"></label>
+	<label class="version-1">6-link<input id="linked-check" type="checkbox"
+										  title="Find items that are either 6-linked or can be 6-linked for under the price range"></label>
 	<label>Uncorrupted<input id="uncorrupted-check" type="checkbox"
 							 title="Find uncorrupted items only"></label>
 	<label>Non Unique<input id="non-unique-check" type="checkbox"
 							title="Find non unique items only"></label>
 	<!-- todo[low] influences not working and not styled dark -->
-	<x-multi-select-lined id="influence-input" class="experimental"
+	<x-multi-select-lined id="influence-input" class="experimental version-1"
 						  placeholder="Add influences"></x-multi-select-lined>
+</div>
+<div class="macros experimental">
+	<button id="drop-implicit-mods-button" title="Remove all implicit mods">Drop Implicits
+	</button>
+	<button id="replace-resist-mods-button"
+			title="Replace all resist mods with a pseudo total resist mod. Useful when looking for a specific corrupted mod.">
+		Replace Resists
+	</button>
+	<button id="replace-attribute-mods-button"
+			title="Replace all attribute mods with 3 pseudo attribute mods">Replace Attributes
+	</button>
+	<button id="add-crafted-mods-button" class="experimental"
+			title="Add all crafted mods matching the existing explicit mods. This isn't very useful since searching for an explicit mode will include crafted mods.">
+		Add Crafted
+	</button>
+	<button id="add-pseudo-mods-button"
+			title="When possible, merge all duplicate explicit, implicit, and crafted mods into pseudo mods">
+		Add Pseudo
+	</button>
+	<button id="enable-all-mods-button" title="Enable the top 35 mods">Enable All</button>
+	<button id="enable-all-mods-for-item-type-button" title="Enable the top 35 mods applicable for the item type">Enable
+		All for Item Type
+	</button>
+	<button id="share-all-mods-button" title="Share all mods">Share All</button>
 </div>
 <div>
 	<input id="search-input" placeholder="search (e.g. duration, resist)" title="ctrl+g">
-	<span class="experimental">
-		<button id="drop-implicit-mods-button" title="Remove all implicit mods">Drop Implicits
-		</button>
-		<button id="replace-resist-mods-button"
-				title="Replace all resist mods with a pseudo total resist mod. Useful when looking for a specific corrupted mod.">
-			Replace Resists
-		</button>
-		<button id="replace-attribute-mods-button"
-				title="Replace all attribute mods with 3 pseudo attribute mods">Replace Attributes
-		</button>
-		<button id="add-crafted-mods-button" class="experimental"
-				title="Add all crafted mods matching the existing explicit mods. This isn't very useful since searching for an explicit mode will include crafted mods.">
-			Add Crafted
-		</button>
-		<button id="add-pseudo-mods-button"
-				title="When possible, merge all duplicate explicit, implicit, and crafted mods into pseudo mods">
-			Add Pseudo
-		</button>
-		<button id="enable-all-mods-button" title="Enable the top 35 mods">Enable All</button>
-		<button id="enable-all-mods-for-item-type-button" title="Enable the top 35 mods applicable for the item type">Enable All for Item Type</button>
-		<button id="share-all-mods-button" title="Share all mods">Share All</button>
-	</span>
 </div>
 <x-arrangeable-list id="query-properties-list"></x-arrangeable-list>
 

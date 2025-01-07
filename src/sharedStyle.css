@@ -125,16 +125,21 @@ progress::-webkit-progress-value {
 
 .pob {
 	border: 1px solid var(--colored-text-pink);
+	display: var(--version-1-display) !important;
 }
 
 /* state based */
 
-.maximized-hidden {
-	display: var(--maximize-hidden-display) !important;
-}
-
 .experimental {
 	display: var(--experimental-display);
+}
+
+.version-1 {
+	display: var(--version-1-display);
+}
+
+.version-2 {
+	display: var(--version-2-display);
 }
 
 /* text */
