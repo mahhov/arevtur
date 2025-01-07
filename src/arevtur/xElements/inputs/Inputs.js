@@ -38,8 +38,6 @@ customElements.define(name, class extends XElement {
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('change', () => this.store());
 
-		this.$('#refresh-button').addEventListener('click', () => window.location.reload());
-
 		this.$('#bug-report-button').addEventListener('click', async () =>
 			(await BugReport.fromCurrentState()).toDownload());
 		this.$('#bug-report-button').addEventListener('dragover', e => e.preventDefault());
