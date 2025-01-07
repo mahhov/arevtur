@@ -24,7 +24,12 @@ class ApiConstants {
 		//  syntax. Likewise for the fake-static constants above.
 		this.api = ApiConstants.api;
 		this.createRequestHeader = ApiConstants.createRequestHeader;
-		this.cache = {};
+		try {
+			this.cache = JSON.parse(localStorage.getItem('api-constants-cache'));
+			Object.values(this.cache).forEach(cached => cached.promise = null);
+		} catch (e) {
+		}
+		this.cache ||= {};
 	}
 
 	// leagues
@@ -314,21 +319,24 @@ class ApiConstants {
 	}
 
 	async cachedRequest(cacheKey, initializer, ...args) {
-		let duration3hours = 3 * 60 * 60 * 1000;
+		let hour1 = 60 * 60 * 1000;
 		while (true) {
 			let version2 = configForRenderer.config.version2;
 			cacheKey = [cacheKey, version2, ...args].join(',');
 			if (!this.cache[cacheKey] ||
-				performance.now() - this.cache[cacheKey].lastRequest > duration3hours ||
-				this.cache[cacheKey].promise.error) {
+				Date.now() - this.cache[cacheKey].lastRequest > hour1 ||
+				this.cache[cacheKey].promise?.error && !this.cache[cacheKey].value) {
 				this.cache[cacheKey] = {
-					lastRequest: performance.now(),
+					lastRequest: Date.now(),
 					promise: new XPromise(initializer(version2, ...args)),
 				};
+				this.cache[cacheKey].value = await this.cache[cacheKey].promise;
+				localStorage.setItem('api-constants-cache', JSON.stringify(this.cache));
 			}
-			await this.cache[cacheKey].promise;
+			if (this.cache[cacheKey].promise)
+				await this.cache[cacheKey].promise;
 			if (version2 === configForRenderer.config.version2)
-				return this.cache[cacheKey].promise;
+				return this.cache[cacheKey].value;
 		}
 	}
 }
