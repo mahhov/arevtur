@@ -74,8 +74,8 @@ customElements.define(name, class extends XElement {
 		this.$('#suffixes-text').textContent = itemData.affixes.suffix;
 		this.$('#affix-value-text').textContent = itemData.weightedValueDetails.affixes;
 		this.$('#quality-text').textContent = itemData.quality;
-		this.$('#defense-value-text').textContent = itemData.weightedValueDetails.defenses;
-		this.$('#weight-value-text').textContent = itemData.weightedValueDetails.mods;
+		this.$('#defense-value-text').textContent = round(itemData.weightedValueDetails.defenses, 3);
+		this.$('#weight-value-text').textContent = round(itemData.weightedValueDetails.mods, 3);
 
 		this.$('#weight-value').text = `Weighted: ${round(itemData.weightedValue, 1)}`;
 		let expandedValues = Object.entries(itemData.weightedValueDetails)
