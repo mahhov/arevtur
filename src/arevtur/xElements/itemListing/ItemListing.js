@@ -103,6 +103,7 @@ customElements.define(name, class extends XElement {
 		this.$('#date-text').textContent = dateDiff > 24 ?
 			`${round(dateDiff / 24, 1)} days ago` :
 			`${round(dateDiff, 1)} hours ago`;
+		this.$('#online-status-text').textContent = itemData.onlineStatus;
 
 		this.selected = itemData.selected;
 		this.hovered = itemData.hovered;

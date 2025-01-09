@@ -25,6 +25,7 @@ class ItemData {
 			`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`;
 		this.directWhisperToken = tradeApiItemData.listing.whisper_token;
 		this.whisperText = tradeApiItemData.listing.whisper;
+		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online);
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text || '');
@@ -124,6 +125,14 @@ class ItemData {
 				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
 		console.warn('Missing currency', currencyId);
 		return -1;
+	}
+
+	static onlineStatus(onlineObj) {
+		if (!onlineObj)
+			return 'offline';
+		if (onlineObj.status)
+			return onlineObj.status;
+		return 'online';
 	}
 
 	static decode64(string64) {
