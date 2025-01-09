@@ -35,6 +35,7 @@ class ItemsData extends Emitter {
 
 	clear() {
 		this.allItems = [];
+		this.shownItemsCache = null;
 	}
 
 	refresh() {

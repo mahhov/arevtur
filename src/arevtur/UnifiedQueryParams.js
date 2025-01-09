@@ -1,6 +1,6 @@
 const apiConstants = require('./apiConstants');
 const {XElement} = require('xx-element');
-const {deepCopy} = require('../util/util');
+const {deepCopy, updateElementChildren} = require('../util/util');
 const {
 	defensePropertyTuples,
 	maxRequirementPropertyTuples,
@@ -124,11 +124,12 @@ class UnifiedQueryParams {
 		inputElement.influences = influenceProperties.map(influence =>
 			this.influences.includes(influence));
 
-		XElement.clearChildren(inputElement.$('#query-properties-list'));
-
-		queryPropertyFilters.forEach(([key, filter, hasWeight, isShared]) =>
-			this[key].forEach(entry => {
-				let queryProperty = inputElement.addQueryProperty();
+		updateElementChildren(
+			inputElement.$('#query-properties-list'),
+			queryPropertyFilters.flatMap(queryPropertyFilter =>
+				this[queryPropertyFilter[0]].map(entry => ({queryPropertyFilter, entry}))),
+			() => inputElement.addQueryProperty(),
+			(queryProperty, i, {queryPropertyFilter: [key, filter, hasWeight, isShared], entry}) => {
 				queryProperty.property = entry.propertyText;
 				if (hasWeight) {
 					queryProperty.weight = entry.weight;
@@ -137,7 +138,7 @@ class UnifiedQueryParams {
 				queryProperty.filter = filter;
 				queryProperty.shared = isShared;
 				queryProperty.enabled = entry.enabled;
-			}));
+			});
 	}
 
 	static fromInputTradeQueryParams(inputElement) {
