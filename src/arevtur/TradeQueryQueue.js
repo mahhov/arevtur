@@ -1,34 +1,45 @@
 const Emitter = require('../util/Emitter');
 
 class TradeQueryQueue extends Emitter {
-	tradeQueries = [];
+	tradeQuerySets = [];
+	activeTradeQuerySet = [];
 
 	addQueries(tradeQueries) {
+		this.tradeQuerySets.push(tradeQueries);
 		tradeQueries.forEach(tradeQuery => {
-			this.tradeQueries.push(tradeQuery);
-			tradeQuery.itemStream.forEach(items => this.emit('items', items));
+			tradeQuery.itemStream.forEach(items => {
+				if (this.activeTradeQuerySet.includes(tradeQuery))
+					this.emit('items', items);
+			});
 			tradeQuery.progressStream.forEach(() => this.updateProgress());
 			tradeQuery.errorStream.forEach(error => this.emit('error', error));
 			tradeQuery.start();
 		});
 	}
 
+	setActiveTradeQueries(tradeQueries) {
+		this.activeTradeQuerySet = tradeQueries;
+	}
+
+	get activeTradeQueriesItems() {
+		return this.activeTradeQuerySet.map(tradeQuery => tradeQuery.itemStream.written).flat(2);
+	}
+
 	updateProgress() {
-		let progresses = this.tradeQueries.map(tradeQuery => tradeQuery.progressStream)
+		let progresses = this.tradeQuerySets
+			.flat()
+			.map(tradeQuery => tradeQuery.progressStream)
 			.map(progressStream => progressStream.lastValue)
 			.filter(progress => progress);
-		let queriesComplete = progresses.reduce((sum, progress) =>
-			sum + progress.queriesComplete, 0);
-		let queriesTotal = progresses.reduce((sum, progress) =>
-			sum + progress.queriesTotal, 0);
-		let itemCount = progresses.reduce((sum, progress) =>
-			sum + progress.itemCount, 0);
+		let queriesComplete = progresses.reduce((sum, progress) => sum + progress.queriesComplete, 0);
+		let queriesTotal = progresses.reduce((sum, progress) => sum + progress.queriesTotal, 0);
+		let itemCount = progresses.reduce((sum, progress) => sum + progress.itemCount, 0);
 		this.emit('progress', {ratio: queriesComplete / queriesTotal, itemCount});
 	}
 
 	cancel() {
-		this.tradeQueries.forEach(tradeQuery => tradeQuery.stop());
-		this.tradeQueries = [];
+		this.tradeQuerySets.flat().forEach(tradeQuery => tradeQuery.stop());
+		this.tradeQuerySets = [];
 	}
 }
 

@@ -59,30 +59,16 @@
 	const {webFrame} = require('electron');
 	const {clamp} = require('../util/util');
 	const googleAnalyticsForRenderer = require('../services/googleAnalytics/googleAnalyticsForRenderer');
-	const TradeQueryQueue = require('./TradeQueryQueue');
-	const configForRenderer = require('../services/config/configForRenderer');
 
 	const $ = document.querySelector.bind(document);
 
-	let tradeQueryQueue = new TradeQueryQueue();
-	tradeQueryQueue.addListener('items', items => $('x-results').joinItems(items));
-	tradeQueryQueue.addListener('progress', ({ratio, itemCount}) =>
-		$('x-results').updateItemsProgress(ratio, itemCount));
-	tradeQueryQueue.addListener('error', error => {
-		console.error('TradeQuery error', error);
-		if (error?.message.includes('Logging in'))
-			configForRenderer.config = {sessionId: ''};
-	});
-
-	$('x-inputs').addEventListener('submit', async e => {
-		if (!e.detail.add) {
+	$('x-inputs').addEventListener('progress', e =>
+		$('x-results').updateItemsProgress(e.detail.ratio, e.detail.itemCount));
+	$('x-inputs').addEventListener('add-items', e => {
+		if (e.detail.clear)
 			$('x-results').clearItems();
-			tradeQueryQueue.cancel();
-		}
-		tradeQueryQueue.addQueries(await $('x-inputs').finalizeTradeQuery());
+		$('x-results').joinItems(e.detail.items);
 	});
-
-	$('x-inputs').addEventListener('cancel', () => tradeQueryQueue.cancel());
 
 	document.addEventListener('wheel', e => {
 		if (!e.ctrlKey)

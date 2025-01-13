@@ -10,11 +10,11 @@ const {minIndex, unique, escapeRegex, openPath} = require('../../../util/util');
 const ItemData = require('../../ItemData');
 const appData = require('../../../services/appData');
 const BugReport = require('../../BugReport');
+const TradeQueryQueue = require('../../TradeQueryQueue');
 
 let timestamp = () => {
 	let date = new Date();
 	return date.toLocaleDateString();
-	// return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
 };
 
 customElements.define(name, class extends XElement {
@@ -113,7 +113,7 @@ customElements.define(name, class extends XElement {
 			// todo[low] if user doesn't override name, append item type when selected
 			this.inputSets.push({name: timestamp()});
 			this.addInputSetEl();
-			this.setInputSetIndex(this.inputSets.length - 1, null, !e.ctrlKey);
+			this.setInputSetIndex(this.inputSets.length - 1, null);
 			this.store();
 		});
 		this.$('#duplicate-input-set-button').addEventListener('click', e =>
@@ -134,15 +134,27 @@ customElements.define(name, class extends XElement {
 			this.store();
 		});
 
+		this.tradeQueryQueue = new TradeQueryQueue();
+		this.tradeQueryQueue.addListener('items', items =>
+			this.emit('add-items', {clear: false, items}));
+		this.tradeQueryQueue.addListener('progress', arg =>
+			this.emit('progress', arg));
+		this.tradeQueryQueue.addListener('error', error => {
+			console.error('TradeQuery error', error);
+			if (error?.message.includes('Logging in')) {
+				this.$('#session-id-input').value = '';
+				this.store();
+			}
+		});
+
 		document.addEventListener('keydown', e => {
 			if (e.key === 'Enter' && e.ctrlKey)
-				this.emit('submit', {add: e.shiftKey});
+				this.onSubmit(e.altKey);
 			if (e.key === 'r' && e.ctrlKey)
 				window.location.reload();
 		});
-		this.$('#search-button').addEventListener('click', e =>
-			this.emit('submit', {add: e.ctrlKey}));
-		this.$('#cancel-button').addEventListener('click', () => this.emit('cancel'));
+		this.$('#search-button').addEventListener('click', e => this.onSubmit(e.altKey));
+		this.$('#cancel-button').addEventListener('click', () => this.tradeQueryQueue.cancel());
 		this.$('#search-in-browser-button').addEventListener('click', async () =>
 			shell.openExternal(await (await this.finalizeTradeQuery())[0].toApiHtmlUrl()));
 
@@ -198,29 +210,27 @@ customElements.define(name, class extends XElement {
 	addInputSet(name, unifiedQueryParams) {
 		this.inputSets.push({
 			name,
-			active: false,
 			unifiedQueryParams,
+			tradeQueries: [],
 		});
 		this.addInputSetEl();
 		this.setInputSetIndex(this.inputSets.length - 1);
 		this.store();
 	}
 
-	async setInputSetIndex(index, fromEl = null, exclusive = true) {
+	setInputSetIndex(index, fromEl = null) {
 		// if fromEl is specified, index is ignored
 		let indexSetEls = [...this.$('#input-set-list').children];
 		this.inputSetIndex = fromEl ? indexSetEls.indexOf(fromEl) : index;
-		if (exclusive) {
-			indexSetEls.forEach(indexSetEl => indexSetEl.classList.remove('active'));
-			this.inputSets.forEach(indexSet => indexSet.active = false);
-		}
 		indexSetEls.forEach(indexSetEl => indexSetEl.classList.remove('selected'));
-		indexSetEls[this.inputSetIndex].classList.add('active');
-		this.inputSets[this.inputSetIndex].active = true;
 		indexSetEls[this.inputSetIndex].classList.add('selected');
+
 		let unifiedQueryParams = UnifiedQueryParams.fromStorageQueryParams(
 			this.inputSets[this.inputSetIndex].unifiedQueryParams, this.sharedWeightEntries);
 		this.$('#input-trade-params').setUnifiedQueryParams(unifiedQueryParams, true);
+
+		this.tradeQueryQueue.setActiveTradeQueries(this.inputSets[this.inputSetIndex].tradeQueries);
+		this.emit('add-items', {clear: true, items: this.tradeQueryQueue.activeTradeQueriesItems});
 	}
 
 	inputSetIndexFromEl(inputSetEl) {
@@ -239,7 +249,7 @@ customElements.define(name, class extends XElement {
 		inputSetEl.name = this.inputSets[this.inputSets.length - 1].name;
 		this.$('#input-set-list').appendChild(inputSetEl);
 		inputSetEl.addEventListener('click', e =>
-			this.setInputSetIndex(0, inputSetEl, !e.ctrlKey));
+			this.setInputSetIndex(0, inputSetEl));
 		inputSetEl.addEventListener('name-change', () => {
 			this.inputSetFromEl(inputSetEl).name = inputSetEl.name;
 			this.store();
@@ -268,11 +278,32 @@ customElements.define(name, class extends XElement {
 			sessionId: this.$('#session-id-input').value,
 		};
 		localStorage.setItem('input-set-index', this.inputSetIndex);
-		localStorage.setItem('input-sets', JSON.stringify(this.inputSets));
+		localStorage.setItem('input-sets', JSON.stringify(this.inputSets.map(inputSet => ({
+			...inputSet,
+			tradeQueries: [],
+		}))));
 		localStorage.setItem('shared-weight-entries', JSON.stringify(this.sharedWeightEntries));
 	}
 
-	async finalizeTradeQuery() {
+	async onSubmit(all) {
+		this.tradeQueryQueue.cancel();
+		if (all)
+			for (let i in this.inputSets)
+				await this.queueTradeQuery(i);
+		else
+			await this.queueTradeQuery(this.inputSetIndex);
+		this.tradeQueryQueue.setActiveTradeQueries(this.inputSets[this.inputSetIndex].tradeQueries);
+		this.emit('add-items', {clear: true, items: []});
+	}
+
+	async queueTradeQuery(i) {
+		this.inputSets[i].tradeQueries = [];
+		let tradeQueries = await this.finalizeTradeQuery(i);
+		this.tradeQueryQueue.addQueries(tradeQueries);
+		this.inputSets[i].tradeQueries = tradeQueries;
+	}
+
+	async finalizeTradeQuery(index = this.inputSetIndex) {
 		let version2 = this.$('#version-2-check').checked;
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
@@ -288,13 +319,10 @@ customElements.define(name, class extends XElement {
 			manual6LinkCheapestOption = manual6LinkOptions[minIndex(manual6LinkOptions.map(v => v[1]))];
 		}
 
-		let tradeQueryDatas = this.inputSets
-			.filter(inputSet => inputSet.active)
-			.map(inputSet => UnifiedQueryParams
-				.fromStorageQueryParams(inputSet.unifiedQueryParams, this.sharedWeightEntries)
-				.toTradeQueryData(version2, league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]));
-		return (await Promise.all(tradeQueryDatas))
-			.flat()
+		let tradeQueryData = await UnifiedQueryParams
+			.fromStorageQueryParams(this.inputSets[index].unifiedQueryParams, this.sharedWeightEntries)
+			.toTradeQueryData(version2, league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]);
+		return tradeQueryData
 			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));
 	}
 });
