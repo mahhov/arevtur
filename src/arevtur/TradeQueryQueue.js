@@ -31,7 +31,7 @@ class TradeQueryQueue extends Emitter {
 			.map(progressStream => progressStream.lastValue)
 			.filter(progress => progress);
 		let queriesComplete = progresses.reduce((sum, progress) => sum + progress.queriesComplete, 0);
-		let queriesTotal = progresses.reduce((sum, progress) => sum + progress.queriesTotal, 0);
+		let queriesTotal = progresses.reduce((sum, progress) => sum + progress.queriesTotal, 0) || 1;
 		let itemCount = progresses.reduce((sum, progress) => sum + progress.itemCount, 0);
 		this.emit('progress', {ratio: queriesComplete / queriesTotal, itemCount});
 	}
