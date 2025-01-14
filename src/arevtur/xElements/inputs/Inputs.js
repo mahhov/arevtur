@@ -61,14 +61,14 @@ customElements.define(name, class extends XElement {
 		});
 
 		// todo[medium] sometimes returns 'error 6 / forbidden'
-		this.$('#input-import-trade-search-url').addEventListener('import-url', async e => {
+		this.$('#input-imports').addEventListener('import-url', async e => {
 			let apiQueryParams =
 				await TradeQuery.fromApiHtmlUrl(this.$('#session-id-input').value, e.detail);
 			let unifiedQueryParams = await UnifiedQueryParams.fromApiQueryParams(apiQueryParams);
 			this.addInputSet(`imported from URL ${timestamp()}`, unifiedQueryParams);
 		});
 
-		this.$('#input-import-trade-search-url').addEventListener('import-item-text', async e => {
+		this.$('#input-imports').addEventListener('import-item-text', async e => {
 			let typeText = ItemData.typeFromItemText(e.detail) || 'Any';
 
 			let propertyTexts = await apiConstants.propertyTexts();
@@ -95,7 +95,7 @@ customElements.define(name, class extends XElement {
 			this.addInputSet(`imported from text ${timestamp()}`, unifiedQueryParams);
 		});
 
-		this.$('#input-import-trade-search-url').addEventListener('import-weight-text', e => {
+		this.$('#input-imports').addEventListener('import-weight-list', e => {
 			let weights = e.detail.split('\n');
 			this.inputSets[this.inputSetIndex].unifiedQueryParams.weightEntries
 				.filter(weightEntry => !weightEntry.locked)
