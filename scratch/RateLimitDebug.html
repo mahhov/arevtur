@@ -1,0 +1,7930 @@
+<style>
+	.container {
+		display: flex;
+		gap: 20px;
+		margin-top: 20px;
+	}
+
+	.output {
+		outline: 1px solid black;
+		flex: 1;
+	}
+
+	.response {
+		margin-left: 10px;
+	}
+
+	.error {
+		background-color: rgb(255, 200, 200);
+	}
+
+	.highlight {
+		background-color: rgb(200, 200, 255);
+	}
+</style>
+
+<textarea></textarea>
+<input type="number" value="5">
+<div id="count"></div>
+<div class="container">
+	<div class="output"></div>
+	<div class="output"></div>
+</div>
+
+<script>
+	let text = document.querySelector('textarea');
+	let windowInput = document.querySelector('input');
+	let divs = document.querySelectorAll('.output');
+	let countEl = document.querySelector('#count');
+
+	let update = () => {
+		let datas = JSON.parse(text.value);
+		[datas.post, datas.get]
+			.map((data, i) => [data, divs[i]])
+			.forEach(([data, div]) => {
+				while (div.firstChild)
+					div.firstChild.remove();
+
+				data.forEach(d => {
+					let {rules, states} = d.rateLimitHeaders || {};
+					let error = states?.some(state => state.match(/\d+:\d+:[^0]/));
+					let response = d.type === 'response';
+
+					let row = document.createElement('div');
+					row.textContent = response ?
+						`${Math.round(d.time) / 1000}, ${d.delays.join(', ')}, max: ${d.delay}` :
+						`${Math.round(d.time) / 1000} ${d.type}`;
+					if (error)
+						row.classList.toggle('error');
+					row.classList.toggle('response', response);
+					row.title = JSON.stringify(d, null, 2);
+					div.appendChild(row);
+
+					row.addEventListener('mouseover', () => {
+						let window = windowInput.value;
+						let matches = data.filter((dd, i) => {
+							let delta = d.time - dd.time;
+							let x = delta > 0 && delta < window * 1000;
+							div.children[i].classList.toggle('highlight', x);
+							return x;
+						});
+						countEl.textContent = `${matches.filter(m => m.type === 'request').length} requests, ${matches.filter(m => m.type === 'response').length} responses`;
+					});
+				});
+			});
+	};
+
+	[text].forEach(el => el.addEventListener('input', update));
+	text.textContent = JSON.stringify({
+		'get': [
+			{
+				'time': 3002.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 3279.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'1:4:0',
+						'1:4:0',
+						'1:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 3789,
+				'type': 'request',
+			},
+			{
+				'time': 4056.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'2:4:0',
+						'2:4:0',
+						'2:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 4564.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 4933.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'3:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 5447.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 5675.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'4:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 6177.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 6554.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'5:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 7055.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 7218.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'6:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 7719.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 8039.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'6:4:0',
+						'6:4:0',
+						'7:12:0',
+					],
+				},
+				'delays': [
+					1017,
+					500,
+					500,
+				],
+				'delay': 1017,
+			},
+			{
+				'time': 9068.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 9373.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'8:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 9875.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 10200,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 10700.699999999255,
+				'type': 'request',
+			},
+			{
+				'time': 11074.599999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 11574.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 11920.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 13398.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 13982.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 15401.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 15865.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'2:4:0',
+						'2:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 16393.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 16783,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 17402.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 17559.599999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 18395.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 18815.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 19402.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 19684.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 20393.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 20637.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 21400,
+				'type': 'request',
+			},
+			{
+				'time': 21702.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 22393.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 22784.599999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 23402,
+				'type': 'request',
+			},
+			{
+				'time': 23681.599999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 24395.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 25085.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 26397.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 26602.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 27405.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 27873.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 28399.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 28551.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 29392.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 29561.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 30398.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 30713.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 31405.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 31706.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 32396.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 32701.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 33403.5,
+				'type': 'request',
+			},
+			{
+				'time': 33742.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 34397.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 34649.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 35406.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 35641.099999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 36397.699999999255,
+				'type': 'request',
+			},
+			{
+				'time': 36669.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 37405.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 37618.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 38397.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 38676.599999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 39406.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 39788.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 40395.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 40734.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 41402.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 41773,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 42395.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 42585.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 43402.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 43622,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 44395.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 44722.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 45403.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 45572.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 46396.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 46742.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 47391.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 47532.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 48399.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 48579.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 49394.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 49580.099999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 50405.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 50602,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 51398.5,
+				'type': 'request',
+			},
+			{
+				'time': 51595.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 52394.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 52837.099999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 53404.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 53761,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 54400,
+				'type': 'request',
+			},
+			{
+				'time': 54835.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 55395.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 55901.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 57400.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 57653.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 58395.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 58594.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 59406.5,
+				'type': 'request',
+			},
+			{
+				'time': 59595.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 60399.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 60645.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 61394.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 61612.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 62402.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 62765.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 63394,
+				'type': 'request',
+			},
+			{
+				'time': 63689.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 64402.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 64608,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 65399.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 65550.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 66396,
+				'type': 'request',
+			},
+			{
+				'time': 66735.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 67407,
+				'type': 'request',
+			},
+			{
+				'time': 67727,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 68402.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 68838.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 69395.5,
+				'type': 'request',
+			},
+			{
+				'time': 69602.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 70399.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 70753.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 71406.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 71666.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 72402.5,
+				'type': 'request',
+			},
+			{
+				'time': 72627.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 73396.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 73655,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 74404.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 74631.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 75396.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 75682.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 76402.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 76978.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 78401.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 78748.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 79394.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 79937.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 81398,
+				'type': 'request',
+			},
+			{
+				'time': 81592.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 82392.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 82744.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 83400,
+				'type': 'request',
+			},
+			{
+				'time': 83813.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 84393.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 84706.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 85404.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 86038.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 87404.5,
+				'type': 'request',
+			},
+			{
+				'time': 87728.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 88396.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 88732.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 89406.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 89981.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 91393.5,
+				'type': 'request',
+			},
+			{
+				'time': 91644.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 92404.5,
+				'type': 'request',
+			},
+			{
+				'time': 92717.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 93399.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 93788.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 94394.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 95034.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 96402.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 96811.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 97398.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 97697.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 98405.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 98613.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 99399,
+				'type': 'request',
+			},
+			{
+				'time': 99790.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 100392.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 100538.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 101400.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 101921.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 103400.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 103656.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 104406.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 104586.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 105400.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 105804.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 106394.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 106759.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 107404.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 107813.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 108396.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 108795.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 109403.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 109759.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 110395.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 110795.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 111404.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 111743.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 112395,
+				'type': 'request',
+			},
+			{
+				'time': 112680.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 113400.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 113757.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 114395.5,
+				'type': 'request',
+			},
+			{
+				'time': 114675.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 115406.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 115721.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 116399.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 116945.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 118405.5,
+				'type': 'request',
+			},
+			{
+				'time': 118807.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 119397,
+				'type': 'request',
+			},
+			{
+				'time': 119728.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 120406.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 120677.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 121403.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 121661.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 122399.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 122649.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 123407.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 124703.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 125393.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 125704,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 126402.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 126884.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 127397.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 127634.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 128393,
+				'type': 'request',
+			},
+			{
+				'time': 128856.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 129402.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 129677.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 130396.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 130715.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 131393.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 131560.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 132403.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 132780.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 133398.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 133702.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 134394.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 134594.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 135404.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 135977.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 137406,
+				'type': 'request',
+			},
+			{
+				'time': 137878,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 138398.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 139817.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 140402.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 140662.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 141397.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 141589.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 142393,
+				'type': 'request',
+			},
+			{
+				'time': 142938,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 144398.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 144667.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 145394.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 145867.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 193348.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 193519.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'1:4:0',
+						'1:4:0',
+						'1:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 194401.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 194879.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'2:4:0',
+						'2:4:0',
+						'2:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 195395.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 195769.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'3:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 196407,
+				'type': 'request',
+			},
+			{
+				'time': 196546.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'4:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 197402.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 197590,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'5:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 198397.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 198714.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'6:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 199392,
+				'type': 'request',
+			},
+			{
+				'time': 199719.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'7:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 200403.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 200690.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'8:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 201400.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 201623.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'9:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 202395.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 202683.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'10:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 203407,
+				'type': 'request',
+			},
+			{
+				'time': 203866.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 204401.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 204622.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 205396.5,
+				'type': 'request',
+			},
+			{
+				'time': 205762.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 206407.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 206725.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 207401,
+				'type': 'request',
+			},
+			{
+				'time': 207690.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 208396,
+				'type': 'request',
+			},
+			{
+				'time': 208818.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 209405.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 209706.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 210400.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 211793.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 212393.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 212769,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 213404.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 213740.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 214398.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 214648.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 215392.5,
+				'type': 'request',
+			},
+			{
+				'time': 215678.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 216403.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 216853.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 217399.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 217681.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 218395,
+				'type': 'request',
+			},
+			{
+				'time': 218720.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 219405,
+				'type': 'request',
+			},
+			{
+				'time': 219611.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 220399,
+				'type': 'request',
+			},
+			{
+				'time': 220600,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 221394.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 221813.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 222405.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 222657,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 223400.5,
+				'type': 'request',
+			},
+			{
+				'time': 223589.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'13:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 224397.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 225167.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'13:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 226400.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 226752.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 227393.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 227561.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 228405.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 228575.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 229400.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 229653.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 230393,
+				'type': 'request',
+			},
+			{
+				'time': 230653,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 231401.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 231813.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 232394,
+				'type': 'request',
+			},
+			{
+				'time': 232826.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 233403.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 233883,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 234397.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 234551.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 235393.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 235746.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 236401.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 236695.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 237397.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 237561.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 238405,
+				'type': 'request',
+			},
+			{
+				'time': 238697.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 239400.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 239591.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 240396.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 240644.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 241392,
+				'type': 'request',
+			},
+			{
+				'time': 241650.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 242401.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 242791.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 243396.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 243640.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 244407.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 244659.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 245400.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 245837.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 246393.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 246569.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 247404.5,
+				'type': 'request',
+			},
+			{
+				'time': 247807.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 248396.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 248625.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 249405.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 249828.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 250399.5,
+				'type': 'request',
+			},
+			{
+				'time': 250683.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 251394.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 251805.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 252402.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 252654.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 253396.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 253803.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 254405,
+				'type': 'request',
+			},
+			{
+				'time': 254738.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 255399,
+				'type': 'request',
+			},
+			{
+				'time': 255584,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 256407.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 256688.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 257398.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 257563.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 258392.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 258772.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 259402.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 259649.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 260397.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 260814.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 261406.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 261565,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 262399.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 262564.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 263394.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 263598.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 264401.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 264623.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 265393.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 265715.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 266401.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 266618.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 267393.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 267630.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 268402.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 268739.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 269395.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 269719.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 270407,
+				'type': 'request',
+			},
+			{
+				'time': 270756.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 271397,
+				'type': 'request',
+			},
+			{
+				'time': 271829.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 272392.5,
+				'type': 'request',
+			},
+			{
+				'time': 272629.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 273402.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 273742.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 274396.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 274624.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 275404.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 275616.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 276398.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 276871.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 277391.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 277620.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 278397.5,
+				'type': 'request',
+			},
+			{
+				'time': 278755.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 279392.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 279643,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 280398.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 280698.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 281392.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 281608.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 282400,
+				'type': 'request',
+			},
+			{
+				'time': 282765.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 283393.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 283598.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 284402.5,
+				'type': 'request',
+			},
+			{
+				'time': 284734.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 285395.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 286014.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 287397.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 287611.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 288393.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 288703.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 289404.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 289630.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 290397.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 290840.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 291407.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 291696.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 292399,
+				'type': 'request',
+			},
+			{
+				'time': 292804,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 293406.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 293746.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 294400.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 294598.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 295394.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 295659,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 296402.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 296587.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 297394.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 297813.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 298401.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 298819.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 299393.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 299600.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 300403.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 300927.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 302406.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 302641.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 303401.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 303721.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 304394,
+				'type': 'request',
+			},
+			{
+				'time': 304561.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 305401.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 305718.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 306394.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 306722.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 307403.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 307678,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 308397.80000000075,
+				'type': 'request',
+			},
+			{
+				'time': 308550.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 309404.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 309905.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 311404.5,
+				'type': 'request',
+			},
+			{
+				'time': 311735.5,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 312393.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 312556.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 313400.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 313894.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'13:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 315399,
+				'type': 'request',
+			},
+			{
+				'time': 315570.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 316393,
+				'type': 'request',
+			},
+			{
+				'time': 316656,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 317400.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 317867.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'3:4:0',
+						'3:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 318394.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 318592.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 319093.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 319587.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 320091.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 320333.80000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 320841.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 321166.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'4:4:0',
+						'4:4:0',
+						'11:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 321667.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 321992.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'12:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 322501.5,
+				'type': 'request',
+			},
+			{
+				'time': 322811.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'13:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 323321.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 323651.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'6:4:10',
+						'12:4:60',
+						'16:12:60',
+					],
+					'states': [
+						'5:4:0',
+						'5:4:0',
+						'13:12:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+		],
+		'post': [
+			{
+				'time': 2180.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 3000.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'1:60:0',
+						'1:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 3509,
+				'type': 'request',
+			},
+			{
+				'time': 5263,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'2:10:0',
+						'2:60:0',
+						'2:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 5772.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 6947.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'3:10:0',
+						'3:60:0',
+						'3:300:0',
+					],
+				},
+				'delays': [
+					2052,
+					500,
+					500,
+					500,
+				],
+				'delay': 2052,
+			},
+			{
+				'time': 9006.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 11355.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'4:10:0',
+						'4:60:0',
+						'4:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 11861.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 12946.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'2:10:0',
+						'5:60:0',
+						'5:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 14393.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 14788.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'6:60:0',
+						'6:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 15401.599999997765,
+				'type': 'request',
+			},
+			{
+				'time': 16275.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'4:10:0',
+						'7:60:0',
+						'7:300:0',
+					],
+				},
+				'delays': [
+					1080,
+					500,
+					500,
+					500,
+				],
+				'delay': 1080,
+			},
+			{
+				'time': 17402.39999999851,
+				'type': 'request',
+			},
+			{
+				'time': 22382.199999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'4:10:0',
+						'8:60:0',
+						'8:300:0',
+					],
+				},
+				'delays': [
+					6000,
+					500,
+					500,
+					500,
+				],
+				'delay': 6000,
+			},
+			{
+				'time': 28399.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 30923.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'9:60:0',
+						'9:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 32395.89999999851,
+				'type': 'request',
+			},
+			{
+				'time': 35151.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'2:10:0',
+						'10:60:0',
+						'10:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 36397.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 38758.599999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'11:60:0',
+						'11:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 39406.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 39948.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'12:60:0',
+						'12:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 41401.800000000745,
+				'type': 'request',
+			},
+			{
+				'time': 42184.800000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'4:10:0',
+						'13:60:0',
+						'13:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 43402.199999999255,
+				'type': 'request',
+			},
+			{
+				'time': 47753.300000000745,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'3:10:0',
+						'14:60:0',
+						'14:300:0',
+					],
+				},
+				'delays': [
+					6000,
+					500,
+					500,
+					500,
+				],
+				'delay': 6000,
+			},
+			{
+				'time': 54399.5,
+				'type': 'request',
+			},
+			{
+				'time': 56599.699999999255,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'12:60:0',
+						'15:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 57401.300000000745,
+				'type': 'request',
+			},
+			{
+				'time': 58533.39999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'2:10:0',
+						'13:60:0',
+						'16:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 59406.099999997765,
+				'type': 'request',
+			},
+			{
+				'time': 60149.099999997765,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'14:60:0',
+						'17:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 61393.699999999255,
+				'type': 'request',
+			},
+			{
+				'time': 64139.89999999851,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'4:10:0',
+						'15:60:0',
+						'18:300:0',
+					],
+				},
+				'delays': [
+					2009,
+					500,
+					2123,
+					500,
+				],
+				'delay': 2123,
+			},
+			{
+				'time': 66396.5,
+				'type': 'request',
+			},
+			{
+				'time': 66498.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'4:10:0',
+						'16:60:120',
+						'19:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					125000,
+					500,
+				],
+				'delay': 125000,
+			},
+			{
+				'time': 192395.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 193347.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'1:60:0',
+						'20:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 194401.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 194873.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'2:10:0',
+						'2:60:0',
+						'21:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 195395.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 196049.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'3:10:0',
+						'3:60:0',
+						'22:300:0',
+					],
+				},
+				'delays': [
+					3298,
+					500,
+					500,
+					500,
+				],
+				'delay': 3298,
+			},
+			{
+				'time': 199392.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 200693.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'4:10:0',
+						'4:60:0',
+						'23:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 201400.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 203074.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'5:10:0',
+						'5:60:0',
+						'24:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 204401.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 205265.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'6:60:0',
+						'25:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 206406.8999999985,
+				'type': 'request',
+			},
+			{
+				'time': 206951.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'4:10:0',
+						'7:60:0',
+						'26:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 208395.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 209085.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'3:10:0',
+						'8:60:0',
+						'27:300:0',
+					],
+				},
+				'delays': [
+					2179,
+					500,
+					500,
+					500,
+				],
+				'delay': 2179,
+			},
+			{
+				'time': 211397.09999999776,
+				'type': 'request',
+			},
+			{
+				'time': 212173.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'4:10:0',
+						'9:60:0',
+						'28:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 213404.5,
+				'type': 'request',
+			},
+			{
+				'time': 214307.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'10:60:0',
+						'29:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 215392.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 216539.3999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'3:5:0',
+						'4:10:0',
+						'11:60:0',
+						'30:300:0',
+					],
+				},
+				'delays': [
+					1634,
+					500,
+					500,
+					500,
+				],
+				'delay': 1634,
+			},
+			{
+				'time': 218394.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 218903,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'2:5:0',
+						'3:10:0',
+						'12:60:0',
+						'31:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 223594.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 225202.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'2:10:0',
+						'13:60:0',
+						'32:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 234555.59999999776,
+				'type': 'request',
+			},
+			{
+				'time': 235940.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'14:60:0',
+						'33:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 244665.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 245419.8999999985,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'15:60:0',
+						'34:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					8928,
+					500,
+				],
+				'delay': 8928,
+			},
+			{
+				'time': 254766.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 255090.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'11:60:0',
+						'32:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 264678.69999999925,
+				'type': 'request',
+			},
+			{
+				'time': 265185.09999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'6:60:0',
+						'33:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 274629.30000000075,
+				'type': 'request',
+			},
+			{
+				'time': 275345.59999999776,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'7:60:0',
+						'34:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 284738.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 285992.30000000075,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'6:60:0',
+						'35:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 295663,
+				'type': 'request',
+			},
+			{
+				'time': 296381,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'5:60:0',
+						'36:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 306726.19999999925,
+				'type': 'request',
+			},
+			{
+				'time': 307103.19999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'5:60:0',
+						'21:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+			{
+				'time': 318596.3999999985,
+				'type': 'request',
+			},
+			{
+				'time': 319089.69999999925,
+				'type': 'response',
+				'rateLimitHeaders': {
+					'rules': [
+						'3:5:60',
+						'8:10:60',
+						'15:60:120',
+						'60:300:1800',
+					],
+					'states': [
+						'1:5:0',
+						'1:10:0',
+						'6:60:0',
+						'22:300:0',
+					],
+				},
+				'delays': [
+					500,
+					500,
+					500,
+					500,
+				],
+				'delay': 500,
+			},
+		],
+	});
+	update();
+</script>

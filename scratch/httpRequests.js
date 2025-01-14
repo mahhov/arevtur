@@ -1,5 +1,4 @@
-const fetch = require('C:\\Users\\manukh\\personal\\arevtur\\node_modules\\node-fetch');
-// const fetch = require('C:\\Users\\manukh\\personal\\arevtur\\node_modules\\node-fetch\\lib\\index.js')
+const fetch = require('C:\\Users\\xxx\\personal\\arevtur\\node_modules\\node-fetch');
 
 let sessionId = '74f0eab98e3f1b23a70bd2c5f5ceb294';
 
