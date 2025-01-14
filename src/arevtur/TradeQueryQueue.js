@@ -26,8 +26,7 @@ class TradeQueryQueue extends Emitter {
 	}
 
 	updateProgress() {
-		let progresses = this.tradeQuerySets
-			.flat()
+		let progresses = this.activeTradeQuerySet
 			.map(tradeQuery => tradeQuery.progressStream)
 			.map(progressStream => progressStream.lastValue)
 			.filter(progress => progress);
