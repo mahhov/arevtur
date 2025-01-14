@@ -1,8 +1,8 @@
-const {sleep} = require('./util');
+const {sleep} = require('../util/util');
 const nodeFetch = require('node-fetch');
 const {XPromise} = require('js-desktop-base');
 
-class RateLimiter {
+class TradeQueryRateLimiter {
 	queue = [];
 	nextReady = 0;
 	responseTimes = [];
@@ -80,4 +80,4 @@ class RateLimiter {
 	}
 }
 
-module.exports = RateLimiter;
+module.exports = TradeQueryRateLimiter;

@@ -3,10 +3,10 @@ const {httpRequest} = require('js-desktop-base');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');
-const RateLimiter = require('../util/RateLimitedRetryQueue');
+const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
 
-let getRateLimiter = new RateLimiter();
-let postRateLimiter = new RateLimiter();
+let getRateLimiter = new TradeQueryRateLimiter();
+let postRateLimiter = new TradeQueryRateLimiter();
 
 window.getRateLimiter = getRateLimiter;
 window.postRateLimiter = postRateLimiter;
