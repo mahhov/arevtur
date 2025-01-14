@@ -1,61 +1,33 @@
 const querystring = require('querystring');
-const nodeFetch = require('node-fetch');
 const {httpRequest} = require('js-desktop-base');
-const RateLimitedRetryQueue = require('../util/RateLimitedRetryQueue');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');
+const RateLimiter = require('../util/RateLimitedRetryQueue');
 
-let parseRateLimitResponseHeader = ({rule, state}) => {
-	let r = rule.split(':');
-	let s = state.split(':');
-	return `${s[0]} of ${r[0]} per ${r[1]} s. Timeout ${s[2]} of ${r[2]}`;
-};
+let getRateLimiter = new RateLimiter();
+let postRateLimiter = new RateLimiter();
 
-let getRateLimitHeaders = responseHeaders => {
-	let rules = [
-		...(responseHeaders['x-rate-limit-account'] || '').split(','),
-		...(responseHeaders['x-rate-limit-ip'] || '').split(','),
-	];
-	let states = [
-		...(responseHeaders['x-rate-limit-account-state'] || '').split(','),
-		...(responseHeaders['x-rate-limit-ip-state'] || '').split(','),
-	];
-	return rules.map((rule, i) => ({rule, state: states[i]}));
-};
+window.getRateLimiter = getRateLimiter;
+window.postRateLimiter = postRateLimiter;
 
-let rlrGetQueue = new RateLimitedRetryQueue(667 * 1.2, [5000, 15000, 60000]);
-let rlrPostQueue = new RateLimitedRetryQueue(1500 * 1.2, [5000, 15000, 60000]);
-
-let rlrGet = (endpoint, params, headers, stopObj) => rlrGetQueue.add(async () => {
-	if (stopObj.stop)
-		return;
+let rlrGet = (endpoint, params, headers, stopObj) => {
 	if (params)
 		endpoint += `?${querystring.stringify(params)}`;
-	let response = await nodeFetch(endpoint, {
+	return getRateLimiter.queueRequest(endpoint, {
 		method: 'get',
 		headers,
-	});
-	let responseHeaders = Object.fromEntries(response.headers);
-	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(responseHeaders)[0]);
-	console.log('got, made requests', responseHeaders, rateLimitStr);
-	return response.json();
-});
+	}, stopObj);
+};
 
-let rlrPost = (endpoint, query, headers, stopObj) => rlrPostQueue.add(async () => {
-	if (stopObj.stop)
-		return;
+let rlrPost = (endpoint, query, headers, stopObj) => {
 	let body = JSON.stringify(query);
-	let response = await nodeFetch(endpoint, {
+	return postRateLimiter.queueRequest(endpoint, {
 		method: 'post',
 		body,
 		headers,
-	});
-	let responseHeaders = Object.fromEntries(response.headers);
-	let rateLimitStr = parseRateLimitResponseHeader(getRateLimitHeaders(responseHeaders)[0]);
-	console.log('posted, made requests', response.headers, rateLimitStr);
-	return response.json();
-});
+	}, stopObj);
+};
 
 class TradeQuery {
 	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {

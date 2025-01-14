@@ -1,48 +1,83 @@
-let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const {sleep} = require('./util');
+const nodeFetch = require('node-fetch');
+const {XPromise} = require('js-desktop-base');
 
-class RateLimitedRetryQueue {
-	constructor(delay = 1000, retries = [1000, 2000, 6000]) {
-		this.delay = delay;
-		this.retries = retries;
-		this.lastTime = performance.now();
-		this.queue = [];
-		this.active = false;
+class RateLimiter {
+	queue = [];
+	nextReady = 0;
+	responseTimes = [];
+
+	calculateRateLimitRuleDelay(ruleStr, stateStr) {
+		let rule = ruleStr.split(':');
+		let state = stateStr.split(':');
+
+		let now = Date.now();
+		let maxHits = Number(rule[0]);
+		let hits = Number(state[0]);
+		let period = Number(rule[1]) * 1000;
+		let timeout = Number(state[2]) * 1000;
+		let periodResponses = this.responseTimes.filter(r => now - r < period);
+
+		if (timeout > 0)
+			return timeout + 5000;
+
+		if (periodResponses.length < hits)
+			this.responseTimes.push(...Array(hits - periodResponses.length).fill(now));
+
+		let remaining = maxHits - hits;
+		if (remaining > 0)
+			return 500;
+
+		return period - (now - periodResponses[0]) + 1000;
 	}
 
-	add(handler) {
-		return new Promise((resolve, reject) => {
-			this.queue.push([handler, resolve, reject]);
-			return this.activate();
-		});
+	calculateRateLimitHeaderDelay(headers) {
+		let rules = [
+			...(headers['x-rate-limit-account'] || '').split(','),
+			...(headers['x-rate-limit-ip'] || '').split(','),
+		];
+		let states = [
+			...(headers['x-rate-limit-account-state'] || '').split(','),
+			...(headers['x-rate-limit-ip-state'] || '').split(','),
+		];
+		return Math.max(...rules.map((rule, i) => this.calculateRateLimitRuleDelay(rule, states[i])));
 	}
 
-	async next() {
-		await sleep(this.delay - performance.now() + this.lastTime);
-		let [handler, resolve, reject] = this.queue.shift();
-		for (let retry of this.retries)
-			try {
-				this.lastTime = performance.now();
-				return resolve(await handler());
-			} catch (e) {
-				console.warn('RateLimitedRetryQueue failed', e, '. Will retry in ', retry);
-				await sleep(retry);
-			}
-		try {
-			this.lastTime = performance.now();
-			resolve(await handler());
-		} catch (e) {
-			reject(e);
-		}
+	queueRequest(endpoint, requestOptions, stopObj) {
+		let promise = new XPromise();
+		this.queue.push({endpoint, requestOptions, stopObj, promise});
+		this.activate();
+		return promise;
 	}
 
 	async activate() {
-		if (this.active)
+		if (this.nextReady === Infinity)
 			return;
-		this.active = true;
-		while (this.queue.length)
-			await this.next();
-		this.active = false;
+
+		let delay = this.nextReady - Date.now();
+		this.nextReady = Infinity;
+
+		while (true) {
+			await sleep(delay);
+
+			let queueObj;
+			do {
+				queueObj = this.queue.shift();
+				if (!queueObj) {
+					this.nextReady = Date.now();
+					return;
+				}
+			} while (queueObj.stopObj.stop);
+
+			let response = await nodeFetch(queueObj.endpoint, queueObj.requestOptions);
+			let now = Date.now();
+			this.responseTimes.push(now);
+			this.responseTimes = this.responseTimes.filter(r => now - r > 300000);
+			let headers = Object.fromEntries(response.headers);
+			delay = this.calculateRateLimitHeaderDelay(headers);
+			queueObj.promise.resolve(response.json());
+		}
 	}
 }
 
-module.exports = RateLimitedRetryQueue;
+module.exports = RateLimiter;
