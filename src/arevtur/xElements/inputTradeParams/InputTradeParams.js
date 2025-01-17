@@ -125,6 +125,10 @@ customElements.define(name, class extends XElement {
 		document.addEventListener('keydown', e => {
 			if (e.key === 'g' && e.ctrlKey)
 				this.$('#search-input').select();
+			if (e.key === 'Tab' && e.ctrlKey && !e.shiftKey)
+				this.shadowRoot.activeElement.nextElementSibling.focus();
+			if (e.key === 'Tab' && e.ctrlKey && e.shiftKey)
+				this.shadowRoot.activeElement.previousElementSibling.focus();
 		});
 		this.$('#search-input').addEventListener('input', () => this.applySearch());
 		this.$('#drop-implicit-mods-button').addEventListener('click', async () =>
