@@ -325,7 +325,7 @@ class ApiConstants {
 			cacheKey = [cacheKey, version2, ...args].join(',');
 			if (!this.cache[cacheKey] ||
 				Date.now() - this.cache[cacheKey].lastRequest > hour1 ||
-				this.cache[cacheKey].promise?.error && !this.cache[cacheKey].value) {
+				(!this.cache[cacheKey].promise || this.cache[cacheKey].promise.error) && !this.cache[cacheKey].value) {
 				this.cache[cacheKey] = {
 					lastRequest: Date.now(),
 					promise: new XPromise(initializer(version2, ...args)),
