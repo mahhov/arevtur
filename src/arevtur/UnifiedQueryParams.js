@@ -51,7 +51,6 @@ class UnifiedQueryParams {
 	typeText = 'Any';
 	minValue = 0;
 	maxPrice = 0;
-	divine = 0;
 	offline = false;
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
@@ -199,14 +198,6 @@ class UnifiedQueryParams {
 	async toTradeQueryData(version2, league) {
 		let queries = [];
 
-		let divinePrice = (await apiConstants.currencyPrices(league))['divine'];
-		let divineOptions = [
-			// query in exalts
-			0,
-			// query in divines
-			version2 && this.maxPrice >= divinePrice * .9 ? divinePrice : null,
-		].filter(v => v !== null);
-
 		let affixOptions = [
 			// query without affixes
 			false,
@@ -223,9 +214,8 @@ class UnifiedQueryParams {
 		].filter(v => v !== null);
 
 		// cross product all combinations of linking and craftable affixes
-		divineOptions.forEach(divineOption => affixOptions.forEach(affixOption => {
+		affixOptions.forEach(affixOption => {
 			let copy = this.copy;
-			copy.divine = divineOption;
 			if (affixOption) {
 				copy.affixProperties[affixOption[0]] = true;
 				copy.uncorrupted = true;
@@ -238,7 +228,7 @@ class UnifiedQueryParams {
 				}
 			}
 			queries.push(copy);
-		}));
+		});
 
 		// each query is like a `UnifiedQueryParams`, but with the additional fields:
 		// `priceShifts`, & `affixValueShift`
@@ -272,13 +262,6 @@ class UnifiedQueryParams {
 		if (overridden.nonUnique)
 			typeFilters.rarity = {option: 'nonunique'};
 
-		let price = version2 ? {
-			max: overridden.divine ? overridden.maxPrice / overridden.divine : overridden.maxPrice,
-			option: overridden.divine ? 'divine' : 'exalted',
-		} : {
-			max: overridden.maxPrice,
-		};
-
 		let miscFilters = {};
 		if (overridden.uncorrupted)
 			miscFilters.corrupted = {option: false};
@@ -309,7 +292,7 @@ class UnifiedQueryParams {
 				].map(pruneIfEmptyFilters).filter(v => v),
 				filters: {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
-					trade_filters: {filters: {price}},
+					trade_filters: {filters: {price: {max: overridden.maxPrice}}},
 					socket_filters: overridden.linked ? {
 						filters: {
 							links: {min: 6},
