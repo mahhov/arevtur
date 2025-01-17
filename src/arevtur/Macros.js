@@ -164,6 +164,16 @@ class Macros {
 			unifiedQueryParams.weightEntries = shared ? [] : entries;
 			return unifiedQueryParams;
 		},
+
+		removeUnshared: unifiedQueryParams => {
+			unifiedQueryParams.weightEntries = [];
+			unifiedQueryParams.andEntries = [];
+			unifiedQueryParams.notEntries = [];
+			unifiedQueryParams.conditionalPrefixEntries = [];
+			unifiedQueryParams.conditionalSuffixEntries = [];
+			return unifiedQueryParams;
+
+		},
 	};
 
 	static Output = {};

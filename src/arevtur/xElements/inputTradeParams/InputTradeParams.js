@@ -155,6 +155,9 @@ customElements.define(name, class extends XElement {
 		this.$('#share-all-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
 				await Macros.Input.shareAll(this.unifiedQueryParams)));
+		this.$('#remove-unshared-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.removeUnshared(this.unifiedQueryParams)));
 
 		this.$('#query-properties-list').addEventListener('arrange', () => {
 			this.checkProperties();
