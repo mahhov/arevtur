@@ -111,7 +111,7 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#add-input-set-button').addEventListener('click', e => {
 			// todo[low] if user doesn't override name, append item type when selected
-			this.inputSets.push({name: timestamp()});
+			this.inputSets.push({name: timestamp(), tradeQueries: []});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1, null);
 			this.store();
@@ -261,7 +261,7 @@ customElements.define(name, class extends XElement {
 			this.inputSets.splice(index, 1);
 			inputSetEl.remove();
 			if (!this.inputSets.length) {
-				this.inputSets.push({name: timestamp()});
+				this.inputSets.push({name: timestamp(), tradeQueries: []});
 				this.addInputSetEl();
 				this.setInputSetIndex(0);
 			} else
