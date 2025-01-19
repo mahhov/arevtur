@@ -28,9 +28,12 @@ class ItemData {
 		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online);
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
-		this.text = ItemData.decode64(tradeApiItemData.item.extended.text || '');
+		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
 		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
+
+		if (!this.text)
+			this.reconstructText();
 
 		// sockets
 		this.sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
@@ -79,7 +82,7 @@ class ItemData {
 		};
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
-		// value build
+		// build value
 		this.buildValuePromise = pobApi.evalItem(this.text);
 		this.buildValuePromise
 			.then(resolved => this.buildValuePromise.resolved = resolved)
@@ -136,8 +139,18 @@ class ItemData {
 	}
 
 	static decode64(string64) {
-		return Buffer.from(string64, 'base64').toString();
+		return Buffer.from(string64 || '', 'base64').toString();
 	};
+
+	reconstructText() {
+		this.text = [
+			'Item Class',
+			this.subtype,
+			...this.enchantMods,
+			...this.implicitMods,
+			...this.explicitMods,
+		].join('\n');
+	}
 
 	async craftValue() {
 		// todo[high] do extra trade requests to get uncorrupted + open affix items

@@ -125,7 +125,6 @@ progress::-webkit-progress-value {
 
 .pob {
 	border: 1px solid var(--colored-text-pink);
-	display: var(--version-1-display, inline-block) !important;
 }
 
 /* state based */

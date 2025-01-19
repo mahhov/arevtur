@@ -33,8 +33,8 @@ class Script extends CustomOsScript {
 				.filter(v => v)
 				.forEach(part => {
 					if (part === '<.') {
-						// if (this.inProgressResponse)
-						// 	console.log('PobApi, debug response:', this.inProgressResponse);
+						if (this.inProgressResponse)
+							console.log('PobApi, debug response:', this.inProgressResponse);
 						this.inProgressResponse = '';
 					} else if (part === '.>') {
 						this.pendingResponses.shift().resolve(this.inProgressResponse);
@@ -336,8 +336,9 @@ class PobApi extends Emitter {
 	}
 
 	static isItemEquippable(item) {
-		return ['requirements:', 'sockets:', 'item class: jewels', 'rarity: unique'].some(search =>
-			item.toLowerCase().includes(search));
+		return true;
+		// return ['requirements:', 'sockets:', 'item class: jewels', 'rarity: unique'].some(search =>
+		// 	item.toLowerCase().includes(search));
 	}
 
 	static clean(outString) {
