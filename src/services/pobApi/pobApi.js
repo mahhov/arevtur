@@ -180,10 +180,10 @@ class PobApi extends Emitter {
 				// '+# total to * (pseudo)' -> '+# to * (pseudo)'
 				// e.g. strength, max life, phys dmg, spell crit, gem level
 				.replace(/total/i, '');
-
-		itemMod = itemMod.replace(/^# /, '+# ');
-
+		if (!itemMod.includes(' increased '))
+			itemMod = itemMod.replace(/^#/, '+#');
 		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
+
 		return this.send({
 			cmd: 'mod',
 			mod: itemMod,
@@ -230,6 +230,9 @@ class PobApi extends Emitter {
 		itemText = PobApi.clean(itemText);
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
+		let totalLifeRegex = /total life \(([+-][\d.]+)%\)/i;
+		let totalManaRegex = /([+-][\d.,]+) total mana/i;
+		let manaRegenRegex = /([+-][\d.,]+) mana regen/i;
 		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
 		let elementalResistRegex = /([+-]\d+)% (?:fire|lightning|cold) res(?:\.|istance)/i;
 		let chaosResistRegex = /([+-]\d+)% chaos res(?:\.|istance)/i;
@@ -247,6 +250,9 @@ class PobApi extends Emitter {
 			let equippingText = diffText.match(/equipping this item.*/i)?.[0] || '';
 			let equippingIndex = Number(equippingText.match(/\d+/)?.[0]) || 1;
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
+			let totalLife = Number(diffText.match(totalLifeRegex)?.[1]) || 0;
+			let totalMana = Number(diffText.match(totalManaRegex)?.[1]) || 0;
+			let manaRegen = Number(diffText.match(manaRegenRegex)?.[1]) || 0;
 			let elementalResist = diffText
 				.match(new RegExp(elementalResistRegex, 'gi'))
 				?.reduce((sum, m) => sum + Number(m.match(elementalResistRegex)[1]), 0) || 0;
@@ -257,6 +263,9 @@ class PobApi extends Emitter {
 			let int = Number(diffText.match(intRegex)?.[1]) || 0;
 			let unscaledValue =
 				effectiveHitPool * this.weights.effectiveHealth +
+				totalLife * this.weights.totalLife +
+				totalMana * this.weights.totalMana +
+				manaRegen * this.weights.manaRegen +
 				elementalResist * this.weights.elementalResist +
 				chaosResist * this.weights.chaosResist +
 				fullDps * this.weights.damage +
@@ -268,6 +277,9 @@ class PobApi extends Emitter {
 				equippingText,
 				equippingIndex,
 				effectiveHitPool,
+				totalLife,
+				totalMana,
+				manaRegen,
 				elementalResist,
 				chaosResist,
 				str,
@@ -306,6 +318,12 @@ class PobApi extends Emitter {
 				if (textPrefixes.some(textPrefix => itemTextLine === textPrefix))
 					return `@bold,pink ${itemTextLine}`;
 				if (itemTextLine.match(effectiveHitPoolRegex))
+					return `@bold,blue ${itemTextLine}`;
+				if (itemTextLine.match(totalLifeRegex))
+					return `@bold,blue ${itemTextLine}`;
+				if (itemTextLine.match(totalManaRegex))
+					return `@bold,blue ${itemTextLine}`;
+				if (itemTextLine.match(manaRegenRegex))
 					return `@bold,blue ${itemTextLine}`;
 				if (itemTextLine.match(anyItemResistRegex))
 					return `@bold,orange ${itemTextLine}`;

@@ -21,6 +21,9 @@ customElements.define(name, class extends XElement {
 		this.$('#refresh').addEventListener('click', () => pobApi.restart());
 		[
 			this.$('#effective-health-weight'),
+			this.$('#total-life-weight'),
+			this.$('#total-mana-weight'),
+			this.$('#mana-regen-weight'),
 			this.$('#elemental-resist-weight'),
 			this.$('#chaos-resist-weight'),
 			this.$('#damage-weight'),
@@ -44,6 +47,9 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').path = buildParams.buildPath;
 		// todo[low] allow custom weights
 		this.$('#effective-health-weight').value = buildParams.weights.effectiveHealth;
+		this.$('#total-life-weight').value = buildParams.weights.totalLife;
+		this.$('#total-mana-weight').value = buildParams.weights.totalMana;
+		this.$('#mana-regen-weight').value = buildParams.weights.manaRegen;
 		this.$('#elemental-resist-weight').value = buildParams.weights.elementalResist;
 		this.$('#chaos-resist-weight').value = buildParams.weights.chaosResist;
 		this.$('#damage-weight').value = buildParams.weights.damage;
@@ -67,6 +73,9 @@ customElements.define(name, class extends XElement {
 				buildPath: this.$('#build-path').path,
 				weights: {
 					effectiveHealth: Number(this.$('#effective-health-weight').value) || 0,
+					totalLife: Number(this.$('#total-life-weight').value) || 0,
+					totalMana: Number(this.$('#total-mana-weight').value) || 0,
+					manaRegen: Number(this.$('#mana-regen-weight').value) || 0,
 					elementalResist: Number(this.$('#elemental-resist-weight').value) || 0,
 					chaosResist: Number(this.$('#chaos-resist-weight').value) || 0,
 					damage: Number(this.$('#damage-weight').value) || 0,

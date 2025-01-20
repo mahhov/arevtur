@@ -117,7 +117,7 @@ customElements.define(name, class extends XElement {
 			this.buildValue = 0;
 			this.buildValueTooltip = '';
 			let pobType = await apiConstants.typeToPobType(this.type);
-			let summary = await pobApi.evalItemModSummary(pobType, this.property, 400);
+			let summary = await pobApi.evalItemModSummary(pobType, this.property, 100);
 			this.buildValue = summary.value;
 			this.buildValueTooltip = summary.text;
 

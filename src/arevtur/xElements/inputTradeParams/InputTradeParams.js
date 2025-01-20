@@ -8,7 +8,7 @@ const {
 	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
-} = require('./Properties');
+} = require('./properties');
 const configForRenderer = require('../../../services/config/configForRenderer');
 const pobApi = require('../../../services/pobApi/pobApi');
 const Searcher = require('../../../util/Searcher');

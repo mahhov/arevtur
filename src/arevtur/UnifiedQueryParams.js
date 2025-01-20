@@ -7,7 +7,7 @@ const {
 	affixPropertyTuples,
 	influenceProperties,
 	queryPropertyFilters,
-} = require('./xElements/inputTradeParams/Properties');
+} = require('./xElements/inputTradeParams/properties');
 
 let pruneIfEmptyFilters = obj =>
 	Object.values(obj.filters).filter(v => v !== undefined).length ? obj : undefined;

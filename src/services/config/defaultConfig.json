@@ -12,6 +12,9 @@
     "buildPath": "",
     "weights": {
       "effectiveHealth": 0.5,
+      "totalLife": 0,
+      "totalMana": 0,
+      "manaRegen": 0,
       "elementalResist": 0.05,
       "chaosResist": 0.1,
       "damage": 0.25,
