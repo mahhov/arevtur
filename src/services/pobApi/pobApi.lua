@@ -149,7 +149,7 @@ while true do
         local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 
         tradeQuery.statSortSelectionList = {
-            { stat = 'TotalEHP', weightMult = tonumber(args.weights.life) },
+            { stat = 'TotalEHP', weightMult = tonumber(args.weights.effectiveHealth) },
             { stat = 'LightningResistTotal', weightMult = tonumber(args.weights.elementalResist) },
             { stat = 'ColdResistTotal', weightMult = tonumber(args.weights.elementalResist) },
             { stat = 'FireResistTotal', weightMult = tonumber(args.weights.elementalResist) },

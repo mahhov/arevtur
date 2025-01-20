@@ -256,7 +256,7 @@ class PobApi extends Emitter {
 			let dex = Number(diffText.match(dexRegex)?.[1]) || 0;
 			let int = Number(diffText.match(intRegex)?.[1]) || 0;
 			let unscaledValue =
-				effectiveHitPool * this.weights.life +
+				effectiveHitPool * this.weights.effectiveHealth +
 				elementalResist * this.weights.elementalResist +
 				chaosResist * this.weights.chaosResist +
 				fullDps * this.weights.damage +
@@ -286,7 +286,7 @@ class PobApi extends Emitter {
 			...textPrefixes.map(textPrefix => `@bold,pink ${textPrefix}`),
 			textPrefixes.length ? '-'.repeat(30) : '',
 			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
-			this.weights.life && diff.effectiveHitPool ?
+			this.weights.effectiveHealth && diff.effectiveHitPool ?
 				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
 			this.weights.elementalResist && diff.elementalResist ?
 				`@bold,orange Elemental Resist ${diff.elementalResist}` : '',

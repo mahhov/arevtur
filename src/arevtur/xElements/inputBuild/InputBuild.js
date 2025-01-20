@@ -20,7 +20,7 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#refresh').addEventListener('click', () => pobApi.restart());
 		[
-			this.$('#life-weight'),
+			this.$('#effective-health-weight'),
 			this.$('#elemental-resist-weight'),
 			this.$('#chaos-resist-weight'),
 			this.$('#damage-weight'),
@@ -43,7 +43,7 @@ customElements.define(name, class extends XElement {
 		this.$('#pob-path').path = buildParams.pobPath;
 		this.$('#build-path').path = buildParams.buildPath;
 		// todo[low] allow custom weights
-		this.$('#life-weight').value = buildParams.weights.life;
+		this.$('#effective-health-weight').value = buildParams.weights.effectiveHealth;
 		this.$('#elemental-resist-weight').value = buildParams.weights.elementalResist;
 		this.$('#chaos-resist-weight').value = buildParams.weights.chaosResist;
 		this.$('#damage-weight').value = buildParams.weights.damage;
@@ -66,7 +66,7 @@ customElements.define(name, class extends XElement {
 				pobPath: this.$('#pob-path').path,
 				buildPath: this.$('#build-path').path,
 				weights: {
-					life: Number(this.$('#life-weight').value) || 0,
+					effectiveHealth: Number(this.$('#effective-health-weight').value) || 0,
 					elementalResist: Number(this.$('#elemental-resist-weight').value) || 0,
 					chaosResist: Number(this.$('#chaos-resist-weight').value) || 0,
 					damage: Number(this.$('#damage-weight').value) || 0,
