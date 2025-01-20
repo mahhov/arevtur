@@ -225,9 +225,14 @@ class ApiConstants {
 	}
 
 	static async initCurrencies(version2, league) {
-		return version2 ?
-			ApiConstants.initOrbCurrencies(version2, league) :
-			ApiConstants.initNinjaCurrencies(version2, league);
+		try {
+			return await (version2 ?
+				ApiConstants.initOrbCurrencies(version2, league) :
+				ApiConstants.initNinjaCurrencies(version2, league));
+		} catch (e) {
+			// todo[medium] show red/orange status indicator
+			return version2 ? {exalted: 1, divine: 150} : {chaos: 1};
+		}
 	}
 
 	static async initNinjaCurrencies(version2, league) {
