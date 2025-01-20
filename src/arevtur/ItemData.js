@@ -4,7 +4,7 @@ const {maxIndex} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
 
 class ItemData {
-	constructor(league, affixValueShift, queryDefenseProperties, priceShifts, tradeApiItemData) {
+	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, tradeApiItemData) {
 		this.id = tradeApiItemData.id;
 		this.name = tradeApiItemData.item.name;
 		this.subtype = tradeApiItemData.item.typeLine; // e.g. 'Gold Amulet'
@@ -32,8 +32,8 @@ class ItemData {
 		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
-		if (!this.text)
-			this.reconstructText();
+		if (!this.text && version2)
+			this.text = this.reconstructText(true);
 
 		// sockets
 		this.sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
@@ -83,12 +83,12 @@ class ItemData {
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
 		// build value
-		this.buildValuePromise = pobApi.evalItem(this.text);
+		this.buildValuePromise = pobApi.evalItem(this.reconstructText(false));
 		this.buildValuePromise
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		this.craftValuePromise = this.craftValue();
+		this.craftValuePromise = version2 ? pobApi.evalItem(this.text) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
@@ -142,10 +142,11 @@ class ItemData {
 		return Buffer.from(string64 || '', 'base64').toString();
 	};
 
-	reconstructText() {
-		this.text = [
+	reconstructText(includeRune) {
+		return [
 			'Item Class',
 			this.subtype,
+			...includeRune ? this.runeMods : [],
 			...this.enchantMods,
 			...this.implicitMods,
 			...this.explicitMods,

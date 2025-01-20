@@ -155,7 +155,7 @@ class TradeQuery {
 					itemCount,
 				});
 				let items = data2.result.map(itemData =>
-					new ItemData(this.league, this.affixValueShift,
+					new ItemData(this.version2, this.league, this.affixValueShift,
 						this.unifiedQueryParams.defenseProperties, this.priceShifts, itemData));
 				// todo[high] let users wait on pricePromise and rm this await
 				await Promise.all(items.map(item => item.pricePromise));
