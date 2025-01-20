@@ -181,6 +181,8 @@ class PobApi extends Emitter {
 				// e.g. strength, max life, phys dmg, spell crit, gem level
 				.replace(/total/i, '');
 
+		itemMod = itemMod.replace(/^# /, '+# ');
+
 		itemMod = itemMod.replace(/#/g, pluginNumber); // pluginNumber
 		return this.send({
 			cmd: 'mod',
@@ -298,7 +300,7 @@ class PobApi extends Emitter {
 				`@bold,light-green Dex ${diff.dex}` : '',
 			this.weights.int && diff.int ?
 				`@bold,light-green Int ${diff.int}` : '',
-			`@bold,green Value ${round(diff.unscaledValue, 3)}`,
+			`@bold,green Value ${round(diff.unscaledValue, 4)}`,
 			'-'.repeat(30),
 			...itemText.split('\n').map(itemTextLine => {
 				if (textPrefixes.some(textPrefix => itemTextLine === textPrefix))
@@ -330,7 +332,7 @@ class PobApi extends Emitter {
 		].filter(v => v).join('\n');
 
 		return {
-			value: round(diff.unscaledValue * valueScale, 3),
+			value: round(diff.unscaledValue * valueScale, 4),
 			text: summaryText,
 		};
 	}
