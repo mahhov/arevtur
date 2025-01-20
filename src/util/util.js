@@ -9,7 +9,7 @@ let randInt = n => Math.floor(Math.random() * n);
 let randId = () => randInt(1000 ** 2) + 1;
 let round = (n, precision) => Math.round(n * 10 ** precision) / 10 ** precision;
 let escapeRegex = stringRegex => stringRegex.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // https://stackoverflow.com/a/6969486/6951428
-let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+let sleep = ms => ms > 0 ? new Promise(resolve => setTimeout(resolve, ms)) : Promise.resolve();
 
 let deepMerge = (target, source) => {
 	if (typeof source !== 'object' || source === null)
