@@ -35,7 +35,7 @@ class Searcher {
 			this.allowedWords.push(...this.requiredWords);
 	}
 
-	test(string) {
+	test(string = '') {
 		string = string.toLowerCase();
 		return (
 			this.requiredWords.every(word => string.match(Searcher.toRegex(word))) &&
