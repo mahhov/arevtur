@@ -150,14 +150,10 @@ while true do
 
         tradeQuery.statSortSelectionList = {
             { stat = 'TotalEHP', weightMult = tonumber(args.weights.effectiveHealth) },
-            { stat = 'LightningResistTotal', weightMult = tonumber(args.weights.elementalResist) },
-            { stat = 'ColdResistTotal', weightMult = tonumber(args.weights.elementalResist) },
-            { stat = 'FireResistTotal', weightMult = tonumber(args.weights.elementalResist) },
-            { stat = 'ChaosResistTotal', weightMult = tonumber(args.weights.chaosResist) },
+            { stat = 'Life', weightMult = tonumber(args.weights.totalLife) },
+            { stat = 'Mana', weightMult = tonumber(args.weights.totalMana) },
+            { stat = 'ManaRegen', weightMult = tonumber(args.weights.manaRegen) },
             { stat = 'FullDPS', weightMult = tonumber(args.weights.damage) },
-            { stat = 'Str', weightMult = tonumber(args.weights.str) },
-            { stat = 'Dex', weightMult = tonumber(args.weights.dex) },
-            { stat = 'Int', weightMult = tonumber(args.weights.int) },
         }
 
         -- TradeQueryClass:PriceItemRowDisplay

@@ -312,7 +312,7 @@ class PobApi extends Emitter {
 				`@bold,light-green Dex ${diff.dex}` : '',
 			this.weights.int && diff.int ?
 				`@bold,light-green Int ${diff.int}` : '',
-			`@bold,green Value ${round(diff.unscaledValue, 4)}`,
+			`@bold,green Value ${round(diff.unscaledValue, 5)}`,
 			'-'.repeat(30),
 			...itemText.split('\n').map(itemTextLine => {
 				if (textPrefixes.some(textPrefix => itemTextLine === textPrefix))
@@ -350,7 +350,7 @@ class PobApi extends Emitter {
 		].filter(v => v).join('\n');
 
 		return {
-			value: round(diff.unscaledValue * valueScale, 4),
+			value: round(diff.unscaledValue * valueScale, 5),
 			text: summaryText,
 		};
 	}

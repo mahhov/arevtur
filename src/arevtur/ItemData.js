@@ -122,9 +122,9 @@ class ItemData {
 	}
 
 	static async price(league, {currency: currencyId, count, shifts}) {
-		let currencyPrices = (await apiConstants.currencyPrices(league))[currencyId];
-		if (currencyPrices)
-			return currencyPrices * count +
+		let currencyPrice = (await apiConstants.currencyPrices(league))[currencyId];
+		if (currencyPrice)
+			return currencyPrice * count +
 				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
 		console.warn('Missing currency', currencyId);
 		return -1;

@@ -17,6 +17,8 @@ customElements.define(name, class extends XElement {
 			enabled: {boolean: true},
 			buildValue: {},
 			buildValueTooltip: {},
+			buildValue2: {},
+			buildValue2Tooltip: {},
 		};
 	}
 
@@ -62,6 +64,10 @@ customElements.define(name, class extends XElement {
 			this.weight = this.buildValue;
 			this.emit('change');
 		});
+		this.$('#build-value-2').addEventListener('click', () => {
+			this.weight = this.buildValue2;
+			this.emit('change');
+		});
 		this.property ||= '';
 		this.weight ||= 0;
 		this.filter ||= 'weight';
@@ -101,11 +107,19 @@ customElements.define(name, class extends XElement {
 	}
 
 	set buildValue(value) {
-		this.$('#build-value').text = value && round(Number(value), 3) || '';
+		this.$('#build-value').text = value && round(Number(value), 5) || '';
 	}
 
 	set buildValueTooltip(value) {
 		this.$('#build-value').tooltip = value;
+	}
+
+	set buildValue2(value) {
+		this.$('#build-value-2').text = value && round(Number(value), 5) || '';
+	}
+
+	set buildValue2Tooltip(value) {
+		this.$('#build-value-2').tooltip = value;
 	}
 
 	focus() {
@@ -117,18 +131,18 @@ customElements.define(name, class extends XElement {
 			this.buildValue = 0;
 			this.buildValueTooltip = '';
 			let pobType = await apiConstants.typeToPobType(this.type);
-			let summary = await pobApi.evalItemModSummary(pobType, this.property, 100);
-			this.buildValue = summary.value;
-			this.buildValueTooltip = summary.text;
+			let {modWeights} = await pobApi.getModWeights(pobType);
+			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights(new UnifiedQueryParams(), 0, modWeights);
+			let index = unifiedQueryParams.weightEntries
+				.findIndex(entry => entry.propertyText === this.property);
+			this.buildValue = unifiedQueryParams.weightEntries[index]?.weight;
 
-			// this.buildValue = '';
-			// let pobType = await apiConstants.typeToPobType(this.type);
-			// let {modWeights} = await pobApi.getModWeights(pobType);
-			// let unifiedQueryParams = await UnifiedQueryParams.fromModWeights(
-			// 	new UnifiedQueryParams(), 0, modWeights);
-			// this.buildValue = unifiedQueryParams.weightEntries
-			// 	.find(entry => entry.propertyText === this.property)
-			// 	?.weight;
+			this.buildValue2 = 0;
+			this.buildValue2Tooltip = '';
+			let pluginNumber = modWeights[index].meanStatDiff / modWeights[index].weight;
+			let summary = await pobApi.evalItemModSummary(pobType, this.property, pluginNumber);
+			this.buildValue2 = summary.value;
+			this.buildValue2Tooltip = summary.text;
 		} catch (e) {
 			// console.warn('Refresh query property build values', e);
 		}

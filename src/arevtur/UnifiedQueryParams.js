@@ -1,5 +1,4 @@
 const apiConstants = require('./apiConstants');
-const {XElement} = require('xx-element');
 const {deepCopy, updateElementChildren} = require('../util/util');
 const {
 	defensePropertyTuples,
