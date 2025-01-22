@@ -264,7 +264,8 @@ class PobApi extends Emitter {
 			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
 			let totalLife = Number(diffText.match(totalLifeRegex)?.[1]) || 0;
 			let totalMana = Number(diffText.match(totalManaRegex)?.[1]) || 0;
-			let manaRegen = Number(diffText.match(manaRegenRegex)?.[1]) || 0;
+			let manaRegenFlat = Number(diffText.match(manaRegenRegex)?.[1]) || 0;
+			let manaRegen = round(manaRegenFlat / baseManaRegen * 100, 5);
 			let elementalResist = diffText
 				.match(new RegExp(elementalResistRegex, 'gi'))
 				?.reduce((sum, m) => sum + Number(m.match(elementalResistRegex)[1]), 0) || 0;
@@ -277,7 +278,7 @@ class PobApi extends Emitter {
 				effectiveHitPool * this.weights.effectiveHealth +
 				totalLife * this.weights.totalLife +
 				totalMana * this.weights.totalMana +
-				manaRegen / baseManaRegen * 100 * this.weights.manaRegen +
+				manaRegen * this.weights.manaRegen +
 				elementalResist * this.weights.elementalResist +
 				chaosResist * this.weights.chaosResist +
 				fullDps * this.weights.damage +
@@ -291,6 +292,7 @@ class PobApi extends Emitter {
 				effectiveHitPool,
 				totalLife,
 				totalMana,
+				manaRegenFlat,
 				manaRegen,
 				elementalResist,
 				chaosResist,
@@ -312,6 +314,12 @@ class PobApi extends Emitter {
 			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
 			this.weights.effectiveHealth && diff.effectiveHitPool ?
 				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
+			this.weights.totalLife && diff.totalLife ?
+				`@bold,blue Total Life ${diff.totalLife}%` : '',
+			this.weights.totalMana && diff.totalMana ?
+				`@bold,blue Total Mana ${diff.totalMana}%` : '',
+			this.weights.manaRegen && diff.manaRegen ?
+				`@bold,blue Mana Regen ${diff.manaRegen}%` : '',
 			this.weights.elementalResist && diff.elementalResist ?
 				`@bold,orange Elemental Resist ${diff.elementalResist}` : '',
 			this.weights.chaosResist && diff.chaosResist ?
