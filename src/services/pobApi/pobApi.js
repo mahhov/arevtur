@@ -191,8 +191,7 @@ class PobApi extends Emitter {
 			weights: this.weights,
 			extraMods: this.extraModStrings,
 		})
-			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod],
-				Number(pobType.match(/\d+/)?.[0]) || 1));
+			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod], Number(pobType.match(/\d+/)?.[0]) || 1));
 	}
 
 	async getModWeights(pobType = undefined, includeCorrupted = true) {

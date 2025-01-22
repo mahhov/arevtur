@@ -101,6 +101,7 @@ while true do
         loadBuildFromXML(readFile(args.path))
         build.itemsTab:UpdateSockets()
         -- copied from `ItemsTab addSlot`
+        -- todo[medium] support ignoring es, eva, arm, res in eff health
 --         local slot = new("ItemSlotControl", nil, 0, 0, build.itemsTab, 'extraSlot')
 --         build.itemsTab.slots[slot.slotName] = slot
 --         table.insert(build.itemsTab.orderedSlots, slot)

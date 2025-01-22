@@ -192,8 +192,9 @@ class Macros {
 			unifiedQueryParams.conditionalPrefixEntries = [];
 			unifiedQueryParams.conditionalSuffixEntries = [];
 			return unifiedQueryParams;
-
 		},
+
+		// todo[medium] macro to accept 2nd column of pob weights
 	};
 
 	static Output = {};
