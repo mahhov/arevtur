@@ -135,11 +135,16 @@ customElements.define(name, class extends XElement {
 			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights(new UnifiedQueryParams(), 0, modWeights);
 			let index = unifiedQueryParams.weightEntries
 				.findIndex(entry => entry.propertyText === this.property);
+			let pluginNumber = modWeights[index].meanStatDiff / modWeights[index].weight;
 			this.buildValue = unifiedQueryParams.weightEntries[index]?.weight;
+			this.buildValueTooltip = pluginNumber;
 
 			this.buildValue2 = 0;
 			this.buildValue2Tooltip = '';
-			let pluginNumber = modWeights[index].meanStatDiff / modWeights[index].weight;
+			if (this.property.startsWith('# to maximum Mana'))
+				pluginNumber = 100;
+			if (this.property.startsWith('# to Intelligence'))
+				pluginNumber = 10;
 			let summary = await pobApi.evalItemModSummary(pobType, this.property, pluginNumber);
 			this.buildValue2 = summary.value;
 			this.buildValue2Tooltip = summary.text;
