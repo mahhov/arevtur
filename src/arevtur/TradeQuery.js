@@ -71,6 +71,13 @@ class TradeQuery {
 	async writeItemsToStream() {
 		let items = await this.queryAndParseItems(await this.getQuery());
 
+		if (items.length) {
+			let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
+			let query = await this.getQuery({minValue: maxValue * .85});
+			let newItems = await this.queryAndParseItems(query);
+			items = items.concat(newItems);
+		}
+
 		// todo[low] this doesn't work for hybrid (e.g. es + evasion) bases
 		let defenseProperty = Object.entries(this.unifiedQueryParams.defenseProperties)
 			.find(([_, {weight}]) => weight);
