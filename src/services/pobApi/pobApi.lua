@@ -110,6 +110,9 @@ while true do
 --         build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
         respond('build loaded')
 
+    elseif args.cmd == 'queryManaRegen' then
+        respond(build.calcsTab.mainOutput['ManaRegenRecovery'])
+
     elseif args.cmd == 'item' then
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build

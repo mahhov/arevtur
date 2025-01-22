@@ -136,6 +136,10 @@ class PobApi extends Emitter {
 		return this.cache[argsString].catch(() => null);
 	}
 
+	queryManaRegen() {
+		return this.send({cmd: 'queryManaRegen'});
+	}
+
 	evalItem(item) {
 		if (!PobApi.isItemEquippable(item))
 			return Promise.reject('item is unequippable');
@@ -225,12 +229,14 @@ class PobApi extends Emitter {
 		].filter(v => v).join(' \\n ');
 	}
 
-	parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {
+	async parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {
 		itemText = PobApi.clean(itemText);
+
+		let baseManaRegen = this.weights.manaRegen ? await this.queryManaRegen() : 1;
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
 		let totalLifeRegex = /total life \(([+-][\d.]+)%\)/i;
-		let totalManaRegex = /([+-][\d.,]+) total mana/i;
+		let totalManaRegex = /total mana \(([+-][\d.]+)%\)/i;
 		let manaRegenRegex = /([+-][\d.,]+) mana regen/i;
 		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
 		let elementalResistRegex = /([+-]\d+)% (?:fire|lightning|cold) res(?:\.|istance)/i;
@@ -264,7 +270,7 @@ class PobApi extends Emitter {
 				effectiveHitPool * this.weights.effectiveHealth +
 				totalLife * this.weights.totalLife +
 				totalMana * this.weights.totalMana +
-				manaRegen * this.weights.manaRegen +
+				manaRegen / baseManaRegen * 100 * this.weights.manaRegen +
 				elementalResist * this.weights.elementalResist +
 				chaosResist * this.weights.chaosResist +
 				fullDps * this.weights.damage +
