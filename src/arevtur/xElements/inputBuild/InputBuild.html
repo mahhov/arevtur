@@ -38,54 +38,8 @@
 				   placeholder="Select PoB Build"></x-path-select>
 	<button id="refresh">Refresh Build</button>
 	<div class="tour-pob-configs">
-		<div>
-			<label title="Weight for 1% More Effective Hit Pool">
-				Eff Hit Pool
-				<x-numeric-input id="effective-health-weight" min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for 1% More Total Life">
-				Total Life
-				<x-numeric-input id="total-life-weight" min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +% More Total Mana">
-				Total Mana
-				<x-numeric-input id="total-mana-weight" min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +% More Mana Regen">
-				Mana Regen
-				<x-numeric-input id="mana-regen-weight" min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +1 elemental resists, including over-cap resists">
-				Ele Resists
-				<x-numeric-input id="elemental-resist-weight" min="0" max="1"
-								 step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +1 chaos resist, including over-cap resist">
-				Chaos Resist
-				<x-numeric-input id="chaos-resist-weight" min="0" max="1"
-								 step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for 1% More Full DPS">
-				Full DPS
-				<x-numeric-input id="damage-weight" min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +1 total strength on top of other bonuses the stat provides">
-				Str
-				<x-numeric-input id="attribute-str-weight" class="attribute-weight"
-								 min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +1 total dexterity on top of other bonuses the stat provides">
-				Dex
-				<x-numeric-input id="attribute-dex-weight" class="attribute-weight"
-								 min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-			<label title="Weight for +1 total intelligence on top of other bonuses the stat provides">
-				Int
-				<x-numeric-input id="attribute-int-weight" class="attribute-weight"
-								 min="0" max="1" step=".05"></x-numeric-input>
-			</label>
-		</div>
-		<div>
+		<div id="weights"></div>
+		<div class="version-1">
 			<label title="">
 				Include Eldritch Mods
 				<input id="include-eldritch-check" type="checkbox">
@@ -99,7 +53,7 @@
 				<input id="include-talisman-check" type="checkbox">
 			</label>
 		</div>
-		<div>
+		<div class="version-1">
 			<label title="Exclude ES from Effective Hit Pool">
 				Ignore ES
 				<input id="ignore-es-check" type="checkbox">

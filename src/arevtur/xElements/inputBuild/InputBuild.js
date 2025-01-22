@@ -3,6 +3,7 @@ const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
 const appData = require('../../../services/appData');
 const configForRenderer = require('../../../services/config/configForRenderer');
+const buildWeights = require('./buildWeights');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -19,17 +20,21 @@ customElements.define(name, class extends XElement {
 		this.$('#pob-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#refresh').addEventListener('click', () => pobApi.restart());
+
+		buildWeights.forEach(buildWeight => {
+			let label = document.createElement('label');
+			label.textContent = buildWeight.display;
+			label.title = buildWeight.tooltip;
+			let input = document.createElement('x-numeric-input');
+			input.min = 0;
+			input.max = 1;
+			input.step = .05;
+			label.appendChild(input);
+			this.$('#weights').appendChild(label);
+			input.addEventListener('change', () => this.saveConfig());
+		});
+
 		[
-			this.$('#effective-health-weight'),
-			this.$('#total-life-weight'),
-			this.$('#total-mana-weight'),
-			this.$('#mana-regen-weight'),
-			this.$('#elemental-resist-weight'),
-			this.$('#chaos-resist-weight'),
-			this.$('#damage-weight'),
-			this.$('#attribute-str-weight'),
-			this.$('#attribute-dex-weight'),
-			this.$('#attribute-int-weight'),
 			this.$('#include-eldritch-check'),
 			this.$('#include-influence-check'),
 			this.$('#include-talisman-check'),
@@ -45,17 +50,11 @@ customElements.define(name, class extends XElement {
 		let buildParams = configForRenderer.config.buildParams;
 		this.$('#pob-path').path = buildParams.pobPath;
 		this.$('#build-path').path = buildParams.buildPath;
-		// todo[low] allow custom weights
-		this.$('#effective-health-weight').value = buildParams.weights.effectiveHealth;
-		this.$('#total-life-weight').value = buildParams.weights.totalLife;
-		this.$('#total-mana-weight').value = buildParams.weights.totalMana;
-		this.$('#mana-regen-weight').value = buildParams.weights.manaRegen;
-		this.$('#elemental-resist-weight').value = buildParams.weights.elementalResist;
-		this.$('#chaos-resist-weight').value = buildParams.weights.chaosResist;
-		this.$('#damage-weight').value = buildParams.weights.damage;
-		this.$('#attribute-str-weight').value = buildParams.weights.str;
-		this.$('#attribute-dex-weight').value = buildParams.weights.dex;
-		this.$('#attribute-int-weight').value = buildParams.weights.int;
+
+		// todo[medium] allow custom weights
+		buildWeights.forEach(((buildWeight, i) =>
+			this.$('#weights').children[i].children[0].value = buildParams.weights[buildWeight.id]));
+
 		this.$('#include-eldritch-check').value = buildParams.options.includeInfluence;
 		this.$('#include-influence-check').value = buildParams.options.includeInfluence;
 		this.$('#include-talisman-check').value = buildParams.options.includeTalisman;
@@ -71,18 +70,8 @@ customElements.define(name, class extends XElement {
 			buildParams: {
 				pobPath: this.$('#pob-path').path,
 				buildPath: this.$('#build-path').path,
-				weights: {
-					effectiveHealth: Number(this.$('#effective-health-weight').value) || 0,
-					totalLife: Number(this.$('#total-life-weight').value) || 0,
-					totalMana: Number(this.$('#total-mana-weight').value) || 0,
-					manaRegen: Number(this.$('#mana-regen-weight').value) || 0,
-					elementalResist: Number(this.$('#elemental-resist-weight').value) || 0,
-					chaosResist: Number(this.$('#chaos-resist-weight').value) || 0,
-					damage: Number(this.$('#damage-weight').value) || 0,
-					str: Number(this.$('#attribute-str-weight').value) || 0,
-					dex: Number(this.$('#attribute-dex-weight').value) || 0,
-					int: Number(this.$('#attribute-int-weight').value) || 0,
-				},
+				weights: Object.fromEntries(buildWeights.map((buildWeight, i) =>
+					[buildWeight.id, this.$('#weights').children[i].children[0].value || 0])),
 				options: {
 					includeEldritch: this.$('#include-eldritch-check').checked,
 					includeInfluence: this.$('#include-influence-check').checked,
