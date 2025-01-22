@@ -211,7 +211,14 @@ class PobApi extends Emitter {
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)
-			.then(([minValue, modWeights]) => ({minValue, modWeights}));
+			.then(([minValue, modWeights]) => ({
+				minValue: minValue / 10,
+				modWeights: modWeights.map(modWeight => ({
+					...modWeight,
+					weight: modWeight.weight / 10,
+					meanStatDiff: modWeight.meanStatDiff / 10,
+				})),
+			}));
 	}
 
 	async getCraftedMods() {
