@@ -5,19 +5,19 @@ class ItemsData extends Emitter {
 	static valueHandlers = [
 		{
 			name: 'Weight sorting',
-			description: 'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set above. Less accurate in predicting health & DMG affects on build.',
+			description: 'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set. Less accurate in predicting health & DMG affects on build.',
 			sortY: item => item.weightedValue,
 			showFilter: item => true,
 			trigger: null,
 		}, {
 			name: 'Build sorting',
-			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above. Does not consider craftable affixes.',
+			description: 'Sort by changes in effective health, total DPS, etc according to the weights set. Does not consider crafted affixes, runes, or anoints (v2 only).',
 			sortY: item => item.buildValuePromise.resolved.value,
 			showFilter: item => item.buildValuePromise.resolved,
 			trigger: item => item.buildValuePromise,
 		}, {
 			name: 'Build + craft sorting',
-			description: 'Sort by changes in effective health, total DPS, and total resists according to the weights set above. Considers craftable affixes.',
+			description: 'Sort by changes in effective health, total DPS, etc according to the weights set. Considers craftable affixes, runes, and anoints.',
 			sortY: item => item.craftValuePromise.resolved.value,
 			showFilter: item => item.craftValuePromise.resolved,
 			trigger: item => item.craftValuePromise,

@@ -33,7 +33,7 @@ class ItemData {
 		this.debug = tradeApiItemData;
 
 		if (!this.text && version2)
-			this.text = this.reconstructText(true);
+			this.text = this.reconstructText(true, true);
 
 		// sockets
 		this.sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
@@ -83,13 +83,13 @@ class ItemData {
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
 		// build value
-		this.buildValuePromise = pobApi.evalItem(this.reconstructText(false));
+		this.buildValuePromise = pobApi.evalItem(this.reconstructText(false, false));
 		this.buildValuePromise
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
 		// todo[medium] for version2, find best rune and compare with equipped item with best rune
-		this.craftValuePromise = version2 ? pobApi.evalItem(this.text) : this.craftValue();
+		this.craftValuePromise = version2 ? pobApi.evalItem(this.reconstructText(true, true)) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
@@ -143,12 +143,14 @@ class ItemData {
 		return Buffer.from(string64 || '', 'base64').toString();
 	};
 
-	reconstructText(includeRune) {
+	reconstructText(includeRune, includeAnoint) {
 		return [
 			'Item Class',
 			this.subtype,
 			...includeRune ? this.runeMods : [],
-			...this.enchantMods,
+			...includeAnoint ?
+				this.enchantMods :
+				this.enchantMods.filter(mod => !mod.startsWith('Allocates ')),
 			...this.implicitMods,
 			...this.explicitMods,
 		].join('\n');
