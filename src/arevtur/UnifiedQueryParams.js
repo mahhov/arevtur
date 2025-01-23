@@ -1,5 +1,5 @@
 const apiConstants = require('./apiConstants');
-const {deepCopy, updateElementChildren} = require('../util/util');
+const {unique, deepCopy, updateElementChildren} = require('../util/util');
 const {
 	defensePropertyTuples,
 	maxRequirementPropertyTuples,
@@ -197,6 +197,8 @@ class UnifiedQueryParams {
 	async toTradeQueryData(version2, league) {
 		let queries = [];
 
+		let offlineOptions = [this.offline, false].filter(unique);
+
 		let affixOptions = [
 			// query without affixes
 			false,
@@ -212,22 +214,24 @@ class UnifiedQueryParams {
 			// 	async entry => ['suffix', (await entry.property)?.id, entry.weight])),
 		].filter(v => v !== null);
 
-		// cross product all combinations of linking and craftable affixes
-		affixOptions.forEach(affixOption => {
-			let copy = this.copy;
-			if (affixOption) {
-				copy.affixProperties[affixOption[0]] = true;
-				copy.uncorrupted = true;
-				copy.uncrafted = true;
-				if (affixOption.length === 1)
-					copy.affixValueShift += this.affixProperties[affixOption[0]];
-				else {
-					copy.notEntries[affixOption[1]] = undefined;
-					copy.affixValueShift += affixOption[2];
+		// cross product all combinations of options
+		offlineOptions.forEach(offlineOption =>
+			affixOptions.forEach(affixOption => {
+				let copy = this.copy;
+				copy.offline = offlineOption;
+				if (affixOption) {
+					copy.affixProperties[affixOption[0]] = true;
+					copy.uncorrupted = true;
+					copy.uncrafted = true;
+					if (affixOption.length === 1)
+						copy.affixValueShift += this.affixProperties[affixOption[0]];
+					else {
+						copy.notEntries[affixOption[1]] = undefined;
+						copy.affixValueShift += affixOption[2];
+					}
 				}
-			}
-			queries.push(copy);
-		});
+				queries.push(copy);
+			}));
 
 		// each query is like a `UnifiedQueryParams`, but with the additional fields:
 		// `priceShifts`, & `affixValueShift`

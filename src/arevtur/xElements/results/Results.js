@@ -149,22 +149,29 @@ customElements.define(name, class extends XElement {
 	renderItemsDataChart(resetChartRange = false) {
 		this.$('#results-chart').pointSets = [
 			{
-				cssPropertyValueColor: '--interactable-primary',
+				cssPropertyValueColor: '--colored-text-blue',
 				size: 1,
 				points: this.itemsData.bestBoundPath,
 				isPath: true,
 			}, {
-				cssPropertyValueColor: '--interactable-focus-border',
+				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 8,
 				points: this.itemsData.itemsToPoints(this.itemsData.selectedItems),
 			}, {
-				cssPropertyValueColor: '--interactable-primary',
+				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 4,
-				points: this.itemsData.itemsToPoints(this.itemsData.shownItems),
+				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
+					.filter(item => item.onlineStatus !== 'offline')),
 			}, {
-				cssPropertyValueColor: '--interactable-focus-border',
+				cssPropertyValueColor: '--colored-text-orange',
+				fill: true,
+				size: 4,
+				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
+					.filter(item => item.onlineStatus === 'offline')),
+			}, {
+				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 8,
 				points: this.itemsData.itemsToPoints(this.itemsData.hoveredItems),

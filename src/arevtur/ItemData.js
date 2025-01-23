@@ -146,7 +146,7 @@ class ItemData {
 		if (!onlineObj)
 			return 'offline';
 		if (onlineObj.status)
-			return onlineObj.status;
+			return onlineObj.status; // afk
 		return 'online';
 	}
 

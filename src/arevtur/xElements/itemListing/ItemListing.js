@@ -109,6 +109,7 @@ customElements.define(name, class extends XElement {
 			`${round(dateDiff / 24, 1)} days ago` :
 			`${round(dateDiff, 1)} hours ago`;
 		this.$('#online-status-text').textContent = itemData.onlineStatus;
+		this.$('#online-status-text').classList.toggle('offline', itemData.onlineStatus === 'offline');
 
 		this.selected = itemData.selected;
 		this.hovered = itemData.hovered;

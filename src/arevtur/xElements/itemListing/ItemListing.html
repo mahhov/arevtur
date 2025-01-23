@@ -82,6 +82,14 @@
 		text-wrap: nowrap;
 		text-overflow: ellipsis;
 	}
+
+	#online-status-text {
+		color: var(--colored-text-blue);
+	}
+
+	#online-status-text.offline {
+		color: var(--colored-text-orange);
+	}
 </style>
 
 <div class="scroll">
@@ -140,6 +148,10 @@
 </div>
 
 <div class="small-info">
-	<span id="account-text"></span> - <span id="date-text"></span> - <span id="online-status-text"></span>
+	<span id="account-text"></span>
+	-
+	<span id="date-text"></span>
+	-
+	<span id="online-status-text"></span>
 	<button id="refresh-button">Refresh</button>
 </div>
