@@ -40,6 +40,11 @@ customElements.define(name, class extends XElement {
 			navigator.clipboard.writeText(this.itemData_.text);
 			e.stopPropagation();
 		});
+		this.$('#refresh-button').addEventListener('click', async () => {
+			let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
+			this.itemData_.refresh(tradeApiItemsData[0]);
+			this.itemData = this.itemData_;
+		});
 		this.addEventListener('click', () => this.emit('select'));
 		this.addEventListener('mouseenter', () => {
 			if (!this.hovered)
