@@ -42,7 +42,7 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#refresh-button').addEventListener('click', async () => {
 			let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
-			this.itemData_.refresh(tradeApiItemsData[0]);
+			this.itemData_.refresh(tradeApiItemsData.result[0]);
 			this.itemData = this.itemData_;
 		});
 		this.addEventListener('click', () => this.emit('select'));
