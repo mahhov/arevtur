@@ -5,30 +5,6 @@ const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');
 const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
 
-let getRateLimiter = new TradeQueryRateLimiter();
-let postRateLimiter = new TradeQueryRateLimiter();
-
-window.getRateLimiter = getRateLimiter;
-window.postRateLimiter = postRateLimiter;
-
-let rlrGet = (endpoint, params, headers, stopObj) => {
-	if (params)
-		endpoint += `?${querystring.stringify(params)}`;
-	return getRateLimiter.queueRequest(endpoint, {
-		method: 'get',
-		headers,
-	}, stopObj);
-};
-
-let rlrPost = (endpoint, query, headers, stopObj) => {
-	let body = JSON.stringify(query);
-	return postRateLimiter.queueRequest(endpoint, {
-		method: 'post',
-		body,
-		headers,
-	}, stopObj);
-};
-
 class TradeQuery {
 	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {
 		this.unifiedQueryParams = unifiedQueryParams;
@@ -105,34 +81,25 @@ class TradeQuery {
 		}
 	}
 
-	async queryAndParseItems(query) {
+	async queryAndParseItems(apiQuery) {
 		// todo[medium] more selective try/catch
 		try {
-			let endpoint = this.version2 ?
-				`${apiConstants.api}/api/trade2/search/poe2/${this.league}` :
-				`${apiConstants.api}/api/trade/search/${this.league}`;
-			let headers = apiConstants.createRequestHeader(this.sessionId);
+			console.log('initial query', apiQuery);
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
 				queriesTotal: 11,
 				itemCount: 0,
 			});
-			console.log('initial query', endpoint, query, headers);
-			let data = await rlrPost(endpoint, query, headers, this.stopObj);
+
+			let data = await TradeQuery.initialSearchApiQuery(this.version2, this.league, this.sessionId, this.stopObj, apiQuery);
 			if (data.error)
 				this.errorStream.write(data.error);
 			let itemCount = data.result.length;
-			this.progressStream.write({
-				text: `Received ${data.result.length} items.`,
-				queriesComplete: 0,
-				queriesTotal: 11,
-				itemCount,
-			});
-
 			let requestGroups = [];
 			while (data.result.length)
 				requestGroups.push(data.result.splice(0, 10));
+
 			this.progressStream.write({
 				text: `Will make ${requestGroups.length} grouped item queries.`,
 				queriesComplete: 1,
@@ -142,17 +109,8 @@ class TradeQuery {
 
 			let receivedCount = 0;
 			let promises = requestGroups.map(async (requestGroup, i) => {
-				let params = {
-					query: data.id,
-					'pseudos[]': [
-						apiConstants.shortProperties.totalEleRes,
-						apiConstants.shortProperties.flatLife,
-					],
-				};
-				let endpoint2 = this.version2 ?
-					`${apiConstants.api}/api/trade2/fetch/${requestGroup.join()}` :
-					`${apiConstants.api}/api/trade/fetch/${requestGroup.join()}`;
-				let data2 = await rlrGet(endpoint2, params, headers, this.stopObj);
+				let data2 = await TradeQuery.itemsApiQuery(this.version2, this.sessionId, this.stopObj, data.id, requestGroup.join());
+
 				if (data2.error)
 					this.errorStream.write(data2.error);
 				this.progressStream.write({
@@ -161,14 +119,16 @@ class TradeQuery {
 					queriesTotal: requestGroups.length + 1,
 					itemCount,
 				});
+
 				let items = data2.result.map(itemData =>
 					new ItemData(this.version2, this.league, this.affixValueShift,
-						this.unifiedQueryParams.defenseProperties, this.priceShifts, itemData));
+						this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, itemData));
 				// todo[high] let users wait on pricePromise and rm this await
 				await Promise.all(items.map(item => item.pricePromise));
 				this.itemStream.write(items);
 				return items;
 			});
+
 			let items = (await Promise.all(promises)).flat();
 			this.progressStream.write({
 				text: 'All grouped item queries completed.',
@@ -177,6 +137,7 @@ class TradeQuery {
 				itemCount,
 			});
 			return items;
+
 		} catch (e) {
 			console.warn('ERROR', e);
 			return [];
@@ -190,6 +151,42 @@ class TradeQuery {
 		let queryParams = {q: JSON.stringify(await this.getQuery())};
 		let queryParamsString = querystring.stringify(queryParams);
 		return `${endpoint}?${queryParamsString}`;
+	}
+
+	static initialSearchRateLimiter = new TradeQueryRateLimiter();
+
+	static initialSearchApiQuery(version2, league, sessionId, stopObj, apiQuery) {
+		let endpoint = version2 ?
+			`${apiConstants.api}/api/trade2/search/poe2/${league}` :
+			`${apiConstants.api}/api/trade/search/${league}`;
+		let headers = apiConstants.createRequestHeader(sessionId);
+		let body = JSON.stringify(apiQuery);
+		return TradeQuery.initialSearchRateLimiter.queueRequest(endpoint, {
+			method: 'post',
+			body,
+			headers,
+		}, stopObj);
+	}
+
+	static itemsApiQueryRateLimiter = new TradeQueryRateLimiter();
+
+	static itemsApiQuery(version2, sessionId, stopObj, queryId, itemIds) {
+		let endpoint = version2 ?
+			`${apiConstants.api}/api/trade2/fetch/${itemIds}` :
+			`${apiConstants.api}/api/trade/fetch/${itemIds}`;
+		let params = {
+			query: queryId,
+			'pseudos[]': [
+				apiConstants.shortProperties.totalEleRes,
+				apiConstants.shortProperties.flatLife,
+			],
+		};
+		endpoint += `?${querystring.stringify(params)}`;
+		let headers = apiConstants.createRequestHeader(sessionId);
+		return TradeQuery.itemsApiQueryRateLimiter.queueRequest(endpoint, {
+			method: 'get',
+			headers,
+		}, stopObj);
 	}
 
 	static async fromApiHtmlUrl(sessionId, tradeSearchUrl) {

@@ -4,7 +4,18 @@ const {maxIndex} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
 
 class ItemData {
-	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, tradeApiItemData) {
+	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, tradeApiItemData) {
+		this.version2 = version2;
+		this.league = league;
+		this.affixValueShift = affixValueShift;
+		this.queryDefenseProperties = queryDefenseProperties;
+		this.priceShifts = priceShifts;
+		this.queryId = queryId;
+
+		this.refresh(tradeApiItemData);
+	}
+
+	refresh(tradeApiItemData) {
 		this.id = tradeApiItemData.id;
 		this.name = tradeApiItemData.item.name;
 		this.subtype = tradeApiItemData.item.typeLine; // e.g. 'Gold Amulet'
@@ -32,7 +43,7 @@ class ItemData {
 		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
-		if (!this.text && version2)
+		if (!this.text && this.version2)
 			this.text = this.reconstructText(true, true);
 
 		// sockets
@@ -76,8 +87,8 @@ class ItemData {
 
 		// weighted value
 		this.weightedValueDetails = {
-			affixes: affixValueShift,
-			defenses: ItemData.evalDefensePropertiesValue(defenseProperties, queryDefenseProperties),
+			affixes: this.affixValueShift,
+			defenses: ItemData.evalDefensePropertiesValue(defenseProperties, this.queryDefenseProperties),
 			mods: ItemData.weightedValue(this.pseudoMods),
 		};
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
@@ -89,7 +100,7 @@ class ItemData {
 			.catch(() => 0);
 
 		// todo[medium] for version2, find best rune and compare with equipped item with best rune
-		this.craftValuePromise = version2 ? pobApi.evalItem(this.reconstructText(true, true)) : this.craftValue();
+		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(true, true)) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
@@ -97,9 +108,9 @@ class ItemData {
 		this.priceDetails = {
 			count: tradeApiItemData.listing.price.amount,
 			currency: tradeApiItemData.listing.price.currency,
-			shifts: priceShifts,
+			shifts: this.priceShifts,
 		};
-		this.pricePromise = ItemData.price(league, this.priceDetails);
+		this.pricePromise = ItemData.price(this.league, this.priceDetails);
 		// todo[medium] rm price, let users use pricePromise
 		this.pricePromise.then(price => this.price = price);
 	}
