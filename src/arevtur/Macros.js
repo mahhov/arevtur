@@ -151,8 +151,7 @@ class Macros {
 				unifiedQueryParams.conditionalSuffixEntries,
 				unifiedQueryParams.sharedWeightEntries,
 			].flat();
-			let enabled = entries.some(entry => !entry.enabled);
-			entries.forEach(entry => entry.enabled = enabled);
+			entries.forEach(entry => entry.enabled = true);
 			return unifiedQueryParams;
 		},
 
