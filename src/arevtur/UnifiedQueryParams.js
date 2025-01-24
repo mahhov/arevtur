@@ -203,7 +203,7 @@ class UnifiedQueryParams {
 		let maxPrice = this.maxPrice;
 		do {
 			priceOptions.push(maxPrice);
-			maxPrice = Math.floor(maxPrice / 5);
+			maxPrice = Math.floor(maxPrice / 10);
 		} while (maxPrice > 100);
 
 		let affixOptions = [

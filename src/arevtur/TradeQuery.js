@@ -84,7 +84,16 @@ class TradeQuery {
 	async queryAndParseItems(apiQuery) {
 		// todo[medium] more selective try/catch
 		try {
-			console.log('initial query', apiQuery);
+			console.log('initial query', apiQuery,
+				', online', apiQuery.query.status.online,
+				', price', apiQuery.query.filters.trade_filters.filters.price.max,
+				', value', apiQuery.query.stats[0].value.min,
+				', defense',
+				apiQuery.query.filters.equipment_filters?.filters.ar ||
+				apiQuery.query.filters.equipment_filters?.filters.ev ||
+				apiQuery.query.filters.equipment_filters?.filters.es ||
+				apiQuery.query.filters.equipment_filters?.filters.block || 0,
+			);
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
