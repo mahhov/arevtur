@@ -10,8 +10,8 @@ const googleAnalyticsForMain = require('../services/googleAnalytics/googleAnalyt
 
 let viewHandle = new ViewHandle();
 
-let slashType = (name = 'hideout') =>
-	keySender.strings([keySender.TYPE, '{enter}/' + name + '{enter}']);
+let slashType = name =>
+	keySender.strings([keySender.TYPE, '{ctrl}{shift}{enter}/' + name + '{enter}']);
 
 let displayGemQualityArbitrage = async () => {
 	if (await viewHandle.visible)
@@ -58,7 +58,7 @@ let windowCheck = async () => {
 	if (!configForMain.config.restrictToPoeWindow)
 		return true;
 	let title = (await frontWindowTitle.get()).out.toLowerCase().trim();
-	return ['path of exile', 'arevtur'].includes(title);
+	return ['path of exile', 'path of exile 2', 'arevtur'].includes(title);
 };
 
 let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
@@ -72,8 +72,7 @@ let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 
 let init = () => {
 	// todo[low] key sending seems to freeze the machine on linux. does it work on windows?
-	// addPoeShortcutListener('h', () => slashType('hideout'));
-	// addPoeShortcutListener('k', () => slashType('kingsmarch'));
+	addPoeShortcutListener('h', () => slashType('hideout'));
 	keyHook.addShortcut('{ctrl}', 'c', async () => {
 		await new Promise(r => setTimeout(r, 100));
 		priceClipboard(electronClipboard.readText());
