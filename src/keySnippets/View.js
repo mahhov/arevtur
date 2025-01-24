@@ -83,7 +83,11 @@ $('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
 
 $('#open-config').addEventListener('click', () => openPath(appData.basePath));
 
+$('#chat-notifications').addEventListener('change', () =>
+	configForRenderer.config = {chatNotifications: $('#chat-notifications').checked});
+
 configForRenderer.addListener('change', config => {
 	$('#restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
+	$('#chat-notifications').checked = configForRenderer.config.chatNotifications;
 	document.documentElement.classList.toggle('dark', config.darkTheme);
 });

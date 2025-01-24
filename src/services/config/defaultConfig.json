@@ -2,6 +2,7 @@
   "league": "Standard",
   "version2": false,
   "restrictToPoeWindow": true,
+  "chatNotifications": false,
   "darkTheme": true,
   "viewHorizontal": true,
   "viewMaximize": false,

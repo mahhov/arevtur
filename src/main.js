@@ -5,6 +5,7 @@ const {TrayHelper} = require('js-desktop-base');
 const appData = require('./services/appData');
 const keySnippet = require('./keySnippets/keySnippets');
 const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
+require('./services/logWatcher');
 
 googleAnalyticsForMain.emitStartup();
 
