@@ -199,6 +199,13 @@ class UnifiedQueryParams {
 
 		let offlineOptions = [this.offline, false].filter(unique);
 
+		let priceOptions = [];
+		let maxPrice = this.maxPrice;
+		do {
+			priceOptions.push(maxPrice);
+			maxPrice = Math.floor(maxPrice / 5);
+		} while (maxPrice > 100);
+
 		let affixOptions = [
 			// query without affixes
 			false,
@@ -216,22 +223,24 @@ class UnifiedQueryParams {
 
 		// cross product all combinations of options
 		offlineOptions.forEach(offlineOption =>
-			affixOptions.forEach(affixOption => {
-				let copy = this.copy;
-				copy.offline = offlineOption;
-				if (affixOption) {
-					copy.affixProperties[affixOption[0]] = true;
-					copy.uncorrupted = true;
-					copy.uncrafted = true;
-					if (affixOption.length === 1)
-						copy.affixValueShift += this.affixProperties[affixOption[0]];
-					else {
-						copy.notEntries[affixOption[1]] = undefined;
-						copy.affixValueShift += affixOption[2];
+			priceOptions.forEach(priceOption =>
+				affixOptions.forEach(affixOption => {
+					let copy = this.copy;
+					copy.offline = offlineOption;
+					copy.maxPrice = priceOption;
+					if (affixOption) {
+						copy.affixProperties[affixOption[0]] = true;
+						copy.uncorrupted = true;
+						copy.uncrafted = true;
+						if (affixOption.length === 1)
+							copy.affixValueShift += this.affixProperties[affixOption[0]];
+						else {
+							copy.notEntries[affixOption[1]] = undefined;
+							copy.affixValueShift += affixOption[2];
+						}
 					}
-				}
-				queries.push(copy);
-			}));
+					queries.push(copy);
+				})));
 
 		// each query is like a `UnifiedQueryParams`, but with the additional fields:
 		// `priceShifts`, & `affixValueShift`
