@@ -65,15 +65,6 @@ customElements.define(name, class extends XElement {
 			this.itemsData.hoverItem(itemIndex);
 			this.renderItemsData(true);
 		});
-		this.$('#results-chart').addEventListener('mouseenter', () => {
-			this.$('#results-chart').width = 450;
-			this.$('#results-chart').height = 450;
-		});
-		this.$('#results-chart').addEventListener('mouseleave', () => {
-			this.$('#results-chart').width = 300;
-			this.$('#results-chart').height = 300;
-		});
-
 
 		this.expectedCount = 0;
 		this.updateResultsCount();
