@@ -1,5 +1,6 @@
 const {app, BrowserWindow} = require('electron');
 const {appReadyPromise} = require('js-desktop-base');
+const {iconPath} = require('../util/util');
 
 // workaround for electron bug
 // https://github.com/electron/electron/issues/22119
@@ -9,10 +10,10 @@ class ElectronWindow {
 	constructor(name, htmlPath, width, height, exitOnClose = false) {
 		this.name = name;
 
-		// todo[low] add a taskbar icon
 		this.window = appReadyPromise.then(() => {
 			let window = new BrowserWindow({
 				title: `${name} - ${app.getVersion()}`,
+				icon: iconPath,
 				width,
 				height,
 				show: false,

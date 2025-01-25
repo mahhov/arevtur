@@ -1,11 +1,11 @@
 const fs = require('fs').promises;
-const path = require('path');
 const {app} = require('electron');
 const {TrayHelper} = require('js-desktop-base');
 const appData = require('./services/appData');
 const keySnippet = require('./keySnippets/keySnippets');
 const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
 require('./services/logWatcher');
+const {iconPath} = require('./util/util');
 
 googleAnalyticsForMain.emitStartup();
 
@@ -14,8 +14,7 @@ let windows = [
 	require('./arevtur/arevtur'),
 ];
 
-let trayIcon = path.join(__dirname, '../resources/icon.png');
-TrayHelper.createExitTray(trayIcon, 'Arevtur', [
+TrayHelper.createExitTray(iconPath, 'Arevtur', [
 	...keySnippet.trayOptions,
 	...windows.flatMap(w => w.trayOptions),
 	{type: 'separator'},

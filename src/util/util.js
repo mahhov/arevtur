@@ -1,4 +1,5 @@
 const {shell} = require('electron');
+const path = require('path');
 
 let minIndex = array => array.indexOf(Math.min(...array));
 let maxIndex = array => array.indexOf(Math.max(...array));
@@ -87,6 +88,7 @@ module.exports = {
 	deepEquality,
 
 	openPath,
+	iconPath: path.join(__dirname, '../../resources/icon.png'),
 
 	updateElementChildren,
 
