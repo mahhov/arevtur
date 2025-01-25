@@ -61,6 +61,7 @@ local sampleItemAmulet = [[
     Rarity: Rare
     Empyrean Collar
     Citrine Amulet
+    Amber Amulet
 ]]
 
 function loadExtraMods(mods)
