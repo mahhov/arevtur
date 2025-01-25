@@ -8,8 +8,8 @@
 		position: relative;
 	}
 
-	label {
-		margin-right: 15px;
+	#version-input {
+		width: 50px;
 	}
 
 	#session-id-input:not(:focus) {
@@ -42,10 +42,7 @@
 </style>
 
 <div class="maximized-hidden">
-	<label>
-		PoE 2
-		<input id="version-2-check" type="checkbox">
-	</label>
+	<x-autocomplete-input id="version-input" placeholder="PoE 1" size="2"></x-autocomplete-input>
 	<x-autocomplete-input id="league-input" placeholder="league" size="8"></x-autocomplete-input>
 	<input id="session-id-input" required pattern=".{32}" placeholder="session id"
 		   title="32 char long ID from pathofexile.com/trade > F12 > Application > Cookies > POESESSID">

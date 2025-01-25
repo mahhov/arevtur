@@ -34,7 +34,8 @@ customElements.define(name, class extends XElement {
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
-		this.$('#version-2-check').addEventListener('change', () => this.store());
+		this.$('#version-input').autocompletes = ['PoE 1', 'PoE 2'];
+		this.$('#version-input').addEventListener('change', () => this.store());
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('change', () => this.store());
 
@@ -165,10 +166,14 @@ customElements.define(name, class extends XElement {
 		this.setInputSetIndex(this.inputSetIndex);
 	}
 
+	get isVersion2() {
+		return this.$('#version-input').value === this.$('#version-input').autocompletes[1];
+	}
+
 	updateStatusIndicator(promise, element) {
-		let version2 = this.$('#version-2-check').checked;
+		let version2 = this.isVersion2;
 		let league = this.$('#league-input').value;
-		let stillCurrent = () => league === this.$('#league-input').value && version2 === this.$('#version-2-check').checked;
+		let stillCurrent = () => league === this.$('#league-input').value && version2 === this.isVersion2;
 
 		element.classList.add('busy');
 		element.classList.remove('valid', 'invalid');
@@ -184,7 +189,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	async onConfigChange(config) {
-		this.$('#version-2-check').checked = config.version2;
+		this.$('#version-input').value = this.$('#version-input').autocompletes[Number(config.version2)];
 		this.$('#league-input').value = config.league;
 		this.$('#session-id-input').value = config.sessionId;
 
@@ -273,7 +278,7 @@ customElements.define(name, class extends XElement {
 
 	store() {
 		configForRenderer.config = {
-			version2: this.$('#version-2-check').checked,
+			version2: this.isVersion2,
 			league: this.$('#league-input').value,
 			sessionId: this.$('#session-id-input').value,
 		};
@@ -304,7 +309,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	async finalizeTradeQuery(index = this.inputSetIndex) {
-		let version2 = this.$('#version-2-check').checked;
+		let version2 = this.isVersion2;
 		let league = this.$('#league-input').value;
 		let sessionId = this.$('#session-id-input').value;
 
