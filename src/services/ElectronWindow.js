@@ -35,8 +35,6 @@ class ElectronWindow {
 				}
 			});
 
-			window.on('minimize', () => window.hide());
-
 			return window;
 		});
 	}
