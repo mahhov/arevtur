@@ -78,7 +78,7 @@ class ItemData {
 			'block',
 			Number(tradeApiItemData.item.properties
 				?.find(property => property.name === 'Chance to Block' || property.name === '[Block] chance')
-				.values[0][0]
+				?.values[0][0]
 				.replace('%', '') || 0),
 		]);
 		this.defenseProperties = defenseProperties
