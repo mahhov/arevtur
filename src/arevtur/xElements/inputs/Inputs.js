@@ -11,6 +11,7 @@ const ItemData = require('../../ItemData');
 const appData = require('../../../services/appData');
 const BugReport = require('../../BugReport');
 const TradeQueryQueue = require('../../TradeQueryQueue');
+const googleAnalyticsForRenderer = require('../../../services/googleAnalytics/googleAnalyticsForRenderer');
 
 let timestamp = () => {
 	let date = new Date();
@@ -156,8 +157,10 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#search-button').addEventListener('click', e => this.onSubmit(e.altKey));
 		this.$('#cancel-button').addEventListener('click', () => this.tradeQueryQueue.cancel());
-		this.$('#search-in-browser-button').addEventListener('click', async () =>
-			shell.openExternal(await (await this.finalizeTradeQuery())[0].toApiHtmlUrl()));
+		this.$('#search-in-browser-button').addEventListener('click', async () => {
+			googleAnalyticsForRenderer.emit('SearchBrowser');
+			shell.openExternal(await (await this.finalizeTradeQuery())[0].toApiHtmlUrl());
+		});
 
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
@@ -292,11 +295,14 @@ customElements.define(name, class extends XElement {
 
 	async onSubmit(all) {
 		this.tradeQueryQueue.cancel();
-		if (all)
+		if (all) {
+			googleAnalyticsForRenderer.emit('SearchAll');
 			for (let i in this.inputSets)
 				await this.queueTradeQuery(i);
-		else
+		} else {
+			googleAnalyticsForRenderer.emit('Search');
 			await this.queueTradeQuery(this.inputSetIndex);
+		}
 		this.tradeQueryQueue.setActiveTradeQueries(this.inputSets[this.inputSetIndex].tradeQueries);
 		this.emit('add-items', {clear: true, items: []});
 	}
