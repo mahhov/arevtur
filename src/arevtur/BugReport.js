@@ -4,16 +4,14 @@ const logging = require('../services/logging');
 const appData = require('../services/appData');
 const {openPath} = require('../util/util');
 const os = require('os');
+const packageJson = require('../../package.json');
 
 class BugReport {
 	constructor(data) {
 		this.data = data;
 	}
 
-	static async fromDownload(path) {
-		let reportString = await fs.readFile(path)
-			.then(r => r.toString())
-			.catch(e => console.warn('BugReport, failed to read bugReport.json:', e));
+	static async fromDownload(reportString) {
 		if (!reportString) return null;
 		let data;
 		try {
@@ -30,8 +28,7 @@ class BugReport {
 	static async fromCurrentState() {
 		return new BugReport({
 			os: os.platform(),
-			// todo[low] electron.app is not available in renderer context
-			// version: app.getVersion(),
+			version: packageJson.version,
 			config: configForRenderer.config,
 			local: localStorage,
 			build: await fs.readFile(configForRenderer.config.buildParams.buildPath)
@@ -63,8 +60,7 @@ class BugReport {
 let activeBugReportString = sessionStorage.getItem('activeBugReport');
 if (activeBugReportString) {
 	let activeBugReport = JSON.parse(activeBugReportString);
-	console.log('BugReport os:', activeBugReport.os);
-	// console.log('BugReport version:', activeBugReport.version);
+	console.log('BugReport:', activeBugReport.os, activeBugReport.version);
 	console.log('BugReport logs:', activeBugReport.logs);
 	sessionStorage.removeItem('activeBugReport');
 }

@@ -43,12 +43,16 @@ customElements.define(name, class extends XElement {
 		this.$('#bug-report-button').addEventListener('click', async () =>
 			(await BugReport.fromCurrentState()).toDownload());
 		this.$('#bug-report-button').addEventListener('dragover', e => e.preventDefault());
-		this.$('#bug-report-button').addEventListener('drop', async e => {
+		this.$('#bug-report-button').addEventListener('drop', e => {
 			e.preventDefault();
-			if (appData.isDev) {
-				let path = e.dataTransfer.files[0].path;
-				(await BugReport.fromDownload(path))?.toCurrentState();
-			}
+			if (!appData.isDev)
+				return;
+			let reader = new FileReader();
+			reader.addEventListener('load', async () =>
+				(await BugReport.fromDownload(reader.result))?.toCurrentState());
+			reader.addEventListener('error', e =>
+				console.warn('BugReport, failed to read bugReport.json:', e));
+			reader.readAsText(e.dataTransfer.files[0]);
 		});
 
 		pobApi.addListener('not-ready', () => {
