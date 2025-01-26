@@ -117,7 +117,7 @@ class PobApi extends Emitter {
 		this.emit('change');
 	}
 
-	async send(argsObj) {
+	send(argsObj) {
 		if (!this.script)
 			return Promise.reject('script has not started');
 		let argsString = JSON.stringify(argsObj);
@@ -136,8 +136,8 @@ class PobApi extends Emitter {
 		return this.cache[argsString].catch(() => null);
 	}
 
-	queryManaRegen() {
-		return this.send({cmd: 'queryManaRegen'});
+	queryBuildStats() {
+		return this.send({cmd: 'queryBuildStats'}).then(JSON.parse);
 	}
 
 	evalItem(item) {
@@ -168,7 +168,7 @@ class PobApi extends Emitter {
 	}
 
 	// todo[low] rename evalItemMod
-	async evalItemModSummary(pobType = undefined, itemMod = undefined, pluginNumber = 1) {
+	evalItemModSummary(pobType = undefined, itemMod = undefined, pluginNumber = 1) {
 		if (!pobType || !itemMod)
 			return Promise.reject('item missing type or mod');
 
@@ -198,7 +198,7 @@ class PobApi extends Emitter {
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod], Number(pobType.match(/\d+/)?.[0]) || 1));
 	}
 
-	async getModWeights(pobType = undefined, includeCorrupted = true) {
+	getModWeights(pobType = undefined, includeCorrupted = true) {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
 		if (!pobType)
 			return Promise.reject('missing type');
@@ -222,10 +222,8 @@ class PobApi extends Emitter {
 	}
 
 	async getCraftedMods() {
-		let jsonString = await this.send({
-			cmd: 'getCraftedMods',
-		});
-		return Object.values(JSON.parse(jsonString));
+		let json = await this.send({cmd: 'getCraftedMods'}).then(JSON.parse);
+		return Object.values(json);
 	}
 
 	get extraModStrings() {
@@ -239,7 +237,7 @@ class PobApi extends Emitter {
 	async parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {
 		itemText = PobApi.clean(itemText);
 
-		let baseManaRegen = this.weights.manaRegen ? await this.queryManaRegen() : 1;
+		let baseManaRegen = this.weights.manaRegen ? (await this.queryBuildStats()).ManaRegenRecovery : 1;
 
 		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
 		let totalLifeRegex = /total life \(([+-][\d.]+)%\)/i;

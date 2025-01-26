@@ -56,6 +56,36 @@ function emplaceNewLines(string)
     return string:gsub([[\n]], '\n') -- replace escaped \\n with real \n
 end
 
+-- copy 1 level deep
+function shallow(o)
+   for k, v in pairs(o) do
+       if type(v) == 'table' then
+           o[k] = nil
+       end
+   end
+   return o
+end
+
+-- for debugging objects that can't be json encoded
+function dump(o, n)
+   if n > 5 then
+     return '"deep"'
+   end
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) == 'table' then k = 'table' end
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. k .. ' : ' .. dump(v, n+1) .. ','
+      end
+      return s .. '} '
+   elseif type(o) == 'string' then
+       return '"' .. tostring(o:gsub('\n', [[\n]])) .. '"'
+   else
+      return tostring(o)
+   end
+end
+
 local sampleItemAmulet = [[
     Item Class: Amulets
     Rarity: Rare
@@ -113,8 +143,8 @@ while true do
         build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
         respond('build loaded')
 
-    elseif args.cmd == 'queryManaRegen' then
-        respond(build.calcsTab.mainOutput['ManaRegenRecovery'])
+    elseif args.cmd == 'queryBuildStats' then
+        respond(dkjson.encode(shallow(build.calcsTab.mainOutput)))
 
     elseif args.cmd == 'item' then
         -- given item text, see what swapping it in, replacing the currently equipped item of that
