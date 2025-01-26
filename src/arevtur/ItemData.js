@@ -61,7 +61,7 @@ class ItemData {
 
 		// quality
 		let qualityProperty = tradeApiItemData.item.properties
-			.find(property => property.name.includes('Quality'));
+			?.find(property => property.name.includes('Quality'));
 		let qualityNumber = Number(qualityProperty?.values[0][0].replace('%', '') || 0);
 		let qualityText = qualityProperty?.name.match(/\((.*)\)/)?.[1];
 		this.quality = [`${qualityNumber} quality`, qualityText].filter(v => v).join(' - ');
@@ -77,8 +77,8 @@ class ItemData {
 		defenseProperties.push([
 			'block',
 			Number(tradeApiItemData.item.properties
-				.find(property => property.name === 'Chance to Block' || property.name === '[Block] chance')
-				?.values[0][0]
+				?.find(property => property.name === 'Chance to Block' || property.name === '[Block] chance')
+				.values[0][0]
 				.replace('%', '') || 0),
 		]);
 		this.defenseProperties = defenseProperties
