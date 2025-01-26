@@ -64,21 +64,24 @@ local sampleItemAmulet = [[
     Amber Amulet
 ]]
 
+-- todo[medium] support ignore eva or arm in eff health
 function loadExtraMods(mods)
---     local itemText = sampleItemAmulet .. '\n' .. emplaceNewLines(mods)
---     local item = new('Item', itemText)
---     item.type = 'extraSlot'
---
---     local extraSlot = build.itemsTab.slots['extraSlot']
---     local oldItemText = build.itemsTab.items[extraSlot.selItemId]
---     if oldItemText and item.raw == oldItemText.raw then
---         return
---     end
---
---     respond('loading extra mods: ', itemText, true)
---     build.itemsTab:AddItem(item)
---     build.buildFlag = true
---     build:OnFrame({})
+    local itemText = sampleItemAmulet .. '\n' .. emplaceNewLines(mods)
+    local item = new('Item', itemText)
+    item.type = 'extraSlot'
+
+    local extraSlot = build.itemsTab.slots['extraSlot']
+    local oldItem = build.itemsTab.items[extraSlot.selItemId]
+
+    if oldItem and item.raw == oldItem.raw then
+        return
+    end
+
+    respond('loading extra mods: ' .. itemText, true)
+    build.itemsTab:AddItem(item)
+    extraSlot:SetSelItemId(item.id)
+    build.buildFlag = true
+    build:OnFrame({})
 end
 
 -- override the legion timeless jewel reads because Inflate is hard to replicate
@@ -102,13 +105,12 @@ while true do
         loadBuildFromXML(readFile(args.path))
         build.itemsTab:UpdateSockets()
         -- copied from `ItemsTab addSlot`
-        -- todo[medium] support ignoring es, eva, arm, res in eff health
---         local slot = new("ItemSlotControl", nil, 0, 0, build.itemsTab, 'extraSlot')
---         build.itemsTab.slots[slot.slotName] = slot
---         table.insert(build.itemsTab.orderedSlots, slot)
---         build.itemsTab.slotOrder[slot.slotName] = #build.itemsTab.orderedSlots
---         table.insert(build.itemsTab.controls, slot)
---         build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
+        local slot = new("ItemSlotControl", nil, 0, 0, build.itemsTab, 'extraSlot')
+        build.itemsTab.slots[slot.slotName] = slot
+        table.insert(build.itemsTab.orderedSlots, slot)
+        build.itemsTab.slotOrder[slot.slotName] = #build.itemsTab.orderedSlots
+        table.insert(build.itemsTab.controls, slot)
+        build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
         respond('build loaded')
 
     elseif args.cmd == 'queryManaRegen' then
