@@ -10,6 +10,7 @@ customElements.define(name, class extends XElement {
 			defaultPath: {},
 			directory: {boolean: true},
 			extension: {},
+			valid: {boolean: true},
 		};
 	}
 
@@ -34,6 +35,7 @@ customElements.define(name, class extends XElement {
 			this.path = '';
 			this.emit('selected');
 		});
+		this.valid = true;
 	}
 
 	set placeholder(value) {
@@ -42,6 +44,10 @@ customElements.define(name, class extends XElement {
 
 	set path(value) {
 		this.updateText();
+	}
+
+	set valid(value) {
+		this.$('#path').classList.toggle('invalid', !value);
 	}
 
 	updateText() {

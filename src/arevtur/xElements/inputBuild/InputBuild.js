@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
@@ -63,6 +65,11 @@ customElements.define(name, class extends XElement {
 			buildParams.extraMods.equalElementalResists;
 		this.$('#equal-chaos-resist-check').checked = buildParams.extraMods.equalChaosResist;
 		pobApi.setParams(configForRenderer.config.buildParams);
+
+		fs.promises.stat(path.join(this.$('#pob-path').path, 'Launch.lua'))
+			.then(() => true)
+			.catch(() => false)
+			.then(valid => this.$('#pob-path').valid = valid);
 	}
 
 	saveConfig() {
