@@ -45,13 +45,25 @@ class TradeQuery {
 	}
 
 	async writeItemsToStream() {
-		let items = await this.queryAndParseItems(await this.getQuery());
-
-		if (items.length) {
-			let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
-			let query = await this.getQuery({minValue: maxValue * .85});
+		let items = [];
+		let runQuery = async overrides => {
+			let query = await this.getQuery(overrides);
 			let newItems = await this.queryAndParseItems(query);
 			items = items.concat(newItems);
+			return newItems;
+		};
+
+		// initial query
+		await runQuery();
+
+		// 0 value query
+		if (!items.length)
+			await runQuery({minValue: 0});
+
+		// high value query
+		if (items.length) {
+			let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
+			await runQuery({minValue: maxValue * .85});
 		}
 
 		// todo[low] this doesn't work for hybrid (e.g. es + evasion) bases
@@ -74,9 +86,7 @@ class TradeQuery {
 				lastMinDefensePropertyValue = minDefensePropertyValue;
 
 				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
-				let query = await this.getQuery(overrides);
-				newItems = await this.queryAndParseItems(query);
-				items = items.concat(newItems);
+				newItems = await runQuery(overrides);
 			} while (newItems.length > 0);
 		}
 	}
