@@ -51,7 +51,7 @@ let priceClipboard = async itemText => {
 		...pricerOutput,
 		pricerOutput.length && pobOutput.text ? '-'.repeat(30) : null,
 		pobOutput.text || null,
-	].filter(v => v).join('\n'), 0);
+	].filter(v => v).join('\n'), 3000);
 };
 
 let windowCheck = async () => {

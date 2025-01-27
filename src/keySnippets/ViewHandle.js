@@ -17,10 +17,13 @@ class ViewHandle extends ViewHandleBase {
 			},
 		}, path.join(__dirname, './View.html'));
 
-		this.window.then(window => window.on('close', e => {
-			e.preventDefault();
-			window.hide();
-		}));
+		this.window.then(window => {
+			window.setAlwaysOnTop(true, 'normal');
+			window.on('close', e => {
+				e.preventDefault();
+				window.hide();
+			});
+		});
 	}
 
 	onMessage(message) {
