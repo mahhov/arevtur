@@ -19,6 +19,7 @@ let deepMerge = (target, source) => {
 		if (!Array.isArray(target))
 			target = [];
 		source.forEach((v, i) => target[i] = deepMerge(target[i], v));
+		target.splice(source.length);
 		return target;
 	}
 	if (typeof target !== 'object' || Array.isArray(target))

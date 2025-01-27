@@ -34,6 +34,13 @@
       "equalChaosResist": true
     }
   },
+  "weights2": [
+    {
+      "name": "Life",
+      "weight": ".5",
+      "flatWeightType": false
+    }
+  ],
   "userId": "",
   "sessionId": ""
 }

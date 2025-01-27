@@ -1,0 +1,22 @@
+<style>
+	@import '../sharedStyle.css';
+
+	:host {
+		display: block;
+	}
+
+	#name {
+		width: 300px;
+	}
+
+	#current-value {
+		display: inline-block;
+		width: 75px;
+	}
+</style>
+
+<x-autocomplete-input id="name"></x-autocomplete-input>
+<span id="current-value" title="Current value"></span>
+<x-numeric-input id="weight" min="0" max="1" step=".05" title="weight"></x-numeric-input>
+<x-autocomplete-input id="weight-type" size="2"></x-autocomplete-input>
+<button id="remove">X</button>

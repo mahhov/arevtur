@@ -11,17 +11,16 @@ require('./numericInput/NumericInput');
 require('./pathSelect/PathSelect');
 require('./tour/Tour');
 
+require('./inputBuildWeight/InputBuildWeight'); // x-numeric-input, x-autocomplete-input
 require('./inputBuild/InputBuild'); // x-path-select, x-numeric-input
 require('./multiSelectLined/MultiSelectLined'); // x-autocomplete-input
 require('./tooltipButton/TooltipButton'); // x-formatted-text
 
+require('./inputBuildWeights/InputBuildWeights'); // x-arrangeable-list, x-input-build-weight
 require('./chart/Chart'); // x-tooltip-button
-// x-autocomplete-input, x-numeric-input, x-tooltip-button, x-multi-select-lined, x-arrangeable-list
-require('./inputTradeParams/InputTradeParams');
+require('./inputTradeParams/InputTradeParams'); // x-autocomplete-input, x-numeric-input, x-tooltip-button, x-multi-select-lined, x-arrangeable-list
 require('./itemListing/ItemListing'); // x-tooltip-button
 require('./queryProperty/QueryProperty'); // x-autocomplete-input, x-numeric-input, x-tooltip-button
 
-// x-autocomplete-input,  x-config-toggle-button,  x-input-build,  x-input-imports
-// x-arrangeable-list,  x-input-trade-params
-require('./inputs/Inputs');
+require('./inputs/Inputs'); // x-autocomplete-input,  x-config-toggle-button,  x-input-build,  x-input-imports, x-arrangeable-list,  x-input-trade-params
 require('./results/Results'); // x-autocomplete-input, x-chart
