@@ -304,7 +304,7 @@ class UnifiedQueryParams {
 				].map(pruneIfEmptyFilters).filter(v => v),
 				filters: {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
-					trade_filters: {filters: {price: {max: overridden.maxPrice}}},
+					trade_filters: overridden.maxPrice ? {filters: {price: {max: overridden.maxPrice}}} : undefined,
 					socket_filters: overridden.linked ? {
 						filters: {
 							links: {min: 6},

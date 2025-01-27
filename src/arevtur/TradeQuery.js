@@ -96,7 +96,7 @@ class TradeQuery {
 		try {
 			console.log('initial query', apiQuery,
 				', online', apiQuery.query.status.online,
-				', price', apiQuery.query.filters.trade_filters.filters.price.max,
+				', price', apiQuery.query.filters.trade_filters?.filters.price.max,
 				', value', apiQuery.query.stats[0]?.value?.min,
 				', defense',
 				apiQuery.query.filters.equipment_filters?.filters.ar ||
