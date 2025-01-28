@@ -37,67 +37,80 @@
   "weights2": [
     {
       "name": "TotalEHP",
-      "weight": ".5",
+      "percentWeight": 0.5,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "Life",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "Mana",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "ManaRegen",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "FireResistTotal",
-      "weight": ".05",
-      "flatWeightType": false
+      "percentWeight": 0,
+      "flatWeight": 0.05,
+      "flatWeightType": true
     },
     {
       "name": "ColdResistTotal",
-      "weight": ".05",
-      "flatWeightType": false
+      "percentWeight": 0,
+      "flatWeight": 0.05,
+      "flatWeightType": true
     },
     {
       "name": "LightningResistTotal",
-      "weight": ".05",
-      "flatWeightType": false
+      "percentWeight": 0,
+      "flatWeight": 0.05,
+      "flatWeightType": true
     },
     {
       "name": "ChaosResistTotal",
-      "weight": ".07",
-      "flatWeightType": false
+      "percentWeight": 0,
+      "flatWeight": 0.07,
+      "flatWeightType": true
     },
     {
       "name": "FullDPS",
-      "weight": ".33",
+      "percentWeight": 0.33,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "Str",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "Int",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "Dex",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     },
     {
       "name": "",
-      "weight": "",
+      "percentWeight": 0,
+      "flatWeight": 0,
       "flatWeightType": false
     }
   ],

@@ -186,13 +186,12 @@ while true do
         tradeQuery:PriceItem()
         local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 
-        tradeQuery.statSortSelectionList = {
-            { stat = 'TotalEHP', weightMult = tonumber(args.weights.effectiveHealth) },
-            { stat = 'Life', weightMult = tonumber(args.weights.totalLife) },
-            { stat = 'Mana', weightMult = tonumber(args.weights.totalMana) },
-            { stat = 'ManaRegen', weightMult = tonumber(args.weights.manaRegen) },
-            { stat = 'FullDPS', weightMult = tonumber(args.weights.damage) },
-        }
+        tradeQuery.statSortSelectionList = {}
+        for k, v in pairs(args.weights2) do
+            if v.percentWeight ~= 0 then
+                table.insert(tradeQuery.statSortSelectionList, { stat = v.name, weightMult = v.percentWeight })
+            end
+        end
 
         -- TradeQueryClass:PriceItemRowDisplay
         local jewelNodeId

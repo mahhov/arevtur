@@ -1,7 +1,8 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const configForRenderer = require('../../../services/config/configForRenderer');
-const {updateElementChildren} = require('../../../util/util');
+const {updateElementChildren, round} = require('../../../util/util');
+const pobApi = require('../../../services/pobApi/pobApi');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -23,12 +24,14 @@ customElements.define(name, class extends XElement {
 		});
 
 		configForRenderer.addListener('change', config => this.loadConfig());
+
+		pobApi.addListener('change', async () => this.loadConfig());
 	}
 
 	loadConfig() {
 		let weights = configForRenderer.config.weights2;
 		if (!weights.length || weights[weights.length - 1].name)
-			weights.push({name: '', weight: '', flatWeightType: false});
+			weights.push({name: '', percentWeight: 0, flatWeight: 0, flatWeightType: false});
 
 		updateElementChildren(this.$('#list'), weights,
 			(i, values) => {
@@ -42,20 +45,16 @@ customElements.define(name, class extends XElement {
 					this.saveConfig();
 				});
 				return el;
-			}, (inputBuildWeight, i, value) => {
-				inputBuildWeight.name = value.name;
-				inputBuildWeight.weight = value.weight;
-				inputBuildWeight.flatWeightType = value.flatWeightType;
-			});
+			}, async (inputBuildWeight, i, value) =>
+				inputBuildWeight.update(await pobApi.queryBuildStats(), value));
+
+		pobApi.setParams(configForRenderer.config.buildParams, configForRenderer.config.weights2);
 	}
 
 	saveConfig() {
 		configForRenderer.config = {
-			weights2: [...this.$('#list').children].map(inputBuildWeight => ({
-				name: inputBuildWeight.name,
-				weight: inputBuildWeight.weight,
-				flatWeightType: inputBuildWeight.flatWeightType,
-			})),
+			weights2: [...this.$('#list').children]
+				.map(inputBuildWeight => inputBuildWeight.toConfig()),
 		};
 	}
 });

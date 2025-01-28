@@ -64,7 +64,7 @@ customElements.define(name, class extends XElement {
 		this.$('#equal-elemental-resists-check').checked =
 			buildParams.extraMods.equalElementalResists;
 		this.$('#equal-chaos-resist-check').checked = buildParams.extraMods.equalChaosResist;
-		pobApi.setParams(configForRenderer.config.buildParams);
+		pobApi.setParams(configForRenderer.config.buildParams, configForRenderer.config.weights2);
 
 		fs.promises.stat(path.join(this.$('#pob-path').path, 'Launch.lua'))
 			.then(() => true)

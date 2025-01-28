@@ -33,8 +33,8 @@ class Script extends CustomOsScript {
 				.filter(v => v)
 				.forEach(part => {
 					if (part === '<.') {
-						// if (this.inProgressResponse)
-						// 	console.log('PobApi, debug response:', this.inProgressResponse);
+						if (this.inProgressResponse)
+							console.log('PobApi, debug response:', this.inProgressResponse);
 						this.inProgressResponse = '';
 					} else if (part === '.>') {
 						this.pendingResponses.shift().resolve(this.inProgressResponse);
@@ -68,6 +68,7 @@ class PobApi extends Emitter {
 		this.pobPath = '';
 		this.buildPath = '';
 		this.weights = {};
+		this.weights2 = [];
 		this.options = {};
 		this.extraMods = {};
 		this.cache = {};
@@ -80,9 +81,10 @@ class PobApi extends Emitter {
 		          weights = this.weights,
 		          options = this.options,
 		          extraMods = this.extraMods,
-	          } = {}) {
+	          } = {}, weights2 = []) {
 		if (pobPath === this.pobPath && buildPath === this.buildPath &&
 			deepEquality(weights, this.weights) &&
+			deepEquality(weights2, this.weights2) &&
 			deepEquality(options, this.options) &&
 			deepEquality(extraMods, this.extraMods))
 			return;
@@ -92,6 +94,7 @@ class PobApi extends Emitter {
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
 		this.weights = weights;
+		this.weights2 = weights2;
 		this.options = options;
 		this.extraMods = extraMods;
 
@@ -208,7 +211,7 @@ class PobApi extends Emitter {
 			cmd: 'getModWeights',
 			type: pobType,
 			includeCorrupted,
-			weights: this.weights,
+			weights2: this.weights2,
 			options: this.options,
 			extraMods: this.extraModStrings,
 		})
