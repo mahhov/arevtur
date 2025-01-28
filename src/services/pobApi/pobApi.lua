@@ -144,6 +144,7 @@ while true do
         respond('build loaded')
 
     elseif args.cmd == 'queryBuildStats' then
+        loadExtraMods(args.extraMods)
         respond(dkjson.encode(shallow(build.calcsTab.mainOutput)))
 
     elseif args.cmd == 'item' then

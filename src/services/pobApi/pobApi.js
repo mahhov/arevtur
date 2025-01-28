@@ -137,7 +137,10 @@ class PobApi extends Emitter {
 	}
 
 	queryBuildStats() {
-		return this.send({cmd: 'queryBuildStats'}).then(JSON.parse);
+		return this.send({
+			cmd: 'queryBuildStats',
+			extraMods: this.extraModStrings,
+		}).then(JSON.parse);
 	}
 
 	evalItem(item) {
@@ -146,7 +149,6 @@ class PobApi extends Emitter {
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
-			weights: this.weights,
 			extraMods: this.extraModStrings,
 		}).then(text => this.parseItemTooltip(text));
 	}
@@ -162,7 +164,6 @@ class PobApi extends Emitter {
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
-			weights: this.weights,
 			extraMods: this.extraModStrings,
 		}).then(text => this.parseItemTooltip(text, 1, craftedMods));
 	}
@@ -193,6 +194,7 @@ class PobApi extends Emitter {
 			mod: itemMod,
 			type: pobType,
 			weights: this.weights,
+			weights2: this.weights2,
 			extraMods: this.extraModStrings,
 		})
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod], Number(pobType.match(/\d+/)?.[0]) || 1));
