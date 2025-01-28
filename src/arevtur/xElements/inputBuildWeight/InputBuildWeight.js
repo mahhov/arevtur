@@ -22,6 +22,8 @@ customElements.define(name, class InputBuildWeight extends XElement {
 			'+1 flat',
 		];
 		this.$('#weight-type').value = this.$('#weight-type').autocompletes[0];
+		this.alternativeWeight = 0;
+		this.currentValue = 0;
 
 		pobApi.addListener('change', async () => {
 			let stats = await pobApi.queryBuildStats();
@@ -36,10 +38,18 @@ customElements.define(name, class InputBuildWeight extends XElement {
 		});
 		this.$('#weight').addEventListener('change', () => {
 			this.weight = this.$('#weight').value;
+			this.updateAlternativeWeight();
 			this.emit('change');
 		});
 		this.$('#weight-type').addEventListener('change', () => {
 			this.flatWeightType = this.$('#weight-type').value === this.$('#weight-type').autocompletes[1];
+			this.updateAlternativeWeight();
+			this.emit('change');
+		});
+		this.$('#alternative-weight').addEventListener('click', () => {
+			this.weight = this.alternativeWeight;
+			this.flatWeightType = !this.flatWeightType;
+			this.updateAlternativeWeight();
 			this.emit('change');
 		});
 		this.$('#remove').addEventListener('click', () => this.emit('remove'));
@@ -59,8 +69,21 @@ customElements.define(name, class InputBuildWeight extends XElement {
 
 	async updateCurrentValue() {
 		let stats = await pobApi.queryBuildStats();
-		this.$('#current-value').textContent = stats[this.name] ? round(stats[this.name], 2) : '';
-		this.$('#current-value').title = stats[this.name];
+		this.currentValue = stats[this.name];
+		this.$('#current-value').textContent = stats[this.name] ? round(this.currentValue, 2) : '';
+		this.$('#current-value').title = this.currentValue;
+		this.updateAlternativeWeight();
+	}
+
+	async updateAlternativeWeight() {
+		let percent = .01 * this.currentValue;
+		this.alternativeWeight = this.flatWeightType ?
+			this.weight * percent :
+			percent ? this.weight / percent : 0;
+		this.$('#alternative-weight').textContent = round(this.alternativeWeight, 5);
+		this.$('#alternative-weight').title = this.flatWeightType ?
+			'The equivalent weight of 1% more' :
+			'The equivalent weight of +1 flat';
 	}
 
 	static addSpace(string) {
