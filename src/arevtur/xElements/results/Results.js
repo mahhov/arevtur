@@ -39,7 +39,7 @@ customElements.define(name, class extends XElement {
 				Number(this.$('#price-per-value-input').value) || Infinity;
 			this.renderItemsData(false, true);
 		});
-		this.$('#price-per-value-input').value = localStorage.getItem('results-price-per-value');
+		this.$('#price-per-value-input').value = localStorage.getItem('results-price-per-value') || 0;
 		this.itemsData.pricePerValue = Number(this.$('#price-per-value-input').value) || Infinity;
 
 		document.addEventListener('keydown', e => {

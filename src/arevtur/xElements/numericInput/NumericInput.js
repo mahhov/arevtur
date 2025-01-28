@@ -8,6 +8,7 @@ customElements.define(name, class extends XElement {
 			max: {},
 			step: {},
 			value: {},
+			disabled: {boolean: true},
 		};
 	}
 
@@ -40,5 +41,9 @@ customElements.define(name, class extends XElement {
 	set value(value) {
 		if (Number(value) !== Number(this.$('input').value))
 			this.$('input').value = value;
+	}
+
+	set disabled(value) {
+		this.$('input').disabled = value;
 	}
 });

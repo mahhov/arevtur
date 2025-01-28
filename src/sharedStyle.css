@@ -47,6 +47,10 @@ body {
 	border-color: var(--interactable-focus-border);
 }
 
+input[disabled] {
+	background: var(--non-interactable-back);
+}
+
 button, input, select, textarea,
 ::-webkit-scrollbar-thumb, .interactable {
 	background: var(--interactable-back);
@@ -60,13 +64,11 @@ button {
 	cursor: pointer;
 }
 
-button:hover, input:hover, option:hover, textarea:hover,
-::-webkit-scrollbar-thumb:hover {
+:is(button, input:not([disabled]), option, textarea, ::-webkit-scrollbar-thumb):hover {
 	background: var(--interactable-hover-back);
 }
 
-button:active, input:active, option:active, textarea:active,
-::-webkit-scrollbar-thumb:active {
+:is(button, input:not([disabled]), option, textarea, ::-webkit-scrollbar-thumb):active {
 	background: var(--interactable-active-back);
 }
 
