@@ -8,6 +8,7 @@ const packageJson = require('../../package.json');
 
 class BugReport {
 	constructor(data) {
+		delete data?.config?.sessionId;
 		this.data = data;
 	}
 
