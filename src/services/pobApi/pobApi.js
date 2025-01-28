@@ -231,8 +231,8 @@ class PobApi extends Emitter {
 	get extraModStrings() {
 		return [
 			this.extraMods.ignoreEs ? 'maximum energy shield is 0' : '',
-			this.extraMods.equalElementalResists ? '+1000% to all elemental resistances' : '',
-			this.extraMods.equalChaosResist ? '+1000% to chaos resistance' : '',
+			this.extraMods.equalElementalResists ? '+10000% to all elemental resistances' : '',
+			this.extraMods.equalChaosResist ? '+10000% to chaos resistance' : '',
 		].filter(v => v).join(' \\n ');
 	}
 
