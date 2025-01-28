@@ -15,6 +15,13 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		this.$('#list').addEventListener('arrange', () => this.saveConfig());
 
+		this.addEventListener('keydown', e => {
+			if (e.key === 'Tab' && e.ctrlKey && !e.shiftKey)
+				this.shadowRoot.activeElement.nextElementSibling?.focus();
+			if (e.key === 'Tab' && e.ctrlKey && e.shiftKey)
+				this.shadowRoot.activeElement.previousElementSibling?.focus();
+		});
+
 		configForRenderer.addListener('change', config => this.loadConfig());
 	}
 

@@ -36,8 +36,68 @@
   },
   "weights2": [
     {
-      "name": "Life",
+      "name": "TotalEHP",
       "weight": ".5",
+      "flatWeightType": false
+    },
+    {
+      "name": "Life",
+      "weight": "",
+      "flatWeightType": false
+    },
+    {
+      "name": "Mana",
+      "weight": "",
+      "flatWeightType": false
+    },
+    {
+      "name": "ManaRegen",
+      "weight": "",
+      "flatWeightType": false
+    },
+    {
+      "name": "FireResistTotal",
+      "weight": ".05",
+      "flatWeightType": false
+    },
+    {
+      "name": "ColdResistTotal",
+      "weight": ".05",
+      "flatWeightType": false
+    },
+    {
+      "name": "LightningResistTotal",
+      "weight": ".05",
+      "flatWeightType": false
+    },
+    {
+      "name": "ChaosResistTotal",
+      "weight": ".07",
+      "flatWeightType": false
+    },
+    {
+      "name": "FullDPS",
+      "weight": ".33",
+      "flatWeightType": false
+    },
+    {
+      "name": "Str",
+      "weight": "",
+      "flatWeightType": false
+    },
+    {
+      "name": "Int",
+      "weight": "",
+      "flatWeightType": false
+    },
+    {
+      "name": "Dex",
+      "weight": "",
+      "flatWeightType": false
+    },
+    {
+      "name": "",
+      "weight": "",
       "flatWeightType": false
     }
   ],

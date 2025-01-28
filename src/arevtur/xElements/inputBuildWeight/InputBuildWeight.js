@@ -25,12 +25,6 @@ customElements.define(name, class InputBuildWeight extends XElement {
 		this.alternativeWeight = 0;
 		this.currentValue = 0;
 
-		pobApi.addListener('change', async () => {
-			let stats = await pobApi.queryBuildStats();
-			this.$('#name').autocompletes = Object.keys(stats).map(InputBuildWeight.addSpace);
-			this.updateCurrentValue();
-		});
-
 		this.$('#name').addEventListener('change', async () => {
 			this.name = InputBuildWeight.removeSpace(this.$('#name').value);
 			this.updateCurrentValue();
@@ -53,6 +47,9 @@ customElements.define(name, class InputBuildWeight extends XElement {
 			this.emit('change');
 		});
 		this.$('#remove').addEventListener('click', () => this.emit('remove'));
+
+		pobApi.addListener('change', async () => this.updateStats());
+		this.updateStats();
 	}
 
 	set name(value) {
@@ -65,6 +62,16 @@ customElements.define(name, class InputBuildWeight extends XElement {
 
 	set flatWeightType(value) {
 		this.$('#weight-type').value = this.$('#weight-type').autocompletes [value ? 1 : 0];
+	}
+
+	focus() {
+		this.$('#name').focus();
+	}
+
+	async updateStats() {
+		let stats = await pobApi.queryBuildStats();
+		this.$('#name').autocompletes = Object.keys(stats).map(InputBuildWeight.addSpace).sort();
+		this.updateCurrentValue();
 	}
 
 	async updateCurrentValue() {
