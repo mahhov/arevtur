@@ -29,15 +29,6 @@
 		gap: 4px;
 	}
 
-	#kofi-button {
-		display: flex;
-		max-width: 30px;
-	}
-
-	#kofi-button img {
-		max-width: 100%;
-	}
-
 	#input-set-list x-input-set {
 		border: 1px solid transparent;
 	}
@@ -75,11 +66,7 @@
 	<x-config-toggle-button config-key="tourComplete" text="ℹ"
 							title="Start tutorial"></x-config-toggle-button>
 	<button id="bug-report-button" title="Bug report">⚐</button>
-	<a id="kofi-button" href="https://ko-fi.com/H2H019QJ0G" target="_blank">
-		<button title="Buy me coffee">
-			<img alt="$" src="../../resources/kofi.png"/>
-		</button>
-	</a>
+	<x-donate-button></x-donate-button>
 </span>
 
 <x-input-build-weights></x-input-build-weights>

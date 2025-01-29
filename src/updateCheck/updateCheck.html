@@ -22,6 +22,12 @@
 		font-weight: bold;
 	}
 
+	#button-row {
+		margin-left: 10px;
+		display: inline-flex;
+		gap: 4px;
+	}
+
 	x-config-toggle-button {
 		float: right;
 	}
@@ -76,8 +82,10 @@
 	<div id="current-container">
 		Current version
 		<span id="current"><!--4.4.0--></span>
-		<x-config-toggle-button config-key="darkTheme" text="☽"
-								title="Dark"></x-config-toggle-button>
+		<span id="button-row">
+			<x-config-toggle-button config-key="darkTheme" text="☽" title="Dark"></x-config-toggle-button>
+			<x-donate-button></x-donate-button>
+		</span>
 	</div>
 
 	<div id="result" class="section checking">

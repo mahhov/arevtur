@@ -10,6 +10,7 @@ require('./inputSet/InputSet');
 require('./numericInput/NumericInput');
 require('./pathSelect/PathSelect');
 require('./tour/Tour');
+require('./donateButton/DonateButton');
 
 require('./inputBuildWeight/InputBuildWeight'); // x-numeric-input, x-autocomplete-input
 require('./inputBuild/InputBuild'); // x-path-select, x-numeric-input
