@@ -139,7 +139,7 @@ class ItemData {
 			return currencyPrice * count +
 				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
 		console.warn('Missing currency', currencyId);
-		return -1;
+		return 1000 ** 2;
 	}
 
 	static onlineStatus(onlineObj) {
