@@ -155,9 +155,29 @@ while true do
         if item.base then
             item:NormaliseQuality()
             item:BuildAndParseRaw()
-            local tooltip = FakeTooltip:new()
-            build.itemsTab:AddItemTooltip(tooltip, item)
-            respond(tooltip.text)
+
+            -- based off of ItemsTabClass:AddItemTooltip
+            local comparisons = {}
+	        local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
+            for slotName, slot in pairs(build.itemsTab.slots) do
+                if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive then
+                    local comparison = {}
+                    comparison.slotLabel = slot.label
+                    local replacedItem = build.itemsTab.items[slot.selItemId]
+                    comparison.replacedItemName = replacedItem and replacedItem.name or ''
+
+                    local output = calcFunc({ repSlotName = slot.slotName, repItem = item})
+                    comparison.stats = shallow(output)
+
+                    local tooltip = FakeTooltip:new()
+                    build:AddStatComparesToTooltip(tooltip, calcBase, output, '')
+                    comparison.tooltip = tooltip.text
+
+                    table.insert(comparisons, comparison)
+                end
+            end
+            respond(dkjson.encode({ baseStats = shallow(calcBase), comparisons = comparisons }))
+
         else
             respond('Item missing base type')
         end

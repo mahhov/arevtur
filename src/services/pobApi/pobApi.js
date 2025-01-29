@@ -153,7 +153,9 @@ class PobApi extends Emitter {
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
 			extraMods: this.extraModStrings,
-		}).then(text => this.parseItemTooltip(text));
+		})
+			.then(JSON.parse)
+			.then(obj => this.parseItemTooltip2(obj));
 	}
 
 	evalItemWithCraft(item, craftedMods) {
@@ -240,7 +242,7 @@ class PobApi extends Emitter {
 	}
 
 	async parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {
-		itemText = PobApi.clean(itemText);
+		itemText = PobApi.cleanTooltip(itemText);
 
 		let baseManaRegen = this.weights.manaRegen ? (await this.queryBuildStats()).ManaRegenRecovery : 1;
 
@@ -378,18 +380,98 @@ class PobApi extends Emitter {
 		};
 	}
 
+	async parseItemTooltip2(obj) {
+		let valueTextTuples = obj.comparisons
+			.map(slotComparison => {
+				let value = this.weights2
+					.filter(weight => weight.name)
+					.reduce((sum, weight) => {
+						let oldStat = obj.baseStats[weight.name];
+						let newStat = slotComparison.stats[weight.name];
+						let value = 0;
+						if (weight.flatWeightType)
+							value = weight.flatWeight * (newStat - oldStat);
+						else if (newStat !== oldStat && oldStat)
+							value = weight.percentWeight * (newStat - oldStat) / oldStat * 100;
+						return sum + value;
+					}, 0);
+				let text = [
+					`Equipping in @bold,pink ${slotComparison.slotLabel}`,
+					slotComparison.replacedItemName ? `Replacing @bold,pink ${slotComparison.replacedItemName}` : '',
+					`Grants @bold,pink ${round(value, 3)} @ value`,
+					PobApi.colorTooltip(PobApi.cleanTooltip(slotComparison.tooltip)),
+				].filter(v => v).join('\n');
+				return {value, text};
+			})
+			.sort((a, b) => b.value - a.value);
+
+		return {
+			value: round(valueTextTuples[0].value, 3),
+			text: valueTextTuples.map(obj => obj.text).join(`\n${'-'.repeat(30)}\n`),
+		};
+	}
+
 	static isItemEquippable(item) {
 		return true;
 		// return ['requirements:', 'sockets:', 'item class: jewels', 'rarity: unique'].some(search =>
 		// 	item.toLowerCase().includes(search));
 	}
 
-	static clean(outString) {
-		return outString
+	static cleanTooltip(string) {
+		return string
 			.replace(/\^x[\dA-F]{6}/g, '')
 			.replace(/\^\d/g, '')
 			.replace(/\r/g, '')
 			.trim();
+	}
+
+	static colorTooltip(string, textPrefixes = []) {
+		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
+		let totalLifeRegex = /total life \(([+-][\d.]+)%\)/i;
+		let totalManaRegex = /total mana \(([+-][\d.]+)%\)/i;
+		let manaRegenRegex = /([+-][\d.,]+) mana regen/i;
+		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
+		let elementalResistRegex = /([+-]\d+)% (?:fire|lightning|cold) res(?:\.|istance)/i;
+		let chaosResistRegex = /([+-]\d+)% chaos res(?:\.|istance)/i;
+		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
+		let strRegex = /([+-]\d+) strength/i;
+		let dexRegex = /([+-]\d+) dexterity/i;
+		let intRegex = /([+-]\d+) intelligence/i;
+
+		return string
+			.split('\n')
+			.map(tooltipLine => {
+				if (textPrefixes.some(textPrefix => tooltipLine === textPrefix))
+					return `@bold,pink ${tooltipLine}`;
+				if (tooltipLine.match(effectiveHitPoolRegex))
+					return `@bold,blue ${tooltipLine}`;
+				if (tooltipLine.match(totalLifeRegex))
+					return `@bold,blue ${tooltipLine}`;
+				if (tooltipLine.match(totalManaRegex))
+					return `@bold,blue ${tooltipLine}`;
+				if (tooltipLine.match(manaRegenRegex))
+					return `@bold,blue ${tooltipLine}`;
+				if (tooltipLine.match(anyItemResistRegex))
+					return `@bold,orange ${tooltipLine}`;
+				if (tooltipLine.match(elementalResistRegex))
+					return `@bold,orange ${tooltipLine}`;
+				if (tooltipLine.match(chaosResistRegex))
+					return `@bold,orange ${tooltipLine}`;
+				if (tooltipLine.match(fullDpsRegex))
+					return `@bold,red ${tooltipLine}`;
+				if (tooltipLine.match(strRegex))
+					return `@bold,light-green ${tooltipLine}`;
+				if (tooltipLine.match(dexRegex))
+					return `@bold,light-green ${tooltipLine}`;
+				if (tooltipLine.match(intRegex))
+					return `@bold,light-green ${tooltipLine}`;
+				if (tooltipLine.match(/^equipping this item/i))
+					return `@bold,green ${tooltipLine}`;
+				if (tooltipLine.match(/^\/\/ Craft:$/i))
+					return `@bold,pink ${tooltipLine}`;
+				return tooltipLine;
+			})
+			.join('\n');
 	}
 
 	static mapMax(array, handler) {
@@ -413,3 +495,11 @@ module.exports = new PobApi();
 //  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
 //  /Data/TimelessJewelData/GloriousVanity.bin
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
+
+// todo[high]
+//   redo craft weights
+//   bring extra mods to new weights UI
+//   allow custom extra mods in new weights UI
+//   allow testing mods in new weights UI
+//   migrate old pob calls to new calls
+
