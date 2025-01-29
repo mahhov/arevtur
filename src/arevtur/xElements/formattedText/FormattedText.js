@@ -19,11 +19,11 @@ customElements.define(name, class extends XElement {
 		this.clearChildren('#container');
 		let span;
 		value
-			.split(/(@[-\w,]+ |\n)/)
+			.split(/(@[-\w,]* |\n)/)
 			.filter(v => v)
 			.forEach(term => {
 				if (term[0] === '@') {
-					span = this.addTooltipSpan(term.slice(1, -1).split(','));
+					span = this.addTooltipSpan(term.slice(1, -1).split(',').filter(v => v));
 					return;
 				}
 				if (term === '\n')
