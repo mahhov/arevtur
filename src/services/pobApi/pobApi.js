@@ -405,9 +405,12 @@ class PobApi extends Emitter {
 			})
 			.sort((a, b) => b.value - a.value);
 
+		let value = round(valueTextTuples[0].value, 3);
+		let title = `${obj.name} @bold,pink ${value}`;
+
 		return {
-			value: round(valueTextTuples[0].value, 3),
-			text: valueTextTuples.map(obj => obj.text).join(`\n${'-'.repeat(30)}\n`),
+			value,
+			text: [title, ...valueTextTuples.map(obj => obj.text)].join(`\n${'-'.repeat(30)}\n`),
 		};
 	}
 
@@ -502,4 +505,5 @@ module.exports = new PobApi();
 //   allow custom extra mods in new weights UI
 //   allow testing mods in new weights UI
 //   migrate old pob calls to new calls
-
+//   name text field hard to type
+//   why resists not importing

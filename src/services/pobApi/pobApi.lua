@@ -176,7 +176,7 @@ while true do
                     table.insert(comparisons, comparison)
                 end
             end
-            respond(dkjson.encode({ baseStats = shallow(calcBase), comparisons = comparisons }))
+            respond(dkjson.encode({ name = item.name, baseStats = shallow(calcBase), comparisons = comparisons }))
 
         else
             respond('Item missing base type')
