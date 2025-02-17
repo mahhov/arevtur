@@ -28,10 +28,12 @@ customElements.define(name, class extends XElement {
 		pobApi.addListener('change', async () => this.loadConfig());
 	}
 
-	loadConfig() {
+	async loadConfig() {
 		let weights = configForRenderer.config.weights2;
 		if (!weights.length || weights[weights.length - 1].name)
 			weights.push({name: '', percentWeight: 0, flatWeight: 0, flatWeightType: false});
+
+		let buildStats = await pobApi.queryBuildStats() || {};
 
 		updateElementChildren(this.$('#list'), weights,
 			(i, values) => {
@@ -45,8 +47,8 @@ customElements.define(name, class extends XElement {
 					this.saveConfig();
 				});
 				return el;
-			}, async (inputBuildWeight, i, value) =>
-				inputBuildWeight.update(await pobApi.queryBuildStats(), value));
+			}, (inputBuildWeight, i, value) =>
+				inputBuildWeight.update(buildStats, value));
 
 		pobApi.setParams(configForRenderer.config.buildParams, configForRenderer.config.weights2);
 	}
