@@ -36,7 +36,9 @@
 				   placeholder="Select PoB Path"></x-path-select>
 	<x-path-select id="build-path" extension="xml"
 				   placeholder="Select PoB Build"></x-path-select>
-	<button id="refresh">Refresh Build</button>
+	<button id="reload" title="Click this if you've tweaked your build in PoB">Reload Build</button>
+	<!-- todo[medium] add a reset button -->
+	<!-- <button id="reset" title="Reset weights to default values. Can't be undone.">Reset Weights</button> -->
 	<div class="tour-pob-configs">
 		<x-arrangeable-list id="weights"></x-arrangeable-list>
 		<div class="version-1">

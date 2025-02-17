@@ -21,7 +21,7 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').defaultPath = appData.defaultPobBuildsPath;
 		this.$('#pob-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
-		this.$('#refresh').addEventListener('click', () => pobApi.restart());
+		this.$('#reload').addEventListener('click', () => pobApi.restart());
 
 		this.$('#weights').addEventListener('arrange', () => this.saveConfig());
 
