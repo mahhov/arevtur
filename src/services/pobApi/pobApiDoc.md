@@ -5,15 +5,23 @@
 
 # luajit
 
-Checkout https://github.com/LuaJIT/LuaJIT
+1. Use linux
+1. `git clone https://luajit.org/git/luajit.git`
+1. `cd luajit/src`
+1. Obtaining `luajit` for linux
+   1. `make`
+   1. `cp luajit <arevtur-path>/src/services/pobApi/`
+1. Obtaining `luajit.exe` for windows
+   1. `sudo apt install gcc-mingw-w64`
+   1. `make clean`
+   1. `make HOST_CC="gcc -m32" CROSS=i686-w64-mingw32- TARGET_SYS=Windows`
+   1. `cp luajit.exe <arevtur-path>/src/services/pobApi/`
+   1. `cp lua51.dll <arevtur-path>/src/services/pobApi/`
+   1. `cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libgcc_s_dw2-1.dll <arevtur-path>/src/services/pobApi/`
 
-- luajit - Compiled onlinux, luajit-2.1.1720049189
-    - `make`
-- luajit.exe - Cross compiled on linux for windows
-    - `cd src`
-    - `make HOST_CC="gcc -m32" CROSS=i686-w64-mingw32- TARGET_SYS=Windows`
-    - `cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libgcc_s_dw2-1.dll .`
-    - IDK if this is the 'proper' way to do it.
+IDK if this is the 'proper' way to do it.
+
+More documentation: https://github.com/LuaJIT/LuaJIT
 
 # Integration
 

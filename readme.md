@@ -268,6 +268,10 @@ The priorities are: low, medium, high, blocking. Anything blocking should be add
 releases. Easier to fix, and more valuable bugs have higher priorities; if something is difficult to
 do, it'll get a lower priority.
 
+### Updating Lua
+
+See [.\src\services\pobApi\pobApiDoc.md](.\src\services\pobApi\pobApiDoc.md)
+
 ## Credits
 
 This wouldn't be possible without:
