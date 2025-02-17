@@ -5,7 +5,7 @@ const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
 const appData = require('../../../services/appData');
 const configForRenderer = require('../../../services/config/configForRenderer');
-const buildWeights = require('./buildWeights');
+const {updateElementChildren, round} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -23,18 +23,15 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#refresh').addEventListener('click', () => pobApi.restart());
 
-		buildWeights.forEach(buildWeight => {
-			let label = document.createElement('label');
-			label.textContent = buildWeight.display;
-			label.title = buildWeight.tooltip;
-			let input = document.createElement('x-numeric-input');
-			input.min = 0;
-			input.max = 1;
-			input.step = .05;
-			label.appendChild(input);
-			this.$('#weights').appendChild(label);
-			input.addEventListener('change', () => this.saveConfig());
-		});
+		this.$('#weights').addEventListener('arrange', () => this.saveConfig());
+
+		// todo[high] support tabbing
+		// this.addEventListener('keydown', e => {
+		// 	if (e.key === 'Tab' && e.ctrlKey && !e.shiftKey)
+		// 		this.shadowRoot.activeElement.nextElementSibling?.focus();
+		// 	if (e.key === 'Tab' && e.ctrlKey && e.shiftKey)
+		// 		this.shadowRoot.activeElement.previousElementSibling?.focus();
+		// });
 
 		[
 			this.$('#include-eldritch-check'),
@@ -46,16 +43,15 @@ customElements.define(name, class extends XElement {
 		].forEach(weight => weight.addEventListener('change', () => this.saveConfig()));
 
 		configForRenderer.addListener('change', config => this.loadConfig());
+		pobApi.addListener('change', async () => this.loadConfig());
 	}
 
-	loadConfig() {
+	async loadConfig() {
 		let buildParams = configForRenderer.config.buildParams;
 		this.$('#pob-path').path = buildParams.pobPath;
 		this.$('#build-path').path = buildParams.buildPath;
 
-		// todo[medium] allow custom weights
-		buildWeights.forEach(((buildWeight, i) =>
-			this.$('#weights').children[i].children[0].value = buildParams.weights[buildWeight.id]));
+		await this.loadConfigWeights();
 
 		this.$('#include-eldritch-check').value = buildParams.options.includeInfluence;
 		this.$('#include-influence-check').value = buildParams.options.includeInfluence;
@@ -64,6 +60,7 @@ customElements.define(name, class extends XElement {
 		this.$('#equal-elemental-resists-check').checked =
 			buildParams.extraMods.equalElementalResists;
 		this.$('#equal-chaos-resist-check').checked = buildParams.extraMods.equalChaosResist;
+
 		pobApi.setParams(configForRenderer.config.buildParams, configForRenderer.config.weights2);
 
 		fs.promises.stat(path.join(this.$('#pob-path').path, 'Launch.lua'))
@@ -72,13 +69,36 @@ customElements.define(name, class extends XElement {
 			.then(valid => this.$('#pob-path').valid = valid);
 	}
 
+	async loadConfigWeights() {
+		let weights = configForRenderer.config.weights2;
+		if (!weights.length || weights[weights.length - 1].name)
+			weights.push({name: '', percentWeight: 0, flatWeight: 0, flatWeightType: false});
+
+		let buildStats = await pobApi.queryBuildStats().catch(() => ({}));
+
+		updateElementChildren(this.$('#weights'), weights,
+			(i, values) => {
+				let el = document.createElement('x-input-build-weight');
+				el.slot = 'list';
+				el.addEventListener('change', () => {
+					this.saveConfig();
+				});
+				el.addEventListener('remove', () => {
+					el.remove();
+					this.saveConfig();
+				});
+				return el;
+			}, (inputBuildWeight, i, value) =>
+				inputBuildWeight.update(buildStats, value));
+	}
+
 	saveConfig() {
 		configForRenderer.config = {
 			buildParams: {
 				pobPath: this.$('#pob-path').path,
 				buildPath: this.$('#build-path').path,
-				weights: Object.fromEntries(buildWeights.map((buildWeight, i) =>
-					[buildWeight.id, this.$('#weights').children[i].children[0].value || 0])),
+				weights2: [...this.$('#weights').children]
+					.map(inputBuildWeight => inputBuildWeight.toConfig()),
 				options: {
 					includeEldritch: this.$('#include-eldritch-check').checked,
 					includeInfluence: this.$('#include-influence-check').checked,
