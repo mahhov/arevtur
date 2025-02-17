@@ -67,7 +67,6 @@ class PobApi extends Emitter {
 		super();
 		this.pobPath = '';
 		this.buildPath = '';
-		this.weights = {};
 		this.weights2 = [];
 		this.options = {};
 		this.extraMods = {};
@@ -78,13 +77,11 @@ class PobApi extends Emitter {
 	setParams({
 		          pobPath = this.pobPath,
 		          buildPath = this.buildPath,
-		          weights = this.weights,
 		          weights2 = this.weights2,
 		          options = this.options,
 		          extraMods = this.extraMods,
 	          } = {}) {
 		if (pobPath === this.pobPath && buildPath === this.buildPath &&
-			deepEquality(weights, this.weights) &&
 			deepEquality(weights2, this.weights2) &&
 			deepEquality(options, this.options) &&
 			deepEquality(extraMods, this.extraMods))
@@ -94,7 +91,6 @@ class PobApi extends Emitter {
 
 		this.pobPath = pobPath;
 		this.buildPath = buildPath;
-		this.weights = weights;
 		this.weights2 = weights2;
 		this.options = options;
 		this.extraMods = extraMods;
@@ -160,18 +156,12 @@ class PobApi extends Emitter {
 	}
 
 	evalItemWithCraft(item, craftedMods) {
-		if (!PobApi.isItemEquippable(item))
-			return Promise.reject('item is unequippable');
 		item = [
 			...item.split('\n').filter(line => !line.includes('(crafted)')),
 			'',
 			...craftedMods,
 		].join('\n');
-		return this.send({
-			cmd: 'item',
-			text: item.replace(/[\n\r]+/g, ' \\n '),
-			extraMods: this.extraModStrings,
-		}).then(text => this.parseItemTooltip(text, 1, craftedMods));
+		return this.evalItem(item);
 	}
 
 	// todo[low] rename evalItemMod
@@ -409,7 +399,10 @@ class PobApi extends Emitter {
 
 		return {
 			value,
-			text: [title, ...valueTextTuples.map(obj => obj.text)].join(`\n${'-'.repeat(30)}\n`),
+			text: [
+				title,
+				...valueTextTuples.map(valueTextTuple => valueTextTuple.text),
+			].join(`\n${'-'.repeat(30)}\n`),
 		};
 	}
 
@@ -504,3 +497,4 @@ module.exports = new PobApi();
 //   migrate old pob calls to new calls
 //   name text field hard to type
 //   why resists not importing
+//   replace parseItemTooltip() with parseItemTooltip2()
