@@ -114,6 +114,39 @@ local function loadExtraMods(mods)
     build:OnFrame({})
 end
 
+local function evalEquippingItem(itemText)
+    local item = new('Item', emplaceNewLines(itemText))
+
+    if not item.base then
+        return nil, 'Item missing base type'
+    end
+
+    item:NormaliseQuality()
+    item:BuildAndParseRaw()
+
+    -- based off of ItemsTabClass:AddItemTooltip
+    local comparisons = {}
+    local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
+    for slotName, slot in pairs(build.itemsTab.slots) do
+        if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive then
+            local comparison = {}
+            comparison.slotLabel = slot.label
+            local replacedItem = build.itemsTab.items[slot.selItemId]
+            comparison.replacedItemName = replacedItem and replacedItem.name or ''
+
+            local output = calcFunc({ repSlotName = slot.slotName, repItem = item})
+            comparison.stats = shallow(output)
+
+            local tooltip = FakeTooltip:new()
+            build:AddStatComparesToTooltip(tooltip, calcBase, output, '')
+            comparison.tooltip = tooltip.text
+
+            table.insert(comparisons, comparison)
+        end
+    end
+    return { name = item.name, baseStats = shallow(calcBase), comparisons = comparisons }, nil
+end
+
 -- override the legion timeless jewel reads because Inflate is hard to replicate
 data.readLUT = function()
     return {}
@@ -151,35 +184,11 @@ while true do
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
         loadExtraMods(args.extraMods)
-        local item = new('Item', emplaceNewLines(args.text))
-        if item.base then
-            item:NormaliseQuality()
-            item:BuildAndParseRaw()
-
-            -- based off of ItemsTabClass:AddItemTooltip
-            local comparisons = {}
-	        local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
-            for slotName, slot in pairs(build.itemsTab.slots) do
-                if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive then
-                    local comparison = {}
-                    comparison.slotLabel = slot.label
-                    local replacedItem = build.itemsTab.items[slot.selItemId]
-                    comparison.replacedItemName = replacedItem and replacedItem.name or ''
-
-                    local output = calcFunc({ repSlotName = slot.slotName, repItem = item})
-                    comparison.stats = shallow(output)
-
-                    local tooltip = FakeTooltip:new()
-                    build:AddStatComparesToTooltip(tooltip, calcBase, output, '')
-                    comparison.tooltip = tooltip.text
-
-                    table.insert(comparisons, comparison)
-                end
-            end
-            respond(dkjson.encode({ name = item.name, baseStats = shallow(calcBase), comparisons = comparisons }))
-
+        local eval, err = evalEquippingItem(args.text)
+        if eval then
+            respond(dkjson.encode(eval))
         else
-            respond('Item missing base type')
+            respond(err)
         end
 
     elseif args.cmd == 'mod' then
@@ -189,10 +198,12 @@ while true do
         local slot = build.itemsTab.slots[args.type]
         if slot then
             local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
-            local newItem = new('Item', equippedItem.raw .. '\n' .. args.mod)
-            local tooltip = FakeTooltip:new()
-            build.itemsTab:AddItemTooltip(tooltip, newItem)
-            respond(tooltip.text)
+            local eval, err = evalEquippingItem(equippedItem.raw .. '\n' .. args.mod)
+            if eval then
+                respond(dkjson.encode(eval))
+            else
+                respond(err)
+            end
         else
             respond('Individual mod weights aren\'t supported on this item type')
         end
