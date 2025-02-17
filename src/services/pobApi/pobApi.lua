@@ -207,7 +207,7 @@ while true do
         local tradeQueryGenerator = tradeQuery.tradeQueryGenerator
 
         tradeQuery.statSortSelectionList = {}
-        for k, v in pairs(args.weights2) do
+        for k, v in pairs(args.weights) do
             if v.percentWeight ~= 0 then
                 table.insert(tradeQuery.statSortSelectionList, { stat = v.name, weightMult = v.percentWeight })
             end

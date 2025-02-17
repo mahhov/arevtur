@@ -199,8 +199,6 @@ class PobApi extends Emitter {
 			cmd: 'mod',
 			mod: itemMod,
 			type: pobType,
-			weights: this.weights,
-			weights2: this.weights2,
 			extraMods: this.extraModStrings,
 		})
 			.then(text => this.parseItemTooltip(text, 1 / pluginNumber, [itemMod], Number(pobType.match(/\d+/)?.[0]) || 1));
@@ -214,7 +212,7 @@ class PobApi extends Emitter {
 			cmd: 'getModWeights',
 			type: pobType,
 			includeCorrupted,
-			weights2: this.weights2,
+			weights: this.weights2,
 			options: this.options,
 			extraMods: this.extraModStrings,
 		})
@@ -501,7 +499,6 @@ module.exports = new PobApi();
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
 
 // todo[high]
-//   use weights2 in all lua api's
 //   allow custom extra mods in new weights UI
 //   allow testing mods in new weights UI
 //   migrate old pob calls to new calls
