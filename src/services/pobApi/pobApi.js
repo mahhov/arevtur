@@ -152,7 +152,7 @@ class PobApi extends Emitter {
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)
-			.then(obj => this.parseItemTooltip2(obj));
+			.then(obj => this.parseItemTooltip(obj));
 	}
 
 	evalItemWithCraft(item, craftedMods) {
@@ -192,7 +192,7 @@ class PobApi extends Emitter {
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)
-			.then(obj => this.parseItemTooltip2(obj))
+			.then(obj => this.parseItemTooltip(obj))
 			.then(parsed => ({
 				value: parsed.value / pluginNumber,
 				...parsed,
@@ -235,146 +235,7 @@ class PobApi extends Emitter {
 		].filter(v => v).join(' \\n ');
 	}
 
-	async parseItemTooltip(itemText, valueScale = 1, textPrefixes = [], exactDiff = 0) {
-		itemText = PobApi.cleanTooltip(itemText);
-
-		let baseManaRegen = this.weights.manaRegen ? (await this.queryBuildStats()).ManaRegenRecovery : 1;
-
-		let effectiveHitPoolRegex = /effective hit pool \(([+-][\d.]+)%\)/i;
-		let totalLifeRegex = /total life \(([+-][\d.]+)%\)/i;
-		let totalManaRegex = /total mana \(([+-][\d.]+)%\)/i;
-		let manaRegenRegex = /([+-][\d.,]+) mana regen/i;
-		let anyItemResistRegex = /[+-]\d+% to .* resistances?/i;
-		let elementalResistRegex = /([+-]\d+)% (?:fire|lightning|cold) res(?:\.|istance)/i;
-		let chaosResistRegex = /([+-]\d+)% chaos res(?:\.|istance)/i;
-		let fullDpsRegex = /full dps \(([+-][\d.]+)%\)/i;
-		let strRegex = /([+-]\d+) strength/i;
-		let dexRegex = /([+-]\d+) dexterity/i;
-		let intRegex = /([+-]\d+) intelligence/i;
-
-		let diffTexts = itemText.split(/(?=equipping this item)/i).slice(1);
-		if (!diffTexts.length)
-			diffTexts.push('');
-
-		let diffs = diffTexts.map(diffText => {
-			// todo[low] see if we can use a loop to reduce repeated logic
-			let equippingText = diffText.match(/equipping this item.*/i)?.[0] || '';
-			let equippingIndex = Number(equippingText.match(/\d+/)?.[0]) || 1;
-			let effectiveHitPool = Number(diffText.match(effectiveHitPoolRegex)?.[1]) || 0;
-			let totalLife = Number(diffText.match(totalLifeRegex)?.[1]) || 0;
-			let totalMana = Number(diffText.match(totalManaRegex)?.[1]) || 0;
-			let manaRegenFlat = Number(diffText.match(manaRegenRegex)?.[1]) || 0;
-			let manaRegen = round(manaRegenFlat / baseManaRegen * 100, 5);
-			let elementalResist = diffText
-				.match(new RegExp(elementalResistRegex, 'gi'))
-				?.reduce((sum, m) => sum + Number(m.match(elementalResistRegex)[1]), 0) || 0;
-			let chaosResist = Number(diffText.match(chaosResistRegex)?.[1]) || 0;
-			let fullDps = Number(diffText.match(fullDpsRegex)?.[1]) || 0;
-			let str = Number(diffText.match(strRegex)?.[1]) || 0;
-			let dex = Number(diffText.match(dexRegex)?.[1]) || 0;
-			let int = Number(diffText.match(intRegex)?.[1]) || 0;
-			let unscaledValue =
-				effectiveHitPool * this.weights.effectiveHealth +
-				totalLife * this.weights.totalLife +
-				totalMana * this.weights.totalMana +
-				manaRegen * this.weights.manaRegen +
-				elementalResist * this.weights.elementalResist +
-				chaosResist * this.weights.chaosResist +
-				fullDps * this.weights.damage +
-				str * this.weights.str +
-				dex * this.weights.dex +
-				int * this.weights.int;
-
-			return {
-				equippingText,
-				equippingIndex,
-				effectiveHitPool,
-				totalLife,
-				totalMana,
-				manaRegenFlat,
-				manaRegen,
-				elementalResist,
-				chaosResist,
-				str,
-				dex,
-				int,
-				fullDps,
-				unscaledValue,
-			};
-		});
-
-		let diff = exactDiff ?
-			diffs.find(diff => diff.equippingIndex === exactDiff) :
-			PobApi.mapMax(diffs, diff => diff.unscaledValue);
-
-		let summaryText = [
-			...textPrefixes.map(textPrefix => `@bold,pink ${textPrefix}`),
-			textPrefixes.length ? '-'.repeat(30) : '',
-			diffs.length > 1 ? `@bold,green ${diff.equippingText}` : null,
-			this.weights.effectiveHealth && diff.effectiveHitPool ?
-				`@bold,blue Effective Hit Pool ${diff.effectiveHitPool}%` : '',
-			this.weights.totalLife && diff.totalLife ?
-				`@bold,blue Total Life ${diff.totalLife}%` : '',
-			this.weights.totalMana && diff.totalMana ?
-				`@bold,blue Total Mana ${diff.totalMana}%` : '',
-			this.weights.manaRegen && diff.manaRegen ?
-				`@bold,blue Mana Regen ${diff.manaRegen}%` : '',
-			this.weights.elementalResist && diff.elementalResist ?
-				`@bold,orange Elemental Resist ${diff.elementalResist}` : '',
-			this.weights.chaosResist && diff.chaosResist ?
-				`@bold,orange Chaos Resist ${diff.chaosResist}` : '',
-			this.weights.damage && diff.fullDps ?
-				`@bold,red Full DPS ${diff.fullDps}%` : '',
-			this.weights.str && diff.str ?
-				`@bold,light-green Str ${diff.str}` : '',
-			this.weights.dex && diff.dex ?
-				`@bold,light-green Dex ${diff.dex}` : '',
-			this.weights.int && diff.int ?
-				`@bold,light-green Int ${diff.int}` : '',
-			`@bold,green Value ${round(diff.unscaledValue, 5)}`,
-			'-'.repeat(30),
-			...itemText.split('\n').map(itemTextLine => {
-				if (textPrefixes.some(textPrefix => itemTextLine === textPrefix))
-					return `@bold,pink ${itemTextLine}`;
-				if (itemTextLine.match(effectiveHitPoolRegex))
-					return `@bold,blue ${itemTextLine}`;
-				if (itemTextLine.match(totalLifeRegex))
-					return `@bold,blue ${itemTextLine}`;
-				if (itemTextLine.match(totalManaRegex))
-					return `@bold,blue ${itemTextLine}`;
-				if (itemTextLine.match(manaRegenRegex))
-					return `@bold,blue ${itemTextLine}`;
-				if (itemTextLine.match(anyItemResistRegex))
-					return `@bold,orange ${itemTextLine}`;
-				if (itemTextLine.match(elementalResistRegex))
-					return `@bold,orange ${itemTextLine}`;
-				if (itemTextLine.match(chaosResistRegex))
-					return `@bold,orange ${itemTextLine}`;
-				if (itemTextLine.match(fullDpsRegex))
-					return `@bold,red ${itemTextLine}`;
-				if (itemTextLine.match(strRegex))
-					return `@bold,light-green ${itemTextLine}`;
-				if (itemTextLine.match(dexRegex))
-					return `@bold,light-green ${itemTextLine}`;
-				if (itemTextLine.match(intRegex))
-					return `@bold,light-green ${itemTextLine}`;
-				if (itemTextLine.match(/^equipping this item/i))
-					return `@bold,green ${itemTextLine}`;
-				if (itemTextLine.match(/^\/\/ Craft:$/i))
-					return `@bold,pink ${itemTextLine}`;
-				if (itemTextLine.match(/^tip: /i))
-					return null;
-				return itemTextLine;
-			}),
-		].filter(v => v).join('\n');
-
-		return {
-			value: round(diff.unscaledValue * valueScale, 5),
-			text: summaryText,
-		};
-	}
-
-	async parseItemTooltip2(obj) {
+	async parseItemTooltip(obj) {
 		let valueTextTuples = obj.comparisons
 			.map(slotComparison => {
 				let value = this.weights2
@@ -502,4 +363,3 @@ module.exports = new PobApi();
 //   migrate old pob calls to new calls
 //   name text field hard to type
 //   why resists not importing
-//   replace parseItemTooltip() with parseItemTooltip2()
