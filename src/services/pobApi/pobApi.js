@@ -79,9 +79,10 @@ class PobApi extends Emitter {
 		          pobPath = this.pobPath,
 		          buildPath = this.buildPath,
 		          weights = this.weights,
+		          weights2 = this.weights2,
 		          options = this.options,
 		          extraMods = this.extraMods,
-	          } = {}, weights2 = []) {
+	          } = {}) {
 		if (pobPath === this.pobPath && buildPath === this.buildPath &&
 			deepEquality(weights, this.weights) &&
 			deepEquality(weights2, this.weights2) &&
@@ -500,8 +501,7 @@ module.exports = new PobApi();
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
 
 // todo[high]
-//   redo craft weights
-//   bring extra mods to new weights UI
+//   use weights2 in all lua api's
 //   allow custom extra mods in new weights UI
 //   allow testing mods in new weights UI
 //   migrate old pob calls to new calls

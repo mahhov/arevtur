@@ -11,18 +11,86 @@
   "buildParams": {
     "pobPath": "",
     "buildPath": "",
-    "weights": {
-      "effectiveHealth": 0.5,
-      "totalLife": 0,
-      "totalMana": 0,
-      "manaRegen": 0,
-      "elementalResist": 0.05,
-      "chaosResist": 0.1,
-      "damage": 0.25,
-      "str": 0,
-      "dex": 0,
-      "int": 0
-    },
+    "weights2": [
+      {
+        "name": "TotalEHP",
+        "percentWeight": 0.5,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "Life",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "Mana",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "ManaRegen",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "FireResistTotal",
+        "percentWeight": 0,
+        "flatWeight": 0.05,
+        "flatWeightType": true
+      },
+      {
+        "name": "ColdResistTotal",
+        "percentWeight": 0,
+        "flatWeight": 0.05,
+        "flatWeightType": true
+      },
+      {
+        "name": "LightningResistTotal",
+        "percentWeight": 0,
+        "flatWeight": 0.05,
+        "flatWeightType": true
+      },
+      {
+        "name": "ChaosResistTotal",
+        "percentWeight": 0,
+        "flatWeight": 0.07,
+        "flatWeightType": true
+      },
+      {
+        "name": "FullDPS",
+        "percentWeight": 0.33,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "Str",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "Int",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "Dex",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      },
+      {
+        "name": "",
+        "percentWeight": 0,
+        "flatWeight": 0,
+        "flatWeightType": false
+      }
+    ],
     "options": {
       "includeEldritch": false,
       "includeInfluence": false,
@@ -34,86 +102,6 @@
       "equalChaosResist": true
     }
   },
-  "weights2": [
-    {
-      "name": "TotalEHP",
-      "percentWeight": 0.5,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "Life",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "Mana",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "ManaRegen",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "FireResistTotal",
-      "percentWeight": 0,
-      "flatWeight": 0.05,
-      "flatWeightType": true
-    },
-    {
-      "name": "ColdResistTotal",
-      "percentWeight": 0,
-      "flatWeight": 0.05,
-      "flatWeightType": true
-    },
-    {
-      "name": "LightningResistTotal",
-      "percentWeight": 0,
-      "flatWeight": 0.05,
-      "flatWeightType": true
-    },
-    {
-      "name": "ChaosResistTotal",
-      "percentWeight": 0,
-      "flatWeight": 0.07,
-      "flatWeightType": true
-    },
-    {
-      "name": "FullDPS",
-      "percentWeight": 0.33,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "Str",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "Int",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "Dex",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    },
-    {
-      "name": "",
-      "percentWeight": 0,
-      "flatWeight": 0,
-      "flatWeightType": false
-    }
-  ],
   "userId": "",
   "sessionId": ""
 }

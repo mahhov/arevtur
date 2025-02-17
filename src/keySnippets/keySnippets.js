@@ -85,7 +85,7 @@ let init = () => {
 	configForMain.addListener('change', config => setupPobApi());
 };
 
-let setupPobApi = () => pobApi.setParams(configForMain.config.buildParams, configForMain.config.weights2);
+let setupPobApi = () => pobApi.setParams(configForMain.config.buildParams);
 
 init();
 

@@ -60,7 +60,7 @@ customElements.define(name, class extends XElement {
 			buildParams.extraMods.equalElementalResists;
 		this.$('#equal-chaos-resist-check').checked = buildParams.extraMods.equalChaosResist;
 
-		pobApi.setParams(configForRenderer.config.buildParams, configForRenderer.config.weights2);
+		pobApi.setParams(configForRenderer.config.buildParams);
 
 		fs.promises.stat(path.join(this.$('#pob-path').path, 'Launch.lua'))
 			.then(() => true)
@@ -69,7 +69,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	async loadConfigWeights() {
-		let weights = configForRenderer.config.weights2;
+		let weights = configForRenderer.config.buildParams.weights2;
 		if (!weights.length || weights[weights.length - 1].name)
 			weights.push({name: '', percentWeight: 0, flatWeight: 0, flatWeightType: false});
 
