@@ -357,9 +357,9 @@ module.exports = new PobApi();
 //  /Data/TimelessJewelData/GloriousVanity.bin
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
 
-// todo[high]
-//   allow custom extra mods in new weights UI
-//   allow testing mods in new weights UI
-//   migrate old pob calls to new calls
-//   name text field hard to type
-//   why resists not importing
+//  todo[high] allow custom extra mods in new weights UI
+//  todo[high] allow testing mods in new weights UI
+//  todo[high] migrate old pob calls to new calls
+//  todo[high] name text field hard to type
+//  todo[high] why resists not importing
+//  todo[high] redo craft weights to consider optimal bench craft, catalyst quality, & rune socket

@@ -99,7 +99,6 @@ class ItemData {
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		// todo[medium] for version2, find best rune and compare with equipped item with best rune
 		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(true, true)) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
