@@ -25,13 +25,12 @@ customElements.define(name, class extends XElement {
 
 		this.$('#weights').addEventListener('arrange', () => this.saveConfig());
 
-		// todo[high] support tabbing
-		// this.addEventListener('keydown', e => {
-		// 	if (e.key === 'Tab' && e.ctrlKey && !e.shiftKey)
-		// 		this.shadowRoot.activeElement.nextElementSibling?.focus();
-		// 	if (e.key === 'Tab' && e.ctrlKey && e.shiftKey)
-		// 		this.shadowRoot.activeElement.previousElementSibling?.focus();
-		// });
+		this.$('#weights').addEventListener('keydown', e => {
+			if (e.key === 'Tab' && e.ctrlKey && !e.shiftKey)
+				this.shadowRoot.activeElement.nextElementSibling?.focus();
+			if (e.key === 'Tab' && e.ctrlKey && e.shiftKey)
+				this.shadowRoot.activeElement.previousElementSibling?.focus();
+		});
 
 		[
 			this.$('#include-eldritch-check'),

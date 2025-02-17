@@ -30,14 +30,13 @@ customElements.define(name, class AutocompleteInput extends XElement {
 			if (e.key === 'ArrowDown') {
 				this.$('select').selectedIndex = 0;
 				this.$('select').focus();
+				e.preventDefault();
 			} else if (e.key === 'ArrowUp') {
 				this.$('select').selectedIndex = this.$('select').length - 1;
 				this.$('select').focus();
+				e.preventDefault();
 			} else if (e.key === 'Enter' || e.key === 'Tab' && !e.ctrlKey)
 				this.internalSetValue(this.$('select').options[0]);
-			else
-				return;
-			e.preventDefault();
 		});
 
 		this.$('select').addEventListener('keydown', e => {
