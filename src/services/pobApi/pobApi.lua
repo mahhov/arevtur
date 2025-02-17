@@ -128,13 +128,13 @@ local function evalEquippingItem(itemText)
     local comparisons = {}
     local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
     for slotName, slot in pairs(build.itemsTab.slots) do
-        if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive then
+        if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive and (not slot.weaponSet or slot.weaponSet == (build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then
             local comparison = {}
-            comparison.slotLabel = slot.label
+            comparison.slotName = slotName
             local replacedItem = build.itemsTab.items[slot.selItemId]
             comparison.replacedItemName = replacedItem and replacedItem.name or ''
 
-            local output = calcFunc({ repSlotName = slot.slotName, repItem = item})
+            local output = calcFunc({ repSlotName = slotName, repItem = item})
             comparison.stats = shallow(output)
 
             local tooltip = FakeTooltip:new()

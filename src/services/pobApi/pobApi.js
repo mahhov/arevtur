@@ -251,7 +251,7 @@ class PobApi extends Emitter {
 						return sum + value;
 					}, 0);
 				let text = [
-					`Equipping in @bold,pink ${slotComparison.slotLabel}`,
+					`Equipping in @bold,pink ${slotComparison.slotName}`,
 					slotComparison.replacedItemName ? `Replacing @bold,pink ${slotComparison.replacedItemName}` : '',
 					`Grants @bold,pink ${round(value, 3)} @ value`,
 					PobApi.colorTooltip(PobApi.cleanTooltip(slotComparison.tooltip)),
