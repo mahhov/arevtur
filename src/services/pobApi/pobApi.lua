@@ -6,7 +6,7 @@ package.path = package.path .. ';' .. './lua/?.lua' -- xml
 -- linux
 package.path = package.path .. ';../runtime/lua/?.lua' -- dkjson & xml
 
-function respond(response, debug)
+local function respond(response, debug)
     if not debug then
         response = '<.' .. response .. '.>'
     end
@@ -57,7 +57,7 @@ function emplaceNewLines(string)
 end
 
 -- copy 1 level deep
-function shallow(o)
+local function shallow(o)
    for k, v in pairs(o) do
        if type(v) == 'table' then
            o[k] = nil
@@ -67,7 +67,7 @@ function shallow(o)
 end
 
 -- for debugging objects that can't be json encoded
-function dump(o, n)
+local function dump(o, n)
    if n > 5 then
      return '"deep"'
    end
@@ -95,7 +95,7 @@ local sampleItemAmulet = [[
 ]]
 
 -- todo[medium] support ignore eva or arm in eff health
-function loadExtraMods(mods)
+local function loadExtraMods(mods)
     local itemText = sampleItemAmulet .. '\n' .. emplaceNewLines(mods)
     local item = new('Item', itemText)
     item.type = 'extraSlot'
@@ -135,7 +135,7 @@ while true do
         loadBuildFromXML(readFile(args.path))
         build.itemsTab:UpdateSockets()
         -- copied from `ItemsTab addSlot`
-        local slot = new("ItemSlotControl", nil, 0, 0, build.itemsTab, 'extraSlot')
+        local slot = new('ItemSlotControl', nil, 0, 0, build.itemsTab, 'extraSlot')
         build.itemsTab.slots[slot.slotName] = slot
         table.insert(build.itemsTab.orderedSlots, slot)
         build.itemsTab.slotOrder[slot.slotName] = #build.itemsTab.orderedSlots
