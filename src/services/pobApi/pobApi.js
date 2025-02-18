@@ -236,6 +236,11 @@ class PobApi extends Emitter {
 	}
 
 	async parseItemTooltip(obj) {
+		if (obj.error) {
+			console.warn(obj);
+			return {value: 0, text: obj.error};
+		}
+
 		let valueTextTuples = obj.comparisons
 			.map(slotComparison => {
 				let value = this.weights2

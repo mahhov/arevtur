@@ -188,7 +188,7 @@ while true do
         if eval then
             respond(dkjson.encode(eval))
         else
-            respond(err)
+            respond(dkjson.encode({ error = err, details = args.text }))
         end
 
     elseif args.cmd == 'mod' then
@@ -198,14 +198,15 @@ while true do
         local slot = build.itemsTab.slots[args.type]
         if slot then
             local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
-            local eval, err = evalEquippingItem(equippedItem.raw .. '\n' .. args.mod)
+            local itemText = equippedItem.raw .. '\n' .. args.mod
+            local eval, err = evalEquippingItem(itemText)
             if eval then
                 respond(dkjson.encode(eval))
             else
-                respond(err)
+                respond(dkjson.encode({ error = err, details = itemText }))
             end
         else
-            respond('Individual mod weights aren\'t supported on this item type')
+            respond(dkjson.encode({ error = 'Individual mod weights aren\'t supported on this item type', details = args.type }))
         end
 
     elseif args.cmd == 'getModWeights' then
