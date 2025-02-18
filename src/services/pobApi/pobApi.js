@@ -194,8 +194,8 @@ class PobApi extends Emitter {
 			.then(JSON.parse)
 			.then(obj => this.parseItemTooltip(obj))
 			.then(parsed => ({
-				value: parsed.value / pluginNumber,
 				...parsed,
+				value: parsed.value / pluginNumber,
 			}));
 	}
 
