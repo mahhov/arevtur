@@ -1,11 +1,13 @@
 const querystring = require('querystring');
-const {httpRequest} = require('js-desktop-base');
+const {httpRequest, XPromise} = require('js-desktop-base');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');
 const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
 
 class TradeQuery {
+	static cachedItems = {};
+
 	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {
 		this.unifiedQueryParams = unifiedQueryParams;
 		this.version2 = version2;
@@ -118,9 +120,12 @@ class TradeQuery {
 			if (data.error)
 				this.errorStream.write(data.error);
 			let itemCount = data.result.length;
+			let newItemIds = data.result.filter(itemId => !TradeQuery.cachedItems[itemId]);
+			newItemIds.forEach(itemId => TradeQuery.cachedItems[itemId] = new XPromise());
+
 			let requestGroups = [];
-			while (data.result.length)
-				requestGroups.push(data.result.splice(0, 10));
+			while (newItemIds.length)
+				requestGroups.push(newItemIds.splice(0, 10));
 
 			this.progressStream.write({
 				text: `Will make ${requestGroups.length} grouped item queries.`,
@@ -130,7 +135,7 @@ class TradeQuery {
 			});
 
 			let receivedCount = 0;
-			let promises = requestGroups.map(async (requestGroup, i) => {
+			requestGroups.forEach(async (requestGroup, i) => {
 				let data2 = await TradeQuery.itemsApiQuery(this.version2, this.sessionId, this.stopObj, data.id, requestGroup.join());
 
 				if (data2.error)
@@ -142,16 +147,21 @@ class TradeQuery {
 					itemCount,
 				});
 
-				let items = data2.result.map(itemData =>
-					new ItemData(this.version2, this.league, this.affixValueShift,
-						this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData));
-				// todo[high] let users wait on pricePromise and rm this await
-				await Promise.all(items.map(item => item.pricePromise));
-				this.itemStream.write(items);
-				return items;
+				data2.result
+					.map(itemData =>
+						new ItemData(this.version2, this.league, this.affixValueShift,
+							this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData))
+					.forEach(item => TradeQuery.cachedItems[item.id].resolve(item));
 			});
 
-			let items = (await Promise.all(promises)).flat();
+			let itemPromises = data.result.map(async itemId => {
+				let item = await TradeQuery.cachedItems[itemId];
+				// todo[high] let users wait on pricePromise and rm this await
+				await item.pricePromise;
+				return item;
+			});
+			let items = await Promise.all(itemPromises);
+			this.itemStream.write(items);
 			this.progressStream.write({
 				text: 'All grouped item queries completed.',
 				queriesComplete: requestGroups.length + 1,
