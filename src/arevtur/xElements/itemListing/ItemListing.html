@@ -90,6 +90,11 @@
 	#online-status-text.offline {
 		color: var(--colored-text-orange);
 	}
+
+	.debug {
+		flex: 0 0;
+		position: relative;
+	}
 </style>
 
 <div class="scroll">
@@ -154,4 +159,8 @@
 	-
 	<span id="online-status-text"></span>
 	<button id="refresh-button">Refresh</button>
+</div>
+
+<div class="experimental debug">
+	<x-tooltip-button id="debug"></x-tooltip-button>
 </div>

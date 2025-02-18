@@ -111,6 +111,9 @@ customElements.define(name, class extends XElement {
 		this.$('#online-status-text').textContent = itemData.onlineStatus;
 		this.$('#online-status-text').classList.toggle('offline', itemData.onlineStatus === 'offline');
 
+		this.$('#debug').text = itemData.queryNotes[0];
+		this.$('#debug').tooltip = itemData.queryNotes.join('\n');
+
 		this.selected = itemData.selected;
 		this.hovered = itemData.hovered;
 	}
