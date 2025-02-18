@@ -43,11 +43,7 @@
 	}
 </style>
 
-<div class="maximized-hidden">
-	<x-autocomplete-input id="version-input" placeholder="PoE 1" size="2"></x-autocomplete-input>
-	<x-autocomplete-input id="league-input" placeholder="league" size="8"></x-autocomplete-input>
-	<input id="session-id-input" required pattern=".{32}" placeholder="session id"
-		   title="32 char long ID from pathofexile.com/trade > F12 > Application > Cookies > POESESSID">
+<div>
 	<span id="loaded-leagues-status" class="loaded-status">Leagues</span>
 	<span id="loaded-types-status" class="loaded-status">Types</span>
 	<span id="loaded-properties-status" class="loaded-status">Properties</span>
@@ -56,6 +52,13 @@
 	<span id="loaded-pob-status" class="loaded-status invalid busy">PoB
 		<span id="queue-length"></span>
 	</span>
+</div>
+
+<div>
+	<x-autocomplete-input id="version-input" placeholder="PoE 1" size="2"></x-autocomplete-input>
+	<x-autocomplete-input id="league-input" placeholder="league" size="8"></x-autocomplete-input>
+	<input id="session-id-input" required pattern=".{32}" placeholder="session id"
+		   title="32 char long ID from pathofexile.com/trade > F12 > Application > Cookies > POESESSID">
 </div>
 
 <span class="right">
@@ -71,7 +74,7 @@
 
 <x-input-build></x-input-build>
 
-<div class="maximized-hidden">
+<div>
 	<x-input-imports id="input-imports" class="experimental"></x-input-imports>
 	<div id="input-set-container">
 		<div>
@@ -83,9 +86,9 @@
 	</div>
 </div>
 
-<x-input-trade-params id="input-trade-params" class="maximized-hidden"></x-input-trade-params>
+<x-input-trade-params id="input-trade-params"></x-input-trade-params>
 
-<div id="query-buttons" class="maximized-hidden">
+<div id="query-buttons">
 	<button id="search-button" title="ctrl+enter">Search</button>
 	<button id="cancel-button">Cancel</button>
 	<button id="search-in-browser-button">Search in Browser</button>
