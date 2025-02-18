@@ -5,19 +5,34 @@ class ItemsData extends Emitter {
 	static valueHandlers = [
 		{
 			name: 'Weight sorting',
-			description: 'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set. Less accurate in predicting health & DMG affects on build.',
+			description: [
+				'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set.',
+				'Less accurate in predicting health & DMG affects on build.',
+				'Recommended when not using PoB.',
+			].join('\n'),
 			sortY: item => item.weightedValue,
 			showFilter: item => true,
 			trigger: null,
 		}, {
 			name: 'Build sorting',
-			description: 'Sort by changes in effective health, total DPS, etc according to the weights set. Does not consider crafted affixes, runes, or anoints (v2 only).',
+			description: [
+				'Sort by changes in effective health, total DPS, etc according to the weights set.',
+				'Assumes the item is quality-ed to 20%.',
+				'Assumes it\'s not modified further (i.e. not bench-crafted, anointed or rune-d).',
+				'Recommended for early gear.',
+			].join('\n'),
 			sortY: item => item.buildValuePromise.resolved.value,
 			showFilter: item => item.buildValuePromise.resolved,
 			trigger: item => item.buildValuePromise,
 		}, {
 			name: 'Build + craft sorting',
-			description: 'Sort by changes in effective health, total DPS, etc according to the weights set. Considers craftable affixes, runes, and anoints.',
+			description: [
+				'Sort by changes in effective health, total DPS, etc according to the weights set.',
+				'Assumes the item is quality-ed to 20%.',
+				'For version 1, assumes it\'s bench-crafted with the optimal bench-craft.',
+				'For version 2, assumes it\'s cleared of runes and anoints.',
+				'Recommended for end gear',
+			].join('\n'),
 			sortY: item => item.craftValuePromise.resolved.value,
 			showFilter: item => item.craftValuePromise.resolved,
 			trigger: item => item.craftValuePromise,

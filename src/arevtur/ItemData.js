@@ -94,12 +94,12 @@ class ItemData {
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
 		// build value
-		this.buildValuePromise = pobApi.evalItem(this.reconstructText(false, false));
+		this.buildValuePromise = pobApi.evalItem(this.reconstructText(true, true));
 		this.buildValuePromise
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(true, true)) : this.craftValue();
+		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false, false)) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
@@ -163,6 +163,7 @@ class ItemData {
 				this.enchantMods.filter(mod => !mod.startsWith('Allocates ')),
 			...this.implicitMods,
 			...this.explicitMods,
+			...this.craftedMods,
 		].join('\n');
 	}
 
