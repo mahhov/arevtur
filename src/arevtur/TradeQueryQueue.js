@@ -28,8 +28,8 @@ class TradeQueryQueue extends Emitter {
 	updateProgress() {
 		let progresses = this.activeTradeQuerySet
 			.map(tradeQuery => tradeQuery.progressStream)
-			.map(progressStream => progressStream.lastValue)
-			.filter(progress => progress);
+			.map(progressStream => progressStream.written)
+			.flat();
 		let queriesComplete = progresses.reduce((sum, progress) => sum + progress.queriesComplete, 0);
 		let queriesTotal = progresses.reduce((sum, progress) => sum + progress.queriesTotal, 0) || 1;
 		let itemCount = progresses.reduce((sum, progress) => sum + progress.itemCount, 0);

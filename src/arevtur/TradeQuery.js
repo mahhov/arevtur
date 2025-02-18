@@ -130,20 +130,19 @@ class TradeQuery {
 			this.progressStream.write({
 				text: `Will make ${requestGroups.length} grouped item queries.`,
 				queriesComplete: 1,
-				queriesTotal: requestGroups.length + 1,
+				queriesTotal: requestGroups.length - 10,
 				itemCount,
 			});
 
-			let receivedCount = 0;
 			requestGroups.forEach(async (requestGroup, i) => {
 				let data2 = await TradeQuery.itemsApiQuery(this.version2, this.sessionId, this.stopObj, data.id, requestGroup.join());
 				if (data2.error)
 					this.errorStream.write(data2.error);
 				this.progressStream.write({
 					text: `Received grouped item query # ${i}.`,
-					queriesComplete: 1 + ++receivedCount,
-					queriesTotal: requestGroups.length + 1,
-					itemCount,
+					queriesComplete: 1,
+					queriesTotal: 0,
+					itemCount: 0,
 				});
 				data2.result.forEach(itemData => TradeQuery.cachedItemDatas[itemData.id].resolve(itemData));
 			});
@@ -160,9 +159,9 @@ class TradeQuery {
 			this.itemStream.write(items);
 			this.progressStream.write({
 				text: 'All grouped item queries completed.',
-				queriesComplete: requestGroups.length + 1,
-				queriesTotal: requestGroups.length + 1,
-				itemCount,
+				queriesComplete: 0,
+				queriesTotal: 0,
+				itemCount: 0,
 			});
 			return items;
 
