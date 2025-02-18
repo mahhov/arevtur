@@ -6,7 +6,7 @@ const ItemData = require('./ItemData');
 const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
 
 class TradeQuery {
-	static cachedItems = {};
+	static cachedItemDatas = {};
 
 	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {
 		this.unifiedQueryParams = unifiedQueryParams;
@@ -120,8 +120,8 @@ class TradeQuery {
 			if (data.error)
 				this.errorStream.write(data.error);
 			let itemCount = data.result.length;
-			let newItemIds = data.result.filter(itemId => !TradeQuery.cachedItems[itemId]);
-			newItemIds.forEach(itemId => TradeQuery.cachedItems[itemId] = new XPromise());
+			let newItemIds = data.result.filter(itemId => !TradeQuery.cachedItemDatas[itemId]);
+			newItemIds.forEach(itemId => TradeQuery.cachedItemDatas[itemId] = new XPromise());
 
 			let requestGroups = [];
 			while (newItemIds.length)
@@ -137,7 +137,6 @@ class TradeQuery {
 			let receivedCount = 0;
 			requestGroups.forEach(async (requestGroup, i) => {
 				let data2 = await TradeQuery.itemsApiQuery(this.version2, this.sessionId, this.stopObj, data.id, requestGroup.join());
-
 				if (data2.error)
 					this.errorStream.write(data2.error);
 				this.progressStream.write({
@@ -146,16 +145,13 @@ class TradeQuery {
 					queriesTotal: requestGroups.length + 1,
 					itemCount,
 				});
-
-				data2.result
-					.map(itemData =>
-						new ItemData(this.version2, this.league, this.affixValueShift,
-							this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData))
-					.forEach(item => TradeQuery.cachedItems[item.id].resolve(item));
+				data2.result.forEach(itemData => TradeQuery.cachedItemDatas[itemData.id].resolve(itemData));
 			});
 
 			let itemPromises = data.result.map(async itemId => {
-				let item = await TradeQuery.cachedItems[itemId];
+				let itemData = await TradeQuery.cachedItemDatas[itemId];
+				let item = new ItemData(this.version2, this.league, this.affixValueShift,
+					this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData);
 				// todo[high] let users wait on pricePromise and rm this await
 				await item.pricePromise;
 				return item;
