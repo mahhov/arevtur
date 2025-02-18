@@ -4,13 +4,14 @@ const {maxIndex} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
 
 class ItemData {
-	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, tradeApiItemData) {
+	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, queryNotes, tradeApiItemData) {
 		this.version2 = version2;
 		this.league = league;
 		this.affixValueShift = affixValueShift;
 		this.queryDefenseProperties = queryDefenseProperties;
 		this.priceShifts = priceShifts;
 		this.queryId = queryId;
+		this.queryNotes = queryNotes;
 
 		this.refresh(tradeApiItemData);
 	}

@@ -19,7 +19,7 @@ class TradeQuery {
 		this.stopObj = {};
 	}
 
-	getQuery(overrides = {}) {
+	getQuery(overrides) {
 		return this.unifiedQueryParams.toApiQueryParams(this.version2, overrides);
 	}
 
@@ -46,24 +46,26 @@ class TradeQuery {
 
 	async writeItemsToStream() {
 		let items = [];
-		let runQuery = async overrides => {
+		let runQuery = async (overrides, note) => {
 			let query = await this.getQuery(overrides);
-			let newItems = await this.queryAndParseItems(query);
+			let newItems = await this.queryAndParseItems(query, note);
 			items = items.concat(newItems);
 			return newItems;
 		};
 
 		// initial query
-		await runQuery();
+		await runQuery({}, 'original');
 
 		// 0 value query
 		if (!items.length)
-			await runQuery({minValue: 0});
+			await runQuery({minValue: 0}, 'no min value');
 
 		// high value query
-		if (items.length) {
-			let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
-			await runQuery({minValue: maxValue * .85});
+		if (items.length === 100) {
+			let maxValue = Math.max(...items.map(itemData => itemData.weightedValueDetails.mods));
+			let newMinValue = maxValue * .85;
+			if (newMinValue > this.unifiedQueryParams.minValue)
+				await runQuery({minValue: newMinValue}, 'high min value');
 		}
 
 		// todo[low] this doesn't work for hybrid (e.g. es + evasion) bases
@@ -75,10 +77,9 @@ class TradeQuery {
 			do {
 				let minDefensePropertyValue;
 				if (newItems.length) {
-					let newItemsMinValue = Math.min(...newItems.map(itemData => itemData.weightedValue));
 					let maxValue = Math.max(...items.map(itemData => itemData.weightedValue));
 					let minModValue = Math.min(...items.map(item => item.weightedValueDetails.mods));
-					minDefensePropertyValue = ((maxValue + newItemsMinValue) / 2 - minModValue) / defenseProperty[1].weight;
+					minDefensePropertyValue = (maxValue - minModValue) / defenseProperty[1].weight;
 				} else
 					minDefensePropertyValue = this.unifiedQueryParams.minValue / defenseProperty[1].weight;
 
@@ -86,24 +87,26 @@ class TradeQuery {
 				lastMinDefensePropertyValue = minDefensePropertyValue;
 
 				let overrides = this.overrideDefenseProperty(defenseProperty[0], minDefensePropertyValue);
-				newItems = await runQuery(overrides);
-			} while (newItems.length > 0);
+				newItems = await runQuery(overrides, 'min defense');
+			} while (newItems.length === 100);
 		}
 	}
 
-	async queryAndParseItems(apiQuery) {
+	async queryAndParseItems(apiQuery, note) {
 		// todo[medium] more selective try/catch
 		try {
-			console.log('initial query', apiQuery,
-				', online', apiQuery.query.status.online,
-				', price', apiQuery.query.filters.trade_filters?.filters.price.max,
-				', value', apiQuery.query.stats[0]?.value?.min,
-				', defense',
-				apiQuery.query.filters.equipment_filters?.filters.ar ||
-				apiQuery.query.filters.equipment_filters?.filters.ev ||
-				apiQuery.query.filters.equipment_filters?.filters.es ||
-				apiQuery.query.filters.equipment_filters?.filters.block || 0,
-			);
+			let queryNotes = [
+				['note', note],
+				['online', apiQuery.query.status.option],
+				['price', apiQuery.query.filters.trade_filters?.filters.price.max],
+				['value', apiQuery.query.stats[0]?.value?.min],
+				['defense',
+					apiQuery.query.filters.equipment_filters?.filters.ar?.min ||
+					apiQuery.query.filters.equipment_filters?.filters.ev?.min ||
+					apiQuery.query.filters.equipment_filters?.filters.es?.min ||
+					apiQuery.query.filters.equipment_filters?.filters.block?.min || 0],
+			].map(line => line.join(': '));
+			console.log('initial query', apiQuery, queryNotes.join(', '));
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
@@ -141,7 +144,7 @@ class TradeQuery {
 
 				let items = data2.result.map(itemData =>
 					new ItemData(this.version2, this.league, this.affixValueShift,
-						this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, itemData));
+						this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData));
 				// todo[high] let users wait on pricePromise and rm this await
 				await Promise.all(items.map(item => item.pricePromise));
 				this.itemStream.write(items);
@@ -167,7 +170,7 @@ class TradeQuery {
 		let endpoint = this.version2 ?
 			`${apiConstants.api}/trade2/search/poe2/${this.league}` :
 			`${apiConstants.api}/trade/search/${this.league}`;
-		let queryParams = {q: JSON.stringify(await this.getQuery())};
+		let queryParams = {q: JSON.stringify(await this.getQuery({}))};
 		let queryParamsString = querystring.stringify(queryParams);
 		return `${endpoint}?${queryParamsString}`;
 	}
