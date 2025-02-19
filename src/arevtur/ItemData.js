@@ -165,6 +165,8 @@ class ItemData {
 			...this.implicitMods,
 			...this.explicitMods,
 			...this.craftedMods,
+			this.corrupted ? 'Corrupted' : '',
+			this.mirrored ? 'Mirrored' : '',
 		].join('\n');
 	}
 
