@@ -5,7 +5,7 @@ class ItemsData extends Emitter {
 		{
 			name: 'Weight sorting',
 			description: [
-				'Sort by considering open affixes, non-blocked crafts, defenses like armor, and item mods according to the weights set.',
+				'Sort by trade site weight. Additionally considers open affixes, non-blocked crafts, and defenses like armor.',
 				'Less accurate in predicting health & DMG affects on build.',
 				'Recommended when not using PoB.',
 			].join('\n'),
@@ -15,9 +15,9 @@ class ItemsData extends Emitter {
 		}, {
 			name: 'Build sorting',
 			description: [
-				'Sort by changes in effective health, total DPS, etc according to the weights set.',
-				'Assumes the item is quality-ed to 20%.',
-				'Assumes it\'s not modified further (i.e. not bench-crafted, anointed or rune-d).',
+				'Sort by PoB\'s predicted affects on effective health, total DPS, etc.',
+				'Qualities non-corrupted/mirrored items to 20%.',
+				'Does not bench-craft, anoint or rune items.',
 				'Recommended for early gear.',
 			].join('\n'),
 			sortY: item => item.buildValuePromise.resolved.value,
@@ -26,11 +26,11 @@ class ItemsData extends Emitter {
 		}, {
 			name: 'Build + craft sorting',
 			description: [
-				'Sort by changes in effective health, total DPS, etc according to the weights set.',
-				'Assumes the item is quality-ed to 20%.',
-				'For version 1, assumes it\'s bench-crafted with the optimal bench-craft.',
-				'For version 2, assumes it\'s cleared of runes and anoints.',
-				'Recommended for end gear',
+				'Sort by PoB\'s predicted affects on effective health, total DPS, etc.',
+				'Qualities non-corrupted/mirrored items to 20%.',
+				'For version 1, optimally bench-crafts items. Does not anoint items.',
+				'For version 2, un-anoints and de-runes items.',
+				'Recommended for end gear.',
 			].join('\n'),
 			sortY: item => item.craftValuePromise.resolved.value,
 			showFilter: item => item.craftValuePromise.resolved,
