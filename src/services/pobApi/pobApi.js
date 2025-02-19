@@ -273,6 +273,7 @@ class PobApi extends Emitter {
 			text: [
 				title,
 				...valueTextTuples.map(valueTextTuple => valueTextTuple.text),
+				obj.text,
 			].join(`\n${'-'.repeat(30)}\n`),
 		};
 	}

@@ -144,7 +144,7 @@ local function evalEquippingItem(itemText)
             table.insert(comparisons, comparison)
         end
     end
-    return { name = item.name, baseStats = shallow(calcBase), comparisons = comparisons }, nil
+    return { name = item.name, text = item:BuildRaw(), baseStats = shallow(calcBase), comparisons = comparisons }, nil
 end
 
 -- override the legion timeless jewel reads because Inflate is hard to replicate
