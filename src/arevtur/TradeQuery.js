@@ -153,10 +153,10 @@ class TradeQuery {
 					this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData);
 				// todo[high] let users wait on pricePromise and rm this await
 				await item.pricePromise;
+				this.itemStream.write([item]);
 				return item;
 			});
 			let items = await Promise.all(itemPromises);
-			this.itemStream.write(items);
 			this.progressStream.write({
 				text: 'All grouped item queries completed.',
 				queriesComplete: 0,
