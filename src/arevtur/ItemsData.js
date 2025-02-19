@@ -1,5 +1,4 @@
 const Emitter = require('../util/Emitter');
-const pobApi = require('../services/pobApi/pobApi');
 
 class ItemsData extends Emitter {
 	static valueHandlers = [
@@ -45,7 +44,6 @@ class ItemsData extends Emitter {
 		this.shownItemsCache = null;
 		this.valueHandler = ItemsData.valueHandlers[0];
 		this.pricePerValue_ = Infinity;
-		pobApi.addListener('change', () => this.refresh());
 	}
 
 	clear() {
