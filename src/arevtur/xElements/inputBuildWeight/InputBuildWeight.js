@@ -39,7 +39,7 @@ customElements.define(name, class InputBuildWeight extends XElement {
 	}
 
 	async update(stats, {name, percentWeight, flatWeight, flatWeightType}) {
-		this.$('#name').autocompletes = Object.keys(stats).map(InputBuildWeight.addSpace).sort();
+		this.$('#name').autocompletes = [''].concat(Object.keys(stats).map(InputBuildWeight.addSpace).sort());
 
 		let currentValue = stats[name] || 0;
 		this.$('#current-value').textContent = currentValue ? round(currentValue, 2) : '';
