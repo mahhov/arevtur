@@ -17,7 +17,7 @@ class ItemsData extends Emitter {
 			description: [
 				'Sort by PoB\'s predicted affects on effective health, total DPS, etc.',
 				'Qualities non-corrupted/mirrored items to 20%.',
-				'Does not bench-craft, anoint or rune items.',
+				'Does modify bench-craft, anointment, or runes.',
 				'Recommended for early gear.',
 			].join('\n'),
 			sortY: item => item.buildValuePromise.resolved.value,
@@ -28,8 +28,8 @@ class ItemsData extends Emitter {
 			description: [
 				'Sort by PoB\'s predicted affects on effective health, total DPS, etc.',
 				'Qualities non-corrupted/mirrored items to 20%.',
-				'For version 1, optimally bench-crafts items. Does not anoint items.',
-				'For version 2, un-anoints and de-runes items.',
+				'For version 1, optimizes bench-craft of non-corrupted/mirrored items. Does not anoint items.',
+				'For version 2, maxes # of rune sockets of non-corrupted/mirrored items. Replaces runes matching your existing runes. Un-anoints items.',
 				'Recommended for end gear.',
 			].join('\n'),
 			sortY: item => item.craftValuePromise.resolved.value,

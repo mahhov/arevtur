@@ -125,6 +125,7 @@ customElements.define(name, class extends XElement {
 			},
 			(itemListing, i, item) => itemListing.itemData = item);
 
+		// todo[medium] apply search before slicing the 1st 100
 		this.applySearch();
 	}
 

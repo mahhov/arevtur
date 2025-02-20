@@ -114,13 +114,11 @@ local function loadExtraMods(mods)
     build:OnFrame({})
 end
 
-local function evalEquippingItem(itemText)
+local function evalEquippingItem(itemText, copyRunes)
     local item = new('Item', emplaceNewLines(itemText))
-
     if not item.base then
         return nil, 'Item missing base type'
     end
-
     item:NormaliseQuality()
     item:BuildAndParseRaw()
 
@@ -129,6 +127,22 @@ local function evalEquippingItem(itemText)
     local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
     for slotName, slot in pairs(build.itemsTab.slots) do
         if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive and (not slot.weaponSet or slot.weaponSet == (build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then
+            if copyRunes then
+                local equippedItem = build.itemsTab.items[slot.selItemId] or nil
+                if equippedItem then
+                    local maxRunes = item.base.socketLimit and item.base.socketLimit - 1 or 0
+                    if not item.corrupted and item.itemSocketCount < maxRunes then
+                        item.itemSocketCount = maxRunes
+                    end
+                    item.runes = equippedItem.runes
+                    for i = equippedItem.itemSocketCount, item.itemSocketCount do
+                        equippedItem.runes[i] = equippedItem.runes[1]
+                    end
+                    item:UpdateRunes()
+                    item:BuildAndParseRaw()
+                end
+            end
+
             local comparison = {}
             comparison.slotName = slotName
             local replacedItem = build.itemsTab.items[slot.selItemId]
@@ -184,7 +198,7 @@ while true do
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
         loadExtraMods(args.extraMods)
-        local eval, err = evalEquippingItem(args.text)
+        local eval, err = evalEquippingItem(args.text, args.copyRunes)
         if eval then
             respond(dkjson.encode(eval))
         else
@@ -199,7 +213,7 @@ while true do
         if slot then
             local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
             local itemText = equippedItem.raw .. '\n' .. args.mod
-            local eval, err = evalEquippingItem(itemText)
+            local eval, err = evalEquippingItem(itemText, false)
             if eval then
                 respond(dkjson.encode(eval))
             else

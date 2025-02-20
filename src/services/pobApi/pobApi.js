@@ -143,12 +143,13 @@ class PobApi extends Emitter {
 		}).then(JSON.parse);
 	}
 
-	evalItem(item) {
+	evalItem(item, copyRunes = false) {
 		if (!PobApi.isItemEquippable(item))
 			return Promise.reject('item is unequippable');
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
+			copyRunes,
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)

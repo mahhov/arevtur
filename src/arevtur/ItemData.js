@@ -44,9 +44,6 @@ class ItemData {
 		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
 		this.debug = tradeApiItemData;
 
-		if (!this.text && this.version2)
-			this.text = this.reconstructText(true, true);
-
 		// sockets
 		let sockets = tradeApiItemData.item.sockets || [];
 		this.sockets = this.version2 ?
@@ -89,6 +86,9 @@ class ItemData {
 			.filter(([_, value]) => value)
 			.map(nameValue => nameValue.join(' '));
 
+		if (!this.text && this.version2)
+			this.text = this.reconstructText(true, true);
+
 		// weighted value
 		this.weightedValueDetails = {
 			affixes: this.affixValueShift,
@@ -98,12 +98,12 @@ class ItemData {
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
 		// build value
-		this.buildValuePromise = pobApi.evalItem(this.reconstructText(true, true));
+		this.buildValuePromise = pobApi.evalItem(this.text);
 		this.buildValuePromise
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false, false)) : this.craftValue();
+		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false, false), true) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
@@ -161,6 +161,7 @@ class ItemData {
 		return [
 			'Item Class',
 			this.subtype,
+			'Sockets: ' + 'S '.repeat(this.sockets[0].length),
 			...includeRune ? this.runeMods : [],
 			...includeAnoint ?
 				this.enchantMods :
