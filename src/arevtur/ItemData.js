@@ -48,11 +48,14 @@ class ItemData {
 			this.text = this.reconstructText(true, true);
 
 		// sockets
-		this.sockets = (tradeApiItemData.item.sockets || []).reduce((a, v) => {
-			a[v.group] = a[v.group] || [];
-			a[v.group].push(v.sColour);
-			return a;
-		}, []);
+		let sockets = tradeApiItemData.item.sockets || [];
+		this.sockets = this.version2 ?
+			[sockets.map(_ => 'S')] :
+			(sockets).reduce((a, v) => {
+				a[v.group] = a[v.group] || [];
+				a[v.group].push(v.sColour);
+				return a;
+			}, []);
 
 		// affixes
 		// todo[high] need to consider fractured
