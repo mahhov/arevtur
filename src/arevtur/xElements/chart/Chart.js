@@ -19,8 +19,7 @@ customElements.define(name, class Chart extends XElement {
 
 		this.$('canvas').addEventListener('mousedown', e => {
 			this.dragged = false;
-			if (!e.ctrlKey)
-				this.mouseDown = {x: e.offsetX, y: e.offsetY};
+			this.mouseDown = this.mouseLast = {x: e.offsetX, y: e.offsetY};
 		});
 		this.$('canvas').addEventListener('mousemove', e => {
 			this.emit('hover', this.pixelToCoord(e.offsetX, e.offsetY));
@@ -28,17 +27,17 @@ customElements.define(name, class Chart extends XElement {
 				return;
 			this.dragged = true;
 			if (e.buttons & 1 && !e.shiftKey)
-				this.panRange(e.offsetX - this.mouseDown.x, e.offsetY - this.mouseDown.y);
+				this.panRange(e.offsetX - this.mouseLast.x, e.offsetY - this.mouseLast.y);
 			else if (e.buttons & 2 || e.shiftKey)
-				this.zoomRange(e.offsetX - this.mouseDown.x, e.offsetY - this.mouseDown.y);
-			this.mouseDown = {x: e.offsetX, y: e.offsetY};
+				this.zoomRange(e.offsetX - this.mouseLast.x, e.offsetY - this.mouseLast.y, this.mouseDown.x, this.mouseDown.y);
+			this.mouseLast = {x: e.offsetX, y: e.offsetY};
 		});
 		this.$('canvas').addEventListener('mouseleave', () => this.emit('hover'));
 		document.addEventListener('mouseup', () => this.mouseDown = null);
 		this.$('canvas').addEventListener('click', e => {
 			if (this.dragged)
 				return;
-			this.emit(e.ctrlKey ? 'action' : 'select', this.pixelToCoord(e.offsetX, e.offsetY));
+			this.emit('select', this.pixelToCoord(e.offsetX, e.offsetY));
 		});
 		this.$('canvas').addEventListener('dblclick', e => {
 			if (this.dragged)
@@ -46,8 +45,8 @@ customElements.define(name, class Chart extends XElement {
 			this.resetRange(e.shiftKey);
 		});
 		this.$('canvas').addEventListener('wheel', e => {
-			let d = e.deltaY / 10;
-			this.zoomRange(-d, d);
+			let d = 50 * Math.sign(e.deltaY);
+			this.zoomRange(-d, d, e.offsetX, e.offsetY);
 			e.preventDefault(); // don't scroll below items
 		});
 
@@ -56,13 +55,10 @@ customElements.define(name, class Chart extends XElement {
 		this.$('#help-tooltip').tooltip = [
 			'LMB drag to pan',
 			'Mouse wheel to scale',
-			// 'rmb drag to scale',
-			// 'shift+LMB drag to scale',
+			// 'RMB drag to scale',
+			// 'Shift+LMB drag to scale',
 			'Double LMB to recenter',
-			'Shift+double LMB to recenter to origin',
-			// todo[low] ctrl+lmb is running bad query. it's probably even harder to fix with build
-			//  sorting. 'ctrl+lmb to query at the min-value and max-price corresponding to the
-			//  cursor's position',
+			// 'Shift+double LMB to recenter to origin',
 		].join('\n');
 
 		this.pointSets_ = [];
@@ -115,13 +111,18 @@ customElements.define(name, class Chart extends XElement {
 		this.draw();
 	}
 
-	zoomRange(x, y) {
+	zoomRange(x, y, focusX, focusY) {
+		let oldFocus = this.pixelToCoord(focusX, focusY);
+
 		let dx = x * this.deltaX / this.width;
 		let dy = -y * this.deltaY / this.height;
-		this.minX += dx;
-		this.minY += dy;
 		this.deltaX -= dx * 2;
 		this.deltaY -= dy * 2;
+
+		let newFocus = this.pixelToCoord(focusX, focusY);
+		this.minX += oldFocus.x - newFocus.x;
+		this.minY += oldFocus.y - newFocus.y;
+
 		this.verifyRange();
 		this.draw();
 	}
