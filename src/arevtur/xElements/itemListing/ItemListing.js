@@ -2,7 +2,7 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const TradeQuery = require('../../TradeQuery');
 const configForRenderer = require('../../../services/config/configForRenderer');
-const {round} = require('../../../util/util');
+const {round, updateElementChildren} = require('../../../util/util');
 
 const listTuples = [
 	['#influence-list', 'influences'],
@@ -66,14 +66,13 @@ customElements.define(name, class extends XElement {
 		this.$('#mirrored-text').classList.toggle('hidden', !itemData.mirrored);
 		this.$('#split-text').classList.toggle('hidden', !itemData.split);
 
-		listTuples.forEach(([containerQuery, propertyName]) => {
-			XElement.clearChildren(this.$(containerQuery));
-			itemData[propertyName].forEach(mod => {
-				let modDiv = document.createElement('div');
-				modDiv.textContent = mod;
-				this.$(containerQuery).appendChild(modDiv);
-			});
-		});
+		listTuples.forEach(([containerQuery, propertyName]) =>
+			updateElementChildren(
+				this.$(containerQuery),
+				itemData[propertyName],
+				(i, mods) => document.createElement('div'),
+				(div, i, mod) => div.textContent = mod,
+			));
 
 		this.$('#prefixes-text').textContent = itemData.affixes.prefix;
 		this.$('#suffixes-text').textContent = itemData.affixes.suffix;
