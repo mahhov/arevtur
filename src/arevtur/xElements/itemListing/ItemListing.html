@@ -75,6 +75,7 @@
 
 	.small-info {
 		font-size: 12px;
+		overflow: hidden;
 	}
 
 	#account-text {
@@ -97,27 +98,22 @@
 	}
 </style>
 
+<div id="name-text"></div>
+
 <div class="scroll">
 	<div>
-		<div id="name-text"></div>
-		<div>
-			<span id="type-text"></span>
-			<span id="item-level-text"></span>
-		</div>
+		<span id="type-text"></span>
+		<span id="item-level-text"></span>
 	</div>
-	<div>
-		<div id="corrupted-text">corrupted</div>
-		<div id="mirrored-text">mirrored</div>
-		<div id="split-text">split</div>
-		<div id="influence-list"></div>
-	</div>
+	<div id="corrupted-text">corrupted</div>
+	<div id="mirrored-text">mirrored</div>
+	<div id="split-text">split</div>
+	<div id="influence-list"></div>
 	<div id="sockets-list"></div>
-	<div>
-		<!-- todo[medium] don't show affix count if both are 0-->
-		<div>P <span id="prefixes-text"></span></div>
-		<div>S <span id="suffixes-text"></span></div>
-		<div class="value">Affix value: <span id="affix-value-text"></span></div>
-	</div>
+	<!-- todo[medium] don't show affix count if both are 0-->
+	<div>P <span id="prefixes-text"></span></div>
+	<div>S <span id="suffixes-text"></span></div>
+	<div class="value">Affix value: <span id="affix-value-text"></span></div>
 	<div id="quality-text"></div>
 	<div id="defense-container">
 		<div id="defense-list"></div>
@@ -161,6 +157,6 @@
 	<button id="refresh-button">Refresh</button>
 </div>
 
-<div class="experimental debug">
+<div class="debug experimental">
 	<x-tooltip-button id="debug"></x-tooltip-button>
 </div>

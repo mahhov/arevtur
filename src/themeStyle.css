@@ -83,6 +83,10 @@
 	--colored-text-background-pink: oklch(.35 .1 340);
 }
 
+:root.maximize {
+	--maximize-hide-display: none;
+}
+
 :root:not(.experimental) {
 	--experimental-display: none;
 }

@@ -23500,6 +23500,7 @@ module.exports = resultsElement => resultsElement.joinItems([
 	x.explicitMods = x.explicitMods?.length ? x.explicitMods : ['explicit mod placeholder'];
 	x.craftedMods = x.craftedMods?.length ? x.craftedMods : ['crafted mod placeholder'];
 	x.pseudoMods = x.pseudoMods?.length ? x.pseudoMods : ['pseudo mod placeholder'];
+	x.queryNotes = [];
 	return x;
 }).flatMap(x => {
 	let a = [];

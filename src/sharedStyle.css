@@ -131,6 +131,10 @@ progress::-webkit-progress-value {
 
 /* state based */
 
+.maximize-hide {
+	display: var(--maximize-hide-display);
+}
+
 .experimental {
 	display: var(--experimental-display);
 }

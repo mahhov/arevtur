@@ -33,8 +33,9 @@ class ItemData {
 		this.explicitMods = tradeApiItemData.item.explicitMods || [];
 		this.craftedMods = tradeApiItemData.item.craftedMods || [];
 		this.pseudoMods = tradeApiItemData.item.pseudoMods || [];
-		this.accountText =
-			`${tradeApiItemData.listing.account.name} > ${tradeApiItemData.listing.account.lastCharacterName}`;
+		this.accountText = [tradeApiItemData.listing.account.name, tradeApiItemData.listing.account.lastCharacterName]
+			.filter(v => v)
+			.join(' > ');
 		this.directWhisperToken = tradeApiItemData.listing.whisper_token;
 		this.whisperText = tradeApiItemData.listing.whisper;
 		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online);
