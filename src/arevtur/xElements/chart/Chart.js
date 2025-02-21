@@ -96,7 +96,7 @@ customElements.define(name, class Chart extends XElement {
 
 	resetRange(zeroMins = false) {
 		let allPoints = this.pointSets_
-			.filter(({isPath}) => !isPath)
+			.filter(({type}) => type === 'range')
 			.flatMap(({points}) => points);
 		[this.minX, this.deltaX] = Chart.getRange(allPoints.map(({x}) => x), zeroMins);
 		[this.minY, this.deltaY] = Chart.getRange(allPoints.map(({y}) => y), zeroMins);
@@ -142,32 +142,33 @@ customElements.define(name, class Chart extends XElement {
 	}
 
 	drawPoints() {
-		this.pointSets_.forEach(({color, cssPropertyValueColor, fill, size, points, isPath}) => {
-			color = color || getComputedStyle(this).getPropertyValue(cssPropertyValueColor);
-			this.ctx.strokeStyle = color;
-			this.ctx.fillStyle = color;
-			if (isPath) {
-				this.ctx.lineWidth = size;
-				this.ctx.beginPath();
-				points.forEach((p, i) => {
-					let {x, y} = this.coordToPixel(p);
-					if (!i)
-						this.ctx.moveTo(x, y);
+		this.pointSets_
+			.filter(({type}) => type !== 'range')
+			.forEach(({color, cssPropertyValueColor, fill, size, points, type}) => {
+				color = color || getComputedStyle(this).getPropertyValue(cssPropertyValueColor);
+				this.ctx.strokeStyle = color;
+				this.ctx.fillStyle = color;
+				if (type === 'path') {
+					this.ctx.lineWidth = size;
+					this.ctx.beginPath();
+					points.forEach((p, i) => {
+						let {x, y} = this.coordToPixel(p);
+						if (!i)
+							this.ctx.moveTo(x, y);
+						else
+							this.ctx.lineTo(x, y);
+					});
+					if (fill)
+						this.ctx.fill();
 					else
-						this.ctx.lineTo(x, y);
-				});
-				if (fill)
-					this.ctx.fill();
-				else
-					this.ctx.stroke();
-			} else {
-				points.forEach(p => {
-					let {x, y} = this.coordToPixel(p);
-					this.ctx[fill ? 'fillRect' : 'strokeRect'](x - size / 2, y - size / 2, size,
-						size);
-				});
-			}
-		});
+						this.ctx.stroke();
+				} else {
+					points.forEach(p => {
+						let {x, y} = this.coordToPixel(p);
+						this.ctx[fill ? 'fillRect' : 'strokeRect'](x - size / 2, y - size / 2, size, size);
+					});
+				}
+			});
 	}
 
 	drawAxis() {

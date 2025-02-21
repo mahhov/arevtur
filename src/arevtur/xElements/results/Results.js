@@ -144,7 +144,7 @@ customElements.define(name, class extends XElement {
 				cssPropertyValueColor: '--colored-text-blue',
 				size: 1,
 				points: this.itemsData.bestBoundPath,
-				isPath: true,
+				type: 'path',
 			}, {
 				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
@@ -167,6 +167,9 @@ customElements.define(name, class extends XElement {
 				fill: true,
 				size: 8,
 				points: this.itemsData.itemsToPoints(this.itemsData.hoveredItems),
+			}, {
+				points: this.itemsData.itemsToPoints(this.itemsData.shownItems.slice(0, 50)),
+				type: 'range',
 			},
 		];
 		this.$('#results-chart').tooltip =
