@@ -155,6 +155,8 @@ In the main view, copy the value associated with the `POESESSID` key. This shoul
 alphanumeric ID.
 In the `Arevtur` app, paste the value in the `Session ID` input at the top.
 
+![session-id.png](./screenshots/session-id.png)
+
 #### What is the purpose of session ID, and is it safe to copy
 
 The session ID allows GGG to identify users.
