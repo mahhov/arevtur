@@ -46,23 +46,21 @@ customElements.define(name, class extends XElement {
 			if (e.key === 'f' && e.ctrlKey)
 				this.$('#search-input').select();
 		});
-		this.$('#search-input').addEventListener('input', () => this.applySearch());
+		this.$('#search-input').addEventListener('input', () => this.renderItemsDataList());
 
 		this.$('#results-chart').addEventListener('select', async e => {
-			let itemIndex = this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
-				e.detail.width);
-			if (itemIndex !== -1) {
-				this.itemsData.selectItem(itemIndex);
+			let item = this.itemsData.itemByRange(e.detail.y, e.detail.x, e.detail.height, e.detail.width);
+			if (item) {
+				this.itemsData.selectItem(item);
 				this.renderItemsData(true);
-				this.$('#results-list').children[itemIndex]?.scrollIntoView(
-					{behavior: 'smooth', block: 'nearest'});
+				[...this.$('#results-list').children]
+					.find(itemListing => itemListing.itemData === item)
+					?.scrollIntoView({behavior: 'smooth', block: 'nearest'});
 			}
 		});
 		this.$('#results-chart').addEventListener('hover', async e => {
-			let itemIndex = e.detail &&
-				this.itemsData.itemIndexByRange(e.detail.y, e.detail.x, e.detail.height,
-					e.detail.width);
-			this.itemsData.hoverItem(itemIndex);
+			let item = e.detail && this.itemsData.itemByRange(e.detail.y, e.detail.x, e.detail.height, e.detail.width);
+			this.itemsData.hoverItem(item);
 			this.renderItemsData(true);
 		});
 
@@ -107,34 +105,36 @@ customElements.define(name, class extends XElement {
 	renderItemsDataList() {
 		this.updateResultsCount();
 
+		let searcher = new Searcher(this.$('#search-input').value);
+		let shownItemsData = this.itemsData.shownItems
+			.filter(item => searcher.test(item.text))
+			.filter((_, i) => i < 100);
+
 		updateElementChildren(
 			this.$('#results-list'),
-			this.itemsData.shownItems.slice(0, 100),
+			shownItemsData,
 			(i, items) => {
 				let itemListing = document.createElement('x-item-listing');
 				itemListing.addEventListener('select', () => {
-					this.itemsData.selectItem(i);
-					itemListing.selected = items[i].selected;
+					this.itemsData.selectItem(itemListing.itemData);
+					itemListing.selected = itemListing.itemData.selected;
 					this.renderItemsDataChart();
 				});
 				itemListing.addEventListener('hover', e => {
-					this.itemsData.hoverItem(e.detail && i);
+					this.itemsData.hoverItem(e.detail ? itemListing.itemData : null);
 					this.renderItemsData(true);
 				});
 				return itemListing;
 			},
 			(itemListing, i, item) => itemListing.itemData = item);
-
-		// todo[medium] apply search before slicing the 1st 100
-		this.applySearch();
 	}
 
 	renderItemsDataListBackgroundsOnly() {
 		[...this.$('#results-list').children].forEach((el, i) => {
 			if (i >= this.itemsData.shownItems.length)
 				return;
-			el.selected = this.itemsData.shownItems[i].selected;
-			el.hovered = this.itemsData.shownItems[i].hovered;
+			el.selected = el.itemData.selected;
+			el.hovered = el.itemData.hovered;
 		});
 	}
 
@@ -179,14 +179,6 @@ customElements.define(name, class extends XElement {
 			};
 		if (resetChartRange)
 			this.$('#results-chart').resetRange();
-	}
-
-	applySearch() {
-		let searcher = new Searcher(this.$('#search-input').value);
-		[...this.$('#results-list').children].forEach(itemListing => {
-			let match = searcher.testMulti(itemListing.searchTexts);
-			itemListing.classList.toggle('search-hidden', !match);
-		});
 	}
 });
 

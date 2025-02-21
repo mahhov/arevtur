@@ -108,21 +108,20 @@ class ItemsData extends Emitter {
 				});
 	}
 
-	selectItem(index) {
-		this.shownItems[index].selected = !this.shownItems[index].selected;
+	selectItem(item) {
+		item.selected = !item.selected;
 	}
 
-	hoverItem(index = -1) {
-		// index -1 item means no item is hovered
-		this.shownItems.forEach((itemI, i) => itemI.hovered = i === index);
+	hoverItem(item) {
+		this.shownItems.forEach(itemI => itemI.hovered = itemI === item);
 	}
 
-	itemIndexByRange(value, price, valueRange, priceRange) {
+	itemByRange(value, price, valueRange, priceRange) {
 		let minValue = value - valueRange / 2;
 		let maxValue = value + valueRange / 2;
 		let minPrice = price - priceRange / 2;
 		let maxPrice = price + priceRange / 2;
-		return this.shownItems.findIndex(item =>
+		return this.shownItems.find(item =>
 			this.y(item) > minValue &&
 			this.y(item) < maxValue &&
 			item.price > minPrice &&

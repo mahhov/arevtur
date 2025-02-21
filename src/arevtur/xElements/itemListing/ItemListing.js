@@ -117,18 +117,15 @@ customElements.define(name, class extends XElement {
 		this.hovered = itemData.hovered;
 	}
 
+	get itemData() {
+		return this.itemData_;
+	}
+
 	set selected(value) {
 		this.classList.toggle('selected', value);
 	}
 
 	set hovered(value) {
 		this.classList.toggle('hovered', value);
-	}
-
-	get searchTexts() {
-		return [...this.$$('div')]
-			.filter(div => !div.querySelector('div') && !div.classList.contains('hidden'))
-			.map(div => div.textContent.trim().replace(/\s+/g, ' '))
-			.filter(text => text);
 	}
 });
