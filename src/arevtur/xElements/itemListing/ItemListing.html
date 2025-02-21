@@ -2,7 +2,7 @@
 	@import '../sharedStyle.css';
 
 	:host {
-		height: 450px;
+		height: var(--maximize-hide-display, 450px);
 		padding: 10px;
 		border: 1px solid var(--interactable-border);
 		background-color: var(--interactable-back);
@@ -100,7 +100,7 @@
 
 <div id="name-text"></div>
 
-<div class="scroll">
+<div class="scroll maximize-hide">
 	<div>
 		<span id="type-text"></span>
 		<span id="item-level-text"></span>
@@ -143,18 +143,20 @@
 	</div>
 	<div>
 		<button id="direct-whisper">Direct whisper</button>
-		<button id="copy-whisper">Copy whisper</button>
-		<button id="copy-item-button">Copy item</button>
+		<button id="copy-whisper" class="maximize-hide">Copy whisper</button>
+		<button id="copy-item-button" class="maximize-hide">Copy item</button>
 	</div>
 </div>
 
 <div class="small-info">
-	<span id="account-text"></span>
-	-
-	<span id="date-text"></span>
-	-
+	<span class="maximize-hide">
+		<span id="account-text"></span>
+		-
+		<span id="date-text"></span>
+		-
+	</span>
 	<span id="online-status-text"></span>
-	<button id="refresh-button">Refresh</button>
+	<button id="refresh-button" class="maximize-hide">Refresh</button>
 </div>
 
 <div class="debug experimental">
