@@ -32,4 +32,4 @@ const itemClassToPobType = {
 	'Utility Flasks': 'Flask',
 };
 
-module.exports = {slots, itemClassToPobType};
+module.exports = {itemClassToPobType};
