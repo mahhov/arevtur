@@ -166,10 +166,7 @@ class PobApi extends Emitter {
 	}
 
 	// todo[low] rename evalItemMod
-	evalItemModSummary(pobType = undefined, itemMod = undefined, pluginNumber = 1) {
-		if (!pobType || !itemMod)
-			return Promise.reject('item missing type or mod');
-
+	evalItemModSummary(type, itemMod, pluginNumber = 1) {
 		// not all pseudo mods are mapped; handles the ones with 'total' in their text
 		if (itemMod.toLowerCase().endsWith('(pseudo)'))
 			itemMod = itemMod
