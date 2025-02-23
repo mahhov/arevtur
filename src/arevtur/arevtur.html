@@ -17,6 +17,10 @@
 		overflow: hidden;
 	}
 
+	:root.maximize x-inputs {
+		display: none;
+	}
+
 	/* in vertical view, split 50%/50%, while allowing the results to grow if inputs don't need all the space */
 	:root:not(.horizontal) {
 		.container {
@@ -41,7 +45,7 @@
 </script>
 
 <div class="container">
-	<x-inputs class="area maximize-hide"></x-inputs>
+	<x-inputs class="area"></x-inputs>
 	<x-results class="area"></x-results>
 	<x-tour></x-tour>
 </div>
