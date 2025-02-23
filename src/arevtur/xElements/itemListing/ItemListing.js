@@ -58,28 +58,9 @@ customElements.define(name, class extends XElement {
 		// overwriting the correct one
 		this.itemData_ = itemData;
 
-		this.$('#name-text').textContent = itemData.name;
-		this.$('#type-text').textContent = itemData.subtype;
-		this.$('#item-level-text').textContent = itemData.itemLevel;
-
-		this.$('#corrupted-text').classList.toggle('hidden', !itemData.corrupted);
-		this.$('#mirrored-text').classList.toggle('hidden', !itemData.mirrored);
-		this.$('#split-text').classList.toggle('hidden', !itemData.split);
-
-		listTuples.forEach(([containerQuery, propertyName]) =>
-			updateElementChildren(
-				this.$(containerQuery),
-				itemData[propertyName],
-				(i, mods) => document.createElement('div'),
-				(div, i, mod) => div.textContent = mod,
-			));
-
-		this.$('#prefixes-text').textContent = itemData.affixes.prefix;
-		this.$('#suffixes-text').textContent = itemData.affixes.suffix;
-		this.$('#affix-value-text').textContent = itemData.weightedValueDetails.affixes;
-		this.$('#quality-text').textContent = itemData.quality;
-		this.$('#defense-value-text').textContent = round(itemData.weightedValueDetails.defenses, 3);
-		this.$('#weight-value-text').textContent = round(itemData.weightedValueDetails.mods, 3);
+		this.$('#name-text').textContent = itemData.displayLines[0];
+		this.$('#body').text = itemData.displayLines[1];
+		this.$('#account-text').text = itemData.displayLines[2];
 
 		this.$('#weight-value').text = `Weighted: ${round(itemData.weightedValue, 1)}`;
 		let expandedValues = Object.entries(itemData.weightedValueDetails)
@@ -100,15 +81,6 @@ customElements.define(name, class extends XElement {
 		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
 			.map(([name, value]) => ` + ${name} (${round(value, 1)} ${currency})`);
 		this.$('#price').tooltip = `${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join('')}`;
-		this.$('#account-text').textContent = itemData.accountText;
-		this.$('#account-text').title = itemData.accountText;
-		const msInHour = 1000 * 60 * 60;
-		let dateDiff = (new Date() - new Date(itemData.date)) / msInHour;
-		this.$('#date-text').textContent = dateDiff > 24 ?
-			`${round(dateDiff / 24, 1)} days ago` :
-			`${round(dateDiff, 1)} hours ago`;
-		this.$('#online-status-text').textContent = itemData.onlineStatus;
-		this.$('#online-status-text').classList.toggle('offline', itemData.onlineStatus === 'offline');
 
 		this.$('#debug').text = itemData.queryNotes[0];
 		this.$('#debug').tooltip = itemData.queryNotes.join('\n');

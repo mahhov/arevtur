@@ -25,49 +25,6 @@
 		flex: 1 1 0;
 	}
 
-	#corrupted-text,
-	#mirrored-text,
-	#split-text {
-		color: var(--colored-text-red);
-		font-weight: bold;
-	}
-
-	#influence-list {
-		color: var(--colored-text-light-green);
-	}
-
-	#defense-container {
-		color: var(--colored-text-orange);
-	}
-
-	#enchant-list {
-		color: var(--colored-text-light-green);
-	}
-
-	#rune-list {
-		color: var(--colored-text-blue);
-	}
-
-	#implicit-list {
-		color: var(--colored-text-green);
-	}
-
-	#fractured-list {
-		color: var(--colored-text-orange);
-	}
-
-	#crafted-list {
-		color: var(--colored-text-blue);
-	}
-
-	#pseudo-container {
-		color: var(--colored-text-pink);
-	}
-
-	.value {
-		font-weight: bold;
-	}
-
 	.button-pane {
 		flex: 0 0;
 		position: relative;
@@ -84,14 +41,6 @@
 		text-overflow: ellipsis;
 	}
 
-	#online-status-text {
-		color: var(--colored-text-blue);
-	}
-
-	#online-status-text.offline {
-		color: var(--colored-text-orange);
-	}
-
 	.debug {
 		flex: 0 0;
 		position: relative;
@@ -100,36 +49,7 @@
 
 <div id="name-text"></div>
 
-<div class="scroll">
-	<div>
-		<span id="type-text"></span>
-		<span id="item-level-text"></span>
-	</div>
-	<div id="corrupted-text">corrupted</div>
-	<div id="mirrored-text">mirrored</div>
-	<div id="split-text">split</div>
-	<div id="influence-list"></div>
-	<div id="sockets-list"></div>
-	<!-- todo[medium] don't show affix count if both are 0-->
-	<div>P <span id="prefixes-text"></span></div>
-	<div>S <span id="suffixes-text"></span></div>
-	<div class="value">Affix value: <span id="affix-value-text"></span></div>
-	<div id="quality-text"></div>
-	<div id="defense-container">
-		<div id="defense-list"></div>
-		<div class="value">Defense value: <span id="defense-value-text"></span></div>
-	</div>
-	<div id="enchant-list"></div>
-	<div id="rune-list"></div>
-	<div id="implicit-list"></div>
-	<div id="fractured-list"></div>
-	<div id="explicit-list"></div>
-	<div id="crafted-list"></div>
-	<div id="pseudo-container">
-		<div id="pseudo-list"></div>
-		<div class="value">Mod value: <span id="weight-value-text"></span></div>
-	</div>
-</div>
+<x-formatted-text id="body" class="scroll"></x-formatted-text>
 
 <div class="button-pane">
 	<!-- todo[medium] show pob value without need to hover -->
@@ -149,11 +69,7 @@
 </div>
 
 <div class="small-info">
-	<span id="account-text"></span>
-	-
-	<span id="date-text"></span>
-	-
-	<span id="online-status-text"></span>
+	<x-formatted-text id="account-text" class="scroll"></x-formatted-text>
 	<button id="refresh-button">Refresh</button>
 </div>
 

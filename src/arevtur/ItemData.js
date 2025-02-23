@@ -1,6 +1,6 @@
 const apiConstants = require('./apiConstants');
 const pobApi = require('../services/pobApi/pobApi');
-const {maxIndex} = require('../util/util');
+const {maxIndex, round} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
 
 class ItemData {
@@ -117,6 +117,8 @@ class ItemData {
 		this.pricePromise = ItemData.price(this.league, this.priceDetails);
 		// todo[medium] rm price, let users use pricePromise
 		this.pricePromise.then(price => this.price = price);
+
+		this.displayLines = this.constructDisplayLines;
 	}
 
 	static typeFromItemText(text) {
@@ -173,6 +175,45 @@ class ItemData {
 			this.corrupted ? 'Corrupted' : '',
 			this.mirrored ? 'Mirrored' : '',
 		].join('\n');
+	}
+
+	get constructDisplayLines() {
+		const msInHour = 1000 * 60 * 60;
+		let dateDiff = (new Date() - new Date(this.date)) / msInHour;
+		let dateText = dateDiff > 24 ?
+			`${round(dateDiff / 24, 1)} days ago` :
+			`${round(dateDiff, 1)} hours ago`;
+
+		return [
+			this.name,
+			[
+				`${this.subtype} ${this.itemLevel}`,
+				this.corrupted ? '@bold,red corrupted' : '',
+				this.mirrored ? '@bold,red mirrored' : '',
+				this.split ? '@bold,red split' : '',
+				...this.influences.map(t => `@light-green ` + t),
+				this.sockets.map(chain => chain.join('')).join(),
+				'P ' + this.affixes.prefix,
+				'S ' + this.affixes.suffix,
+				this.weightedValueDetails.affixes ? '@bold Affix value: ' + this.weightedValueDetails.affixes : '',
+				this.quality,
+				...this.defenseProperties.map(t => `@orange ` + t),
+				this.weightedValueDetails.defenses ? '@bold,orange Defense value: ' + this.weightedValueDetails.defenses : '',
+				...this.enchantMods.map(t => `@light-green ` + t),
+				...this.runeMods.map(t => `@blue ` + t),
+				...this.implicitMods.map(t => `@green ` + t),
+				...this.fracturedMods.map(t => `@orange ` + t),
+				...this.explicitMods,
+				...this.craftedMods.map(t => `@blue ` + t),
+				...this.pseudoMods.map(t => `@pink ` + t),
+				this.weightedValueDetails.mods ? '@bold,pink Mod value: ' + this.weightedValueDetails.mods : '',
+			].filter(v => v).join('\n'),
+			[
+				this.accountText,
+				dateText,
+				(this.onlineStatus === 'offline' ? '@orange ' : '@blue ') + this.onlineStatus,
+			].join(' - '),
+		];
 	}
 
 	async craftValue() {
