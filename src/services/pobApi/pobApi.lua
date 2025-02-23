@@ -114,6 +114,38 @@ local function loadExtraMods(mods)
     build:OnFrame({})
 end
 
+local function typeToSlotName(type)
+    -- if already have an item of the same type equipped, use its slot
+    for slotName, slot in pairs(build.itemsTab.slots) do
+        local item = build.itemsTab.items[slot.selItemId]
+        if item and item.type == type then
+            return slotName
+        end
+    end
+
+    local fakeItemBase
+    for _, itemBase in pairs(data.itemBases) do
+        if itemBase.type == type then
+            fakeItemBase = itemBase
+            break
+        end
+    end
+    if not fakeItemBase then
+        return nil
+    end
+
+    -- ItemsTab, with charms and flasks removed
+    local baseSlots = { "Weapon 1", "Weapon 2", "Helmet", "Body Armour", "Gloves", "Boots", "Amulet", "Ring 1", "Ring 2", "Belt"}
+
+    -- otherwise, find the first slot that might equip this item
+    local fakeItem = { type = type, base = fakeItemBase }
+    for _, slotName in ipairs(baseSlots) do
+        if build.itemsTab:IsItemValidForSlot(fakeItem, slotName) then
+            return slotName
+        end
+    end
+end
+
 local function evalEquippingItem(itemText, copyRunes)
     local item = new('Item', emplaceNewLines(itemText))
     if not item.base then
@@ -209,7 +241,7 @@ while true do
         -- given a mod and item type, see what adding that mod to the currently equipped item of
         -- that type would do for the build
         loadExtraMods(args.extraMods)
-        local slot = build.itemsTab.slots[args.type]
+        local slot = build.itemsTab.slots[typeToSlotName(args.type)]
         if slot then
             local equippedItem = build.itemsTab.items[slot.selItemId] or { raw = sampleItemAmulet }
             local itemText = equippedItem.raw .. '\n' .. args.mod
@@ -220,7 +252,7 @@ while true do
                 respond(dkjson.encode({ error = err, details = itemText }))
             end
         else
-            respond(dkjson.encode({ error = 'Individual mod weights aren\'t supported on this item type', details = args.type }))
+            respond(dkjson.encode({ error = 'Could not find slot for type', details = args.type }))
         end
 
     elseif args.cmd == 'getModWeights' then
@@ -239,56 +271,64 @@ while true do
             end
         end
 
+        local jewelTypes = {
+            ['Any Jewel'] = 'Any',
+            ['Base Jewel'] = 'Base',
+            ['Abyss Jewel'] = 'Abyss',
+        }
+
         -- TradeQueryClass:PriceItemRowDisplay
         local jewelNodeId
-        for nodeId, slot in pairs(itemsTab.sockets) do
-            if not slot.inactive then
-                jewelNodeId = nodeId
-                break
+        if jewelTypes[args.type] then
+            for nodeId, slot in pairs(itemsTab.sockets) do
+                if not slot.inactive then
+                    jewelNodeId = nodeId
+                    break
+                end
             end
         end
-        local slot = itemsTab.slots[args.type] or itemsTab.sockets[jewelNodeId]
-        tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
-                tradeQuery.statSortSelectionList, function(context, query, errMsg)
-                    respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
-                    local minValue = dkjson.decode(query).query.stats[1].value.min
-                    respond(dkjson.encode({ minValue, tradeQueryGenerator.modWeights }))
-                end)
+        local slot = itemsTab.slots[typeToSlotName(args.type)] or itemsTab.sockets[jewelNodeId]
+        if slot then
+            tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
+                    tradeQuery.statSortSelectionList, function(context, query, errMsg)
+                        respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
+                        local minValue = dkjson.decode(query).query.stats[1].value.min
+                        respond(dkjson.encode({ minValue, tradeQueryGenerator.modWeights }))
+                    end)
 
-        -- TradeQueryGeneratorClass:RequestQuery execute
-        local eldritchModSlots = {
-            ['Body Armour'] = true,
-            ['Helmet'] = true,
-            ['Gloves'] = true,
-            ['Boots'] = true
-        }
-        local jewelTypes = {
-            ['Jewel Any'] = 'Any',
-            ['Jewel Base'] = 'Base',
-            ['Jewel Abyss'] = 'Abyss',
-        }
-        local options = {
-            includeCorrupted = args.includeCorrupted,
-            includeEldritch = eldritchModSlots[slot.slotName] == true and args.options.includeEldritch,
-            includeTalisman = slot.slotName == 'Amulet' and args.options.includeTalisman,
-            influence1 = 1,
-            influence2 = 1,
-            maxPrice = 1,
-            statWeights = tradeQuery.statSortSelectionList,
-            jewelType = jewelTypes[args.type],
-        }
-        respond('Slot ' .. slot.slotName .. ', Options ' .. dkjson.encode(options), true)
-        tradeQueryGenerator:StartQuery(slot, options)
+            -- TradeQueryGeneratorClass:RequestQuery execute
+            local eldritchModSlots = {
+                ['Body Armour'] = true,
+                ['Helmet'] = true,
+                ['Gloves'] = true,
+                ['Boots'] = true
+            }
+            local options = {
+                includeCorrupted = args.includeCorrupted,
+                includeEldritch = eldritchModSlots[slot.slotName] == true and args.options.includeEldritch,
+                includeTalisman = slot.slotName == 'Amulet' and args.options.includeTalisman,
+                influence1 = 1,
+                influence2 = 1,
+                maxPrice = 1,
+                statWeights = tradeQuery.statSortSelectionList,
+                jewelType = jewelTypes[args.type],
+            }
+            respond('Slot ' .. slot.slotName .. ', Options ' .. dkjson.encode(options), true)
+            tradeQueryGenerator:StartQuery(slot, options)
 
-        if args.options.includeInfluence then
-            for _, influence in pairs(itemLib.influenceInfo) do
-                tradeQueryGenerator.calcContext.testItem[influence.key] = true
+            if args.options.includeInfluence then
+                for _, influence in pairs(itemLib.influenceInfo) do
+                    tradeQueryGenerator.calcContext.testItem[influence.key] = true
+                end
             end
-        end
 
-        tradeQueryGenerator:OnFrame()
-        -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot
-        -- todo[low] make sure these all work for characters with empty slots
+            tradeQueryGenerator:OnFrame()
+            -- todo[low] replace weakest or empty jewel slot instead of 1st jewel slot
+            -- todo[low] make sure these all work for characters with empty slots
+
+        else
+            respond(dkjson.encode({ error = 'Could not find slot for type', details = args.type }))
+        end
 
     elseif args.cmd == 'getCraftedMods' then
         local response = dkjson.encode(data.masterMods)

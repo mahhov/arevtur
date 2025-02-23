@@ -130,8 +130,7 @@ customElements.define(name, class extends XElement {
 		try {
 			this.buildValue = 0;
 			this.buildValueTooltip = '';
-			let pobType = await apiConstants.typeToPobType(this.type);
-			let {modWeights} = await pobApi.getModWeights(pobType);
+			let {modWeights} = await pobApi.getModWeights(this.type);
 			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights(new UnifiedQueryParams(), 0, modWeights);
 			let index = unifiedQueryParams.weightEntries
 				.findIndex(entry => entry.propertyText === this.property);
@@ -145,7 +144,7 @@ customElements.define(name, class extends XElement {
 				pluginNumber = 100;
 			if (this.property.startsWith('# to Intelligence'))
 				pluginNumber = 10;
-			let summary = await pobApi.evalItemModSummary(pobType, this.property, pluginNumber);
+			let summary = await pobApi.evalItemModSummary(this.type, this.property, pluginNumber);
 			this.buildValue2 = summary.value;
 			this.buildValue2Tooltip = summary.text;
 		} catch (e) {

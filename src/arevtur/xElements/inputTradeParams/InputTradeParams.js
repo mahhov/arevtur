@@ -299,8 +299,7 @@ customElements.define(name, class extends XElement {
 
 	async buildImport() {
 		try {
-			let pobType = await apiConstants.typeToPobType(this.type);
-			let {minValue, modWeights} = await pobApi.getModWeights(pobType, !this.uncorrupted);
+			let {minValue, modWeights} = await pobApi.getModWeights(this.type, !this.uncorrupted);
 			return await UnifiedQueryParams.fromModWeights(this.unifiedQueryParams, minValue, modWeights);
 		} catch (e) {
 			console.warn('PoB import', e);
@@ -407,8 +406,7 @@ customElements.define(name, class extends XElement {
 			try {
 				this[buildValue] = 0;
 				this[buildValue + 'Tooltip'] = '';
-				let pobType = await apiConstants.typeToPobType(this.type);
-				let summary = await pobApi.evalItemModSummary(pobType, modProperty, 400);
+				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 400);
 				this[buildValue] = summary.value;
 				this[buildValue + 'Tooltip'] = summary.text;
 			} catch (e) {

@@ -189,7 +189,7 @@ class PobApi extends Emitter {
 		return this.send({
 			cmd: 'mod',
 			mod: itemMod,
-			type: pobType,
+			type,
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)
@@ -200,13 +200,11 @@ class PobApi extends Emitter {
 			}));
 	}
 
-	getModWeights(pobType = undefined, includeCorrupted = true) {
+	getModWeights(type, includeCorrupted = true) {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
-		if (!pobType)
-			return Promise.reject('missing type');
 		return this.send({
 			cmd: 'getModWeights',
-			type: pobType,
+			type,
 			includeCorrupted,
 			weights: this.weights2,
 			options: this.options,

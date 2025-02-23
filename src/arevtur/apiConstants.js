@@ -79,11 +79,6 @@ class ApiConstants {
 		return types.find(type => type.text === text)?.id;
 	}
 
-	async typeToPobType(text) {
-		let typeId = await this.typeTextToId(text);
-		return pobConsts.slots[typeId];
-	}
-
 	async typeIdToText(id) {
 		let types = await this.types;
 		return types.find(type => type.id === id)?.text;
@@ -327,7 +322,7 @@ class ApiConstants {
 		let hour1 = 60 * 60 * 1000;
 		while (true) {
 			let version2 = configForRenderer.config.version2;
-			cacheKey = [cacheKey, version2, ...args].join(',');
+			cacheKey = [cacheKey, version2, ...args].join();
 			if (!this.cache[cacheKey] ||
 				Date.now() - this.cache[cacheKey].lastRequest > hour1 ||
 				(!this.cache[cacheKey].promise || this.cache[cacheKey].promise.error) && !this.cache[cacheKey].value) {

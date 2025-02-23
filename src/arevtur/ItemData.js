@@ -230,9 +230,8 @@ class ItemData {
 		// skip crafts that don't benefit build
 		craftableMods = await Promise.all(craftableMods.map(async craftableMod => {
 			// todo[medium] use correct slot; amulet won't correctly eval e.g. local evasion or dmg.
-			let pobType = await apiConstants.typeToPobType('Amulet');
 			craftableMod.eval =
-				await pobApi.evalItemModSummary(pobType, craftableMod.stats.join('\n'));
+				await pobApi.evalItemModSummary('Amulet', craftableMod.stats.join('\n'));
 			return craftableMod;
 		}));
 		// pick the best mod
