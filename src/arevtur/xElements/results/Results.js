@@ -107,7 +107,7 @@ customElements.define(name, class extends XElement {
 
 		let searcher = new Searcher(this.$('#search-input').value);
 		let shownItemsData = this.itemsData.shownItems
-			.filter(item => searcher.test(item.text))
+			.filter(item => searcher.testMulti(item.displayLines))
 			.filter((_, i) => i < 100);
 
 		updateElementChildren(
