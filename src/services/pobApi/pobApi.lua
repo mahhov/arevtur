@@ -135,7 +135,7 @@ local function typeToSlotName(type)
     end
 
     -- ItemsTab, with charms and flasks removed
-    local baseSlots = { "Weapon 1", "Weapon 2", "Helmet", "Body Armour", "Gloves", "Boots", "Amulet", "Ring 1", "Ring 2", "Belt"}
+    local baseSlots = { 'Weapon 1', 'Weapon 2', 'Helmet', 'Body Armour', 'Gloves', 'Boots', 'Amulet', 'Ring 1', 'Ring 2', 'Belt'}
 
     -- otherwise, find the first slot that might equip this item
     local fakeItem = { type = type, base = fakeItemBase }
