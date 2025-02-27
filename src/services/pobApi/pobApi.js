@@ -140,7 +140,10 @@ class PobApi extends Emitter {
 		return this.send({
 			cmd: 'queryBuildStats',
 			extraMods: this.extraModStrings,
-		}).then(JSON.parse);
+		})
+			.then(JSON.parse)
+			.then(obj => obj || {})
+			.catch(() => ({}));
 	}
 
 	evalItem(item, copyRunes = false) {

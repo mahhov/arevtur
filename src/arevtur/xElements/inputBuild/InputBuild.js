@@ -5,6 +5,7 @@ const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
 const appData = require('../../../services/appData');
 const configForRenderer = require('../../../services/config/configForRenderer');
+const defaultConfig = require('../../../services/config/defaultConfig.json');
 const {updateElementChildren, round} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {
@@ -22,6 +23,7 @@ customElements.define(name, class extends XElement {
 		this.$('#pob-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#reload').addEventListener('click', () => pobApi.restart());
+		this.$('#reset').addEventListener('click', () => this.resetConfig());
 
 		this.$('#weights').addEventListener('arrange', () => this.saveConfig());
 
@@ -73,7 +75,7 @@ customElements.define(name, class extends XElement {
 		if (!weights.length || weights[weights.length - 1].name)
 			weights.push({name: '', percentWeight: 0, flatWeight: 0, flatWeightType: false});
 
-		let buildStats = await pobApi.queryBuildStats().catch(() => ({}));
+		let buildStats = await pobApi.queryBuildStats();
 
 		updateElementChildren(this.$('#weights'), weights,
 			(i, values) => {
@@ -109,6 +111,12 @@ customElements.define(name, class extends XElement {
 					equalChaosResist: this.$('#equal-chaos-resist-check').checked,
 				},
 			},
+		};
+	}
+
+	resetConfig() {
+		configForRenderer.config = {
+			buildParams: defaultConfig.buildParams,
 		};
 	}
 });

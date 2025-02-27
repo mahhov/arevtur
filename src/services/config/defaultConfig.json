@@ -83,12 +83,6 @@
         "percentWeight": 0,
         "flatWeight": 0,
         "flatWeightType": false
-      },
-      {
-        "name": "",
-        "percentWeight": 0,
-        "flatWeight": 0,
-        "flatWeightType": false
       }
     ],
     "options": {
