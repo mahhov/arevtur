@@ -14,7 +14,7 @@ let getUnreadLines = async () => {
 	readLines = lines.length;
 	return lines
 		.slice(oldReadLines)
-		.map(line => line.match(/\d{4}\/\d{2}\/\d{2} (\d{2}:\d{2}:\d{2}) \d+ \w+ \[\w+ \w+ \d+] (@From|@To|:|%\w+:|@\w+:)(.*)/))
+		.map(line => line.match(/\d{4}\/\d{2}\/\d{2} (\d{2}:\d{2}:\d{2}) \d+ \w+ \[\w+ \w+ \d+] (@From|:|%\w+:|@\w+:)(.*)/))
 		.filter(match => match)
 		.map(match => `${match[1]}${match[2]}${match[3]}`);
 };
