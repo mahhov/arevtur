@@ -20,60 +20,6 @@ class Macros {
 				(await weightEntry.property)?.type !== 'implicit');
 		},
 
-		replaceResists: async unifiedQueryParams => {
-			let searcher = new Searcher(
-				'= +#% #% total to all and cold fire lightning chaos elemental resistance resistances (explicit) (implicit)');
-			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>
-				!searcher.test((await weightEntry.property)?.originalText));
-
-			(configForRenderer.config.version2 ? [
-				['#% to Cold Resistance (implicit)', pobApi.weights.elementalResist],
-				['#% to Cold Resistance (explicit)', pobApi.weights.elementalResist],
-				['#% to Fire Resistance (implicit)', pobApi.weights.elementalResist],
-				['#% to Fire Resistance (explicit)', pobApi.weights.elementalResist],
-				['#% to Lightning Resistance (implicit)', pobApi.weights.elementalResist],
-				['#% to Lightning Resistance (explicit)', pobApi.weights.elementalResist],
-				['#% to all Elemental Resistances (implicit)', pobApi.weights.elementalResist * 3],
-				['#% to all Elemental Resistances (explicit)', pobApi.weights.elementalResist * 3],
-				['#% to Chaos Resistance (explicit)', pobApi.weights.elementalResist],
-				['#% to Chaos Resistance (implicit)', pobApi.weights.chaosResist],
-			] : [
-				['+#% total to all Elemental Resistances (pseudo)', pobApi.weights.elementalResist],
-				['+#% total to Chaos Resistance (pseudo)', pobApi.weights.chaosResist],
-			])
-				.filter(tuple => tuple[1])
-				.forEach(tuple => unifiedQueryParams.weightEntries.unshift(new UnifiedQueryParams.Entry(...tuple)));
-
-			return unifiedQueryParams;
-		},
-
-		replaceAttributes: async unifiedQueryParams => {
-			let searchers = ['strength', 'dexterity', 'intelligence'].map(
-				attribute => new Searcher(`
-				${attribute}`));
-			for (let searcher of searchers) {
-				await Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>
-					!searcher.test((await weightEntry.property)?.originalText));
-			}
-
-			// todo[medium] should be adding to any weight already assigned so to include e.g. the value of life given from str.
-			(configForRenderer.config.version2 ? [
-				['# to Strength (implicit)', pobApi.weights.str],
-				['# to Strength (explicit)', pobApi.weights.str],
-				['# to Dexterity (implicit)', pobApi.weights.dex],
-				['# to Dexterity (explicit)', pobApi.weights.dex],
-				['# to Intelligence (implicit)', pobApi.weights.int],
-				['# to Intelligence (explicit)', pobApi.weights.int],
-			] : [
-				['+# total to Strength (pseudo)', pobApi.weights.str],
-				['+# total to Dexterity (pseudo)', pobApi.weights.dex],
-				['+# total to Intelligence (pseudo)', pobApi.weights.int],
-			])
-				.filter(tuple => tuple[1])
-				.forEach(tuple => unifiedQueryParams.weightEntries.unshift(new UnifiedQueryParams.Entry(...tuple)));
-			return unifiedQueryParams;
-		},
-
 		addCrafted: async unifiedQueryParams => {
 			// remove existing crafted properties
 			await Macros.Input.removeWeightedEntries(unifiedQueryParams, async weightEntry =>

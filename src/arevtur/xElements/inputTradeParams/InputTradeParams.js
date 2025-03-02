@@ -134,12 +134,6 @@ customElements.define(name, class extends XElement {
 		this.$('#drop-implicit-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
 				await Macros.Input.dropImplicits(this.unifiedQueryParams)));
-		this.$('#replace-resist-mods-button').addEventListener('click', async () =>
-			this.setUnifiedQueryParams(
-				await Macros.Input.replaceResists(this.unifiedQueryParams)));
-		this.$('#replace-attribute-mods-button').addEventListener('click', async () =>
-			this.setUnifiedQueryParams(
-				await Macros.Input.replaceAttributes(this.unifiedQueryParams)));
 		this.$('#add-crafted-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
 				await Macros.Input.addCrafted(this.unifiedQueryParams)));
