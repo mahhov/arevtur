@@ -76,8 +76,6 @@ customElements.define(name, class extends XElement {
 		//  before the query returns.
 		this.$('#smart-build-import-for-type-button').addEventListener('click', async () => {
 			this.setUnifiedQueryParams(await this.buildImport()
-				.then(Macros.Input.replaceResists)
-				.then(Macros.Input.replaceAttributes)
 				.then(Macros.Input.addPseudo)
 				.then(Macros.Input.enableAll));
 		});
