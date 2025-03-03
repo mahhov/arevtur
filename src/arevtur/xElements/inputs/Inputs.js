@@ -325,7 +325,6 @@ customElements.define(name, class extends XElement {
 
 		let manual6LinkCheapestOption = [];
 		if (!version2) {
-			// todo[medium] re-add 6-link support for poe 1 queries
 			let currencyPrices = await apiConstants.currencyPrices(league);
 			let manual6LinkOptions = [
 				['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],
@@ -334,9 +333,9 @@ customElements.define(name, class extends XElement {
 			manual6LinkCheapestOption = manual6LinkOptions[minIndex(manual6LinkOptions.map(v => v[1]))];
 		}
 
-		let tradeQueryData = await UnifiedQueryParams
+		let tradeQueryData = UnifiedQueryParams
 			.fromStorageQueryParams(this.inputSets[index].unifiedQueryParams, this.sharedWeightEntries)
-			.toTradeQueryData(version2, league, manual6LinkCheapestOption[0], manual6LinkCheapestOption[1]);
+			.toTradeQueryData(...manual6LinkCheapestOption);
 		return tradeQueryData
 			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));
 	}

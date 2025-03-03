@@ -67,6 +67,7 @@ class UnifiedQueryParams {
 	conditionalPrefixEntries = [];
 	conditionalSuffixEntries = [];
 	sharedWeightEntries = [];
+	priceShifts = {};
 
 	constructor() {
 		defensePropertyTuples.forEach(([property]) =>
@@ -194,7 +195,7 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	async toTradeQueryData(version2, league) {
+	toTradeQueryData(manual6LinkName, manual6LinkPrice) {
 		let queries = [];
 
 		let offlineOptions = [this.offline, false].filter(unique);
@@ -205,6 +206,13 @@ class UnifiedQueryParams {
 			priceOptions.push(maxPrice);
 			maxPrice = Math.floor(maxPrice / 10);
 		} while (maxPrice > 100);
+
+		let linkedOptions = [
+			// query with the intended links
+			false,
+			// query unlinked + uncorrupted  items
+			this.linked && (!this.maxPrice || this.maxPrice > manual6LinkPrice) ? true : null,
+		].filter(v => v !== null);
 
 		let affixOptions = [
 			// query without affixes
@@ -224,23 +232,31 @@ class UnifiedQueryParams {
 		// cross product all combinations of options
 		offlineOptions.forEach(offlineOption =>
 			priceOptions.forEach(priceOption =>
-				affixOptions.forEach(affixOption => {
-					let copy = this.copy;
-					copy.offline = offlineOption;
-					copy.maxPrice = priceOption;
-					if (affixOption) {
-						copy.affixProperties[affixOption[0]] = true;
-						copy.uncorrupted = true;
-						copy.uncrafted = true;
-						if (affixOption.length === 1)
-							copy.affixValueShift += this.affixProperties[affixOption[0]];
-						else {
-							copy.notEntries[affixOption[1]] = undefined;
-							copy.affixValueShift += affixOption[2];
+				linkedOptions.forEach(linkedOption =>
+					affixOptions.forEach(affixOption => {
+						let copy = this.copy;
+						copy.offline = offlineOption;
+						copy.maxPrice = priceOption;
+						if (linkedOption) {
+							copy.linked = false;
+							copy.uncorrupted = true;
+							if (copy.maxPrice)
+								copy.maxPrice -= manual6LinkPrice;
+							copy.priceShifts[manual6LinkName] = manual6LinkPrice;
 						}
-					}
-					queries.push(copy);
-				})));
+						if (affixOption) {
+							copy.affixProperties[affixOption[0]] = true;
+							copy.uncorrupted = true;
+							copy.uncrafted = true;
+							if (affixOption.length === 1)
+								copy.affixValueShift += this.affixProperties[affixOption[0]];
+							else {
+								copy.notEntries[affixOption[1]] = undefined;
+								copy.affixValueShift += affixOption[2];
+							}
+						}
+						queries.push(copy);
+					}))));
 
 		// each query is like a `UnifiedQueryParams`, but with the additional fields:
 		// `priceShifts`, & `affixValueShift`
