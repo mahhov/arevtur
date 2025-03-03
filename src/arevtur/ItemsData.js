@@ -1,4 +1,5 @@
 const Emitter = require('../util/Emitter');
+const {round} = require('../util/util');
 
 class ItemsData extends Emitter {
 	static valueHandlers = [
@@ -89,7 +90,7 @@ class ItemsData extends Emitter {
 				if (copies[0] !== v)
 					return false;
 				v.weightedValue = Math.max(...copies.map(vv => vv.weightedValue));
-				v.price = Math.min(...copies.map(vv => vv.price));
+				v.price.price = Math.min(...copies.map(vv => vv.price.price));
 				// todo[low] is it ok to take the max of each, or should the values of the max-sum
 				//  be taken?
 				v.weightedValueDetails = Object.fromEntries(Object.keys(v.weightedValueDetails).map(
@@ -124,8 +125,8 @@ class ItemsData extends Emitter {
 		return this.shownItems.find(item =>
 			this.y(item) > minValue &&
 			this.y(item) < maxValue &&
-			item.price > minPrice &&
-			item.price < maxPrice);
+			item.price.price > minPrice &&
+			item.price.price < maxPrice);
 	}
 
 	get shownItems() {
@@ -133,7 +134,7 @@ class ItemsData extends Emitter {
 			.filter(this.valueHandler_.showFilter)
 			// high to low values, low to high prices
 			.sort((a, b) =>
-				this.y(b) - this.y(a) - (b.price - a.price) / this.pricePerValue_ ||
+				this.y(b) - this.y(a) - (b.price.price - a.price.price) / this.pricePerValue_ ||
 				this.y(b) - this.y(a)));
 	}
 
@@ -141,11 +142,11 @@ class ItemsData extends Emitter {
 		let minPriceFound = Infinity;
 		// ordered top right to bottom left
 		return [...this.shownItems]
-			.sort((a, b) => this.y(b) - this.y(a) || a.price - b.price)
+			.sort((a, b) => this.y(b) - this.y(a) || a.price.price - b.price.price)
 			.filter(item => {
-				if (item.price >= minPriceFound)
+				if (item.price.price >= minPriceFound)
 					return false;
-				minPriceFound = item.price;
+				minPriceFound = item.price.price;
 				return true;
 			});
 	}
@@ -159,17 +160,24 @@ class ItemsData extends Emitter {
 	}
 
 	get bestBoundPath() {
-		let maxPrice = Math.max(...this.shownItems.map(item => item.price));
+		let maxPrice = Math.max(...this.shownItems.map(item => item.price.price));
 		let path = this.bestBoundItems.flatMap((item, i, a) =>
 			[{
 				...item,
-				price: i ? a[i - 1].price : maxPrice,
+				price: {price: i ? a[i - 1].price.price : maxPrice},
 			}, item]);
 		return this.itemsToPoints(path);
 	}
 
 	itemsToPoints(items) {
-		return items.map(item => ({x: item.price, y: this.y(item)}));
+		return items.map(item => {
+			let y = this.y(item);
+			return {
+				x: item.price.price,
+				y,
+				text: `${item.price.priceSummary}, ${round(y, 1)}`,
+			};
+		});
 	}
 }
 

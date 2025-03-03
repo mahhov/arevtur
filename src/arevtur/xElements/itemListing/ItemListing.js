@@ -76,11 +76,8 @@ customElements.define(name, class extends XElement {
 			this.$('#craft-value').tooltip = craftValue.text;
 		}).catch(e => 0);
 
-		let currency = configForRenderer.config.version2 ? 'exalt' : 'chaos';
-		this.$('#price').text = `${round(itemData.price, 1)} ${currency}`;
-		let expandedPriceShifts = Object.entries(itemData.priceDetails.shifts)
-			.map(([name, value]) => ` + ${name} (${round(value, 1)} ${currency})`);
-		this.$('#price').tooltip = `${itemData.priceDetails.count} ${itemData.priceDetails.currency}${expandedPriceShifts.join('')}`;
+		this.$('#price').text = itemData.price.priceSummary;
+		this.$('#price').tooltip = itemData.price.priceBreakdown;
 
 		this.$('#debug').text = itemData.queryNotes[0];
 		this.$('#debug').tooltip = itemData.queryNotes.join('\n');

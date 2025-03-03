@@ -11,6 +11,10 @@ let randId = () => randInt(1000 ** 2) + 1;
 let round = (n, precision) => Math.round(n * 10 ** precision) / 10 ** precision;
 let escapeRegex = stringRegex => stringRegex.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // https://stackoverflow.com/a/6969486/6951428
 let sleep = ms => ms > 0 ? new Promise(resolve => setTimeout(resolve, ms)) : Promise.resolve();
+let unitText = (value, smallInBig, precision, smallUnit, bigUnit) =>
+	value > smallInBig ?
+		`${round(value / smallInBig, precision)} ${bigUnit}` :
+		`${round(value, precision)} ${smallUnit}`;
 
 let deepMerge = (target, source) => {
 	if (typeof source !== 'object' || source === null)
@@ -82,6 +86,7 @@ module.exports = {
 	round,
 	escapeRegex,
 	sleep,
+	unitText,
 
 	deepMerge,
 	deepCopy,

@@ -226,7 +226,7 @@ class ApiConstants {
 				ApiConstants.initNinjaCurrencies(version2, league));
 		} catch (e) {
 			// todo[medium] show red/orange status indicator
-			return version2 ? {exalted: 1, divine: 150} : {chaos: 1};
+			return version2 ? {exalted: 1} : {chaos: 1};
 		}
 	}
 

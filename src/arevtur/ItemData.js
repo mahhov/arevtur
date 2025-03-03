@@ -1,7 +1,8 @@
 const apiConstants = require('./apiConstants');
 const pobApi = require('../services/pobApi/pobApi');
-const {maxIndex, round} = require('../util/util');
+const {maxIndex, round, unitText} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
+const configForRenderer = require('../services/config/configForRenderer');
 
 class ItemData {
 	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, queryNotes, tradeApiItemData) {
@@ -140,12 +141,22 @@ class ItemData {
 	}
 
 	static async price(league, {currency: currencyId, count, shifts}) {
-		let currencyPrice = (await apiConstants.currencyPrices(league))[currencyId];
-		if (currencyPrice)
-			return currencyPrice * count +
-				Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
-		console.warn('Missing currency', currencyId);
-		return 1000 ** 2;
+		let currencyPrices = await apiConstants.currencyPrices(league);
+		let currencyPrice = currencyPrices[currencyId];
+		if (!currencyPrice) {
+			console.warn('Missing currency', currencyId);
+			return {price: 1000 ** 2, priceSummary: `${count} ${currencyId}`, priceBreakdown: ''};
+		}
+
+		let price = currencyPrice * count +
+			Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
+		let smallCurrency = configForRenderer.config.version2 ? 'exalt' : 'chaos';
+		let priceSummary = unitText(price, currencyPrices.divine, 1,
+			smallCurrency, 'divine');
+		let expandedPriceShifts = Object.entries(shifts)
+			.map(([name, value]) => ` + ${name} (${round(value, 1)} ${smallCurrency})`);
+		let priceBreakdown = `${count} ${currencyId}${expandedPriceShifts.join('')}`;
+		return {price, priceSummary, priceBreakdown};
 	}
 
 	static onlineStatus(onlineObj) {
@@ -180,9 +191,7 @@ class ItemData {
 	get constructDisplayLines() {
 		const msInHour = 1000 * 60 * 60;
 		let dateDiff = (new Date() - new Date(this.date)) / msInHour;
-		let dateText = dateDiff > 24 ?
-			`${round(dateDiff / 24, 1)} days ago` :
-			`${round(dateDiff, 1)} hours ago`;
+		let dateText = unitText(dateDiff, 24, 1, 'hours ago', 'days ago');
 
 		return [
 			this.name,

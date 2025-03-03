@@ -1,7 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const configForRenderer = require('../../../services/config/configForRenderer');
-const {round} = require('../../../util/util');
 
 customElements.define(name, class Chart extends XElement {
 	static get attributeTypes() {
@@ -192,7 +191,7 @@ customElements.define(name, class Chart extends XElement {
 		let offset = this.tooltip_.offset;
 		this.tooltip_.points.forEach(p => {
 			let {x, y} = this.coordToPixel(p);
-			this.ctx.fillText(`(${round(p.x, 0)}, ${round(p.y, 1)})`, x + offset, y - offset);
+			this.ctx.fillText(p.text, x + offset, y - offset);
 		});
 	}
 
