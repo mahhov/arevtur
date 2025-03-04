@@ -59,7 +59,7 @@ end
 -- copy 1 level deep
 local function shallow(o)
    for k, v in pairs(o) do
-       if type(v) == 'table' then
+       if type(v) == 'table' or type(v) == 'function' then
            o[k] = nil
        end
    end
@@ -221,6 +221,9 @@ while true do
         table.insert(build.itemsTab.controls, slot)
         build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
         respond('build loaded')
+
+    elseif args.cmd == 'version' then
+        respond(APP_NAME)
 
     elseif args.cmd == 'queryBuildStats' then
         loadExtraMods(args.extraMods)
