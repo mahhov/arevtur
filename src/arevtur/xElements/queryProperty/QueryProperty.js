@@ -152,7 +152,7 @@ customElements.define(name, class extends XElement {
 			this.buildValue2 = summary.value;
 			this.buildValue2Tooltip = summary.text;
 		} catch (e) {
-			console.warn('Refresh query property build values', e);
+			// console.warn('Refresh query property build values', e);
 		}
 	}
 });

@@ -115,6 +115,11 @@ local function loadExtraMods(mods)
 end
 
 local function typeToSlotName(type)
+    -- PoE 1 swords, maces, and axes (but not maces) have these extra words that aren't in PoB types
+    type = type:gsub("^Any ", "")
+    type = type:gsub("^Base ", "")
+    respond(type, true)
+
     -- if already have an item of the same type equipped, use its slot
     for slotName, slot in pairs(build.itemsTab.slots) do
         local item = build.itemsTab.items[slot.selItemId]
