@@ -79,6 +79,9 @@ customElements.define(name, class extends XElement {
 		this.$('#price').text = itemData.price.priceSummary;
 		this.$('#price').tooltip = itemData.price.priceBreakdown;
 
+		this.$('#direct-whisper').classList.toggle('hidden', !itemData.directWhisperToken)
+		this.$('#copy-whisper').classList.toggle('hidden', !itemData.whisperText)
+
 		this.$('#debug').text = itemData.queryNotes[0];
 		this.$('#debug').tooltip = itemData.queryNotes.join('\n');
 
