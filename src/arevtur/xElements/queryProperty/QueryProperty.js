@@ -130,16 +130,20 @@ customElements.define(name, class extends XElement {
 		try {
 			this.buildValue = 0;
 			this.buildValueTooltip = '';
+			this.buildValue2 = 0;
+			this.buildValue2Tooltip = '';
+
 			let {modWeights} = await pobApi.getModWeights(this.type);
 			let unifiedQueryParams = await UnifiedQueryParams.fromModWeights(new UnifiedQueryParams(), 0, modWeights);
 			let index = unifiedQueryParams.weightEntries
 				.findIndex(entry => entry.propertyText === this.property);
-			let pluginNumber = modWeights[index].meanStatDiff / modWeights[index].weight;
-			this.buildValue = unifiedQueryParams.weightEntries[index]?.weight;
-			this.buildValueTooltip = pluginNumber;
+			let pluginNumber;
+			if (index >= 0) {
+				pluginNumber = modWeights[index].meanStatDiff / modWeights[index].weight;
+				this.buildValue = unifiedQueryParams.weightEntries[index]?.weight;
+				this.buildValueTooltip = pluginNumber;
+			}
 
-			this.buildValue2 = 0;
-			this.buildValue2Tooltip = '';
 			if (this.property.startsWith('# to maximum Mana'))
 				pluginNumber = 100;
 			if (this.property.startsWith('# to Intelligence'))
@@ -148,7 +152,7 @@ customElements.define(name, class extends XElement {
 			this.buildValue2 = summary.value;
 			this.buildValue2Tooltip = summary.text;
 		} catch (e) {
-			// console.warn('Refresh query property build values', e);
+			console.warn('Refresh query property build values', e);
 		}
 	}
 });
