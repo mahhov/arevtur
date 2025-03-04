@@ -64,10 +64,17 @@ customElements.define(name, class extends XElement {
 
 		pobApi.setParams(configForRenderer.config.buildParams);
 
+		this.$('#pob-path').valid = true;
+
 		fs.promises.stat(path.join(this.$('#pob-path').path, 'Launch.lua'))
-			.then(() => true)
-			.catch(() => false)
-			.then(valid => this.$('#pob-path').valid = valid);
+			.catch(() => this.$('#pob-path').valid = false);
+
+		pobApi.version()
+			.then(version => {
+				if (version === 2 !== configForRenderer.config.version2)
+					this.$('#pob-path').valid = false;
+			})
+			.catch((e) => 0);
 	}
 
 	async loadConfigWeights() {

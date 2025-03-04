@@ -46,11 +46,13 @@ class Script extends CustomOsScript {
 	}
 
 	send(text) {
-		if (this.cleared)
-			return Promise.reject('script already cleared');
 		let promise = new XPromise();
-		this.pendingResponses.push(promise);
-		super.send(text);
+		if (this.cleared)
+			promise.reject('script already cleared');
+		else {
+			this.pendingResponses.push(promise);
+			super.send(text);
+		}
 		return promise;
 	}
 
@@ -134,6 +136,14 @@ class PobApi extends Emitter {
 			});
 		// rejections are expected
 		return this.cache[argsString].catch(() => null);
+	}
+
+	version() {
+		return this.send({cmd: 'version'})
+			.then(v => ({
+				'Path of Building': 1,
+				'Path of Building (PoE2)': 2,
+			}[v] || null));
 	}
 
 	queryBuildStats() {
