@@ -139,7 +139,7 @@ customElements.define(name, class Tour extends XElement {
 					align: {x: -1, y: 1},
 				}, {
 					lines: ['6/6',
-						'The build value of this item; this is how PoB would sort the item.'],
+						'The build value of this item; this is how PoB would sort the item as-is.'],
 					elementQueries: [
 						'.button-pane #build-value',
 					],
@@ -159,8 +159,8 @@ customElements.define(name, class Tour extends XElement {
 					elementQueries: [
 						'#results-chart',
 					],
-					corner: {x: -1, y: 1},
-					align: {x: 1, y: 1},
+					corner: {x: 1, y: 1},
+					align: {x: -1, y: 1},
 				}, {
 					lines: ['6/6', `Select a preferred sorting method.`],
 					elementQueries: [
@@ -203,7 +203,7 @@ customElements.define(name, class Tour extends XElement {
 			if (isComplete && nextElementsVisible) {
 				do
 					this.stepI++;
-				while (this.steps[this.stepI].complete?.());
+				while (this.steps[this.stepI]?.complete?.());
 				this.update();
 			}
 		});
