@@ -1,4 +1,5 @@
 // maps from item text: 'Item Class: ...'
+// todo[low] don't seem to get any errors when these are mapped incorrectly
 const itemClassToPobType = {
 	'Rings': 'Ring',
 	'Quivers': 'Quiver',
@@ -10,9 +11,9 @@ const itemClassToPobType = {
 	'Belts': 'Belt',
 	'Shields': 'Shield',
 	'Foci': 'Focus',
-	'Bucklers': 'Buckler',
+	'Bucklers': 'Shield',
 	'Bows': 'Bow',
-	'Crossbows': 'Crossbows',
+	'Crossbows': 'Crossbow',
 	'Claws': 'Claw',
 	'Spears': 'Spear',
 	'Flails': 'Flail',
@@ -32,4 +33,10 @@ const itemClassToPobType = {
 	'Utility Flasks': 'Flask',
 };
 
-module.exports = {itemClassToPobType};
+// maps from trade site types
+const tradeClassToPobType = type => {
+	let map = {'Buckler': 'Shield'};
+	return map[type] || type;
+};
+
+module.exports = {itemClassToPobType, tradeClassToPobType};

@@ -4,6 +4,7 @@ const {spawn} = require('child_process');
 const {CustomOsScript, XPromise} = require('js-desktop-base');
 const Emitter = require('../../util/Emitter');
 const {round, deepEquality} = require('../../util/util');
+const pobConsts = require('./pobConsts');
 
 class Script extends CustomOsScript {
 	constructor(pobPath) {
@@ -199,7 +200,7 @@ class PobApi extends Emitter {
 		return this.send({
 			cmd: 'mod',
 			mod: itemMod,
-			type,
+			type: pobConsts.tradeClassToPobType(type),
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)
@@ -214,7 +215,7 @@ class PobApi extends Emitter {
 		// todo[low] mod weights might be different for ring slot 1 v ring slot 2
 		return this.send({
 			cmd: 'getModWeights',
-			type,
+			type: pobConsts.tradeClassToPobType(type),
 			includeCorrupted,
 			weights: this.weights2,
 			options: this.options,
