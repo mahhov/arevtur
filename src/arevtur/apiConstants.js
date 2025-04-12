@@ -1,7 +1,6 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
 const poeNinjaApi = require('../services/poeNinjaApi');
 const configForRenderer = require('../services/config/configForRenderer');
-const pobConsts = require('../services/pobApi/pobConsts');
 const {unique} = require('../util/util');
 const nodeFetch = require('node-fetch');
 
@@ -260,8 +259,14 @@ class ApiConstants {
 	static async initOrbCurrencies(version2, league) {
 		let staticData = ApiConstants.get('static', version2);
 		let currencyPrices = nodeFetch(
-			'https://orbwatch.trade/api/currency?mode=buy',
-			{headers: {referer: 'https://orbwatch.trade/'}},
+			`https://orbwatch.trade/api/preload?realm=${league}`,
+			{
+				headers: {
+					referer: 'https://orbwatch.trade/',
+					'x-csrf-token': 'x',
+					cookie: 'csrf_token=x',
+				},
+			},
 		);
 		staticData = JSON.parse((await staticData).string);
 		currencyPrices = await (await currencyPrices).json();
@@ -269,11 +274,16 @@ class ApiConstants {
 		let tuples = staticData.result
 			.find(({id}) => id === 'Currency').entries
 			.map(({id}) => {
-				let price = currencyPrices.currencies
-					.find(line => line.id === id)
-					?.median_price;
-				return [id, 1 / price];
-			});
+				let prices = currencyPrices.prices.currency
+					.filter(line => line.item_id === id)
+					.map(line => Number(line.item_price));
+				if (prices.length === 2)
+					return [id, (prices[0] + prices[1]) / 2];
+				if (prices.length)
+					console.warn('Expected 2 prices (buy & sell) for currency', id, prices);
+				return null;
+			})
+			.filter(v => v);
 
 		let currencies = Object.fromEntries(tuples);
 		currencies.exalted = 1;
