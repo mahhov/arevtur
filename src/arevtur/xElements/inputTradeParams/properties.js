@@ -6,11 +6,11 @@ const defensePropertyTuples = [
 ];
 
 const defenseBuildValueTuples = [
-	// this key, el query, mapping to defense property, mod property
-	['armourBuildValue', '#armour-build-value', 'armour', '# Armour'],
-	['evasionBuildValue', '#evasion-build-value', 'evasion', '# Evasion'],
-	['energyShieldBuildValue', '#energy-shield-build-value', 'energyShield', '# Energy shield'],
-	['blockBuildValue', '#block-build-value', 'block', 'Block'],
+	// this key, el query, mapping to defense property, mod property, plugin number
+	['armourBuildValue', '#armour-build-value', 'armour', '# Armour', 400],
+	['evasionBuildValue', '#evasion-build-value', 'evasion', '# Evasion', 400],
+	['energyShieldBuildValue', '#energy-shield-build-value', 'energyShield', '# Energy shield', 400],
+	['blockBuildValue', '#block-build-value', 'block', '# chance to Block', 1],
 ];
 
 const maxRequirementPropertyTuples = [

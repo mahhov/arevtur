@@ -13,6 +13,7 @@ const configForRenderer = require('../../../services/config/configForRenderer');
 const pobApi = require('../../../services/pobApi/pobApi');
 const Searcher = require('../../../util/Searcher');
 const Macros = require('../../Macros');
+const {round} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -394,12 +395,12 @@ customElements.define(name, class extends XElement {
 
 	refreshBuild() {
 		this.queryProperties.forEach(queryProperty => queryProperty.refreshBuild());
-		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty]) => {
+		defenseBuildValueTuples.forEach(async ([buildValue, _, __, modProperty, pluginNumber]) => {
 			try {
 				this[buildValue] = 0;
 				this[buildValue + 'Tooltip'] = '';
-				let summary = await pobApi.evalItemModSummary(this.type, modProperty, 400);
-				this[buildValue] = summary.value;
+				let summary = await pobApi.evalItemModSummary(this.type, modProperty, pluginNumber);
+				this[buildValue] = round(summary.value, 4);
 				this[buildValue + 'Tooltip'] = summary.text;
 			} catch (e) {
 				// console.warn('Refresh defense build values', e);
