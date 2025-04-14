@@ -22,6 +22,15 @@ class ItemData {
 		this.name = tradeApiItemData.item.name;
 		this.subtype = tradeApiItemData.item.baseType; // e.g. 'Gold Amulet'
 		this.itemLevel = tradeApiItemData.item.ilvl;
+
+		let requirementNameMapping = {
+			'Level': 'lvl',
+			'[Strength|Str]': 'str',
+			'[Dexterity|Dex]': 'dex',
+			'[Intelligence|Int]': 'int',
+		};
+		this.requirements = tradeApiItemData.item.requirements.map(requirement =>
+			[requirementNameMapping[requirement.name] || requirement.name, requirement.values[0][0]]);
 		this.rarity = tradeApiItemData.item.rarity;
 		this.corrupted = tradeApiItemData.item.corrupted;
 		this.mirrored = tradeApiItemData.item.duplicated;
@@ -197,13 +206,13 @@ class ItemData {
 			this.name,
 			[
 				`${this.subtype} ${this.itemLevel}`,
+				'Requires: ' + this.requirements.map(([name, value]) => `${name} ${value}`).join(', '),
 				this.corrupted ? '@bold,red corrupted' : '',
 				this.mirrored ? '@bold,red mirrored' : '',
 				this.split ? '@bold,red split' : '',
 				...this.influences.map(t => `@light-green ` + t),
 				'Sockets: ' + this.sockets.map(chain => chain.join('')).join(),
-				'Prefixes: ' + this.affixes.prefix,
-				'Suffixes: ' + this.affixes.suffix,
+				`Prefixes: ${this.affixes.prefix}, Suffixes: ${this.affixes.suffix}`,
 				this.weightedValueDetails.affixes ? '@bold Affix value: ' + this.weightedValueDetails.affixes : '',
 				this.quality,
 				...this.defenseProperties.map(t => `@orange ` + t),
