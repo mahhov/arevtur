@@ -18,8 +18,8 @@ customElements.define(name, class extends XElement {
 			this.emit('name-change');
 		});
 		this.$('#remove').addEventListener('click', e => {
-			this.emit('remove');
 			e.stopPropagation();
+			this.emit('remove');
 		});
 	}
 

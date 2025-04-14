@@ -27,18 +27,21 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#direct-whisper').addEventListener('click', e => {
-			navigator.clipboard.writeText(this.itemData_.whisperText);
-			TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.directWhisperToken);
+		this.$('#direct-whisper').addEventListener('click', async e => {
 			e.stopPropagation();
+			navigator.clipboard.writeText(this.itemData_.whisperText);
+			let whisperSuccess = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.directWhisperToken);
+			this.$('#direct-whisper').classList.toggle('invalid', !whisperSuccess);
+			this.$('#direct-whisper').classList.toggle('busy', whisperSuccess);
+			this.$('#refresh-button').classList.toggle('valid', !whisperSuccess);
 		});
 		this.$('#copy-whisper').addEventListener('click', e => {
-			navigator.clipboard.writeText(this.itemData_.whisperText);
 			e.stopPropagation();
+			navigator.clipboard.writeText(this.itemData_.whisperText);
 		});
 		this.$('#copy-item-button').addEventListener('click', e => {
-			navigator.clipboard.writeText(this.itemData_.text);
 			e.stopPropagation();
+			navigator.clipboard.writeText(this.itemData_.text);
 		});
 		this.$('#refresh-button').addEventListener('click', async () => {
 			let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
@@ -79,8 +82,8 @@ customElements.define(name, class extends XElement {
 		this.$('#price').text = itemData.price.priceSummary;
 		this.$('#price').tooltip = itemData.price.priceBreakdown;
 
-		this.$('#direct-whisper').classList.toggle('hidden', !itemData.directWhisperToken)
-		this.$('#copy-whisper').classList.toggle('hidden', !itemData.whisperText)
+		this.$('#direct-whisper').classList.toggle('hidden', !itemData.directWhisperToken);
+		this.$('#copy-whisper').classList.toggle('hidden', !itemData.whisperText);
 
 		this.$('#debug').text = itemData.queryNotes[0];
 		this.$('#debug').tooltip = itemData.queryNotes.join('\n');

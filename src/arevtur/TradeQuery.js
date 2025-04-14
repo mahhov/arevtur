@@ -227,12 +227,13 @@ class TradeQuery {
 		};
 	}
 
-	static async directWhisper(version2, sessionId, token) {
+	static directWhisper(version2, sessionId, token) {
 		let endpoint = version2 ?
 			`${apiConstants.api}/api/trade2/whisper` :
 			`${apiConstants.api}/api/trade/whisper`;
 		let headers = apiConstants.createRequestHeader(sessionId);
-		await httpRequest.post(endpoint, {token}, headers)
+		return httpRequest.post(endpoint, {token}, headers)
+			.then(() => true)
 			.catch(e => console.error('failed to direct whisper:', e));
 	}
 }
