@@ -42,7 +42,7 @@ customElements.define(name, class extends XElement {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.text);
 		});
-		this.$('#refresh-button').addEventListener('click', () => {
+		this.$('#refresh-button').addEventListener('click', e => {
 			e.stopPropagation();
 			this.refresh();
 		});
