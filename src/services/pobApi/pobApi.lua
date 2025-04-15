@@ -163,7 +163,7 @@ local function evalEquippingItem(itemText, copyRunes)
     local comparisons = {}
     local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
     for slotName, slot in pairs(build.itemsTab.slots) do
-        if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive and (not slot.weaponSet or slot.weaponSet == (build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then
+        if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive and (not slot.weaponSet or slot.weaponSet == (build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) and slot.shown() then
             if copyRunes then
                 local equippedItem = build.itemsTab.items[slot.selItemId] or nil
                 if equippedItem then
