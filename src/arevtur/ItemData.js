@@ -29,8 +29,8 @@ class ItemData {
 			'[Dexterity|Dex]': 'dex',
 			'[Intelligence|Int]': 'int',
 		};
-		this.requirements = tradeApiItemData.item.requirements.map(requirement =>
-			[requirementNameMapping[requirement.name] || requirement.name, requirement.values[0][0]]);
+		this.requirements = tradeApiItemData.item.requirements?.map(requirement =>
+			[requirementNameMapping[requirement.name] || requirement.name, requirement.values[0][0]]) || [];
 		this.rarity = tradeApiItemData.item.rarity;
 		this.corrupted = tradeApiItemData.item.corrupted;
 		this.mirrored = tradeApiItemData.item.duplicated;
