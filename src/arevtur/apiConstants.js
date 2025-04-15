@@ -276,7 +276,10 @@ class ApiConstants {
 			.map(({id}) => {
 				let prices = currencyPrices.prices.currency
 					.filter(line => line.item_id === id)
-					.map(line => Number(line.item_price));
+					.map(line => {
+						let p = Number(line.item_price);
+						return line.price_type === 'buy' ? p : 1 / p;
+					});
 				if (prices.length === 2)
 					return [id, (prices[0] + prices[1]) / 2];
 				if (prices.length)
