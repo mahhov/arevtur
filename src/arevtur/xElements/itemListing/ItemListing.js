@@ -29,11 +29,10 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		this.$('#direct-whisper').addEventListener('click', async e => {
 			e.stopPropagation();
-			navigator.clipboard.writeText(this.itemData_.whisperText);
-			let whisperSuccess = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.directWhisperToken);
-			this.$('#direct-whisper').classList.toggle('invalid', !whisperSuccess);
-			this.$('#direct-whisper').classList.toggle('busy', whisperSuccess);
-			this.$('#refresh-button').classList.toggle('valid', !whisperSuccess);
+			if (!await this.directWhisper()) {
+				await this.refresh();
+				await this.directWhisper();
+			}
 		});
 		this.$('#copy-whisper').addEventListener('click', e => {
 			e.stopPropagation();
@@ -43,10 +42,9 @@ customElements.define(name, class extends XElement {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.text);
 		});
-		this.$('#refresh-button').addEventListener('click', async () => {
-			let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
-			this.itemData_.refresh(tradeApiItemsData.result[0]);
-			this.itemData = this.itemData_;
+		this.$('#refresh-button').addEventListener('click', () => {
+			e.stopPropagation();
+			this.refresh();
 		});
 		this.addEventListener('click', () => this.emit('select'));
 		this.addEventListener('mouseenter', () => {
@@ -90,6 +88,8 @@ customElements.define(name, class extends XElement {
 
 		this.selected = itemData.selected;
 		this.hovered = itemData.hovered;
+		this.setButtonColor(this.$('#direct-whisper'), '');
+		this.setButtonColor(this.$('#refresh-button'), '');
 	}
 
 	get itemData() {
@@ -102,5 +102,27 @@ customElements.define(name, class extends XElement {
 
 	set hovered(value) {
 		this.classList.toggle('hovered', value);
+	}
+
+	async directWhisper() {
+		navigator.clipboard.writeText(this.itemData_.whisperText);
+		let whisperSuccess = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.directWhisperToken);
+		this.setButtonColor(this.$('#direct-whisper'), whisperSuccess ? 'busy' : 'invalid');
+		this.setButtonColor(this.$('#refresh-button'), whisperSuccess ? '' : 'valid');
+		return whisperSuccess;
+	}
+
+	async refresh() {
+		let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
+		this.itemData_.refresh(tradeApiItemsData.result[0]);
+		this.itemData = this.itemData_;
+		this.setButtonColor(this.$('#direct-whisper'), '');
+		this.setButtonColor(this.$('#refresh-button'), 'busy');
+	}
+
+	setButtonColor(button, color) {
+		button.classList.remove('busy', 'valid', 'invalid');
+		if (color)
+			button.classList.add(color);
 	}
 });
