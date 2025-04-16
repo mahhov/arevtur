@@ -43,7 +43,7 @@ class ItemsData extends Emitter {
 		super();
 		this.clear();
 		this.shownItemsCache = null;
-		this.valueHandler = ItemsData.valueHandlers[0];
+		this.valueHandler_ = ItemsData.valueHandlers[0];
 		this.pricePerValue_ = Infinity;
 	}
 
@@ -56,12 +56,6 @@ class ItemsData extends Emitter {
 		let items = this.allItems;
 		this.clear();
 		this.join(items);
-	}
-
-	set valueHandler(valueHandler) {
-		this.shownItemsCache = null;
-		this.valueHandler_ = valueHandler;
-		this.refresh();
 	}
 
 	setValueHandlerByName(name) {
@@ -81,7 +75,6 @@ class ItemsData extends Emitter {
 	}
 
 	join(items) {
-		this.shownItemsCache = null;
 		let oldLength = this.allItems.length;
 		this.allItems = this.allItems
 			.concat(items)
@@ -104,9 +97,13 @@ class ItemsData extends Emitter {
 				.filter((_, i) => i >= oldLength)
 				.forEach(async item => {
 					await this.valueHandler_.trigger(item);
-					if (this.allItems.includes(item))
+					if (this.allItems.includes(item)) {
+						this.shownItemsCache = null;
 						this.emit('change');
+					}
 				});
+		else
+			this.shownItemsCache = null;
 	}
 
 	selectItem(item) {
