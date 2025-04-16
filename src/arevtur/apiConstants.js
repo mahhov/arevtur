@@ -274,17 +274,10 @@ class ApiConstants {
 		let tuples = staticData.result
 			.find(({id}) => id === 'Currency').entries
 			.map(({id}) => {
-				let prices = currencyPrices.prices.currency
-					.filter(line => line.item_id === id)
-					.map(line => {
-						let p = Number(line.item_price);
-						return line.price_type === 'buy' ? p : 1 / p;
-					});
-				if (prices.length === 2)
-					return [id, (prices[0] + prices[1]) / 2];
-				if (prices.length)
-					console.warn('Expected 2 prices (buy & sell) for currency', id, prices);
-				return null;
+				let price = currencyPrices.prices.currency
+					.find(line => line.item_id === id && line.price_type === 'buy')
+					?.item_price;
+				return [id, Number(price)];
 			})
 			.filter(v => v);
 
