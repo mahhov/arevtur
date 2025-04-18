@@ -35,7 +35,10 @@ const itemClassToPobType = {
 
 // maps from trade site types
 const tradeClassToPobType = type => {
-	let map = {'Buckler': 'Shield'};
+	let map = {
+		'Buckler': 'Shield',
+		'Quarterstaff': 'Staff',
+	};
 	return map[type] || type;
 };
 
