@@ -205,7 +205,7 @@ class UnifiedQueryParams {
 		do {
 			priceOptions.push(maxPrice);
 			maxPrice = Math.floor(maxPrice / 10);
-		} while (maxPrice > 100);
+		} while (maxPrice > 10);
 
 		let linkedOptions = [
 			// query with the intended links
