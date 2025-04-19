@@ -30,8 +30,10 @@ customElements.define(name, class extends XElement {
 		this.$('#direct-whisper').addEventListener('click', async e => {
 			e.stopPropagation();
 			if (!await this.directWhisper()) {
+				let oldPrice = this.itemData_.price.price;
 				await this.refresh();
-				await this.directWhisper();
+				if (this.itemData_.price.price === oldPrice)
+					await this.directWhisper();
 			}
 		});
 		this.$('#copy-whisper').addEventListener('click', e => {
