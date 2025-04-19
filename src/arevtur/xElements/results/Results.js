@@ -17,7 +17,7 @@ customElements.define(name, class extends XElement {
 
 	connectedCallback() {
 		this.itemsData = new ItemsData();
-		let debouncer = new Debouncer(() => this.renderItemsData(), 200);
+		let debouncer = new Debouncer(() => this.renderItemsData(false, true), 200);
 		this.itemsData.addListener('change', () => debouncer.request());
 
 		this.$('#sort-build-value-input').autocompletes =
