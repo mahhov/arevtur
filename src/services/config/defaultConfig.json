@@ -93,7 +93,8 @@
     "extraMods": {
       "ignoreEs": true,
       "equalElementalResists": true,
-      "equalChaosResist": true
+      "equalChaosResist": true,
+      "infiniteLifeLeech": false
     }
   },
   "userId": "",
