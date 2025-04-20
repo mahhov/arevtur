@@ -19,7 +19,7 @@ class ItemData {
 
 	refresh(tradeApiItemData) {
 		this.id = tradeApiItemData.id;
-		this.name = tradeApiItemData.item.name;
+		this.name = tradeApiItemData.item.name || tradeApiItemData.item.typeLine;
 		this.subtype = tradeApiItemData.item.baseType; // e.g. 'Gold Amulet'
 		this.itemLevel = tradeApiItemData.item.ilvl;
 
