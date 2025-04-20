@@ -160,7 +160,12 @@ customElements.define(name, class extends XElement {
 				window.location.reload();
 		});
 		this.$('#search-button').addEventListener('click', e => this.onSubmit(e.altKey));
-		this.$('#cancel-button').addEventListener('click', () => this.tradeQueryQueue.cancel());
+		this.$('#cancel-button').addEventListener('click', e => {
+			let inputSets = e.altKey ? this.inputSets : [this.inputSets[this.inputSetIndex]];
+			inputSets
+				.flatMap(inputSet => inputSet.tradeQueries)
+				.forEach(tradeQuery => tradeQuery.stop());
+		});
 		this.$('#search-in-browser-button').addEventListener('click', async () => {
 			googleAnalyticsForRenderer.emit('SearchBrowser');
 			shell.openExternal(await (await this.finalizeTradeQuery())[0].toApiHtmlUrl());
@@ -298,7 +303,6 @@ customElements.define(name, class extends XElement {
 	}
 
 	async onSubmit(all) {
-		this.tradeQueryQueue.cancel();
 		if (all) {
 			googleAnalyticsForRenderer.emit('SearchAll');
 			for (let i in this.inputSets)
@@ -312,6 +316,7 @@ customElements.define(name, class extends XElement {
 	}
 
 	async queueTradeQuery(i) {
+		this.inputSets[i].tradeQueries.forEach(tradeQuery => tradeQuery.stop());
 		this.inputSets[i].tradeQueries = [];
 		let tradeQueries = await this.finalizeTradeQuery(i);
 		this.tradeQueryQueue.addQueries(tradeQueries);

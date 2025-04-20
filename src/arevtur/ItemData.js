@@ -142,10 +142,9 @@ class ItemData {
 	}
 
 	static weightedValue(pseudoMods) {
-		let pseudoSumI = pseudoMods.findIndex(mod => mod.startsWith('Sum: '));
-		if (pseudoSumI === -1)
+		let pseudoSum = pseudoMods.find(mod => mod.startsWith('Sum: '));
+		if (!pseudoSum)
 			return 0;
-		let [pseudoSum] = pseudoMods.splice(pseudoSumI, 1);
 		return Number(pseudoSum.substring(5));
 	}
 

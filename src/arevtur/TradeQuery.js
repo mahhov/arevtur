@@ -18,6 +18,7 @@ class TradeQuery {
 		this.itemStream = new Stream();
 		this.progressStream = new Stream();
 		this.errorStream = new Stream();
+		this.itemIds = [];
 		this.stopObj = {};
 	}
 
@@ -44,6 +45,10 @@ class TradeQuery {
 
 	stop() {
 		this.stopObj.stop = true;
+		this.itemIds.forEach(id => {
+			if (!--TradeQuery.cachedItemDatas[id].count)
+				TradeQuery.cachedItemDatas[id].promise.reject();
+		});
 	}
 
 	async writeItemsToStream() {
@@ -65,7 +70,7 @@ class TradeQuery {
 		// high value query
 		if (items.length === 100) {
 			let maxValue = Math.max(...items.map(itemData => itemData.weightedValueDetails.mods));
-			let newMinValue = maxValue * .85;
+			let newMinValue = maxValue * .5;
 			if (newMinValue > this.unifiedQueryParams.minValue)
 				await runQuery({minValue: newMinValue}, 'high min value');
 		}
@@ -119,9 +124,15 @@ class TradeQuery {
 			let data = await TradeQuery.initialSearchApiQuery(this.version2, this.league, this.sessionId, this.stopObj, apiQuery);
 			if (data.error)
 				this.errorStream.write(data.error);
-			let itemCount = data.result.length;
-			let newItemIds = data.result.filter(itemId => !TradeQuery.cachedItemDatas[itemId]);
-			newItemIds.forEach(itemId => TradeQuery.cachedItemDatas[itemId] = new XPromise());
+
+			this.itemIds = this.itemIds.concat(data.result);
+			let newItemIds = data.result.filter(itemId => {
+				if (!TradeQuery.cachedItemDatas[itemId])
+					return TradeQuery.cachedItemDatas[itemId] = {count: 1};
+				if (TradeQuery.cachedItemDatas[itemId].promise.error)
+					return TradeQuery.cachedItemDatas[itemId].count++;
+			});
+			newItemIds.forEach(itemId => TradeQuery.cachedItemDatas[itemId].promise = new XPromise());
 
 			let requestGroups = [];
 			while (newItemIds.length)
@@ -131,7 +142,7 @@ class TradeQuery {
 				text: `Will make ${requestGroups.length} grouped item queries.`,
 				queriesComplete: 1,
 				queriesTotal: requestGroups.length - 10,
-				itemCount,
+				itemCount: data.result.length,
 			});
 
 			requestGroups.forEach(async (requestGroup, i) => {
@@ -144,11 +155,11 @@ class TradeQuery {
 					queriesTotal: 0,
 					itemCount: 0,
 				});
-				data2.result.forEach(itemData => TradeQuery.cachedItemDatas[itemData.id].resolve(itemData));
+				data2.result.forEach(itemData => TradeQuery.cachedItemDatas[itemData.id].promise.resolve(itemData));
 			});
 
 			let itemPromises = data.result.map(async itemId => {
-				let itemData = await TradeQuery.cachedItemDatas[itemId];
+				let itemData = await TradeQuery.cachedItemDatas[itemId].promise;
 				let item = new ItemData(this.version2, this.league, this.affixValueShift,
 					this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData);
 				// todo[high] let users wait on pricePromise and rm this await

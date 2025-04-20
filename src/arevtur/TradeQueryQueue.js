@@ -1,11 +1,9 @@
 const Emitter = require('../util/Emitter');
 
 class TradeQueryQueue extends Emitter {
-	tradeQuerySets = [];
 	activeTradeQuerySet = [];
 
 	addQueries(tradeQueries) {
-		this.tradeQuerySets.push(tradeQueries);
 		tradeQueries.forEach(tradeQuery => {
 			tradeQuery.itemStream.forEach(items => {
 				if (this.activeTradeQuerySet.includes(tradeQuery))
@@ -34,11 +32,6 @@ class TradeQueryQueue extends Emitter {
 		let queriesTotal = progresses.reduce((sum, progress) => sum + progress.queriesTotal, 0) || 1;
 		let itemCount = progresses.reduce((sum, progress) => sum + progress.itemCount, 0);
 		this.emit('progress', {ratio: queriesComplete / queriesTotal, itemCount});
-	}
-
-	cancel() {
-		this.tradeQuerySets.flat().forEach(tradeQuery => tradeQuery.stop());
-		this.tradeQuerySets = [];
 	}
 }
 
