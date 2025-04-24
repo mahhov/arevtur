@@ -243,8 +243,8 @@ class PobApi extends Emitter {
 			this.extraMods.equalElementalResists ? '+10000% to all elemental resistances' : '',
 			this.extraMods.equalChaosResist ? '+10000% to chaos resistance' : '',
 			this.extraMods.infiniteLifeLeech ? [
-				'1000000000000% increased Maximum Recovery per Life Leech',
-				'1000000000000% increased Maximum total Life Recovery per second from Leech'].join('\n') : '', ,
+				'1000000000000% increased maximum recovery per life leech',
+				'1000000000000% increased maximum total life recovery per second from leech'].join('\n') : '',
 		].filter(v => v).join(' \\n ');
 	}
 
@@ -256,9 +256,9 @@ class PobApi extends Emitter {
 
 		let valueTextTuples = obj.comparisons
 			.map(slotComparison => {
-				let value = this.weights2
+				let values = this.weights2
 					.filter(weight => weight.name)
-					.reduce((sum, weight) => {
+					.map(weight => {
 						let oldStat = obj.baseStats[weight.name];
 						let newStat = slotComparison.stats[weight.name];
 						let value = 0;
@@ -266,12 +266,15 @@ class PobApi extends Emitter {
 							value = weight.flatWeight * (newStat - oldStat);
 						else if (newStat !== oldStat && oldStat)
 							value = weight.percentWeight * (newStat - oldStat) / oldStat * 100;
-						return sum + value;
-					}, 0);
+						return [weight.name, value];
+					})
+					.filter(value => value[1]);
+				let value = values.reduce((sum, value) => sum + value[1], 0);
 				let text = [
 					`Equipping in @bold,pink ${slotComparison.slotName}`,
 					slotComparison.replacedItemName ? `Replacing @bold,pink ${slotComparison.replacedItemName}` : '',
 					`Grants @bold,pink ${round(value, 3)} @ value`,
+					...values.map(value => `  ${value[0]} ${round(value[1], 3)}`),
 					PobApi.colorTooltip(PobApi.cleanTooltip(slotComparison.tooltip)),
 				].filter(v => v).join('\n');
 				return {value, text};
