@@ -68,7 +68,7 @@ end
 
 -- for debugging objects that can't be json encoded
 local function dump(o, n)
-   if n > 5 then
+   if n <= 0 then
      return '"deep"'
    end
    if type(o) == 'table' then
@@ -76,7 +76,7 @@ local function dump(o, n)
       for k,v in pairs(o) do
          if type(k) == 'table' then k = 'table' end
          if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. k .. ' : ' .. dump(v, n+1) .. ','
+         s = s .. k .. ' : ' .. dump(v, n - 1) .. ','
       end
       return s .. '} '
    elseif type(o) == 'string' then
@@ -121,10 +121,10 @@ local function typeToSlotName(type)
     respond(type, true)
 
     -- if already have an item of the same type equipped, use its slot
-    for slotName, slot in pairs(build.itemsTab.slots) do
+    for _, slot in ipairs(build.itemsTab.orderedSlots) do
         local item = build.itemsTab.items[slot.selItemId]
         if item and item.type == type then
-            return slotName
+            return slot.slotName
         end
     end
 
