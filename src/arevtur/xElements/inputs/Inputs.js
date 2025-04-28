@@ -30,7 +30,6 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		configForRenderer.addListener('change', config => this.onConfigChange(config));
 
-		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo[high] try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
@@ -175,7 +174,7 @@ customElements.define(name, class extends XElement {
 			let inputSetEl = this.addInputSetEl();
 			inputSetEl.name = inputSet.name;
 		});
-		this.setInputSetIndex(this.inputSetIndex);
+		this.setInputSetIndex(Number(localStorage.getItem('input-set-index')) || 0);
 	}
 
 	get isVersion2() {
@@ -238,7 +237,10 @@ customElements.define(name, class extends XElement {
 	setInputSetIndex(index, fromEl = null) {
 		// if fromEl is specified, index is ignored
 		let indexSetEls = [...this.$('#input-set-list').children];
-		this.inputSetIndex = fromEl ? indexSetEls.indexOf(fromEl) : index;
+		let inputSetIndex = fromEl ? indexSetEls.indexOf(fromEl) : index;
+		if (inputSetIndex === this.inputSetIndex)
+			return;
+		this.inputSetIndex = inputSetIndex;
 		indexSetEls.forEach(indexSetEl => indexSetEl.classList.remove('selected'));
 		indexSetEls[this.inputSetIndex].classList.add('selected');
 
