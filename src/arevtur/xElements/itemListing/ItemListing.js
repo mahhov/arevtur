@@ -4,19 +4,6 @@ const TradeQuery = require('../../TradeQuery');
 const configForRenderer = require('../../../services/config/configForRenderer');
 const {round, updateElementChildren} = require('../../../util/util');
 
-const listTuples = [
-	['#influence-list', 'influences'],
-	['#sockets-list', 'sockets'],
-	['#defense-list', 'defenseProperties'],
-	['#enchant-list', 'enchantMods'],
-	['#rune-list', 'runeMods'],
-	['#implicit-list', 'implicitMods'],
-	['#fractured-list', 'fracturedMods'],
-	['#explicit-list', 'explicitMods'],
-	['#crafted-list', 'craftedMods'],
-	['#pseudo-list', 'pseudoMods'],
-];
-
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
 		return {selected: {boolean: true}, hovered: {boolean: true}};
@@ -47,6 +34,10 @@ customElements.define(name, class extends XElement {
 		this.$('#refresh-button').addEventListener('click', e => {
 			e.stopPropagation();
 			this.refresh();
+		});
+		this.$('#debug').addEventListener('click', e => {
+			e.stopPropagation();
+			navigator.clipboard.writeText(JSON.stringify(this.itemData_, null, 2));
 		});
 		this.addEventListener('click', () => this.emit('select'));
 		this.addEventListener('mouseenter', () => {
