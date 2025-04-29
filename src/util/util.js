@@ -12,7 +12,7 @@ let round = (n, precision) => Math.round(n * 10 ** precision) / 10 ** precision;
 let escapeRegex = stringRegex => stringRegex.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // https://stackoverflow.com/a/6969486/6951428
 let sleep = ms => ms > 0 ? new Promise(resolve => setTimeout(resolve, ms)) : Promise.resolve();
 let unitText = (value, smallInBig, precision, smallUnit, bigUnit) =>
-	value > smallInBig ?
+	value >= smallInBig ?
 		`${round(value / smallInBig, precision)} ${bigUnit}` :
 		`${round(value, precision)} ${smallUnit}`;
 
