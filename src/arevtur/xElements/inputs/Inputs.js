@@ -275,6 +275,7 @@ customElements.define(name, class extends XElement {
 		});
 		inputSetEl.addEventListener('remove', () => {
 			let index = this.inputSetIndexFromEl(inputSetEl);
+			this.inputSets[index].tradeQueries.forEach(tradeQuery => tradeQuery.stop());
 			if (this.inputSetIndex >= index && this.inputSetIndex)
 				this.inputSetIndex--;
 			this.inputSets.splice(index, 1);
