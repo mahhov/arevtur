@@ -58,12 +58,21 @@ class ItemData {
 		// sockets
 		let sockets = tradeApiItemData.item.sockets || [];
 		this.sockets = this.version2 ?
+			// e.g. [['S', 'S']]
 			[sockets.map(_ => 'S')] :
+			// e.g. [['R', 'G'], ['B']]
 			(sockets).reduce((a, v) => {
 				a[v.group] = a[v.group] || [];
 				a[v.group].push(v.sColour);
 				return a;
 			}, []);
+
+		// charm slots
+		let charmSlots = Number(tradeApiItemData.item.properties
+			?.find(property => property.name === 'Charm Slots')
+			?.values[0][0] || 0);
+		// E.g. [['S', 'S'], ['C', 'C']]
+		this.sockets.push([Array(charmSlots)].map(_ => 'C'));
 
 		// affixes
 		// todo[high] need to consider fractured
@@ -138,7 +147,7 @@ class ItemData {
 	static evalDefensePropertiesValue(itemDefenseProperties, queryDefenseProperties) {
 		return itemDefenseProperties
 			.map(([name, value]) => value * queryDefenseProperties[name].weight)
-			.reduce((sum, v) => sum + v, 0);
+			.reduce((sum, v) => sum + v);
 	}
 
 	static weightedValue(pseudoMods) {
@@ -210,7 +219,7 @@ class ItemData {
 				this.mirrored ? '@bold,red mirrored' : '',
 				this.split ? '@bold,red split' : '',
 				...this.influences.map(t => `@light-green ` + t),
-				'Sockets: ' + this.sockets.map(chain => chain.join('')).join(),
+				'Sockets: ' + this.sockets.filter(chain => chain.length).map(chain => chain.join('')).join(),
 				`Prefixes: ${this.affixes.prefix}, Suffixes: ${this.affixes.suffix}`,
 				this.weightedValueDetails.affixes ? '@bold Affix value: ' + this.weightedValueDetails.affixes : '',
 				this.quality,
