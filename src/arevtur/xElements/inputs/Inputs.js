@@ -77,27 +77,27 @@ customElements.define(name, class extends XElement {
 			let typeText = ItemData.typeFromItemText(e.detail) || 'Any';
 
 			let propertyTexts = await apiConstants.propertyTexts();
-			let matchedPropertyTexts = (await Promise.all(e.detail
+			let matchedPropertyTextWeights = e.detail
 				.split('\n')
 				.map(line => line.trim())
-				.map(line => line)
-				.map(escapeRegex)
-				.map(line => line.replaceAll(/\+/g, '+?'))
-				.map(line => line.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)'))
-				.map(line => line.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)'))
-				.map(line => `(^|\n)${line}( \\(explicit\\))?($|\n)`)
-				.map(line => new RegExp(line))
-				// todo[low] sometimes, there are multiple properties with the same text.
-				// should do an 'or' between them. e.g. '+# to Strength and Intelligence'
-				.map(regex => propertyTexts.find(pt => pt.match(regex)))
-				.filter(propertyText => propertyText)
-				.filter(unique)
-				.map(propertyText => apiConstants.propertyByText(propertyText))))
-				.filter(property => property)
-				.map(property => property.text);
+				.filter(line => line)
+				.map(line => {
+					let weight = (line.match(/\d+(\.\d+)?/g) || []).reduce((sum, v, _, a) => sum + v / a.length, 0);
+					line = escapeRegex(line)
+						.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)')
+						.replaceAll(/\+/g, '+?')
+						.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)');
+					line = `(^|\n)${line}( \\(explicit\\))?($|\n)`;
+					let regex = new RegExp(line);
+					// todo[low] sometimes, there are multiple properties with the same text.
+					// should do an 'or' between them. e.g. '+# to Strength and Intelligence'
+					let propertyText = propertyTexts.find(pt => pt.match(regex));
+					return propertyText ? [propertyText, weight] : null;
+				})
+				.filter(m => m);
 
 			let unifiedQueryParams =
-				await UnifiedQueryParams.fromPropertyIds(typeText, matchedPropertyTexts);
+				await UnifiedQueryParams.fromPropertyIds(typeText, matchedPropertyTextWeights);
 			this.addInputSet(`imported from text ${timestamp()}`, unifiedQueryParams);
 		});
 

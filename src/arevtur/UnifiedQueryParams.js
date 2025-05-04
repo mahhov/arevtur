@@ -406,11 +406,11 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	static fromPropertyIds(typeText, propertyTexts) {
+	static fromPropertyIds(typeText, propertyTextWeights) {
 		let unifiedQueryParams = new UnifiedQueryParams();
 		unifiedQueryParams.typeText = typeText;
 		unifiedQueryParams.andEntries =
-			propertyTexts.map(propertyTexts => new Entry(propertyTexts, 0));
+			propertyTextWeights.map(([propertyText, weight]) => new Entry(propertyText, weight));
 		return unifiedQueryParams;
 	}
 }
