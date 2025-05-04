@@ -69,8 +69,8 @@ class TradeQuery {
 
 		// high value query
 		if (items.length === 100) {
-			let maxValue = Math.max(...items.map(itemData => itemData.weightedValueDetails.mods));
-			let newMinValue = maxValue * .5;
+			let values = items.map(itemData => itemData.weightedValueDetails.mods);
+			let newMinValue = (Math.min(...values) + Math.max(...values)) / 2;
 			if (newMinValue > this.unifiedQueryParams.minValue)
 				await runQuery({minValue: newMinValue}, 'high min value');
 		}
