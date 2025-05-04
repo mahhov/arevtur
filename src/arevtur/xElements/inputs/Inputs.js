@@ -30,6 +30,7 @@ customElements.define(name, class extends XElement {
 	connectedCallback() {
 		configForRenderer.addListener('change', config => this.onConfigChange(config));
 
+		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo[high] try catch JSON.parse
 		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
@@ -119,7 +120,7 @@ customElements.define(name, class extends XElement {
 			// todo[low] if user doesn't override name, append item type when selected
 			this.inputSets.push({name: timestamp(), tradeQueries: []});
 			this.addInputSetEl();
-			this.setInputSetIndex(this.inputSets.length - 1, null);
+			this.setInputSetIndex(this.inputSets.length - 1);
 			this.store();
 		});
 		this.$('#duplicate-input-set-button').addEventListener('click', e =>
@@ -175,7 +176,7 @@ customElements.define(name, class extends XElement {
 			let inputSetEl = this.addInputSetEl();
 			inputSetEl.name = inputSet.name;
 		});
-		this.setInputSetIndex(Number(localStorage.getItem('input-set-index')) || 0);
+		this.setInputSetIndex(this.inputSetIndex);
 	}
 
 	get isVersion2() {
@@ -235,13 +236,9 @@ customElements.define(name, class extends XElement {
 		this.store();
 	}
 
-	setInputSetIndex(index, fromEl = null) {
-		// if fromEl is specified, index is ignored
+	setInputSetIndex(index) {
 		let indexSetEls = [...this.$('#input-set-list').children];
-		let inputSetIndex = fromEl ? indexSetEls.indexOf(fromEl) : index;
-		if (inputSetIndex === this.inputSetIndex)
-			return;
-		this.inputSetIndex = inputSetIndex;
+		this.inputSetIndex = index;
 		indexSetEls.forEach(indexSetEl => indexSetEl.classList.remove('selected'));
 		indexSetEls[this.inputSetIndex].classList.add('selected');
 
@@ -268,8 +265,11 @@ customElements.define(name, class extends XElement {
 		inputSetEl.slot = 'list';
 		inputSetEl.name = this.inputSets[this.inputSets.length - 1].name;
 		this.$('#input-set-list').appendChild(inputSetEl);
-		inputSetEl.addEventListener('click', e =>
-			this.setInputSetIndex(0, inputSetEl));
+		inputSetEl.addEventListener('click', e => {
+			let index = this.inputSetIndexFromEl(inputSetEl);
+			if (index !== this.inputSetIndex)
+				this.setInputSetIndex(index);
+		});
 		inputSetEl.addEventListener('name-change', () => {
 			this.inputSetFromEl(inputSetEl).name = inputSetEl.name;
 			this.store();
