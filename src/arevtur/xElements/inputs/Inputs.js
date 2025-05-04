@@ -82,9 +82,10 @@ customElements.define(name, class extends XElement {
 				.map(line => line.trim())
 				.map(line => line)
 				.map(escapeRegex)
+				.map(line => line.replaceAll(/\+/g, '+?'))
 				.map(line => line.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)'))
-				.map(line => line.replaceAll(/(\d+)/g, '($1|#)'))
-				.map(line => `(^|\n)${line}( \\(\\explicit+\\))?($|\n)`)
+				.map(line => line.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)'))
+				.map(line => `(^|\n)${line}( \\(explicit\\))?($|\n)`)
 				.map(line => new RegExp(line))
 				// todo[low] sometimes, there are multiple properties with the same text.
 				// should do an 'or' between them. e.g. '+# to Strength and Intelligence'
