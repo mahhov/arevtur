@@ -125,8 +125,8 @@ class ItemData {
 			shifts: this.priceShifts,
 		};
 		this.pricePromise = ItemData.price(this.league, this.priceDetails);
-		// todo[medium] rm price, let users use pricePromise
-		this.pricePromise.then(price => this.price = price);
+		// todo[medium] remove pricePromise.resolved, let users use pricePromise
+		this.pricePromise.then(resolved => this.pricePromise.resolved = resolved);
 
 		this.displayLines = this.constructDisplayLines;
 	}

@@ -17,9 +17,9 @@ customElements.define(name, class extends XElement {
 		this.$('#direct-whisper').addEventListener('click', async e => {
 			e.stopPropagation();
 			if (!await this.directWhisper()) {
-				let oldPrice = this.itemData_.price.price;
+				let oldPrice = this.itemData_.pricePromise.resolved.price;
 				await this.refresh();
-				if (this.itemData_.price.price === oldPrice)
+				if (this.itemData_.pricePromise.resolved.price === oldPrice)
 					await this.directWhisper();
 			}
 		});
@@ -70,8 +70,8 @@ customElements.define(name, class extends XElement {
 			this.$('#craft-value').tooltip = craftValue.text;
 		}).catch(e => 0);
 
-		this.$('#price').text = itemData.price.priceSummary;
-		this.$('#price').tooltip = itemData.price.priceBreakdown;
+		this.$('#price').text = itemData.pricePromise.resolved.priceSummary;
+		this.$('#price').tooltip = itemData.pricePromise.resolved.priceBreakdown;
 
 		this.$('#direct-whisper').classList.toggle('hidden', !itemData.directWhisperToken);
 		this.$('#copy-whisper').classList.toggle('hidden', !itemData.whisperText);
