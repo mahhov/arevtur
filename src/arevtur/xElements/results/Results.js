@@ -126,7 +126,7 @@ customElements.define(name, class extends XElement {
 				});
 				return itemListing;
 			},
-			(itemListing, i, item) => itemListing.itemData = item);
+			(itemListing, i, item) => itemListing.setItemData(item));
 	}
 
 	renderItemsDataListBackgroundsOnly() {

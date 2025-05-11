@@ -47,7 +47,7 @@ customElements.define(name, class extends XElement {
 		this.addEventListener('mouseleave', () => this.emit('hover', false));
 	}
 
-	set itemData(itemData) {
+	async setItemData(itemData) {
 		// should only be called once to avoid a late-resolved, stale itemData.buildValuePromise
 		// overwriting the correct one
 		this.itemData_ = itemData;
@@ -61,17 +61,12 @@ customElements.define(name, class extends XElement {
 			.filter(([_, value]) => value);
 		this.$('#weight-value').tooltip = expandedValues.length > 1 ?
 			expandedValues.map(([name, value]) => `${round(value, 1)} ${name}`).join(' + ') : '';
-		itemData.buildValuePromise.then(buildValue => {
-			this.$('#build-value').text = `Build: ${buildValue.value}`;
-			this.$('#build-value').tooltip = buildValue.text;
-		}).catch(e => 0);
-		itemData.craftValuePromise.then(craftValue => {
-			this.$('#craft-value').text = `Craft: ${craftValue.value}`;
-			this.$('#craft-value').tooltip = craftValue.text;
-		}).catch(e => 0);
-
-		this.$('#price').text = itemData.pricePromise.resolved.priceSummary;
-		this.$('#price').tooltip = itemData.pricePromise.resolved.priceBreakdown;
+		this.$('#build-value').text = `Build: ${(await itemData.buildValuePromise).value}`;
+		this.$('#build-value').tooltip = (await itemData.buildValuePromise).text;
+		this.$('#craft-value').text = `Craft: ${(await itemData.craftValuePromise).value}`;
+		this.$('#craft-value').tooltip = (await itemData.craftValuePromise).text;
+		this.$('#price').text = (await itemData.pricePromise).priceSummary;
+		this.$('#price').tooltip = (await itemData.pricePromise).priceBreakdown;
 
 		this.$('#direct-whisper').classList.toggle('hidden', !itemData.directWhisperToken);
 		this.$('#copy-whisper').classList.toggle('hidden', !itemData.whisperText);
@@ -108,7 +103,7 @@ customElements.define(name, class extends XElement {
 	async refresh() {
 		let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
 		this.itemData_.refresh(tradeApiItemsData.result[0]);
-		this.itemData = this.itemData_;
+		await this.setItemData(this.itemData_)
 		this.setButtonColor(this.$('#direct-whisper'), '');
 		this.setButtonColor(this.$('#refresh-button'), 'busy');
 	}
