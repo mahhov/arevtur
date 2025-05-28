@@ -46,7 +46,7 @@ class TradeQuery {
 	stop() {
 		this.stopObj.stop = true;
 		this.itemIds.forEach(id => {
-			if (!--TradeQuery.cachedItemDatas[id].count)
+			if (TradeQuery.cachedItemDatas[id] && !--TradeQuery.cachedItemDatas[id].count)
 				TradeQuery.cachedItemDatas[id].promise.reject();
 		});
 	}
@@ -125,6 +125,7 @@ class TradeQuery {
 			if (data.error)
 				this.errorStream.write(data.error);
 
+			// TODO[blocking] only add itemIDs and increment cache count when making the actual request
 			this.itemIds = this.itemIds.concat(data.result);
 			let newItemIds = data.result.filter(itemId => {
 				if (!TradeQuery.cachedItemDatas[itemId])
