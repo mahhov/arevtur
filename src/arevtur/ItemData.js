@@ -153,7 +153,7 @@ class ItemData {
 		let currencyPrice = currencyPrices[currencyId];
 		if (!currencyPrice) {
 			console.warn('Missing currency', currencyId);
-			return {price: 1000 ** 2, priceSummary: `${count} ${currencyId}`, priceBreakdown: ''};
+			return {price: Infinity, priceSummary: `${count} ${currencyId}`, priceBreakdown: ''};
 		}
 
 		let price = currencyPrice * count +

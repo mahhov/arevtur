@@ -11,7 +11,7 @@ class ItemsData extends Emitter {
 				'Recommended when not using PoB.',
 			].join('\n'),
 			sortY: item => item.weightedValue,
-			showFilter: item => true,
+			showFilter: item => item.pricePromise.resolved.price !== Infinity,
 			trigger: null,
 		}, {
 			name: 'Build sorting',
@@ -22,7 +22,7 @@ class ItemsData extends Emitter {
 				'Recommended for early gear.',
 			].join('\n'),
 			sortY: item => item.buildValuePromise.resolved.value,
-			showFilter: item => item.buildValuePromise.resolved,
+			showFilter: item => item.pricePromise.resolved.price !== Infinity && item.buildValuePromise.resolved,
 			trigger: item => item.buildValuePromise,
 		}, {
 			name: 'Build + craft sorting',
@@ -34,7 +34,7 @@ class ItemsData extends Emitter {
 				'Recommended for end gear.',
 			].join('\n'),
 			sortY: item => item.craftValuePromise.resolved.value,
-			showFilter: item => item.craftValuePromise.resolved,
+			showFilter: item => item.pricePromise.resolved.price !== Infinity && item.craftValuePromise.resolved,
 			trigger: item => item.craftValuePromise,
 		},
 	];
