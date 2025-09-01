@@ -6,7 +6,7 @@
     "start": "electron .",
     "build": "build",
     "ship": ". ./git_token && git push && git push --tags && rm -rf dist && build -lwp always",
-    "windowShip": "git-personal && git push && git push --tags && rm -rf dist && electron-builder -wp always",
+    "windowShip": "gitpersonal && git push && git push --tags && rm -rf dist && electron-builder -wp always",
     "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && npm run windowShip"
   },
   "author": "mahhov1",
