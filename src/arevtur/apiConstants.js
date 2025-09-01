@@ -221,7 +221,7 @@ class ApiConstants {
 	static async initCurrencies(version2, league) {
 		try {
 			return await (version2 ?
-				ApiConstants.initOrbCurrencies(version2, league) :
+				ApiConstants.initScoutCurrencies(version2, league) :
 				ApiConstants.initNinjaCurrencies(version2, league));
 		} catch (e) {
 			// todo[medium] show red/orange status indicator
@@ -277,6 +277,28 @@ class ApiConstants {
 				let price = currencyPrices.prices.currency
 					.find(line => line.item_id === id && line.price_type === 'buy')
 					?.item_price;
+				return [id, Number(price)];
+			})
+			.filter(v => v);
+
+		let currencies = Object.fromEntries(tuples);
+		currencies.exalted = 1;
+		return currencies;
+		/* {alt: .125, ...} */
+	}
+
+	static async initScoutCurrencies(version2, league) {
+		let staticData = ApiConstants.get('static', version2);
+		let currencyPrices = httpRequest.get('https://poe2scout.com/api/items/currency/currency', {league, perPage: 100});
+		staticData = JSON.parse((await staticData).string);
+		currencyPrices = JSON.parse((await currencyPrices).string);
+
+		let tuples = staticData.result
+			.find(({id}) => id === 'Currency').entries
+			.map(({id}) => {
+				let price = currencyPrices.items
+					.find(line => line.apiId === id)
+					?.currentPrice;
 				return [id, Number(price)];
 			})
 			.filter(v => v);
