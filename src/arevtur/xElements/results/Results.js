@@ -141,28 +141,40 @@ customElements.define(name, class extends XElement {
 	renderItemsDataChart(resetChartRange = false) {
 		this.$('#results-chart').pointSets = [
 			{
+				// line for best path
 				cssPropertyValueColor: '--colored-text-blue',
 				size: 1,
 				points: this.itemsData.bestBoundPath,
 				type: 'path',
 			}, {
+				// big blue squares for selected items
 				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 8,
 				points: this.itemsData.itemsToPoints(this.itemsData.selectedItems),
 			}, {
+				// small light-green squares for travelHideout items
+				cssPropertyValueColor: '--colored-text-light-green',
+				fill: true,
+				size: 4,
+				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
+					.filter(item => item.onlineStatus === 'travelHideout')),
+			}, {
+				// small blue squares for online & afk items
 				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
-					.filter(item => item.onlineStatus !== 'offline')),
+					.filter(item => item.onlineStatus !== 'travelHideout' && item.onlineStatus !== 'offline')),
 			}, {
+				// small orange squares for offline items
 				cssPropertyValueColor: '--colored-text-orange',
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
 					.filter(item => item.onlineStatus === 'offline')),
 			}, {
+				// big blue squares for hovered item
 				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 8,

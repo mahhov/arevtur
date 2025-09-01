@@ -22,7 +22,6 @@ customElements.define(name, class extends XElement {
 			type: {},
 			minValue: {},
 			price: {},
-			offline: {boolean: true},
 			armour: {},
 			evasion: {},
 			energyShield: {},
@@ -67,10 +66,6 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#price-input').addEventListener('change', (e) => {
 			this.price = this.$('#price-input').value;
-			this.emit('change');
-		});
-		this.$('#offline-check').addEventListener('change', () => {
-			this.offline = this.$('#offline-check').checked;
 			this.emit('change');
 		});
 		// todo[high] slow async stuff probably breaks stuff if the user interacts with the UI
@@ -187,10 +182,6 @@ customElements.define(name, class extends XElement {
 
 	set price(value) {
 		this.$('#price-input').value = value;
-	}
-
-	set offline(value) {
-		this.$('#offline-check').checked = value;
 	}
 
 	set armour(value) {

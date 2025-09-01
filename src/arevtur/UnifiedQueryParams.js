@@ -50,7 +50,7 @@ class UnifiedQueryParams {
 	typeText = 'Any';
 	minValue = 0;
 	maxPrice = 0;
-	offline = false;
+	offline = 'online';
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
 	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
@@ -110,7 +110,6 @@ class UnifiedQueryParams {
 		inputElement.type = this.typeText;
 		inputElement.minValue = this.minValue;
 		inputElement.price = this.maxPrice;
-		inputElement.offline = this.offline;
 		defensePropertyTuples.forEach(([property]) =>
 			inputElement[property] = this.defenseProperties[property].weight);
 		maxRequirementPropertyTuples.forEach(([property]) =>
@@ -182,7 +181,6 @@ class UnifiedQueryParams {
 		unifiedQueryParams.typeText = inputElement.type;
 		unifiedQueryParams.minValue = Number(inputElement.minValue);
 		unifiedQueryParams.maxPrice = Number(inputElement.price);
-		unifiedQueryParams.offline = inputElement.offline;
 		unifiedQueryParams.defenseProperties = defenseProperties;
 		unifiedQueryParams.maxRequirementProperties = maxRequirementProperties;
 		unifiedQueryParams.affixProperties = affixProperties;
@@ -198,7 +196,11 @@ class UnifiedQueryParams {
 	toTradeQueryData(manual6LinkName, manual6LinkPrice) {
 		let queries = [];
 
-		let offlineOptions = [this.offline, false].filter(unique);
+		let offlineOptions = [
+			'securable', // instant buyout
+			'online', // in person trade
+			'any', // offline
+		];
 
 		let priceOptions = [];
 		let maxPrice = this.maxPrice;
@@ -303,7 +305,7 @@ class UnifiedQueryParams {
 
 		return {
 			query: {
-				status: {option: overridden.offline ? 'any' : 'online'},
+				status: {option: overridden.offline},
 				type: overridden.name || undefined,
 				stats: [
 					{
@@ -369,8 +371,7 @@ class UnifiedQueryParams {
 				filters?.type_filters?.filters?.category?.option) || 'Any',
 			minValue: weightedStats?.value?.min || 0,
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 0,
-			offline: apiQueryParams?.query?.status !== 'online' &&
-				apiQueryParams?.query?.status?.option !== 'online',
+			// offline
 			// defenseProperties
 			// maxRequirementProperties
 			// affixProperties

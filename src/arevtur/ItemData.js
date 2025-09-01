@@ -48,7 +48,8 @@ class ItemData {
 			.join(' > ');
 		this.directWhisperToken = tradeApiItemData.listing.whisper_token;
 		this.whisperText = tradeApiItemData.listing.whisper;
-		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online);
+		this.travelHideoutToken = tradeApiItemData.listing.hideout_token;
+		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online, this.travelHideoutToken);
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
@@ -167,7 +168,9 @@ class ItemData {
 		return {price, priceSummary, priceBreakdown};
 	}
 
-	static onlineStatus(onlineObj) {
+	static onlineStatus(onlineObj, travelHideoutToken) {
+		if (travelHideoutToken)
+			return 'travelHideout'
 		if (!onlineObj)
 			return 'offline';
 		if (onlineObj.status)
@@ -200,6 +203,10 @@ class ItemData {
 		const msInHour = 1000 * 60 * 60;
 		let dateDiff = (new Date() - new Date(this.date)) / msInHour;
 		let dateText = unitText(dateDiff, 24, 1, 'hours ago', 'days ago');
+		let onlineStatusColor = {
+			travelHideout: '@light-green',
+			offline: '@orange',
+		}[this.onlineStatus] || '@blue'
 
 		return [
 			this.name,
@@ -228,7 +235,7 @@ class ItemData {
 			[
 				this.accountText,
 				dateText,
-				(this.onlineStatus === 'offline' ? '@orange ' : '@blue ') + this.onlineStatus,
+				`${onlineStatusColor} ${this.onlineStatus}`,
 			].join(' - '),
 		];
 	}
