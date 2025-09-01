@@ -7,8 +7,12 @@ const clientPath = 'C:\\Program Files (x86)\\Grinding Gear Games\\Path of Exile 
 
 let readLines = 0;
 let getUnreadLines = async () => {
-	let buffer = await fs.promises.readFile(clientPath);
-	let lines = buffer.toString().split('\n').filter(v => v);
+	let lines = [];
+	try {
+		let buffer = await fs.promises.readFile(clientPath);
+		lines = buffer.toString().split('\n').filter(v => v);
+	} catch (e) {
+	}
 
 	let oldReadLines = readLines;
 	readLines = lines.length;
