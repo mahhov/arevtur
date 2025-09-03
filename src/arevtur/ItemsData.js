@@ -45,6 +45,7 @@ class ItemsData extends Emitter {
 		this.shownItemsCache = null;
 		this.valueHandler_ = ItemsData.valueHandlers[0];
 		this.pricePerValue_ = Infinity;
+		this.goldPerPrice_ = Infinity;
 	}
 
 	clear() {
@@ -67,6 +68,12 @@ class ItemsData extends Emitter {
 	set pricePerValue(pricePerValue) {
 		this.shownItemsCache = null;
 		this.pricePerValue_ = pricePerValue;
+		this.refresh();
+	}
+
+	set goldPerPrice(goldPerPrice) {
+		this.shownItemsCache = null;
+		this.goldPerPrice_ = goldPerPrice;
 		this.refresh();
 	}
 
@@ -127,12 +134,17 @@ class ItemsData extends Emitter {
 	}
 
 	get shownItems() {
+		// high to low values, low to high prices
+		let score = item => {
+			let y = this.y(item);
+			let pricePenalty = item.pricePromise.resolved.price / this.pricePerValue_ || 0;
+			let instantBuyoutFeePenalty = item.instantBuyoutFee / this.goldPerPrice_ / this.pricePerValue_;
+			return y - pricePenalty - instantBuyoutFeePenalty;
+		};
+
 		return (this.shownItemsCache ||= this.allItems
 			.filter(this.valueHandler_.showFilter)
-			// high to low values, low to high prices
-			.sort((a, b) =>
-				this.y(b) - this.y(a) - (b.pricePromise.resolved.price - a.pricePromise.resolved.price) / this.pricePerValue_ ||
-				this.y(b) - this.y(a)));
+			.sort((a, b) => score(b) - score(a)));
 	}
 
 	get bestBoundItems() {

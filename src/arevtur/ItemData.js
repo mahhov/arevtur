@@ -48,6 +48,7 @@ class ItemData {
 			.join(' > ');
 		this.directWhisperToken = tradeApiItemData.listing.whisper_token;
 		this.whisperText = tradeApiItemData.listing.whisper;
+		this.instantBuyoutFee = tradeApiItemData.listing.fee || 0;
 		this.travelHideoutToken = tradeApiItemData.listing.hideout_token;
 		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online, this.travelHideoutToken);
 		this.date = tradeApiItemData.listing.indexed;
@@ -120,12 +121,12 @@ class ItemData {
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		this.priceDetails = {
-			count: tradeApiItemData.listing.price.amount,
-			currency: tradeApiItemData.listing.price.currency,
-			shifts: this.priceShifts,
-		};
-		this.pricePromise = ItemData.price(this.league, this.priceDetails);
+		this.pricePromise = ItemData.price(
+			this.league,
+			tradeApiItemData.listing.price.currency,
+			tradeApiItemData.listing.price.amount,
+			this.priceShifts,
+			this.instantBuyoutFee);
 		// todo[medium] remove pricePromise.resolved, let users use pricePromise
 		this.pricePromise.then(resolved => this.pricePromise.resolved = resolved);
 
@@ -149,7 +150,7 @@ class ItemData {
 		return Number(pseudoSum.substring(5));
 	}
 
-	static async price(league, {currency: currencyId, count, shifts}) {
+	static async price(league, currencyId, count, shifts, instantBuyoutFee) {
 		let currencyPrices = await apiConstants.currencyPrices(league);
 		let currencyPrice = currencyPrices[currencyId];
 		if (!currencyPrice) {
@@ -160,17 +161,18 @@ class ItemData {
 		let price = currencyPrice * count +
 			Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
 		let smallCurrency = configForRenderer.config.version2 ? 'exalt' : 'chaos';
-		let priceSummary = unitText(price, currencyPrices.divine, 1,
-			smallCurrency, 'divine');
+		let priceSummary = unitText(price, currencyPrices.divine, 1, smallCurrency, 'divine');
 		let expandedPriceShifts = Object.entries(shifts)
 			.map(([name, value]) => ` + ${name} (${round(value, 1)} ${smallCurrency})`);
+		if (instantBuyoutFee)
+			expandedPriceShifts.push(` + ${instantBuyoutFee} gold`);
 		let priceBreakdown = `${count} ${currencyId}${expandedPriceShifts.join('')}`;
 		return {price, priceSummary, priceBreakdown};
 	}
 
 	static onlineStatus(onlineObj, travelHideoutToken) {
 		if (travelHideoutToken)
-			return 'instant buyout'
+			return 'instant buyout';
 		if (!onlineObj)
 			return 'offline';
 		if (onlineObj.status)
@@ -206,7 +208,7 @@ class ItemData {
 		let onlineStatusColor = {
 			'instant buyout': '@light-green',
 			offline: '@orange',
-		}[this.onlineStatus] || '@blue'
+		}[this.onlineStatus] || '@blue';
 
 		return [
 			this.name,

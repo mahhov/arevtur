@@ -35,12 +35,19 @@ customElements.define(name, class extends XElement {
 
 		this.$('#price-per-value-input').addEventListener('change', () => {
 			localStorage.setItem('results-price-per-value', this.$('#price-per-value-input').value);
-			this.itemsData.pricePerValue =
-				Number(this.$('#price-per-value-input').value) || Infinity;
+			this.itemsData.pricePerValue = Number(this.$('#price-per-value-input').value) || Infinity;
 			this.renderItemsData(false, true);
 		});
 		this.$('#price-per-value-input').value = localStorage.getItem('results-price-per-value') || 0;
 		this.itemsData.pricePerValue = Number(this.$('#price-per-value-input').value) || Infinity;
+
+		this.$('#gold-per-price-input').addEventListener('change', () => {
+			localStorage.setItem('results-gold-per-price', this.$('#gold-per-price-input').value);
+			this.itemsData.goldPerPrice = Number(this.$('#gold-per-price-input').value) || Infinity;
+			this.renderItemsData(false, true);
+		});
+		this.$('#gold-per-price-input').value = localStorage.getItem('results-gold-per-price') || 0;
+		this.itemsData.goldPerPrice = Number(this.$('#gold-per-price-input').value) || Infinity;
 
 		document.addEventListener('keydown', e => {
 			if (e.key === 'f' && e.ctrlKey)
