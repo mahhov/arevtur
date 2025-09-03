@@ -114,8 +114,8 @@ customElements.define(name, class extends XElement {
 	}
 
 	async refresh() {
-		let tradeApiItemsData = await TradeQuery.itemsApiQuery(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
-		this.itemData_.refresh(tradeApiItemsData.result[0]);
+		let tradeApiItemsData = await TradeQuery.itemGetter.get(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
+		this.itemData_.refresh(tradeApiItemsData);
 		await this.setItemData(this.itemData_)
 		this.setButtonColor(this.$('#direct-whisper'), '');
 		this.setButtonColor(this.$('#travel-hideout'), '');

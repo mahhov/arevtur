@@ -3,11 +3,10 @@ const {httpRequest, XPromise} = require('js-desktop-base');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');
-const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
+const TradeQuerySearcher = require('./TradeQuerySearcher');
+const TradeQueryItemGetter = require('./TradeQueryItemGetter');
 
 class TradeQuery {
-	static cachedItemDatas = {};
-
 	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {
 		this.unifiedQueryParams = unifiedQueryParams;
 		this.version2 = version2;
@@ -18,7 +17,6 @@ class TradeQuery {
 		this.itemStream = new Stream();
 		this.progressStream = new Stream();
 		this.errorStream = new Stream();
-		this.itemIds = [];
 		this.stopObj = {};
 	}
 
@@ -45,10 +43,6 @@ class TradeQuery {
 
 	stop() {
 		this.stopObj.stop = true;
-		this.itemIds.forEach(id => {
-			if (TradeQuery.cachedItemDatas[id] && !--TradeQuery.cachedItemDatas[id].count)
-				TradeQuery.cachedItemDatas[id].promise.reject();
-		});
 	}
 
 	async writeItemsToStream() {
@@ -117,58 +111,51 @@ class TradeQuery {
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
-				queriesTotal: 11,
+				queriesTotal: 110,
 				itemCount: 0,
 			});
 
-			let data = await TradeQuery.initialSearchApiQuery(this.version2, this.league, this.sessionId, this.stopObj, apiQuery);
-			if (data.error)
-				this.errorStream.write(data.error);
-
-			// TODO[blocking] only add itemIDs and increment cache count when making the actual request
-			this.itemIds = this.itemIds.concat(data.result);
-			let newItemIds = data.result.filter(itemId => {
-				if (!TradeQuery.cachedItemDatas[itemId])
-					return TradeQuery.cachedItemDatas[itemId] = {count: 1};
-				if (TradeQuery.cachedItemDatas[itemId].promise.error)
-					return TradeQuery.cachedItemDatas[itemId].count++;
-			});
-			newItemIds.forEach(itemId => TradeQuery.cachedItemDatas[itemId].promise = new XPromise());
-
-			let requestGroups = [];
-			while (newItemIds.length)
-				requestGroups.push(newItemIds.splice(0, 10));
+			let searcherData;
+			try {
+				searcherData = await TradeQuery.searcher.get(this.version2, this.league, this.sessionId, this.stopObj, apiQuery);
+			} catch (e) {
+				this.errorStream.write(e);
+				return;
+			}
 
 			this.progressStream.write({
-				text: `Will make ${requestGroups.length} grouped item queries.`,
-				queriesComplete: 1,
-				queriesTotal: requestGroups.length - 10,
-				itemCount: data.result.length,
+				text: `Searcher returned fetch ${searcherData.result.length} items`,
+				queriesComplete: 10,
+				queriesTotal: searcherData.result.length - 100,
+				itemCount: searcherData.result.length,
 			});
 
-			requestGroups.forEach(async (requestGroup, i) => {
-				let data2 = await TradeQuery.itemsApiQuery(this.version2, this.sessionId, this.stopObj, data.id, requestGroup.join());
-				if (data2.error)
-					this.errorStream.write(data2.error);
+			let itemGetterDataPromises = searcherData.result.map(itemId => TradeQuery.itemGetter.get(this.version2, this.sessionId, this.stopObj, searcherData.id, itemId));
+			TradeQuery.itemGetter.flush();
+
+			let itemPromises = itemGetterDataPromises.map(async (itemGetterDataPromise, i) => {
+				let itemGetterData;
+				try {
+					itemGetterData = await itemGetterDataPromise;
+				} catch (e) {
+					this.errorStream.write(e);
+					return null;
+				}
+				let item = new ItemData(this.version2, this.league, this.affixValueShift,
+					this.unifiedQueryParams.defenseProperties, this.priceShifts, searcherData.id, queryNotes, itemGetterData);
+				// todo[high] let users wait on pricePromise and rm this await
+				await item.pricePromise;
+				this.itemStream.write([item]);
 				this.progressStream.write({
-					text: `Received grouped item query # ${i}.`,
+					text: `Received item #${i}.`,
 					queriesComplete: 1,
 					queriesTotal: 0,
 					itemCount: 0,
 				});
-				data2.result.forEach(itemData => TradeQuery.cachedItemDatas[itemData.id].promise.resolve(itemData));
-			});
-
-			let itemPromises = data.result.map(async itemId => {
-				let itemData = await TradeQuery.cachedItemDatas[itemId].promise;
-				let item = new ItemData(this.version2, this.league, this.affixValueShift,
-					this.unifiedQueryParams.defenseProperties, this.priceShifts, data.id, queryNotes, itemData);
-				// todo[high] let users wait on pricePromise and rm this await
-				await item.pricePromise;
-				this.itemStream.write([item]);
 				return item;
 			});
-			let items = await Promise.all(itemPromises);
+
+			let items = (await Promise.all(itemPromises)).filter(v => v);
 			this.progressStream.write({
 				text: 'All grouped item queries completed.',
 				queriesComplete: 0,
@@ -192,41 +179,8 @@ class TradeQuery {
 		return `${endpoint}?${queryParamsString}`;
 	}
 
-	static initialSearchRateLimiter = new TradeQueryRateLimiter();
-
-	static initialSearchApiQuery(version2, league, sessionId, stopObj, apiQuery) {
-		let endpoint = version2 ?
-			`${apiConstants.api}/api/trade2/search/poe2/${league}` :
-			`${apiConstants.api}/api/trade/search/${league}`;
-		let headers = apiConstants.createRequestHeader(sessionId);
-		let body = JSON.stringify(apiQuery);
-		return TradeQuery.initialSearchRateLimiter.queueRequest(endpoint, {
-			method: 'post',
-			body,
-			headers,
-		}, stopObj);
-	}
-
-	static itemsApiQueryRateLimiter = new TradeQueryRateLimiter();
-
-	static itemsApiQuery(version2, sessionId, stopObj, queryId, itemIds) {
-		let endpoint = version2 ?
-			`${apiConstants.api}/api/trade2/fetch/${itemIds}` :
-			`${apiConstants.api}/api/trade/fetch/${itemIds}`;
-		let params = {
-			query: queryId,
-			'pseudos[]': [
-				apiConstants.shortProperties.totalEleRes,
-				apiConstants.shortProperties.flatLife,
-			],
-		};
-		endpoint += `?${querystring.stringify(params)}`;
-		let headers = apiConstants.createRequestHeader(sessionId);
-		return TradeQuery.itemsApiQueryRateLimiter.queueRequest(endpoint, {
-			method: 'get',
-			headers,
-		}, stopObj);
-	}
+	static searcher = new TradeQuerySearcher();
+	static itemGetter = new TradeQueryItemGetter();
 
 	static async fromApiHtmlUrl(sessionId, tradeSearchUrl) {
 		tradeSearchUrl = tradeSearchUrl.replace('.com/trade', '.com/api/trade');

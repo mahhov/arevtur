@@ -148,7 +148,7 @@ customElements.define(name, class extends XElement {
 			this.emit('progress', arg));
 		this.tradeQueryQueue.addListener('error', error => {
 			console.error('TradeQuery error', error);
-			if (error?.message.includes('Logging in')) {
+			if (error?.message?.includes('Logging in')) {
 				this.$('#session-id-input').value = '';
 				this.store();
 			}
