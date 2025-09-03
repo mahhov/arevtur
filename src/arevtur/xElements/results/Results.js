@@ -158,14 +158,14 @@ customElements.define(name, class extends XElement {
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
-					.filter(item => item.onlineStatus === 'travelHideout')),
+					.filter(item => item.onlineStatus === 'instant buyout')),
 			}, {
 				// small blue squares for online & afk items
 				cssPropertyValueColor: '--colored-text-blue',
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
-					.filter(item => item.onlineStatus !== 'travelHideout' && item.onlineStatus !== 'offline')),
+					.filter(item => item.onlineStatus !== 'instant buyout' && item.onlineStatus !== 'offline')),
 			}, {
 				// small orange squares for offline items
 				cssPropertyValueColor: '--colored-text-orange',

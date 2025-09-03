@@ -1,5 +1,5 @@
 const apiConstants = require('./apiConstants');
-const {unique, deepCopy, updateElementChildren} = require('../util/util');
+const {deepCopy, updateElementChildren} = require('../util/util');
 const {
 	defensePropertyTuples,
 	maxRequirementPropertyTuples,

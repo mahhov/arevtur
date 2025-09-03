@@ -170,7 +170,7 @@ class ItemData {
 
 	static onlineStatus(onlineObj, travelHideoutToken) {
 		if (travelHideoutToken)
-			return 'travelHideout'
+			return 'instant buyout'
 		if (!onlineObj)
 			return 'offline';
 		if (onlineObj.status)
@@ -204,7 +204,7 @@ class ItemData {
 		let dateDiff = (new Date() - new Date(this.date)) / msInHour;
 		let dateText = unitText(dateDiff, 24, 1, 'hours ago', 'days ago');
 		let onlineStatusColor = {
-			travelHideout: '@light-green',
+			'instant buyout': '@light-green',
 			offline: '@orange',
 		}[this.onlineStatus] || '@blue'
 
