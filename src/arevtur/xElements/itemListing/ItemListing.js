@@ -29,7 +29,7 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#travel-hideout').addEventListener('click', e => {
 			e.stopPropagation();
-			this.travelHideout()
+			this.travelHideout();
 		});
 		this.$('#copy-item-button').addEventListener('click', e => {
 			e.stopPropagation();
@@ -114,9 +114,12 @@ customElements.define(name, class extends XElement {
 	}
 
 	async refresh() {
-		let tradeApiItemsData = await TradeQuery.itemGetter.get(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, [this.itemData_.id]);
-		this.itemData_.refresh(tradeApiItemsData);
-		await this.setItemData(this.itemData_)
+		TradeQuery.itemGetter.clearCache(this.itemData_.id);
+		let itemGetterDataPromise = TradeQuery.itemGetter.get(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, this.itemData_.id);
+		TradeQuery.itemGetter.flush();
+		let itemGetterData = await itemGetterDataPromise;
+		this.itemData_.refresh(itemGetterData);
+		await this.setItemData(this.itemData_);
 		this.setButtonColor(this.$('#direct-whisper'), '');
 		this.setButtonColor(this.$('#travel-hideout'), '');
 		this.setButtonColor(this.$('#refresh-button'), 'busy');

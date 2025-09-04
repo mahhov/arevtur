@@ -11,6 +11,10 @@ class TradeQueryItemGetter {
 	#queued = [];
 	#rateLimiter = new TradeQueryRateLimiter();
 
+	clearCache(itemId) {
+		this.#cached[itemId] = null;
+	}
+
 	get(version2, sessionId, stopObj, searchId, itemId) {
 		if (this.#cached[itemId]) return this.#cached[itemId];
 		let queueObj = this.#queued.find(queueObj => queueObj.itemId === itemId);
