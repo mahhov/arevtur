@@ -63,7 +63,7 @@ class TradeQueryItemGetter {
 		this.#queued = this.#queued.filter(queueObj => {
 			if (!queueObj.stopObj.stop)
 				return true;
-			queueObj.stopObj.promise.reject('stopped');
+			queueObj.promise.reject('stopped');
 		});
 		let first = this.#queued[0];
 		return this.#queued
@@ -95,6 +95,3 @@ class TradeQueryItemGetter {
 }
 
 module.exports = TradeQueryItemGetter;
-
-// todo[blocking]
-//   cancelled trade queries stuck
