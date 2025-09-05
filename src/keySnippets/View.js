@@ -79,8 +79,6 @@ document.addEventListener('mousedown', () => ipcSend({name: 'prevent-close'}));
 $('#restrict-window').addEventListener('change', () =>
 	configForRenderer.config = {restrictToPoeWindow: $('#restrict-window').checked});
 
-$('#reset-pob').addEventListener('click', () => ipcSend({name: 'reset-pob'}));
-
 $('#open-config').addEventListener('click', () => openPath(appData.basePath));
 
 $('#chat-notifications').addEventListener('change', () =>

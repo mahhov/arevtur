@@ -12,6 +12,7 @@ let getUnreadLines = async () => {
 		let buffer = await fs.promises.readFile(clientPath);
 		lines = buffer.toString().split('\n').filter(v => v);
 	} catch (e) {
+		console.error('log watcher failed', e);
 	}
 
 	let oldReadLines = readLines;

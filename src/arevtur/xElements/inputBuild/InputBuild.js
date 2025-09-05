@@ -1,3 +1,4 @@
+const {ipcRenderer: ipc} = require('electron');
 const fs = require('fs');
 const path = require('path');
 const {XElement, importUtil} = require('xx-element');
@@ -22,7 +23,10 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').defaultPath = appData.defaultPobBuildsPath;
 		this.$('#pob-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
-		this.$('#reload').addEventListener('click', () => pobApi.restart());
+		this.$('#reload').addEventListener('click', () => {
+			pobApi.restart();
+			ipc.send('window-request', {name: 'reset-pob'});
+		});
 		this.$('#reset').addEventListener('click', () => this.resetConfig());
 
 		this.$('#weights').addEventListener('arrange', () => this.saveConfig());

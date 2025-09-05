@@ -36,7 +36,7 @@ class ViewHandle extends ViewHandleBase {
 				break;
 			case 'reset-pob':
 				// todo[low] merge this file with keySnippet
-				pobApi.setParams();
+				pobApi.restart();
 				break;
 			case 'size':
 				this.resize(600, message.height);

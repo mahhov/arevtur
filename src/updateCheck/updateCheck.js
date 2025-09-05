@@ -14,3 +14,5 @@ let window = new ElectronWindow(`Check for updates`, path.resolve(__dirname, 'up
 	400, 400, false);
 
 module.exports = window;
+
+// todo[blocking] updater not working

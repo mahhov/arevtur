@@ -99,8 +99,7 @@ class PobApi extends Emitter {
 		this.extraMods = extraMods;
 
 		// restart to cancel pending requests
-		if (clearCache || !this.script || this.script.pendingResponses.length ||
-			this.script.cleared)
+		if (clearCache || !this.script || this.script.pendingResponses.length || this.script.cleared)
 			this.restart(clearCache);
 		else
 			this.emit('change');

@@ -95,3 +95,6 @@ class TradeQueryItemGetter {
 }
 
 module.exports = TradeQueryItemGetter;
+
+// todo[blocking]
+//   cancelled trade queries stuck
