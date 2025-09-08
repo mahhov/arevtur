@@ -18,7 +18,7 @@ let timestamp = () => {
 	return date.toLocaleDateString();
 };
 
-customElements.define(name, class extends XElement {
+customElements.define(name, class Inputs extends XElement {
 	static get attributeTypes() {
 		return {};
 	}
@@ -32,7 +32,7 @@ customElements.define(name, class extends XElement {
 
 		this.inputSetIndex = Number(localStorage.getItem('input-set-index')) || 0;
 		// todo[high] try catch JSON.parse
-		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: timestamp()}];
+		this.inputSets = JSON.parse(localStorage.getItem('input-sets')) || [{name: null}];
 		this.sharedWeightEntries = JSON.parse(localStorage.getItem('shared-weight-entries')) || [];
 
 		this.$('#version-input').autocompletes = ['PoE 1', 'PoE 2'];
@@ -117,18 +117,19 @@ customElements.define(name, class extends XElement {
 			this.store();
 		});
 		this.$('#add-input-set-button').addEventListener('click', e => {
-			// todo[low] if user doesn't override name, append item type when selected
-			this.inputSets.push({name: timestamp(), tradeQueries: []});
+			this.inputSets.push({name: null, tradeQueries: []});
 			this.addInputSetEl();
 			this.setInputSetIndex(this.inputSets.length - 1);
 			this.store();
 		});
-		this.$('#duplicate-input-set-button').addEventListener('click', e =>
-			this.addInputSet(`${this.inputSets[this.inputSetIndex].name} (copy)`,
-				this.inputSets[this.inputSetIndex].unifiedQueryParams));
+		this.$('#duplicate-input-set-button').addEventListener('click', e => {
+			let name = this.inputSets[this.inputSetIndex].name ?
+				`${this.inputSets[this.inputSetIndex].name} (copy)` : null;
+			this.addInputSet(name, this.inputSets[this.inputSetIndex].unifiedQueryParams);
+		});
 		this.$('#clear-all-input-sets-button').addEventListener('click', e => {
 			this.clearChildren('#input-set-list');
-			this.inputSets = [{name: timestamp()}];
+			this.inputSets = [{name: null}];
 			this.addInputSetEl();
 			this.setInputSetIndex(0);
 			this.store();
@@ -139,6 +140,8 @@ customElements.define(name, class extends XElement {
 			this.inputSets[this.inputSetIndex].unifiedQueryParams = unifiedQueryParams;
 			this.sharedWeightEntries = unifiedQueryParams.sharedWeightEntries;
 			this.store();
+			let indexSetEls = [...this.$('#input-set-list').children];
+			indexSetEls[this.inputSetIndex].name = Inputs.inputSetName(this.inputSets[this.inputSetIndex]);
 		});
 
 		this.tradeQueryQueue = new TradeQueryQueue();
@@ -174,7 +177,7 @@ customElements.define(name, class extends XElement {
 
 		this.inputSets.forEach(inputSet => {
 			let inputSetEl = this.addInputSetEl();
-			inputSetEl.name = inputSet.name;
+			inputSetEl.name = Inputs.inputSetName(inputSet);
 		});
 		this.setInputSetIndex(this.inputSetIndex);
 	}
@@ -263,7 +266,7 @@ customElements.define(name, class extends XElement {
 	addInputSetEl() {
 		let inputSetEl = document.createElement('x-input-set');
 		inputSetEl.slot = 'list';
-		inputSetEl.name = this.inputSets[this.inputSets.length - 1].name;
+		inputSetEl.name = Inputs.inputSetName(this.inputSets[this.inputSets.length - 1]);
 		this.$('#input-set-list').appendChild(inputSetEl);
 		inputSetEl.addEventListener('click', e => {
 			let index = this.inputSetIndexFromEl(inputSetEl);
@@ -282,7 +285,7 @@ customElements.define(name, class extends XElement {
 			this.inputSets.splice(index, 1);
 			inputSetEl.remove();
 			if (!this.inputSets.length) {
-				this.inputSets.push({name: timestamp(), tradeQueries: []});
+				this.inputSets.push({name: null, tradeQueries: []});
 				this.addInputSetEl();
 				this.setInputSetIndex(0);
 			} else
@@ -347,5 +350,9 @@ customElements.define(name, class extends XElement {
 			.toTradeQueryData(...manual6LinkCheapestOption);
 		return tradeQueryData
 			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));
+	}
+
+	static inputSetName(inputSet) {
+		return (inputSet.name ?? inputSet.unifiedQueryParams?.typeText) || '';
 	}
 });
