@@ -53,6 +53,7 @@ customElements.define(name, class extends XElement {
 			if (e.key === 'f' && e.ctrlKey)
 				this.$('#search-input').select();
 		});
+		// todo[blocking] store search input
 		this.$('#search-input').addEventListener('input', () => this.renderItemsDataList());
 
 		this.$('#results-chart').addEventListener('select', async e => {
