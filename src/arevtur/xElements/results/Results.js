@@ -53,8 +53,11 @@ customElements.define(name, class extends XElement {
 			if (e.key === 'f' && e.ctrlKey)
 				this.$('#search-input').select();
 		});
-		// todo[blocking] store search input
-		this.$('#search-input').addEventListener('input', () => this.renderItemsDataList());
+		this.$('#search-input').addEventListener('input', () => {
+			localStorage.setItem('results-search', this.$('#search-input').value);
+			this.renderItemsDataList();
+		});
+		this.$('#search-input').value = localStorage.getItem('results-search') || '';
 
 		this.$('#results-chart').addEventListener('select', async e => {
 			let item = this.itemsData.itemByRange(e.detail.y, e.detail.x, e.detail.height, e.detail.width);
