@@ -94,7 +94,7 @@
       "ignoreEs": true,
       "equalElementalResists": true,
       "equalChaosResist": true,
-      "infiniteLifeLeech": false
+      "infiniteLeech": false
     }
   },
   "userId": "",

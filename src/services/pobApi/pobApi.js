@@ -241,9 +241,12 @@ class PobApi extends Emitter {
 			this.extraMods.ignoreEs ? 'maximum energy shield is 0' : '',
 			this.extraMods.equalElementalResists ? '+10000% to all elemental resistances' : '',
 			this.extraMods.equalChaosResist ? '+10000% to chaos resistance' : '',
-			this.extraMods.infiniteLifeLeech ? [
+			this.extraMods.infiniteLeech ? [
 				'1000000000000% increased maximum recovery per life leech',
-				'1000000000000% increased maximum total life recovery per second from leech'].join('\n') : '',
+				'1000000000000% increased maximum total life recovery per second from leech',
+				'1000000000000% increased maximum recovery per mana leech',
+				'1000000000000% increased maximum total mana recovery per second from leech',
+			].join('\n') : '',
 		].filter(v => v).join(' \\n ');
 	}
 

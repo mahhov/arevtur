@@ -45,7 +45,7 @@ customElements.define(name, class extends XElement {
 			this.$('#ignore-es-check'),
 			this.$('#equal-elemental-resists-check'),
 			this.$('#equal-chaos-resist-check'),
-			this.$('#infinite-life-leech-check'),
+			this.$('#infinite-leech-check'),
 		].forEach(weight => weight.addEventListener('change', () => this.saveConfig()));
 
 		configForRenderer.addListener('change', config => this.loadConfig());
@@ -66,7 +66,7 @@ customElements.define(name, class extends XElement {
 		this.$('#equal-elemental-resists-check').checked =
 			buildParams.extraMods.equalElementalResists;
 		this.$('#equal-chaos-resist-check').checked = buildParams.extraMods.equalChaosResist;
-		this.$('#infinite-life-leech-check').checked = buildParams.extraMods.infiniteLifeLeech;
+		this.$('#infinite-leech-check').checked = buildParams.extraMods.infiniteLeech;
 
 		pobApi.setParams(configForRenderer.config.buildParams);
 
@@ -122,7 +122,7 @@ customElements.define(name, class extends XElement {
 					ignoreEs: this.$('#ignore-es-check').checked,
 					equalElementalResists: this.$('#equal-elemental-resists-check').checked,
 					equalChaosResist: this.$('#equal-chaos-resist-check').checked,
-					infiniteLifeLeech: this.$('#infinite-life-leech-check').checked,
+					infiniteLeech: this.$('#infinite-leech-check').checked,
 				},
 			},
 		};

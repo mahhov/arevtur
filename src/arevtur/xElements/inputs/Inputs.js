@@ -353,6 +353,6 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	static inputSetName(inputSet) {
-		return (inputSet.name ?? inputSet.unifiedQueryParams?.typeText) || '';
+		return inputSet.name || inputSet.unifiedQueryParams?.typeText || '';
 	}
 });
