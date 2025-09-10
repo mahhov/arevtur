@@ -2,6 +2,7 @@ const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./ViewHandle');
 const configForMain = require('../services/config/configForMain');
 const Pricer = require('./Pricer');
+const Pricer2 = require('./Pricer2');
 const gemQualityArbitrage = require('./gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
 const pobApi = require('../services/pobApi/pobApi');
@@ -34,7 +35,8 @@ let priceClipboard = async itemText => {
 	if (!itemText || !await windowCheck())
 		return;
 	// console.log('clipboard', itemText.slice(0, 100));
-	let pricerOutput = Pricer.getPrice(itemText).catch(e => {
+	let getPrice = configForMain.config.version2 ? Pricer2.getPrice : Pricer.getPrice;
+	let pricerOutput = getPrice(itemText).catch(e => {
 		console.error('Pricer failed', e);
 		return [];
 	});

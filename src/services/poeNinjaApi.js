@@ -52,12 +52,12 @@ class PoeNinjaApi {
 	}
 
 	getData(endpoint) {
-		const CACHE_DURATION_S = 12 * 60; // 12 minutes
+		const CACHE_DURATION_MS = 12 * 60 * 1000; // 12 minutes
 
 		let timestampS = performance.now();
 		let cache = this.cache[endpoint] = this.cache[endpoint] || {};
 
-		if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_S)
+		if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_MS)
 			return cache.data;
 
 		cache.timestampS = timestampS;
