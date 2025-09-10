@@ -85,6 +85,7 @@ customElements.define(name, class extends XElement {
 
 	async loadConfigWeights() {
 		let weights = configForRenderer.config.buildParams.weights2;
+		await this.syncWeights(weights);
 		if (!weights.length || weights[weights.length - 1].name)
 			weights.push({name: '', percentWeight: 0, flatWeight: 0, flatWeightType: false});
 
@@ -103,16 +104,19 @@ customElements.define(name, class extends XElement {
 				});
 				return el;
 			}, (inputBuildWeight, i, value) =>
-				inputBuildWeight.update(buildStats, value));
+				inputBuildWeight.update(Object.keys(buildStats), value));
 	}
 
-	saveConfig() {
+	async saveConfig() {
+		let weights = [...this.$('#weights').children]
+			.map(inputBuildWeight => inputBuildWeight.toConfig());
+		await this.syncWeights(weights);
+
 		configForRenderer.config = {
 			buildParams: {
 				pobPath: this.$('#pob-path').path,
 				buildPath: this.$('#build-path').path,
-				weights2: [...this.$('#weights').children]
-					.map(inputBuildWeight => inputBuildWeight.toConfig()),
+				weights2: weights,
 				options: {
 					includeEldritch: this.$('#include-eldritch-check').checked,
 					includeInfluence: this.$('#include-influence-check').checked,
@@ -132,5 +136,19 @@ customElements.define(name, class extends XElement {
 		configForRenderer.config = {
 			buildParams: defaultConfig.buildParams,
 		};
+	}
+
+	async syncWeights(weights) {
+		let buildStats = await pobApi.queryBuildStats();
+		weights
+			.filter(weight => weight.name)
+			.forEach(weight => {
+				weight.currentValue = buildStats[weight.name] || 0;
+				let percent = .01 * weight.currentValue;
+				if (weight.flatWeightType)
+					weight.percentWeight = weight.flatWeight * percent;
+				else
+					weight.flatWeight = weight.currentValue ? weight.percentWeight / percent : 0;
+			});
 	}
 });

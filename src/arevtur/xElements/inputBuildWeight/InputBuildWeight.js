@@ -1,17 +1,10 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const pobApi = require('../../../services/pobApi/pobApi');
 const {round} = require('../../../util/util');
 
 customElements.define(name, class InputBuildWeight extends XElement {
 	static get attributeTypes() {
-		return {
-			name: {},
-			currentValue: {},
-			percentWeight: {},
-			flatWeight: {},
-			flatWeightType: {boolean: true},
-		};
+		return {};
 	}
 
 	static get htmlTemplate() {
@@ -38,19 +31,10 @@ customElements.define(name, class InputBuildWeight extends XElement {
 		this.$('#name').focus();
 	}
 
-	async update(stats, {name, percentWeight, flatWeight, flatWeightType}) {
-		this.$('#name').autocompletes = [''].concat(Object.keys(stats).map(InputBuildWeight.addSpace).sort());
-
-		let currentValue = stats[name] || 0;
+	update(buildStatNames, {name, currentValue, percentWeight, flatWeight, flatWeightType}) {
+		this.$('#name').autocompletes = [''].concat(buildStatNames.map(InputBuildWeight.addSpace).sort());
 		this.$('#current-value').textContent = currentValue ? round(currentValue, 2) : '';
 		this.$('#current-value').title = currentValue;
-
-		let percent = .01 * currentValue;
-		if (flatWeightType)
-			percentWeight = flatWeight * percent;
-		else
-			flatWeight = currentValue ? percentWeight / percent : 0;
-
 		this.$('#name').value = InputBuildWeight.addSpace(name);
 		this.$('#percent-weight').value = percentWeight;
 		this.$('#flat-weight').value = flatWeight;
