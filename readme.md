@@ -279,7 +279,8 @@ See [.\src\services\pobApi\pobApiDoc.md](.\src\services\pobApi\pobApiDoc.md)
 This wouldn't be possible without:
 
 - Discord user Nchi for the app icon
-- [poe.ninja](https://poe.ninja/) for price information
+- [poe.ninja](https://poe.ninja/) for PoE 1 price information
+- [poe2scout.com](https://poe2scout.com/) for PoE 2 price information
 - [Openarl](https://github.com/Openarl/PathOfBuilding) & [PathOfBuildingCommunity](https://github.com/PathOfBuildingCommunity/PathOfBuilding)
   for item and mod evaluations
 - [VolatilePulse/PoB-Item-Tester](https://github.com/VolatilePulse/PoB-Item-Tester) for help with
