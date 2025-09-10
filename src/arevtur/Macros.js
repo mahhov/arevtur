@@ -1,8 +1,6 @@
 const apiConstants = require('./apiConstants');
-const Searcher = require('../util/Searcher');
 const pobApi = require('../services/pobApi/pobApi');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
-const configForRenderer = require('../services/config/configForRenderer');
 
 class Macros {
 	static Input = {
@@ -85,6 +83,20 @@ class Macros {
 					unifiedQueryParams.weightEntries.unshift(
 						new UnifiedQueryParams.Entry(pseudoProperty.text, weight));
 				});
+			return unifiedQueryParams;
+		},
+
+		addGainDamage: async unifiedQueryParams => {
+			let promises = [
+				'Gain #% of Damage as Extra Fire Damage (explicit)',
+				'Gain #% of Damage as Extra Lightning Damage (explicit)',
+				'Gain #% of Damage as Extra Cold Damage (explicit)',
+			].map(async propertyText => {
+				let summary = await pobApi.evalItemModSummary(unifiedQueryParams.typeText, propertyText);
+				if (summary.value)
+					unifiedQueryParams.weightEntries.unshift(new UnifiedQueryParams.Entry(propertyText, summary.value));
+			});
+			await Promise.all(promises);
 			return unifiedQueryParams;
 		},
 

@@ -136,6 +136,9 @@ customElements.define(name, class extends XElement {
 		this.$('#add-pseudo-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
 				await Macros.Input.addPseudo(this.unifiedQueryParams)));
+		this.$('#add-gain-damage-mods-button').addEventListener('click', async () =>
+			this.setUnifiedQueryParams(
+				await Macros.Input.addGainDamage(this.unifiedQueryParams)));
 		this.$('#enable-all-mods-button').addEventListener('click', async () =>
 			this.setUnifiedQueryParams(
 				await Macros.Input.enableAll(this.unifiedQueryParams)));

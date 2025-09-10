@@ -120,6 +120,16 @@ class ApiConstants {
 	}
 
 	async propertiesByType(type) {
+		// possible types:
+		// pseudo
+		// explicit
+		// implicit
+		// fractured
+		// enchant
+		// rune
+		// desecrated
+		// sanctum
+		// skill
 		let properties = await this.properties;
 		return properties.filter(property => property.type === type);
 	}
