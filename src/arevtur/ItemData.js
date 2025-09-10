@@ -36,11 +36,12 @@ class ItemData {
 		this.mirrored = tradeApiItemData.item.duplicated;
 		this.split = tradeApiItemData.item.split;
 		this.influences = Object.keys(tradeApiItemData.item.influences || {});
-		this.enchantMods = tradeApiItemData.item.enchantMods || [];
 		this.runeMods = tradeApiItemData.item.runeMods || [];
+		this.enchantMods = tradeApiItemData.item.enchantMods || [];
 		this.implicitMods = tradeApiItemData.item.implicitMods || [];
 		this.fracturedMods = tradeApiItemData.item.fracturedMods || [];
 		this.explicitMods = tradeApiItemData.item.explicitMods || [];
+		this.desecratedMods = tradeApiItemData.item.desecratedMods || [];
 		this.craftedMods = tradeApiItemData.item.craftedMods || [];
 		this.pseudoMods = tradeApiItemData.item.pseudoMods || [];
 		this.accountText = [tradeApiItemData.listing.account.name, tradeApiItemData.listing.account.lastCharacterName]
@@ -194,7 +195,9 @@ class ItemData {
 				this.enchantMods :
 				this.enchantMods.filter(mod => !mod.startsWith('Allocates ')),
 			...this.implicitMods,
+			...this.fracturedMods,
 			...this.explicitMods,
+			...this.desecratedMods,
 			...this.craftedMods,
 			this.corrupted ? 'Corrupted' : '',
 			this.mirrored ? 'Mirrored' : '',
@@ -230,6 +233,7 @@ class ItemData {
 				...this.implicitMods.map(t => `@green ` + t),
 				...this.fracturedMods.map(t => `@orange ` + t),
 				...this.explicitMods,
+				...this.desecratedMods.map(t => `@light-green ` + t),
 				...this.craftedMods.map(t => `@blue ` + t),
 				...this.pseudoMods.map(t => `@pink ` + t),
 				this.weightedValueDetails.mods ? '@bold,pink Mod value: ' + this.weightedValueDetails.mods : '',
