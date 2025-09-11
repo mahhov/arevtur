@@ -24,7 +24,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 
 		this.$('input').addEventListener('focus', () => this.updateAutocompletesShown(true));
 		this.$('input').addEventListener('change', () =>
-			this.internalSetValue(this.$('select').options[0]));
+			this.internalSetValue(this.$('select').options[0], false));
 		this.$('input').addEventListener('input', () => this.updateAutocompletesShown());
 		this.$('input').addEventListener('keydown', e => {
 			if (e.key === 'ArrowDown') {
@@ -36,12 +36,12 @@ customElements.define(name, class AutocompleteInput extends XElement {
 				this.$('select').focus();
 				e.preventDefault();
 			} else if (e.key === 'Enter' || e.key === 'Tab' && !e.ctrlKey)
-				this.internalSetValue(this.$('select').options[0]);
+				this.internalSetValue(this.$('select').options[0], true);
 		});
 
 		this.$('select').addEventListener('keydown', e => {
 			if (e.key === 'Enter' || e.key === 'Tab' && !e.ctrlKey)
-				this.internalSetValue(this.$('select').selectedOptions[0]);
+				this.internalSetValue(this.$('select').selectedOptions[0], true);
 			let arrowOut =
 				e.key === 'ArrowDown' && this.$('select').selectedIndex ===
 				this.$('select').length - 1 ||
@@ -90,12 +90,13 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		this.updateInputValidity();
 	}
 
-	internalSetValue(optionEl, blur) {
+	internalSetValue(optionEl, emit) {
 		this.value = optionEl?.value || this.$('input').value;
 		this.$('input').value = this.value; // force update even if value unchanged
 		this.$('input').title = optionEl?.title || this.value || '';
 		this.blur();
-		this.emit('change');
+		if (emit)
+			this.emit('change');
 	}
 
 	updateInputValidity() {
@@ -118,7 +119,7 @@ customElements.define(name, class AutocompleteInput extends XElement {
 			optionEl.value = autocomplete; // necessary to prevent whitespace trimming
 			optionEl.title = tooltip || '';
 			this.$('select').appendChild(optionEl);
-			optionEl.addEventListener('click', () => this.internalSetValue(optionEl));
+			optionEl.addEventListener('click', () => this.internalSetValue(optionEl, true));
 		});
 	}
 

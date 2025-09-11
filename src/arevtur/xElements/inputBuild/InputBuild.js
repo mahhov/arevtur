@@ -140,15 +140,13 @@ customElements.define(name, class extends XElement {
 
 	async syncWeights(weights) {
 		let buildStats = await pobApi.queryBuildStats();
-		weights
-			.filter(weight => weight.name)
-			.forEach(weight => {
-				weight.currentValue = buildStats[weight.name] || 0;
-				let percent = .01 * weight.currentValue;
-				if (weight.flatWeightType)
-					weight.percentWeight = weight.flatWeight * percent;
-				else
-					weight.flatWeight = weight.currentValue ? weight.percentWeight / percent : 0;
-			});
+		weights.forEach(weight => {
+			weight.currentValue = buildStats[weight.name] || 0;
+			let percent = .01 * weight.currentValue;
+			if (weight.flatWeightType)
+				weight.percentWeight = weight.flatWeight * percent;
+			else
+				weight.flatWeight = weight.currentValue ? weight.percentWeight / percent : 0;
+		});
 	}
 });
