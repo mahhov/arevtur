@@ -9,6 +9,7 @@ const packageJson = require('../../package.json');
 class BugReport {
 	constructor(data) {
 		delete data?.config?.sessionId;
+		delete data?.local?.['api-constants-cache'];
 		this.data = data;
 	}
 
