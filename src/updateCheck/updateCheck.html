@@ -133,21 +133,24 @@
 
 	let checkForUpdate = () => {
 		setResultProgress('checking');
-		ipcRenderer.invoke('request-check-updates').then(update => {
-			setResultProgress(update ? 'yes-update' : 'no-update');
-			if (!update)
-				return;
-			$('#update-version').textContent = update.version;
-			$('#update-date').textContent = new Date(update.releaseDate).toLocaleString();
-			XElement.clearChildren($('#update-description'));
-			update.releaseNotes
-				.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, '')])
-				.forEach(text => $c('div', $('#update-description'), [], text));
-		});
+		ipcRenderer.invoke('request-check-updates').then(onUpdateResponse);
+	};
+
+	let onUpdateResponse = update => {
+		setResultProgress(update ? 'yes-update' : 'no-update');
+		if (!update)
+			return;
+		$('#update-version').textContent = update.version;
+		$('#update-date').textContent = new Date(update.releaseDate).toLocaleString();
+		XElement.clearChildren($('#update-description'));
+		update.releaseNotes
+			.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, ''), '\n'])
+			.forEach(text => $c('div', $('#update-description'), [], text));
 	};
 
 	$('#check-button').addEventListener('click', checkForUpdate);
 	$('#update-button').addEventListener('click', () => ipcRenderer.invoke('request-update'));
 
 	checkForUpdate();
+	// onUpdateResponse(require('./mockUpdate'));
 </script>

@@ -10,9 +10,6 @@ ipcMain.handle('request-current-version', () => app.getVersion());
 ipcMain.handle('request-check-updates', () => updater.checkForUpdate());
 ipcMain.handle('request-update', () => updater.updateAndRestart());
 
-let window = new ElectronWindow(`Check for updates`, path.resolve(__dirname, 'updateCheck.html'),
-	400, 400, false);
+let window = new ElectronWindow(`Check for updates`, path.resolve(__dirname, 'updateCheck.html'), 400, 400, false);
 
 module.exports = window;
-
-// todo[blocking] updater not working
