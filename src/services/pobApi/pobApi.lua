@@ -167,7 +167,8 @@ local function evalEquippingItem(itemText, copyRunes)
             if copyRunes then
                 local equippedItem = build.itemsTab.items[slot.selItemId] or nil
                 if equippedItem then
-                    local maxRunes = item.base.socketLimit and item.base.socketLimit - 1 or 0
+                    -- -1 for corruption, -1 for exceptional
+                    local maxRunes = item.base.socketLimit and item.base.socketLimit - 2 or 0
                     if not item.corrupted and item.itemSocketCount < maxRunes then
                         item.itemSocketCount = maxRunes
                     end

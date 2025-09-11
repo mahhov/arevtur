@@ -107,7 +107,7 @@ class TradeQuery {
 					apiQuery.query.filters.equipment_filters?.filters.es?.min ||
 					apiQuery.query.filters.equipment_filters?.filters.block?.min || 0],
 			].map(line => line.join(': '));
-			console.log('initial query', apiQuery, queryNotes.join(', '));
+			// console.log('initial query', apiQuery, queryNotes.join(', '));
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
