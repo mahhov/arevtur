@@ -1,6 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const Searcher = require('../../../util/Searcher');
+const {updateElementChildren} = require('../../../util/util');
 
 customElements.define(name, class AutocompleteInput extends XElement {
 	constructor() {
@@ -112,15 +113,17 @@ customElements.define(name, class AutocompleteInput extends XElement {
 		let options = optionIndexes.map(i => [this.autocompletes[i], this.tooltips_?.[i] || '']);
 		if (this.freeform && options[0] !== this.value)
 			options.unshift([this.$('input').value, null]);
-		XElement.clearChildren(this.$('select'));
-		options.forEach(([autocomplete, tooltip], i) => {
-			let optionEl = document.createElement('option');
-			optionEl.textContent = autocomplete;
-			optionEl.value = autocomplete; // necessary to prevent whitespace trimming
-			optionEl.title = tooltip || '';
-			this.$('select').appendChild(optionEl);
-			optionEl.addEventListener('click', () => this.internalSetValue(optionEl, true));
-		});
+		updateElementChildren(this.$('select'), options,
+			() => {
+				let optionEl = document.createElement('option');
+				optionEl.addEventListener('click', () => this.internalSetValue(optionEl, true));
+				return optionEl;
+			},
+			(optionEl, i, [autocomplete, tooltip]) => {
+				optionEl.textContent = autocomplete;
+				optionEl.value = autocomplete; // necessary to prevent whitespace trimming
+				optionEl.title = tooltip || '';
+			});
 	}
 
 	static smartFilter(input, array = [], maxSize = Infinity) {

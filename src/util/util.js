@@ -66,7 +66,6 @@ let openPath = (path, isFile = false) => {
 		shell.openPath(path);
 };
 
-// todo[low] use this instead of `clearChildren()` and re-creating elements
 let updateElementChildren = (parentEl, values, creator, updater) => {
 	while (parentEl.children.length < values.length)
 		parentEl.appendChild(creator(parentEl.children.length, values));

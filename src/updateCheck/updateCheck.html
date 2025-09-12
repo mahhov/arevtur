@@ -111,16 +111,10 @@
 <script>
 	const {ipcRenderer} = require('electron');
 	const {XElement} = require('xx-element');
+	const appData = require('../services/appData');
+	const {updateElementChildren} = require('../util/util');
+
 	const $ = document.querySelector.bind(document);
-	const $c = (tagName, parent = null, classList = [], text = '') => {
-		let el = document.createElement(tagName);
-		if (parent)
-			parent.appendChild(el);
-		el.classList.add(...classList);
-		if (text)
-			el.textContent = text;
-		return el;
-	};
 
 	ipcRenderer.invoke('request-current-version').then(version =>
 		$('#current').textContent = version);
@@ -142,15 +136,17 @@
 			return;
 		$('#update-version').textContent = update.version;
 		$('#update-date').textContent = new Date(update.releaseDate).toLocaleString();
-		XElement.clearChildren($('#update-description'));
-		update.releaseNotes
-			.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, ''), '\n'])
-			.forEach(text => $c('div', $('#update-description'), [], text));
+		updateElementChildren($('#update-description'),
+			update.releaseNotes.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, ''), '\n']),
+			() => document.createElement('div'),
+			(div, i, text) => div.textContent = text);
 	};
 
 	$('#check-button').addEventListener('click', checkForUpdate);
 	$('#update-button').addEventListener('click', () => ipcRenderer.invoke('request-update'));
 
-	checkForUpdate();
-	// onUpdateResponse(require('./mockUpdate'));
+	if (appData.isDev)
+		onUpdateResponse(require('./mockUpdate'));
+	else
+		checkForUpdate();
 </script>

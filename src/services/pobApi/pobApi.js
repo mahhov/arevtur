@@ -377,13 +377,6 @@ module.exports = new PobApi();
 
 // todo[medium] failing when timeless jewel is equipped:
 //   Failed to load /Data/TimelessJewelData/GloriousVanity.bin, or data is out of date, falling
-//  back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
-//  /Data/TimelessJewelData/GloriousVanity.bin
+//   back to compressed file Failed to load either file: /Data/TimelessJewelData/GloriousVanity.zip,
+//   /Data/TimelessJewelData/GloriousVanity.bin
 // todo[high] tooltip not working for cluster jewels, mega jewels, flasks
-
-//  todo[high] allow custom extra mods in new weights UI
-//  todo[high] allow testing mods in new weights UI
-//  todo[high] migrate old pob calls to new calls
-//  todo[high] name text field hard to type
-//  todo[high] why resists not importing
-//  todo[high] redo craft weights to consider optimal bench craft, catalyst quality, & rune socket

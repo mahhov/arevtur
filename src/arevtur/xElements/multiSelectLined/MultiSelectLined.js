@@ -1,5 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const {unique, updateElementChildren} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -43,18 +44,16 @@ customElements.define(name, class extends XElement {
 	}
 
 	set values(value) {
-		this.clearChildren('#selected');
-		value
-			.filter((v, i) => value.indexOf(v) === i)
-			.forEach(text => {
-				let el = document.createElement('button');
-				el.textContent = text;
-				this.$('#selected').appendChild(el);
-				el.addEventListener('click', () => {
-					el.remove();
+		updateElementChildren(this.$('#selected'), value.filter(unique),
+			() => {
+				let button = document.createElement('button');
+				button.addEventListener('click', () => {
+					button.remove();
 					this.emit('change');
 				});
-			});
+				return button;
+			},
+			(buttonEl, i, text) => buttonEl.textContent = text);
 	}
 
 	get valuesAsArray() {
