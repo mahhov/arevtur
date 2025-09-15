@@ -103,7 +103,7 @@ customElements.define(name, class extends XElement {
 		if (this.itemData_.whisperText)
 			navigator.clipboard.writeText(this.itemData_.whisperText);
 		let success = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, token);
-		this.setButtonColor(this.$(buttonEl), success ? 'busy' : 'invalid');
+		this.setButtonColor(buttonEl, success ? 'busy' : 'invalid');
 		this.setButtonColor(this.$('#refresh-button'), success ? '' : 'valid');
 		return success;
 	}
