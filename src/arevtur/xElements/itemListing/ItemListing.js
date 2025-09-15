@@ -15,13 +15,13 @@ customElements.define(name, class extends XElement {
 
 	connectedCallback() {
 		this.$('#direct-whisper').addEventListener('click', e =>
-			this.onDirectWhisperClick(e, this.$('#direct-whisper'), this.itemData_.directWhisperToken));
+			this.onDirectWhisperClick(e, this.$('#direct-whisper'), () => this.itemData_.directWhisperToken));
 		this.$('#copy-whisper').addEventListener('click', e => {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.whisperText);
 		});
 		this.$('#travel-hideout').addEventListener('click', e =>
-			this.onDirectWhisperClick(e, this.$('#travel-hideout'), this.itemData_.travelHideoutToken));
+			this.onDirectWhisperClick(e, this.$('#travel-hideout'), () => this.itemData_.travelHideoutToken));
 		this.$('#copy-item-button').addEventListener('click', e => {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.text);
@@ -89,14 +89,14 @@ customElements.define(name, class extends XElement {
 		this.classList.toggle('hovered', value);
 	}
 
-	async onDirectWhisperClick(event, buttonEl, token) {
+	async onDirectWhisperClick(event, buttonEl, tokenGetter) {
 		event.stopPropagation();
-		if (await this.directWhisper(buttonEl, token))
+		if (await this.directWhisper(buttonEl, tokenGetter()))
 			return;
 		let oldPrice = this.itemData_.pricePromise.resolved.price;
 		await this.refresh();
 		if (this.itemData_.pricePromise.resolved.price === oldPrice)
-			await this.directWhisper(buttonEl, token);
+			await this.directWhisper(buttonEl, tokenGetter());
 	}
 
 	async directWhisper(buttonEl, token) {
