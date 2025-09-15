@@ -49,10 +49,10 @@ class TradeQuery {
 	async writeItemsToStream() {
 		let items = [];
 		let runQuery = async (overrides, note) => {
-			console.debug('Trade query sub query', note)
+			console.debug('Trade query, start sub query', note);
 			let query = await this.getQuery(overrides);
 			let newItems = await this.queryAndParseItems(query, note);
-			console.debug('Trade query sub query received', newItems.length)
+			console.debug('Trade query, sub query received', newItems.length);
 			items = items.concat(newItems);
 			return newItems;
 		};
@@ -110,7 +110,7 @@ class TradeQuery {
 					apiQuery.query.filters.equipment_filters?.filters.es?.min ||
 					apiQuery.query.filters.equipment_filters?.filters.block?.min || 0],
 			].map(line => line.join(': '));
-			// console.debug('initial query', apiQuery, queryNotes.join(', '));
+			console.debug('Trade query, sub query', queryNotes.join(', '));
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,

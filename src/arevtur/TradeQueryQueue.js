@@ -9,7 +9,10 @@ class TradeQueryQueue extends Emitter {
 				if (this.activeTradeQuerySet.includes(tradeQuery))
 					this.emit('items', items);
 			});
-			tradeQuery.progressStream.forEach(() => this.updateProgress());
+			tradeQuery.progressStream.forEach(progress => {
+				console.debug('TradeQueryQueue progress', progress);
+				this.updateProgress();
+			});
 			tradeQuery.errorStream.forEach(error => this.emit('error', error));
 			tradeQuery.start();
 		});
