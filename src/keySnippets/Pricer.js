@@ -37,7 +37,7 @@ class TextItem {
 		if (!this.itemName2.replaceAll('-', '').trim())
 			this.itemName2 = this.itemName1;
 
-		console.log(JSON.stringify({
+		console.debug(JSON.stringify({
 			itemClass: this.itemClass,
 			itemRarity: this.itemRarity,
 			itemName1: this.itemName1,
@@ -57,7 +57,7 @@ class Pricer {
 			.map(endpointByLeague => endpointByLeague(configForMain.config.league))
 			.map(endpoint => poeNinjaApi.getData(endpoint))
 			.map(promise => promise.catch(e => {
-				console.warn('pricer refreshData', e);
+				console.warn('Pricer refreshData', e);
 				return null;
 			}));
 	}
@@ -65,7 +65,7 @@ class Pricer {
 	async price(inputItem) {
 		if (!this.filter(inputItem))
 			return Promise.resolve([]);
-		console.log('Running', this.dataEndpointsByLeague[0](configForMain.config.league));
+		console.debug('Running', this.dataEndpointsByLeague[0](configForMain.config.league));
 		this.refreshData();
 
 		return (await Promise.all(this.dataArray))

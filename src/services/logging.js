@@ -5,7 +5,7 @@ class Logging {
 		this.logs = [];
 		// disabled in dev builds to avoid corrupting line numbers
 		if (!appData.isDev)
-			['log', 'info', 'warn', 'error'].forEach(type => {
+			['debug', 'log', 'info', 'warn', 'error'].forEach(type => {
 				let std = console[type];
 				console[type] = (...args) => {
 					this.logs.push({type, args});

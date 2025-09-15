@@ -34,19 +34,18 @@ let displayDevOptions = async () => {
 let priceClipboard = async itemText => {
 	if (!itemText || !await windowCheck())
 		return;
-	// console.log('clipboard', itemText.slice(0, 100));
+	// console.debug('clipboard', itemText.slice(0, 100));
 	let getPrice = configForMain.config.version2 ? Pricer2.getPrice : Pricer.getPrice;
 	let pricerOutput = getPrice(itemText).catch(e => {
 		console.error('Pricer failed', e);
 		return [];
 	});
 	let pobOutput = pobApi.evalItem(itemText).catch(e => {
-		// console.error('Pricer pobApi failed', e);
-		console.warn('pricer pobOutput', e);
+		console.warn('Pricer pobOutput', e);
 		return {text: ''};
 	});
 	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
-	console.log('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
+	console.debug('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
 	googleAnalyticsForMain.emit('pricerUsed',
 		{pricer: pricerOutput.length, pob: !!pobOutput.text});
 	await viewHandle.showText([
@@ -65,11 +64,11 @@ let windowCheck = async () => {
 
 let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
 	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
-		console.log('Key received', key);
+		console.debug('Key received', key);
 		if (ignoreWindow || await windowCheck())
 			handler();
 		else
-			console.log('PoE window not focused.');
+			console.debug('PoE window not focused.');
 	});
 
 let init = () => {

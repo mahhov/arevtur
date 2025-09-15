@@ -35,7 +35,7 @@ class Script extends CustomOsScript {
 				.forEach(part => {
 					if (part === '<.') {
 						// if (this.inProgressResponse)
-						// 	console.log('PobApi, debug response:', this.inProgressResponse);
+						// 	console.debug('PobApi, debug response:', this.inProgressResponse);
 						this.inProgressResponse = '';
 					} else if (part === '.>') {
 						this.pendingResponses.shift().resolve(this.inProgressResponse);

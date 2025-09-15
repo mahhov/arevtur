@@ -62,8 +62,8 @@ class BugReport {
 let activeBugReportString = sessionStorage.getItem('activeBugReport');
 if (activeBugReportString) {
 	let activeBugReport = JSON.parse(activeBugReportString);
-	console.log('BugReport:', activeBugReport.os, activeBugReport.version);
-	console.log('BugReport logs:', activeBugReport.logs);
+	console.debug('BugReport:', activeBugReport.os, activeBugReport.version);
+	console.debug('BugReport logs:', activeBugReport.logs);
 	sessionStorage.removeItem('activeBugReport');
 }
 

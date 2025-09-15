@@ -30,7 +30,7 @@ class GoogleAnalyticsForMain {
 				},
 			}],
 		};
-		// console.log('google analytics logging:', eventName, JSON.stringify(body));
+		// console.debug('google analytics logging:', eventName, JSON.stringify(body));
 		let response = await post2(endpoint, {
 			api_secret: apiSecret,
 			measurement_id: measurementId,
@@ -38,7 +38,7 @@ class GoogleAnalyticsForMain {
 		if (debug) {
 			let responseObj = JSON.parse(response.string);
 			if (responseObj.validationMessages.length)
-				console.error('google analytics error', responseObj.validationMessages);
+				console.error('Google analytics error', responseObj.validationMessages);
 		}
 	}
 

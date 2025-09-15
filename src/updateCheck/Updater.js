@@ -8,16 +8,16 @@ class Updater {
 		this.checkForUpdate();
 
 		autoUpdater.on('update-available', result => {
-			console.log('Updater:: update available');
+			console.debug('Updater:: update available');
 			this.updateCheck.resolve(result);
 		});
 		autoUpdater.on('update-not-available', () => {
-			console.log('Updater:: update not available');
+			console.debug('Updater:: update not available');
 			this.updateCheck.resolve();
 		});
 		this.updateReady = new Promise(resolve =>
 			autoUpdater.on('update-downloaded', result => {
-				console.log('Updater:: update downloaded', result);
+				console.debug('Updater:: update downloaded', result);
 				resolve();
 			}));
 	}

@@ -38,6 +38,7 @@ class TradeQuery {
 	}
 
 	start() {
+		console.debug('Trade query start');
 		this.writeItemsToStream().then(() => this.itemStream.done());
 	}
 
@@ -48,8 +49,10 @@ class TradeQuery {
 	async writeItemsToStream() {
 		let items = [];
 		let runQuery = async (overrides, note) => {
+			console.debug('Trade query sub query', note)
 			let query = await this.getQuery(overrides);
 			let newItems = await this.queryAndParseItems(query, note);
+			console.debug('Trade query sub query received', newItems.length)
 			items = items.concat(newItems);
 			return newItems;
 		};
@@ -107,7 +110,7 @@ class TradeQuery {
 					apiQuery.query.filters.equipment_filters?.filters.es?.min ||
 					apiQuery.query.filters.equipment_filters?.filters.block?.min || 0],
 			].map(line => line.join(': '));
-			// console.log('initial query', apiQuery, queryNotes.join(', '));
+			// console.debug('initial query', apiQuery, queryNotes.join(', '));
 			this.progressStream.write({
 				text: 'Initial query.',
 				queriesComplete: 0,
@@ -165,7 +168,7 @@ class TradeQuery {
 			return items;
 
 		} catch (e) {
-			console.warn('ERROR', e);
+			console.warn('Trade query error', e);
 			return [];
 		}
 	}
@@ -200,7 +203,7 @@ class TradeQuery {
 		let headers = apiConstants.createRequestHeader(sessionId);
 		return httpRequest.post(endpoint, {token}, headers)
 			.then(() => true)
-			.catch(e => console.error('failed to direct whisper:', e));
+			.catch(e => console.error('Failed to direct whisper:', e));
 	}
 }
 

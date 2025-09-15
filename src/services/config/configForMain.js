@@ -13,7 +13,7 @@ class ConfigForMain extends Emitter {
 		try {
 			deepMerge(this.config, require(appData.configPath));
 		} catch (e) {
-			console.warn('failed to load config:', e);
+			console.warn('Failed to load config:', e);
 			// for the first run, config.json won't exist
 		}
 		// Initialize userId for first run. Used for google analytics and for PoE trade API for the
@@ -40,7 +40,7 @@ class ConfigForMain extends Emitter {
 		if (oldConfigJson === newConfigJson)
 			return;
 		this.emit('change', this.config);
-		// console.log('Updated config', JSON.stringify(this.config, null, 2));
+		// console.debug('Updated config', JSON.stringify(this.config, null, 2));
 		try {
 			await fs.mkdir(appData.basePath, {recursive: true});
 			await fs.writeFile(appData.configPath, newConfigJson);
