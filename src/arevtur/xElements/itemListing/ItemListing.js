@@ -14,23 +14,14 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#direct-whisper').addEventListener('click', async e => {
-			e.stopPropagation();
-			if (!await this.directWhisper()) {
-				let oldPrice = this.itemData_.pricePromise.resolved.price;
-				await this.refresh();
-				if (this.itemData_.pricePromise.resolved.price === oldPrice)
-					await this.directWhisper();
-			}
-		});
+		this.$('#direct-whisper').addEventListener('click', e =>
+			this.onDirectWhisperClick(e, this.$('#direct-whisper'), this.itemData_.directWhisperToken));
 		this.$('#copy-whisper').addEventListener('click', e => {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.whisperText);
 		});
-		this.$('#travel-hideout').addEventListener('click', e => {
-			e.stopPropagation();
-			this.travelHideout();
-		});
+		this.$('#travel-hideout').addEventListener('click', e =>
+			this.onDirectWhisperClick(e, this.$('#travel-hideout'), this.itemData_.travelHideoutToken));
 		this.$('#copy-item-button').addEventListener('click', e => {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.text);
@@ -98,17 +89,21 @@ customElements.define(name, class extends XElement {
 		this.classList.toggle('hovered', value);
 	}
 
-	async directWhisper() {
-		navigator.clipboard.writeText(this.itemData_.whisperText);
-		let success = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.directWhisperToken);
-		this.setButtonColor(this.$('#direct-whisper'), success ? 'busy' : 'invalid');
-		this.setButtonColor(this.$('#refresh-button'), success ? '' : 'valid');
-		return success;
+	async onDirectWhisperClick(event, buttonEl, token) {
+		event.stopPropagation();
+		if (await this.directWhisper(buttonEl, token))
+			return;
+		let oldPrice = this.itemData_.pricePromise.resolved.price;
+		await this.refresh();
+		if (this.itemData_.pricePromise.resolved.price === oldPrice)
+			await this.directWhisper(buttonEl, token);
 	}
 
-	async travelHideout() {
-		let success = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, this.itemData_.travelHideoutToken);
-		this.setButtonColor(this.$('#travel-hideout'), success ? 'busy' : 'invalid');
+	async directWhisper(buttonEl, token) {
+		if (this.itemData_.whisperText)
+			navigator.clipboard.writeText(this.itemData_.whisperText);
+		let success = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, token);
+		this.setButtonColor(this.$(buttonEl), success ? 'busy' : 'invalid');
 		this.setButtonColor(this.$('#refresh-button'), success ? '' : 'valid');
 		return success;
 	}
