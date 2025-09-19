@@ -345,10 +345,9 @@ customElements.define(name, class Inputs extends XElement {
 			manual6LinkCheapestOption = manual6LinkOptions[minIndex(manual6LinkOptions.map(v => v[1]))];
 		}
 
-		let tradeQueryData = UnifiedQueryParams
+		return UnifiedQueryParams
 			.fromStorageQueryParams(this.inputSets[index].unifiedQueryParams, this.sharedWeightEntries)
-			.toTradeQueryData(...manual6LinkCheapestOption);
-		return tradeQueryData
+			.toTradeQueryData(...manual6LinkCheapestOption)
 			.map(data => new TradeQuery(data, version2, league, sessionId, data.affixValueShift, data.priceShifts));
 	}
 

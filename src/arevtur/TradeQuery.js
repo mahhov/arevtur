@@ -1,5 +1,5 @@
 const querystring = require('querystring');
-const {httpRequest, XPromise} = require('js-desktop-base');
+const {httpRequest} = require('js-desktop-base');
 const apiConstants = require('./apiConstants');
 const Stream = require('../util/Stream');
 const ItemData = require('./ItemData');

@@ -53,10 +53,11 @@ class UnifiedQueryParams {
 	offline = 'online';
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
+	minItemLevel = 0;
 	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
 	linked = false;
 	uncorrupted = false;
-	nonUnique = false;
+	rarity = '';
 	uncrafted = false;
 	influences = [];
 	weightEntries = [];
@@ -118,7 +119,7 @@ class UnifiedQueryParams {
 			inputElement[property] = this.affixProperties[property]);
 		inputElement.linked = this.linked;
 		inputElement.uncorrupted = this.uncorrupted;
-		inputElement.nonUnique = this.nonUnique;
+		inputElement.nonUnique = this.rarity === 'nonunique';
 		inputElement.influences = influenceProperties.map(influence =>
 			this.influences.includes(influence));
 
@@ -186,7 +187,7 @@ class UnifiedQueryParams {
 		unifiedQueryParams.affixProperties = affixProperties;
 		unifiedQueryParams.linked = inputElement.linked;
 		unifiedQueryParams.uncorrupted = inputElement.uncorrupted;
-		unifiedQueryParams.nonUnique = inputElement.nonUnique;
+		unifiedQueryParams.rarity = inputElement.nonUnique ? 'nonunique' : '';
 		unifiedQueryParams.influences =
 			influenceProperties.filter((_, i) => inputElement.influences[i]);
 		Object.assign(unifiedQueryParams, entries);
@@ -212,7 +213,7 @@ class UnifiedQueryParams {
 		let linkedOptions = [
 			// query with the intended links
 			false,
-			// query unlinked + uncorrupted  items
+			// query unlinked + uncorrupted items
 			this.linked && (!this.maxPrice || this.maxPrice > manual6LinkPrice) ? true : null,
 		].filter(v => v !== null);
 
@@ -289,8 +290,10 @@ class UnifiedQueryParams {
 		let typeId = await apiConstants.typeTextToId(overridden.typeText);
 		if (typeId)
 			typeFilters.category = {option: typeId};
-		if (overridden.nonUnique)
-			typeFilters.rarity = {option: 'nonunique'};
+		if (overridden.rarity)
+			typeFilters.rarity = {option: overridden.rarity};
+		if (overridden.minItemLevel)
+			typeFilters.ilvl = {min: overridden.minItemLevel};
 
 		let miscFilters = {};
 		if (overridden.uncorrupted)
@@ -377,7 +380,7 @@ class UnifiedQueryParams {
 			// affixProperties
 			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,
 			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,
-			nonUnique: filters?.type_filters?.filters?.rarity?.option === 'nonunique' || false,
+			rarity: filters?.type_filters?.filters?.rarity?.option || '',
 			// influences
 			weightEntries: await Promise.all(weightedStats?.filters?.map(async entry =>
 				new Entry((await apiConstants.propertyById(entry?.id)).text,
