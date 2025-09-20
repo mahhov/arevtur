@@ -1,5 +1,6 @@
 const {httpRequest: {get}} = require('js-desktop-base');
 const querystring = require('querystring');
+const Cache = require('../util/Cache');
 
 class PoeNinjaApi {
 	constructor() {
@@ -43,7 +44,8 @@ class PoeNinjaApi {
 			VIAL: PoeNinjaApi.genEndpointByLeague(ITEM, 'Vial'),
 		};
 
-		this.cache = {};
+		this.cache = new Cache(12 * 60 * 1000, endpoint =>
+			get(endpoint).then(({string}) => JSON.parse(string)));
 	}
 
 	static genEndpointByLeague(prefix, type) {
@@ -52,21 +54,7 @@ class PoeNinjaApi {
 	}
 
 	getData(endpoint) {
-		const CACHE_DURATION_MS = 12 * 60 * 1000; // 12 minutes
-
-		let timestampS = performance.now();
-		let cache = this.cache[endpoint] = this.cache[endpoint] || {};
-
-		if (cache.data && timestampS - cache.timestampS < CACHE_DURATION_MS)
-			return cache.data;
-
-		cache.timestampS = timestampS;
-		return cache.data = get(endpoint)
-			.then(({string}) => JSON.parse(string))
-			.catch(e => {
-				cache.data = null;
-				console.error(`Unable to connect to '${endpoint}':`, e);
-			});
+		return this.cache.get(endpoint);
 	};
 }
 
