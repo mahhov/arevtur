@@ -1,6 +1,6 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
 const poeNinjaApi = require('../services/poeNinjaApi');
-const configForRenderer = require('../services/config/configForRenderer');
+const configData = require('../services/config/configData');
 const {unique} = require('../util/util');
 const nodeFetch = require('node-fetch');
 
@@ -359,7 +359,7 @@ class ApiConstants {
 	async cachedRequest(cacheKey, initializer, ...args) {
 		let hour1 = 60 * 60 * 1000;
 		while (true) {
-			let version2 = configForRenderer.config.version2;
+			let version2 = configData.config.version2;
 			cacheKey = [cacheKey, version2, ...args].join();
 			if (!this.cache[cacheKey] ||
 				Date.now() - this.cache[cacheKey].lastRequest > hour1 ||
@@ -373,7 +373,7 @@ class ApiConstants {
 			}
 			if (this.cache[cacheKey].promise)
 				await this.cache[cacheKey].promise;
-			if (version2 === configForRenderer.config.version2)
+			if (version2 === configData.config.version2)
 				return this.cache[cacheKey].value;
 		}
 	}

@@ -1,8 +1,8 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const TradeQuery = require('../../TradeQuery');
-const configForRenderer = require('../../../services/config/configForRenderer');
-const {round, updateElementChildren} = require('../../../util/util');
+const configData = require('../../../services/config/configData');
+const {round} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -102,7 +102,7 @@ customElements.define(name, class extends XElement {
 	async directWhisper(buttonEl, token) {
 		if (this.itemData_.whisperText)
 			navigator.clipboard.writeText(this.itemData_.whisperText);
-		let success = await TradeQuery.directWhisper(configForRenderer.config.version2, configForRenderer.config.sessionId, token);
+		let success = await TradeQuery.directWhisper(configData.config.version2, configData.config.sessionId, token);
 		this.setButtonColor(buttonEl, success ? 'busy' : 'invalid');
 		this.setButtonColor(this.$('#refresh-button'), success ? '' : 'valid');
 		return success;
@@ -110,7 +110,7 @@ customElements.define(name, class extends XElement {
 
 	async refresh() {
 		TradeQuery.itemGetter.clearCache(this.itemData_.id);
-		let itemGetterDataPromise = TradeQuery.itemGetter.get(configForRenderer.config.version2, configForRenderer.config.sessionId, {}, this.itemData_.queryId, this.itemData_.id);
+		let itemGetterDataPromise = TradeQuery.itemGetter.get(configData.config.version2, configData.config.sessionId, {}, this.itemData_.queryId, this.itemData_.id);
 		TradeQuery.itemGetter.flush();
 		let itemGetterData = await itemGetterDataPromise;
 		this.itemData_.refresh(itemGetterData);

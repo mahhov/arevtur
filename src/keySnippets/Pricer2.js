@@ -1,5 +1,5 @@
 const {httpRequest: {get}} = require('js-desktop-base');
-const configForMain = require('../services/config/configForMain');
+const configData = require('../services/config/configData');
 const {round} = require('../util/util');
 
 let endpointTypes = [
@@ -30,7 +30,7 @@ let endpointTypes = [
 let dataCache = {};
 
 let getData = (endpointType) => {
-	let league = configForMain.config.league;
+	let league = configData.config.league;
 	let endpoint = `https://poe2scout.com/api/items/${endpointType}?page=1&perPage=250&league=${league}`;
 	const CACHE_DURATION_MS = 12 * 60 * 1000; // 12 minutes
 

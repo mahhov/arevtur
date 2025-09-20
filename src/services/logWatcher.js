@@ -1,6 +1,6 @@
 const fs = require('fs');
 const {Notification} = require('electron');
-const configForMain = require('../services/config/configForMain');
+const configData = require('../services/config/configData');
 
 // todo[low] configurable path
 const clientPath = 'C:\\Program Files (x86)\\Grinding Gear Games\\Path of Exile 2\\logs\\Client.txt';
@@ -27,7 +27,7 @@ let getUnreadLines = async () => {
 setTimeout(async () => {
 	await getUnreadLines();
 	fs.watchFile(clientPath, async () => {
-		if (!configForMain.config.chatNotifications)
+		if (!configData.config.chatNotifications)
 			return;
 		let text = (await getUnreadLines()).join('\n');
 		if (!text)

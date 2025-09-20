@@ -1,11 +1,11 @@
 const poeNinjaApi = require('../services/poeNinjaApi');
-const configForMain = require('../services/config/configForMain');
+const configData = require('../services/config/configData');
 
 let str = num => (parseInt(num * 100) / 100).toString();
 
 let main = async () => {
 	let data = (await poeNinjaApi.getData(
-		poeNinjaApi.endpointsByLeague.SKILL_GEM(configForMain.config.league))).lines
+		poeNinjaApi.endpointsByLeague.SKILL_GEM(configData.config.league))).lines
 		.reduce((data, {name, corrupted, gemLevel, gemQuality, chaosValue}) => {
 			let key = [corrupted && 'corrupted',
 				gemLevel === 20 && 'level',

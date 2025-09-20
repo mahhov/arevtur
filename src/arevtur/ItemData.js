@@ -2,7 +2,7 @@ const apiConstants = require('./apiConstants');
 const pobApi = require('../services/pobApi/pobApi');
 const {maxIndex, round, unitText} = require('../util/util');
 const pobConsts = require('../services/pobApi/pobConsts');
-const configForRenderer = require('../services/config/configForRenderer');
+const configData = require('../services/config/configData');
 
 class ItemData {
 	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, queryNotes, tradeApiItemData) {
@@ -161,7 +161,7 @@ class ItemData {
 
 		let price = currencyPrice * count +
 			Object.values(shifts).reduce((sum, shift) => sum + shift, 0);
-		let smallCurrency = configForRenderer.config.version2 ? 'exalt' : 'chaos';
+		let smallCurrency = configData.config.version2 ? 'exalt' : 'chaos';
 		let priceSummary = unitText(price, currencyPrices.divine, 1, smallCurrency, 'divine');
 		let expandedPriceShifts = Object.entries(shifts)
 			.map(([name, value]) => ` + ${name} (${round(value, 1)} ${smallCurrency})`);

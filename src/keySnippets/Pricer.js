@@ -1,5 +1,5 @@
 const poeNinjaApi = require('../services/poeNinjaApi');
-const configForMain = require('../services/config/configForMain');
+const configData = require('../services/config/configData');
 const Filter = require('./Filter');
 const {round} = require('../util/util');
 
@@ -54,7 +54,7 @@ class Pricer {
 
 	refreshData() {
 		this.dataArray = this.dataEndpointsByLeague
-			.map(endpointByLeague => endpointByLeague(configForMain.config.league))
+			.map(endpointByLeague => endpointByLeague(configData.config.league))
 			.map(endpoint => poeNinjaApi.getData(endpoint))
 			.map(promise => promise.catch(e => {
 				console.warn('Pricer refreshData', e);
@@ -65,7 +65,7 @@ class Pricer {
 	async price(inputItem) {
 		if (!this.filter(inputItem))
 			return Promise.resolve([]);
-		console.debug('Running', this.dataEndpointsByLeague[0](configForMain.config.league));
+		console.debug('Running', this.dataEndpointsByLeague[0](configData.config.league));
 		this.refreshData();
 
 		return (await Promise.all(this.dataArray))
