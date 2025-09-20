@@ -4,6 +4,15 @@ const configData = require('../services/config/configData');
 const {unique} = require('../util/util');
 const nodeFetch = require('node-fetch');
 
+let localStorage;
+if (typeof localStorage === 'undefined') {
+	let data = {};
+	localStorage = {
+		getItem: key => data[key],
+		setItem: (key, value) => data[key] = value,
+	};
+}
+
 class ApiConstants {
 
 	// constants

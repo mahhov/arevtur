@@ -51,7 +51,7 @@ class TradeQuery {
 		let runQuery = async (overrides, note) => {
 			console.debug('Trade query, start sub query', note);
 			let query = await this.getQuery(overrides);
-			let newItems = await this.queryAndParseItems(query, note);
+			let newItems = await this.queryAndParseItems(query, note, false);
 			console.debug('Trade query, sub query received', newItems.length);
 			items = items.concat(newItems);
 			return newItems;
@@ -96,7 +96,7 @@ class TradeQuery {
 		}
 	}
 
-	async queryAndParseItems(apiQuery, note) {
+	async queryAndParseItems(apiQuery, note, singlePage) {
 		// todo[medium] more selective try/catch
 		try {
 			let queryNotes = [
@@ -133,7 +133,9 @@ class TradeQuery {
 				itemCount: searcherData.result.length,
 			});
 
-			let itemGetterDataPromises = searcherData.result.map(itemId => TradeQuery.itemGetter.get(this.version2, this.sessionId, this.stopObj, searcherData.id, itemId));
+			let itemGetterDataPromises = searcherData.result
+				.slice(0, singlePage ? 10 : Infinity)
+				.map(itemId => TradeQuery.itemGetter.get(this.version2, this.sessionId, this.stopObj, searcherData.id, itemId));
 			TradeQuery.itemGetter.flush();
 
 			let itemPromises = itemGetterDataPromises.map(async (itemGetterDataPromise, i) => {

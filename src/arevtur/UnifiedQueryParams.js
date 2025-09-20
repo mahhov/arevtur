@@ -50,6 +50,7 @@ class UnifiedQueryParams {
 	typeText = 'Any';
 	minValue = 0;
 	maxPrice = 0;
+	currencyType = '';
 	offline = 'online';
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
@@ -295,6 +296,14 @@ class UnifiedQueryParams {
 		if (overridden.minItemLevel)
 			typeFilters.ilvl = {min: overridden.minItemLevel};
 
+		let tradeFilters = {};
+		if (overridden.maxPrice || overridden.currencyType)
+			tradeFilters.price = {};
+		if (overridden.maxPrice)
+			tradeFilters.price.max = overridden.maxPrice;
+		if (overridden.currencyType)
+			tradeFilters.price.option = overridden.currencyType;
+
 		let miscFilters = {};
 		if (overridden.uncorrupted)
 			miscFilters.corrupted = {option: false};
@@ -325,7 +334,7 @@ class UnifiedQueryParams {
 				].map(pruneIfEmptyFilters).filter(v => v),
 				filters: {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
-					trade_filters: overridden.maxPrice ? {filters: {price: {max: overridden.maxPrice}}} : undefined,
+					trade_filters: pruneIfEmptyFilters({filters: tradeFilters}),
 					socket_filters: overridden.linked ? {
 						filters: {
 							links: {min: 6},
@@ -374,6 +383,7 @@ class UnifiedQueryParams {
 				filters?.type_filters?.filters?.category?.option) || 'Any',
 			minValue: weightedStats?.value?.min || 0,
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 0,
+			// currencyType
 			// offline
 			// defenseProperties
 			// maxRequirementProperties
