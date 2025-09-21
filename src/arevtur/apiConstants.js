@@ -344,6 +344,11 @@ class ApiConstants {
 		/* ['Pledge of Hands', ...] */
 	}
 
+	async nameToItem(name) {
+		// E.g. 'Bubbling Ultimate Life Flask of the Brewer' -> 'Ultimate Life Flask'
+		return (await this.items).find(item => item && name.includes(item));
+	}
+
 	// utility
 
 	static get api() {

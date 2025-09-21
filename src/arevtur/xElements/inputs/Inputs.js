@@ -75,6 +75,7 @@ customElements.define(name, class Inputs extends XElement {
 		});
 
 		this.$('#input-imports').addEventListener('import-item-text', async e => {
+			// todo[medium] dedupe with Pricer2
 			let typeText = ItemData.typeFromItemText(e.detail) || 'Any';
 
 			let propertyTexts = await apiConstants.propertyTexts();

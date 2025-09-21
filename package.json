@@ -3,7 +3,7 @@
   "version": "8.13.2",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron --trace-warnings .",
     "build": "build",
     "ship": ". ./git_token && git push && git push --tags && rm -rf dist && build -lwp always",
     "windowShip": "gitpersonal && git push && git push --tags && rm -rf dist && electron-builder -wp always",

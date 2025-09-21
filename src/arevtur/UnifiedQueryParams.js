@@ -52,6 +52,7 @@ class UnifiedQueryParams {
 	maxPrice = 0;
 	currencyType = '';
 	offline = 'online';
+	minQuality = 0;
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
 	minItemLevel = 0;
@@ -291,10 +292,12 @@ class UnifiedQueryParams {
 		let typeId = await apiConstants.typeTextToId(overridden.typeText);
 		if (typeId)
 			typeFilters.category = {option: typeId};
-		if (overridden.rarity)
-			typeFilters.rarity = {option: overridden.rarity};
+		if (overridden.minQuality)
+			typeFilters.quality = {min: overridden.minQuality};
 		if (overridden.minItemLevel)
 			typeFilters.ilvl = {min: overridden.minItemLevel};
+		if (overridden.rarity)
+			typeFilters.rarity = {option: overridden.rarity};
 
 		let tradeFilters = {};
 		if (overridden.maxPrice || overridden.currencyType)
@@ -385,6 +388,7 @@ class UnifiedQueryParams {
 			maxPrice: filters?.trade_filters?.filters?.price?.max || 0,
 			// currencyType
 			// offline
+			// minQuality
 			// defenseProperties
 			// maxRequirementProperties
 			// affixProperties
