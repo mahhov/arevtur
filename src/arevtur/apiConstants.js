@@ -1,7 +1,7 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
 const poeNinjaApi = require('../services/poeNinjaApi');
 const configData = require('../services/config/configData');
-const {unique} = require('../util/util');
+const {unique, escapeRegex} = require('../util/util');
 const nodeFetch = require('node-fetch');
 
 let localStorage;
@@ -229,6 +229,35 @@ class ApiConstants {
 			.map(mappedType => this.propertiesByMappedItemType(mappedType))))
 			.flat()
 			.filter(unique);
+	}
+
+	async parsePropertyCopyText(propertyCopyText) {
+		// e.g. '28% reduced Charges per use' -> {propertyText: '#% increased Charges per use', weight: -28, flipIncrease: true}
+		let propertyTexts = await this.propertyTexts();
+
+		// average all numbers found
+		let weight = (propertyCopyText.match(/\d+(\.\d+)?/g) || []).reduce((sum, v, _, a) => sum + v / a.length, 0);
+
+		let getRegex = (propertyCopyText, flipIncrease) => {
+			propertyCopyText = escapeRegex(propertyCopyText)
+				.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)') // e.g. 23.5 -> (23.5|#)
+				.replaceAll(/\+/g, '+?');
+			if (flipIncrease)
+				propertyCopyText = propertyCopyText.replaceAll(/(reduce|increase)/g, '(reduce|increase)');
+			propertyCopyText = `(^|\n)${propertyCopyText}( \\(explicit\\))?($|\n)`;
+			return new RegExp(propertyCopyText);
+		};
+
+		// todo[low] sometimes, there are multiple properties with the same text.
+		//   should do an 'or' between them. e.g. '+# to Strength and Intelligence'
+
+		let propertyText = propertyTexts.find(pt => pt.match(getRegex(propertyCopyText, false)));
+		if (propertyText) return {propertyText, weight, flipIncrease: false};
+
+		propertyText = propertyTexts.find(pt => pt.match(getRegex(propertyCopyText, true)));
+		if (propertyText) return {propertyText, weight: -weight, flipIncrease: true};
+
+		return null;
 	}
 
 	// currencies

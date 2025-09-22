@@ -69,7 +69,7 @@ class Poe2ScoutPricer {
 
 class PoeTradeApiPricer {
 	get title() {
-		return ' pricer';
+		return '';
 	}
 
 	createUnifiedQueryParams(lines) {
@@ -85,13 +85,15 @@ class PoeTradeApiPricer {
 		tradeQuery.errorStream.forEach(error => console.warn(error));
 		let tradeQueryQuery = await tradeQuery.getQuery();
 		let items = await tradeQuery.queryAndParseItems(tradeQueryQuery, 'pricer', true);
-		let prices = [items[0], items[items.length - 1]]
-			.map(item => item.pricePromise.resolved.priceSummary)
-			.filter(unique);
+		let prices = items
+			.map(item => item.pricePromise.resolved)
+			.sort((p1, p2) => p1.price - p2.price)
+			.map(pricePromise => pricePromise.priceSummary);
+		let priceRange = [prices[0], prices[prices.length - 1]].filter(unique).join(' - ');
 		return [
+			'@bold,pink ' + priceRange,
 			this.title,
 			items[0].displayLines[1],
-			prices.join(' - '),
 		];
 	}
 }
@@ -144,31 +146,9 @@ class PoeTradeApiFlaskPricer extends PoeTradeApiPricer {
 		if (!lines[0].match(/Item Class: (Life|Mana) Flasks/))
 			return null;
 
-		let unifiedQueryParams = new UnifiedQueryParams();
-		unifiedQueryParams.name = await apiConstants.nameToItem(lines[2]);
+		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
 		unifiedQueryParams.currencyType = 'exalted_divine';
 		unifiedQueryParams.offline = 'securable';
-
-		let propertyTexts = await apiConstants.propertyTexts();
-		let matchedPropertyTextWeights = lines
-			.map(line => {
-				let weight = (line.match(/\d+(\.\d+)?/g) || []).reduce((sum, v, _, a) => sum + v / a.length, 0);
-				line = escapeRegex(line)
-					.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)')
-					.replaceAll(/\+/g, '+?')
-					.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)');
-				line = `(^|\n)${line}( \\(explicit\\))?($|\n)`;
-				let regex = new RegExp(line);
-				// todo[low] sometimes, there are multiple properties with the same text. should do an 'or' between them. e.g. '+# to Strength and Intelligence'
-				let propertyText = propertyTexts.find(pt => pt.match(regex));
-				return propertyText ? [propertyText, weight] : null;
-			})
-			.filter(m => m);
-
-		unifiedQueryParams.andEntries =
-			matchedPropertyTextWeights.map(([propertyText, weight]) =>
-				new UnifiedQueryParams.Entry(propertyText, weight));
-
 		return unifiedQueryParams;
 	}
 }

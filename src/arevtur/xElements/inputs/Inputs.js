@@ -75,31 +75,11 @@ customElements.define(name, class Inputs extends XElement {
 		});
 
 		this.$('#input-imports').addEventListener('import-item-text', async e => {
-			// todo[medium] dedupe with Pricer2
-			let typeText = ItemData.typeFromItemText(e.detail) || 'Any';
-
-			let propertyTexts = await apiConstants.propertyTexts();
-			let matchedPropertyTextWeights = e.detail
+			let lines = e.detail
 				.split('\n')
 				.map(line => line.trim())
-				.filter(line => line)
-				.map(line => {
-					let weight = (line.match(/\d+(\.\d+)?/g) || []).reduce((sum, v, _, a) => sum + v / a.length, 0);
-					line = escapeRegex(line)
-						.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)')
-						.replaceAll(/\+/g, '+?')
-						.replaceAll(/decrease|reduce/g, '(decrease|reduce|increase)');
-					line = `(^|\n)${line}( \\(explicit\\))?($|\n)`;
-					let regex = new RegExp(line);
-					// todo[low] sometimes, there are multiple properties with the same text.
-					// should do an 'or' between them. e.g. '+# to Strength and Intelligence'
-					let propertyText = propertyTexts.find(pt => pt.match(regex));
-					return propertyText ? [propertyText, weight] : null;
-				})
-				.filter(m => m);
-
-			let unifiedQueryParams =
-				await UnifiedQueryParams.fromPropertyIds(typeText, matchedPropertyTextWeights);
+				.filter(line => line);
+			let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
 			this.addInputSet(`imported from text ${timestamp()}`, unifiedQueryParams);
 		});
 

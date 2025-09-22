@@ -66,6 +66,7 @@ class UnifiedQueryParams {
 	// todo[high] don't default '' to 0 in order to not break negated mods; e.g. 'Socketed
 	//  Attacks have +# to Total Mana Cost'
 	andEntries = [];
+	andMaxEntries = [];
 	notEntries = [];
 	conditionalPrefixEntries = [];
 	conditionalSuffixEntries = [];
@@ -175,7 +176,7 @@ class UnifiedQueryParams {
 				let entries = propertyEntryDatas
 					.filter(data => data.filter === filter && data.shared === isShared)
 					.map(data =>
-						new Entry(data.propertyText, data.weight, data.locked, data.enabled));
+						new Entry(data.propertyText, data.weight, false, data.locked, data.enabled));
 				return [key, entries];
 			}));
 
@@ -279,6 +280,9 @@ class UnifiedQueryParams {
 		let andFilters = (await Promise.all(overridden.andEntries
 			.map(entry => entry.toApiQueryParams('min'))))
 			.filter(v => v);
+		let andMaxFilters = (await Promise.all(overridden.andMaxEntries
+			.map(entry => entry.toApiQueryParams('max'))))
+			.filter(v => v);
 		let notFilters = (await Promise.all(overridden.notEntries
 			.map(entry => entry.toApiQueryParams())))
 			.filter(v => v);
@@ -329,7 +333,7 @@ class UnifiedQueryParams {
 						value: {min: overridden.minValue},
 					}, {
 						type: 'and',
-						filters: andFilters,
+						filters: [andFilters, andMaxFilters].flat(),
 					}, {
 						type: 'not',
 						filters: notFilters,
@@ -402,6 +406,7 @@ class UnifiedQueryParams {
 			andEntries: await Promise.all(andStats?.filters?.map(async entry =>
 				new Entry((await apiConstants.propertyById(entry?.id)).text,
 					entry?.value?.min)) || []),
+			// andMaxFilters
 			notEntries: await Promise.all(notStats?.filters?.map(async entry =>
 				new Entry((await apiConstants.propertyById(entry?.id)).text, 0)) || []),
 			// conditionalPrefixEntries
@@ -424,11 +429,21 @@ class UnifiedQueryParams {
 		return unifiedQueryParams;
 	}
 
-	static fromPropertyIds(typeText, propertyTextWeights) {
+	static async fromItemText(lines) {
 		let unifiedQueryParams = new UnifiedQueryParams();
-		unifiedQueryParams.typeText = typeText;
-		unifiedQueryParams.andEntries =
-			propertyTextWeights.map(([propertyText, weight]) => new Entry(propertyText, weight));
+		unifiedQueryParams.name = await apiConstants.nameToItem(lines[2]);
+
+		let parsedProperties = (await Promise.all(lines
+			.map(line => apiConstants.parsePropertyCopyText(line))))
+			.filter(m => m);
+
+		unifiedQueryParams.andEntries = parsedProperties
+			.filter(parsedProperty => !parsedProperty.flipIncrease)
+			.map(parsedProperty => new UnifiedQueryParams.Entry(parsedProperty.propertyText, parsedProperty.weight));
+		unifiedQueryParams.andMaxEntries = parsedProperties
+			.filter(parsedProperty => parsedProperty.flipIncrease)
+			.map(parsedProperty => new UnifiedQueryParams.Entry(parsedProperty.propertyText, parsedProperty.weight));
+
 		return unifiedQueryParams;
 	}
 }
