@@ -158,10 +158,14 @@ class PoeTradeApiTabletPricer extends PoeTradeApiPricer {
 		return 'Tablet pricer';
 	}
 
-	createUnifiedQueryParams(lines) {
-		return null;
-		// let unifiedQueryParams = new UnifiedQueryParams();
-		// return unifiedQueryParams;
+	async createUnifiedQueryParams(lines) {
+		if (lines[0] !== 'Item Class: Tablet')
+			return null;
+
+		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
+		unifiedQueryParams.currencyType = 'exalted_divine';
+		unifiedQueryParams.offline = 'securable';
+		return unifiedQueryParams;
 	}
 }
 
