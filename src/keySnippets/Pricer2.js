@@ -200,8 +200,8 @@ class PoeTradeApiRarePricer extends PoeTradeApiPricer {
 	}
 
 	async createUnifiedQueryParams(lines) {
-		// if (lines[0] !== 'Item Class: Tablet')
-		// 	return null;
+		if (lines[1] === 'Rarity: Normal')
+			return null;
 
 		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
 		unifiedQueryParams.currencyType = 'exalted_divine';
@@ -215,10 +215,9 @@ let pricers = [
 	new PoeTradeApiNormalBasePricer(),
 	new PoeTradeApiFlaskPricer(),
 	new PoeTradeApiTabletPricer(),
-	new PoeTradeApiWaystonePricer(), // todo
-	// new PoeTradeApiJewelPricer(), // todo
-	// new PoeTradeApiRarePricer(), // todo
-	// todo logbook
+	new PoeTradeApiWaystonePricer(),
+	new PoeTradeApiJewelPricer(),
+	// new PoeTradeApiRarePricer(),
 ];
 
 let getPrice = async text =>
