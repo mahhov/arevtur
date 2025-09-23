@@ -85,6 +85,7 @@ class PoeTradeApiPricer {
 		tradeQuery.errorStream.forEach(error => console.warn(error));
 		let tradeQueryQuery = await tradeQuery.getQuery();
 		let items = await tradeQuery.queryAndParseItems(tradeQueryQuery, 'pricer', true);
+		let itemCount = tradeQuery.progressStream.written.reduce((sum, progress) => sum + progress.itemCount, 0);
 		let prices = items
 			.map(item => item.pricePromise.resolved)
 			.sort((p1, p2) => p1.price - p2.price)
@@ -92,7 +93,7 @@ class PoeTradeApiPricer {
 		let priceRange = [prices[0], prices[prices.length - 1]].filter(unique).join(' - ');
 		let allPrices = prices[0] !== prices[prices.length - 1] ? prices.join(', ') : '';
 		return [
-			'@bold,pink ' + priceRange,
+			`@bold,pink ${priceRange}@normal  (${itemCount} items)`,
 			allPrices,
 			this.title,
 			items[0].displayLines[1],
@@ -115,26 +116,10 @@ class PoeTradeApiNormalBasePricer extends PoeTradeApiPricer {
 		unifiedQueryParams.offline = 'securable';
 		unifiedQueryParams.minItemLevel = lines.map(l => l.match(/Item Level: (\d+)/)).find(v => v)?.[1];
 		unifiedQueryParams.rarity = 'normal';
-		return unifiedQueryParams;
-	}
-}
-
-class PoeTradeApiExceptionalBasePricer extends PoeTradeApiPricer {
-	get title() {
-		return 'Exceptional normal base pricer';
-	}
-
-	createUnifiedQueryParams(lines) {
-		if (!lines[0].startsWith('Item Class: ') || lines[1] !== 'Rarity: Normal' || !lines[2].startsWith('Exceptional '))
-			return null;
-
-		let unifiedQueryParams = new UnifiedQueryParams();
-		unifiedQueryParams.name = lines[2].replace(/^Exceptional /, '');
-		unifiedQueryParams.currencyType = 'exalted_divine';
-		unifiedQueryParams.offline = 'securable';
-		unifiedQueryParams.minItemLevel = lines.map(l => l.match(/Item Level: (\d+)/)).find(v => v)?.[1];
-		unifiedQueryParams.rarity = 'normal';
-		unifiedQueryParams.minQuality = lines.map(l => l.match(/Quality: \+(\d+)/)).find(v => v)?.[1];
+		let quality = lines.map(l => l.match(/Quality: \+(\d+)/)).find(v => v)?.[1];
+		if (quality > 20)
+			unifiedQueryParams.minQuality = quality;
+		unifiedQueryParams.uncorrupted = true;
 		return unifiedQueryParams;
 	}
 }
@@ -177,10 +162,19 @@ class PoeTradeApiWaystonePricer extends PoeTradeApiPricer {
 	}
 
 	createUnifiedQueryParams(lines) {
-		if (lines[0] !== 'Item Class: Waystones')
+		if (lines[0] !== 'Item Class: Waystones' || lines[1] === 'Rarity: Normal')
 			return null;
-		// let unifiedQueryParams = new UnifiedQueryParams();
-		// return unifiedQueryParams;
+
+		let unifiedQueryParams = new UnifiedQueryParams();
+		unifiedQueryParams.waystoneTier = lines.map(l => l.match(/Waystone Tier: (\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.waystonePackSize = lines.map(l => l.match(/Monster Pack Size: \+(\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.waystoneMagicMonsters = lines.map(l => l.match(/Magic Monsters: \+(\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.waystoneRareMonsters = lines.map(l => l.match(/Rare Monsters: \+(\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.waystoneDropChance = lines.map(l => l.match(/Waystone Drop Chance: \+(\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.waystoneItemRarity = lines.map(l => l.match(/Item Rarity: \+(\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.currencyType = 'exalted_divine';
+		unifiedQueryParams.offline = 'securable';
+		return unifiedQueryParams;
 	}
 }
 
@@ -219,12 +213,12 @@ class PoeTradeApiRarePricer extends PoeTradeApiPricer {
 let pricers = [
 	...Poe2ScoutPricer.endpointTypes.map(endpointType => new Poe2ScoutPricer(endpointType)),
 	new PoeTradeApiNormalBasePricer(),
-	new PoeTradeApiExceptionalBasePricer(),
 	new PoeTradeApiFlaskPricer(),
 	new PoeTradeApiTabletPricer(),
-	new PoeTradeApiWaystonePricer(),
-	new PoeTradeApiJewelPricer(),
-	new PoeTradeApiRarePricer(),
+	new PoeTradeApiWaystonePricer(), // todo
+	// new PoeTradeApiJewelPricer(), // todo
+	// new PoeTradeApiRarePricer(), // todo
+	// todo logbook
 ];
 
 let getPrice = async text =>

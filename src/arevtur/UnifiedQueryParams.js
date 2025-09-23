@@ -72,6 +72,12 @@ class UnifiedQueryParams {
 	conditionalSuffixEntries = [];
 	sharedWeightEntries = [];
 	priceShifts = {};
+	waystoneTier = 0;
+	waystonePackSize = 0;
+	waystoneMagicMonsters = 0;
+	waystoneRareMonsters = 0;
+	waystoneDropChance = 0;
+	waystoneItemRarity = 0;
 
 	constructor() {
 		defensePropertyTuples.forEach(([property]) =>
@@ -320,6 +326,14 @@ class UnifiedQueryParams {
 			.filter(influence => influence)
 			.forEach(influence => miscFilters[`${influence}_item`] = {option: true});
 
+		let waystoneFilters = {};
+		if (overridden.waystoneTier) waystoneFilters.map_tier = {min: overridden.waystoneTier, max: overridden.waystoneTier};
+		if (overridden.waystonePackSize) waystoneFilters.map_packsize = {min: overridden.waystonePackSize};
+		if (overridden.waystoneMagicMonsters) waystoneFilters.map_magic_monsters = {min: overridden.waystoneMagicMonsters};
+		if (overridden.waystoneRareMonsters) waystoneFilters.map_rare_monsters = {min: overridden.waystoneRareMonsters};
+		if (overridden.waystoneDropChance) waystoneFilters.map_bonus = {min: overridden.waystoneDropChance};
+		if (overridden.waystoneItemRarity) waystoneFilters.map_iir = {min: overridden.waystoneItemRarity};
+
 		let sort = weightFilters.length ? apiConstants.sort.value : apiConstants.sort.price;
 
 		return {
@@ -372,6 +386,7 @@ class UnifiedQueryParams {
 						},
 					}),
 					misc_filters: pruneIfEmptyFilters({filters: miscFilters}),
+					map_filters: pruneIfEmptyFilters({filters: waystoneFilters}),
 				},
 			},
 			sort,
@@ -412,6 +427,12 @@ class UnifiedQueryParams {
 			// conditionalPrefixEntries
 			// conditionalSuffixEntries
 			// sharedWeightEntries
+			// waystoneTier
+			// waystonePackSize
+			// waystoneMagicMonsters
+			// waystoneRareMonsters
+			// waystoneDropChance
+			// waystoneItemRarity
 		};
 		let unifiedQueryParams = new UnifiedQueryParams();
 		Object.assign(unifiedQueryParams, data);
@@ -431,7 +452,9 @@ class UnifiedQueryParams {
 
 	static async fromItemText(lines) {
 		let unifiedQueryParams = new UnifiedQueryParams();
-		unifiedQueryParams.name = await apiConstants.nameToItem(lines[2]);
+
+		let nameLine = lines[3].startsWith('-') ? lines[2] : lines[3];
+		unifiedQueryParams.name = await apiConstants.nameToItem(nameLine);
 
 		let parsedProperties = (await Promise.all(lines
 			.map(line => apiConstants.parsePropertyCopyText(line))))
