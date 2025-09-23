@@ -90,11 +90,13 @@ class PoeTradeApiPricer {
 			.sort((p1, p2) => p1.price - p2.price)
 			.map(pricePromise => pricePromise.priceSummary);
 		let priceRange = [prices[0], prices[prices.length - 1]].filter(unique).join(' - ');
+		let allPrices = prices[0] !== prices[prices.length - 1] ? prices.join(', ') : '';
 		return [
 			'@bold,pink ' + priceRange,
+			allPrices,
 			this.title,
 			items[0].displayLines[1],
-		];
+		].filter(v => v);
 	}
 }
 
@@ -175,9 +177,42 @@ class PoeTradeApiWaystonePricer extends PoeTradeApiPricer {
 	}
 
 	createUnifiedQueryParams(lines) {
-		return null;
+		if (lines[0] !== 'Item Class: Waystones')
+			return null;
 		// let unifiedQueryParams = new UnifiedQueryParams();
 		// return unifiedQueryParams;
+	}
+}
+
+class PoeTradeApiJewelPricer extends PoeTradeApiPricer {
+	get title() {
+		return 'Jewel pricer';
+	}
+
+	async createUnifiedQueryParams(lines) {
+		if (lines[0] !== 'Item Class: Jewels')
+			return null;
+
+		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
+		unifiedQueryParams.currencyType = 'exalted_divine';
+		unifiedQueryParams.offline = 'securable';
+		return unifiedQueryParams;
+	}
+}
+
+class PoeTradeApiRarePricer extends PoeTradeApiPricer {
+	get title() {
+		return 'Rare pricer';
+	}
+
+	async createUnifiedQueryParams(lines) {
+		// if (lines[0] !== 'Item Class: Tablet')
+		// 	return null;
+
+		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
+		unifiedQueryParams.currencyType = 'exalted_divine';
+		unifiedQueryParams.offline = 'securable';
+		return unifiedQueryParams;
 	}
 }
 
@@ -188,6 +223,8 @@ let pricers = [
 	new PoeTradeApiFlaskPricer(),
 	new PoeTradeApiTabletPricer(),
 	new PoeTradeApiWaystonePricer(),
+	new PoeTradeApiJewelPricer(),
+	new PoeTradeApiRarePricer(),
 ];
 
 let getPrice = async text =>

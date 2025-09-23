@@ -239,6 +239,9 @@ class ApiConstants {
 		let weight = (propertyCopyText.match(/\d+(\.\d+)?/g) || []).reduce((sum, v, _, a) => sum + v / a.length, 0);
 
 		let getRegex = (propertyCopyText, flipIncrease) => {
+			[
+				['increased Gold found in your Maps', 'increased Gold found in your Maps (Gold Piles)'],
+			].forEach(([from, to]) => propertyCopyText = propertyCopyText.replace(from, to));
 			propertyCopyText = escapeRegex(propertyCopyText)
 				.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)') // e.g. 23.5 -> (23.5|#)
 				.replaceAll(/\+/g, '+?');
@@ -251,10 +254,12 @@ class ApiConstants {
 		// todo[low] sometimes, there are multiple properties with the same text.
 		//   should do an 'or' between them. e.g. '+# to Strength and Intelligence'
 
-		let propertyText = propertyTexts.find(pt => pt.match(getRegex(propertyCopyText, false)));
+		let regex = getRegex(propertyCopyText, false);
+		let propertyText = propertyTexts.find(pt => pt.match(regex));
 		if (propertyText) return {propertyText, weight, flipIncrease: false};
 
-		propertyText = propertyTexts.find(pt => pt.match(getRegex(propertyCopyText, true)));
+		let regexFlipIncrease = getRegex(propertyCopyText, true)
+		propertyText = propertyTexts.find(pt => pt.match(regexFlipIncrease));
 		if (propertyText) return {propertyText, weight: -weight, flipIncrease: true};
 
 		return null;
@@ -375,7 +380,9 @@ class ApiConstants {
 
 	async nameToItem(name) {
 		// E.g. 'Bubbling Ultimate Life Flask of the Brewer' -> 'Ultimate Life Flask'
-		return (await this.items).find(item => item && name.includes(item));
+		return (await this.items)
+			.filter(item => item && name.includes(item))
+			.sort((a, b) => b.length - a.length)[0];
 	}
 
 	// utility
