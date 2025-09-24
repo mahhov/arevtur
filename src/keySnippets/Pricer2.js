@@ -93,6 +93,7 @@ class PoeTradeApiPricer {
 		let priceRange = [prices[0], prices[prices.length - 1]].filter(unique).join(' - ');
 		let allPrices = prices[0] !== prices[prices.length - 1] ? prices.join(', ') : '';
 		return [
+			lines[2],
 			`@bold,pink ${priceRange}@normal  (${itemCount} items)`,
 			allPrices,
 			this.title,
