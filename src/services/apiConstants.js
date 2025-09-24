@@ -241,13 +241,14 @@ class ApiConstants {
 		let getRegex = (propertyCopyText, flipIncrease) => {
 			[
 				['increased Gold found in your Maps', 'increased Gold found in your Maps (Gold Piles)'],
+				[/\d+ additional Rooms are/, 'An additional Room is'],
 			].forEach(([from, to]) => propertyCopyText = propertyCopyText.replace(from, to));
 			propertyCopyText = escapeRegex(propertyCopyText)
 				.replaceAll(/(\d+(\\\.\d+)?)/g, '($1|#)') // e.g. 23.5 -> (23.5|#)
 				.replaceAll(/\+/g, '+?');
 			if (flipIncrease)
 				propertyCopyText = propertyCopyText.replaceAll(/(reduce|increase)/g, '(reduce|increase)');
-			propertyCopyText = `(^|\n)${propertyCopyText}( \\(explicit\\))?($|\n)`;
+			propertyCopyText = `(^|\n)${propertyCopyText}( \\((explicit|sanctum)\\))?($|\n)`;
 			return new RegExp(propertyCopyText);
 		};
 
@@ -258,7 +259,7 @@ class ApiConstants {
 		let propertyText = propertyTexts.find(pt => pt.match(regex));
 		if (propertyText) return {propertyText, weight, flipIncrease: false};
 
-		let regexFlipIncrease = getRegex(propertyCopyText, true)
+		let regexFlipIncrease = getRegex(propertyCopyText, true);
 		propertyText = propertyTexts.find(pt => pt.match(regexFlipIncrease));
 		if (propertyText) return {propertyText, weight: -weight, flipIncrease: true};
 
