@@ -1,7 +1,7 @@
-const configForRenderer = require('../services/config/configForRenderer');
+const configForRenderer = require('./config/configForRenderer');
 const {promises: fs} = require('fs');
-const logging = require('../services/logging');
-const appData = require('../services/appData');
+const logging = require('./logging');
+const appData = require('./appData');
 const {openPath} = require('../util/util');
 const os = require('os');
 const packageJson = require('../../package.json');

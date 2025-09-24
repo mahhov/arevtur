@@ -1,7 +1,7 @@
 const nodeFetch = require('node-fetch');
 const {XPromise} = require('js-desktop-base');
 const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
-const apiConstants = require('./apiConstants');
+const apiConstants = require('../apiConstants');
 
 class TradeQueryItemSearcher {
 	#active = false;

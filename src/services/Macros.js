@@ -1,5 +1,5 @@
 const apiConstants = require('./apiConstants');
-const pobApi = require('../services/pobApi/pobApi');
+const pobApi = require('./pobApi/pobApi');
 const UnifiedQueryParams = require('./UnifiedQueryParams');
 
 class Macros {

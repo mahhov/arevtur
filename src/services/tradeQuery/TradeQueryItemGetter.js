@@ -1,8 +1,8 @@
 const nodeFetch = require('node-fetch');
 const {XPromise} = require('js-desktop-base');
-const {unique} = require('../util/util');
+const {unique} = require('../../util/util');
 const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
-const apiConstants = require('./apiConstants');
+const apiConstants = require('../apiConstants');
 const querystring = require('querystring');
 
 class TradeQueryItemGetter {

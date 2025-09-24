@@ -1,8 +1,8 @@
 const apiConstants = require('./apiConstants');
-const pobApi = require('../services/pobApi/pobApi');
+const pobApi = require('./pobApi/pobApi');
 const {maxIndex, round, unitText} = require('../util/util');
-const pobConsts = require('../services/pobApi/pobConsts');
-const configData = require('../services/config/configData');
+const pobConsts = require('./pobApi/pobConsts');
+const configData = require('./config/configData');
 
 class ItemData {
 	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, queryNotes, tradeApiItemData) {

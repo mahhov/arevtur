@@ -1,8 +1,8 @@
 const querystring = require('querystring');
 const {httpRequest} = require('js-desktop-base');
-const apiConstants = require('./apiConstants');
-const Stream = require('../util/Stream');
-const ItemData = require('./ItemData');
+const apiConstants = require('../apiConstants');
+const Stream = require('../../util/Stream');
+const ItemData = require('../ItemData');
 const TradeQuerySearcher = require('./TradeQuerySearcher');
 const TradeQueryItemGetter = require('./TradeQueryItemGetter');
 

@@ -1,6 +1,6 @@
 const {httpRequest, XPromise} = require('js-desktop-base');
-const poeNinjaApi = require('../services/poeNinjaApi');
-const configData = require('../services/config/configData');
+const poeNinjaApi = require('./poeNinjaApi');
+const configData = require('./config/configData');
 const {unique, escapeRegex} = require('../util/util');
 const nodeFetch = require('node-fetch');
 

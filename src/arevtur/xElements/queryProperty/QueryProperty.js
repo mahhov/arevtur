@@ -1,8 +1,8 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const pobApi = require('../../../services/pobApi/pobApi');
-const UnifiedQueryParams = require('../../UnifiedQueryParams');
-const apiConstants = require('../../apiConstants');
+const UnifiedQueryParams = require('../../../services/UnifiedQueryParams');
+const apiConstants = require('../../../services/apiConstants');
 const {round} = require('../../../util/util');
 
 customElements.define(name, class extends XElement {

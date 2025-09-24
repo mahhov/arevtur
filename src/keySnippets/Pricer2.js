@@ -1,9 +1,9 @@
 const {httpRequest: {get}} = require('js-desktop-base');
 const configData = require('../services/config/configData');
 const {unique, join, round, unitText, escapeRegex} = require('../util/util');
-const UnifiedQueryParams = require('../arevtur/UnifiedQueryParams');
-const TradeQuery = require('../arevtur/TradeQuery');
-const apiConstants = require('../arevtur/apiConstants');
+const UnifiedQueryParams = require('../services/UnifiedQueryParams');
+const TradeQuery = require('../services/tradeQuery/TradeQuery');
+const apiConstants = require('../services/apiConstants');
 const Cache = require('../util/Cache');
 
 let priceText = async price => {

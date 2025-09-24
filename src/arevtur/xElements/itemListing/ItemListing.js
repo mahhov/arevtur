@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const TradeQuery = require('../../TradeQuery');
+const TradeQuery = require('../../../services/tradeQuery/TradeQuery');
 const configData = require('../../../services/config/configData');
 const {round} = require('../../../util/util');
 

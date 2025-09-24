@@ -1,6 +1,6 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
-const ItemsData = require('../../ItemsData');
+const ItemsData = require('../../../services/ItemsData');
 const Searcher = require('../../../util/Searcher');
 const Debouncer = require('../../../util/Debouncer');
 const {updateElementChildren} = require('../../../util/util');

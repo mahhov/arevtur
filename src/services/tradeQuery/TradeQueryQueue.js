@@ -1,4 +1,4 @@
-const Emitter = require('../util/Emitter');
+const Emitter = require('../../util/Emitter');
 
 class TradeQueryQueue extends Emitter {
 	activeTradeQuerySet = [];

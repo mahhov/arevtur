@@ -2,15 +2,15 @@ const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const {shell} = require('electron');
 const configForRenderer = require('../../../services/config/configForRenderer');
-const apiConstants = require('../../apiConstants');
-const TradeQuery = require('../../TradeQuery');
-const UnifiedQueryParams = require('../../UnifiedQueryParams');
+const apiConstants = require('../../../services/apiConstants');
+const TradeQuery = require('../../../services/tradeQuery/TradeQuery');
+const UnifiedQueryParams = require('../../../services/UnifiedQueryParams');
 const pobApi = require('../../../services/pobApi/pobApi');
 const {minIndex, unique, escapeRegex} = require('../../../util/util');
-const ItemData = require('../../ItemData');
+const ItemData = require('../../../services/ItemData');
 const appData = require('../../../services/appData');
-const BugReport = require('../../BugReport');
-const TradeQueryQueue = require('../../TradeQueryQueue');
+const BugReport = require('../../../services/BugReport');
+const TradeQueryQueue = require('../../../services/tradeQuery/TradeQueryQueue');
 const googleAnalyticsForRenderer = require('../../../services/googleAnalytics/googleAnalyticsForRenderer');
 
 let timestamp = () => {

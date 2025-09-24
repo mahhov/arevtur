@@ -1,4 +1,4 @@
-const {sleep} = require('../util/util');
+const {sleep} = require('../../util/util');
 
 class TradeQueryRateLimiter {
 	#nextReady = 0;
