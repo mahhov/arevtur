@@ -3,7 +3,16 @@
 	@import '../sharedStyle.css';
 
 	body {
-		display: flex
+		border: 1px solid;
+		margin: 2px; /* so the border is visible */
+		padding: 8px;
+	}
+
+	#text-container {
+		display: block;
+		max-height: 100%;
+		overflow: auto;
+		font-size: 14px;
 	}
 </style>
 
@@ -29,8 +38,8 @@
 		keySender.strings([keySender.TYPE, '{ctrl}{shift}{enter}/' + name + '{enter}']);
 
 	let processClipboard = async itemText => {
-		if (!itemText || !await windowCheck())
-			return;
+		// if (!itemText || !await windowCheck())
+		// 	return;
 		// console.debug('clipboard', itemText.slice(0, 100));
 		let getPrice = configForRenderer.config.version2 ? Pricer2.getPrice : Pricer.getPrice;
 		let pricerOutput = getPrice(itemText).catch(e => {
@@ -97,9 +106,7 @@
 
 	init();
 
-	// todo
-	//   move to mouse but stay in bounds of screen
-	//   resize to fit text
+	// todo[blocking]
 	//   show text incrementally as ready
-	//   maybe migrate other functionality from key snippet
+	//   dev options
 </script>
