@@ -27,8 +27,8 @@
 	const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 	const {ipcRenderer, clipboard: electronClipboard} = require('electron');
 	const configForRenderer = require('../services/config/configForRenderer');
-	const Pricer = require('../keySnippets/Pricer');
-	const Pricer2 = require('../keySnippets/Pricer2');
+	const Pricer = require('../services/pricer/Pricer');
+	const Pricer2 = require('../services/pricer/Pricer2');
 	const pobApi = require('../services/pobApi/pobApi');
 	const appData = require('../services/appData');
 

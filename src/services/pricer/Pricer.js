@@ -1,7 +1,7 @@
-const poeNinjaApi = require('../services/poeNinjaApi');
-const configData = require('../services/config/configData');
+const poeNinjaApi = require('../poeNinjaApi');
+const configData = require('../config/configData');
 const Filter = require('./Filter');
-const {round} = require('../util/util');
+const {round} = require('../../util/util');
 
 const price = (number, invert) => Number.isNaN(number) ? '?' :
 	`${round(invert ? 1 / number : number, 2)}${invert ? '/c' : 'c'}`;

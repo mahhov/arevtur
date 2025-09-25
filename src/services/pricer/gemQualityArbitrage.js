@@ -1,5 +1,5 @@
-const poeNinjaApi = require('../services/poeNinjaApi');
-const configData = require('../services/config/configData');
+const poeNinjaApi = require('../poeNinjaApi');
+const configData = require('../config/configData');
 
 let str = num => (parseInt(num * 100) / 100).toString();
 

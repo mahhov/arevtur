@@ -1,9 +1,9 @@
 const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
 const ViewHandle = require('./ViewHandle');
 const configForMain = require('../services/config/configForMain');
-const Pricer = require('./Pricer');
-const Pricer2 = require('./Pricer2');
-const gemQualityArbitrage = require('./gemQualityArbitrage');
+const Pricer = require('../services/pricer/Pricer');
+const Pricer2 = require('../services/pricer/Pricer2');
+const gemQualityArbitrage = require('../services/pricer/gemQualityArbitrage');
 const {clipboard: electronClipboard} = require('electron');
 const pobApi = require('../services/pobApi/pobApi');
 const appData = require('../services/appData');
