@@ -1,0 +1,105 @@
+<style>
+	@import '../themeStyle.css';
+	@import '../sharedStyle.css';
+
+	body {
+		display: flex
+	}
+</style>
+
+<script type="module">
+	require('../arevtur/xElements/import');
+</script>
+
+<x-formatted-text id="text-container"></x-formatted-text>
+
+<script type="module">
+	require('../services/logging');
+	const {keyHook, keySender, frontWindowTitle} = require('js-desktop-base');
+	const {ipcRenderer, clipboard: electronClipboard} = require('electron');
+	const configForRenderer = require('../services/config/configForRenderer');
+	const Pricer = require('../keySnippets/Pricer');
+	const Pricer2 = require('../keySnippets/Pricer2');
+	const pobApi = require('../services/pobApi/pobApi');
+	const appData = require('../services/appData');
+
+	const $ = document.querySelector.bind(document);
+
+	let slashType = name =>
+		keySender.strings([keySender.TYPE, '{ctrl}{shift}{enter}/' + name + '{enter}']);
+
+	let processClipboard = async itemText => {
+		if (!itemText || !await windowCheck())
+			return;
+		// console.debug('clipboard', itemText.slice(0, 100));
+		let getPrice = configForRenderer.config.version2 ? Pricer2.getPrice : Pricer.getPrice;
+		let pricerOutput = getPrice(itemText).catch(e => {
+			console.error('Pricer failed', e);
+			return [];
+		});
+		let pobOutput = pobApi.evalItem(itemText).catch(e => {
+			console.warn('Pricer pobOutput', e);
+			return {text: ''};
+		});
+		[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
+		console.debug('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
+
+		$('#text-container').text = [
+			...pricerOutput,
+			pricerOutput.length && pobOutput.text ? '-'.repeat(30) : null,
+			pobOutput.text || null,
+		].filter(v => v).join('\n');
+		ipcRenderer.invoke('key-snippet', 'show');
+	};
+
+	let windowCheck = async () => {
+		if (!configForRenderer.config.restrictToPoeWindow)
+			return true;
+		let title = (await frontWindowTitle.get()).out.toLowerCase().trim();
+		return ['path of exile', 'path of exile 2', 'arevtur'].includes(title);
+	};
+
+	let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
+		keyHook.addShortcut('{ctrl}{shift}', key, async () => {
+			console.debug('Key received', key);
+			if (ignoreWindow || await windowCheck())
+				handler();
+			else
+				console.debug('PoE window not focused.');
+		});
+
+	let init = () => {
+		// todo[low] key sending seems to freeze the machine on linux
+		addPoeShortcutListener('h', () => slashType('hideout'));
+		keyHook.addShortcut('{ctrl}', 'c', async () => {
+			await new Promise(r => setTimeout(r, 100));
+			processClipboard(electronClipboard.readText());
+		});
+
+		setupPobApi();
+		configForRenderer.addListener('change', config => setupPobApi());
+	};
+
+	let setupPobApi = () => pobApi.setParams(configForRenderer.config.buildParams);
+
+	document.addEventListener('keydown', ({code}) => {
+		switch (code.toLowerCase()) {
+			case 'enter':
+			case 'escape':
+			case 'space':
+				ipcRenderer.invoke('key-snippet', 'close');
+				break;
+		}
+	});
+
+	window.addEventListener('blur', () => ipcRenderer.invoke('key-snippet', 'close'));
+	document.addEventListener('mousedown', () => ipcRenderer.invoke('key-snippet', 'prevent-close'));
+
+	init();
+
+	// todo
+	//   move to mouse but stay in bounds of screen
+	//   resize to fit text
+	//   show text incrementally as ready
+	//   maybe migrate other functionality from key snippet
+</script>

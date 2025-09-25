@@ -11,9 +11,6 @@ const googleAnalyticsForMain = require('../services/googleAnalytics/googleAnalyt
 
 let viewHandle = new ViewHandle();
 
-let slashType = name =>
-	keySender.strings([keySender.TYPE, '{ctrl}{shift}{enter}/' + name + '{enter}']);
-
 let displayGemQualityArbitrage = async () => {
 	if (await viewHandle.visible)
 		viewHandle.hide();
@@ -31,64 +28,6 @@ let displayDevOptions = async () => {
 		await viewHandle.showDevOptions();
 };
 
-let priceClipboard = async itemText => {
-	if (!itemText || !await windowCheck())
-		return;
-	// console.debug('clipboard', itemText.slice(0, 100));
-	let getPrice = configForMain.config.version2 ? Pricer2.getPrice : Pricer.getPrice;
-	let pricerOutput = getPrice(itemText).catch(e => {
-		console.error('Pricer failed', e);
-		return [];
-	});
-	let pobOutput = pobApi.evalItem(itemText).catch(e => {
-		console.warn('Pricer pobOutput', e);
-		return {text: ''};
-	});
-	[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
-	console.debug('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
-	googleAnalyticsForMain.emit('pricerUsed',
-		{pricer: pricerOutput.length, pob: !!pobOutput.text});
-	await viewHandle.showText([
-		...pricerOutput,
-		pricerOutput.length && pobOutput.text ? '-'.repeat(30) : null,
-		pobOutput.text || null,
-	].filter(v => v).join('\n'), 3000);
-};
-
-let windowCheck = async () => {
-	if (!configForMain.config.restrictToPoeWindow)
-		return true;
-	let title = (await frontWindowTitle.get()).out.toLowerCase().trim();
-	return ['path of exile', 'path of exile 2', 'arevtur'].includes(title);
-};
-
-let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
-	keyHook.addShortcut('{ctrl}{shift}', key, async () => {
-		console.debug('Key received', key);
-		if (ignoreWindow || await windowCheck())
-			handler();
-		else
-			console.debug('PoE window not focused.');
-	});
-
-let init = () => {
-	// todo[low] key sending seems to freeze the machine on linux. does it work on windows?
-	addPoeShortcutListener('h', () => slashType('hideout'));
-	keyHook.addShortcut('{ctrl}', 'c', async () => {
-		await new Promise(r => setTimeout(r, 100));
-		priceClipboard(electronClipboard.readText());
-	});
-	addPoeShortcutListener('g', displayGemQualityArbitrage);
-	if (appData.isDev)
-		addPoeShortcutListener('p', displayDevOptions, true);
-
-	setupPobApi();
-	configForMain.addListener('change', config => setupPobApi());
-};
-
-let setupPobApi = () => pobApi.setParams(configForMain.config.buildParams);
-
-init();
 
 module.exports = {
 	trayOptions: [appData.isDev && {label: 'Dev options', click: displayDevOptions}],

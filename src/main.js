@@ -12,6 +12,7 @@ googleAnalyticsForMain.emitStartup();
 let windows = [
 	require('./updateCheck/updateCheck'),
 	require('./arevtur/arevtur'),
+	require('./keySnippet2/keySnippet2'),
 ];
 
 TrayHelper.createExitTray(iconPath, 'Arevtur', [

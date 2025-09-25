@@ -7,7 +7,7 @@ const {iconPath} = require('../util/util');
 app.allowRendererProcessReuse = false;
 
 class ElectronWindow {
-	constructor(name, htmlPath, width, height, exitOnClose = false) {
+	constructor(name, htmlPath, width, height, exitOnClose = false, options = {}) {
 		this.name = name;
 
 		this.window = appReadyPromise.then(() => {
@@ -21,6 +21,7 @@ class ElectronWindow {
 					nodeIntegration: true,
 					contextIsolation: false,
 				},
+				...options,
 			});
 
 			window.setMenu(null);
