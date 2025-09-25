@@ -23,10 +23,6 @@ class ConfigForRenderer extends Emitter {
 		// this.config_ will be updated in the on('config-change') callback
 		ipcRenderer.invoke('config-change', newConfig);
 	}
-
-	addListener(event, handler) {
-		super.addListener(event, handler);
-	}
 }
 
 module.exports = new ConfigForRenderer();

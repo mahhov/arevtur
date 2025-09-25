@@ -97,7 +97,7 @@ class PoeTradeApiPricer {
 			`@bold,pink ${priceRange}@normal  (${itemCount} items)`,
 			allPrices,
 			this.title,
-			items[0].displayLines[1],
+			items[0]?.displayLines[1],
 		].filter(v => v);
 	}
 }

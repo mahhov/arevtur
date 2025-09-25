@@ -1,4 +1,4 @@
-const {ipcRenderer: ipc} = require('electron');
+const {ipcRenderer} = require('electron');
 const fs = require('fs');
 const path = require('path');
 const {XElement, importUtil} = require('xx-element');
@@ -25,7 +25,7 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#reload').addEventListener('click', () => {
 			pobApi.restart();
-			ipc.send('window-request', {name: 'reset-pob'});
+			ipcRenderer.send('window-request', {name: 'reset-pob'});
 		});
 		this.$('#reset').addEventListener('click', () => this.resetConfig());
 

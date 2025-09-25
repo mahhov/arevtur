@@ -1,14 +1,14 @@
-const {ipcRenderer: ipc, shell} = require('electron');
+const {ipcRenderer, shell} = require('electron');
 const configForRenderer = require('../services/config/configForRenderer');
 const appData = require('../services/appData');
 const {openPath} = require('../util/util');
 
-const ipcSend = message => ipc.send('window-request', message);
+const ipcSend = message => ipcRenderer.send('window-request', message);
 
 const $ = document.querySelector.bind(document);
 const $c = document.createElement.bind(document);
 
-ipc.on('window-command', (_, command) => {
+ipcRenderer.on('window-command', (_, command) => {
 	switch (command.name) {
 		case 'setText':
 			updateText(command.text);
