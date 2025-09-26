@@ -283,7 +283,7 @@ class PobApi extends Emitter {
 			})
 			.sort((a, b) => b.value - a.value);
 
-		let value = round(valueTextTuples[0].value, 3);
+		let value = valueTextTuples.length ? round(valueTextTuples[0].value, 3) : 0;
 		let title = `${obj.name} @bold,pink ${value}`;
 
 		return {
