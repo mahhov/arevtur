@@ -52,6 +52,7 @@ class Poe2ScoutPricer {
 		return Poe2ScoutPricer.#cache.get(endpoint);
 	}
 
+	// returns promise<string>
 	async getPrice(text) {
 		let textName = text.split(/\r?\n/)[2];
 		if (!textName) return Promise.reject();
@@ -60,10 +61,10 @@ class Poe2ScoutPricer {
 		let price = item.currentPrice;
 		return [
 			textName,
-			this.endpointType,
+			this.#endpointType,
 			await priceText(price),
 			price < 1 ? round(1 / price, 2) + ' : 1ex' : '',
-		].filter(v => v);
+		].filter(v => v).join('\n');
 	}
 }
 
@@ -76,6 +77,7 @@ class PoeTradeApiPricer {
 		return null;
 	}
 
+	// returns promise<string>
 	async getPrice(text) {
 		let lines = text.split(/\r?\n/);
 		let unifiedQueryParams = await this.createUnifiedQueryParams(lines);
@@ -98,7 +100,7 @@ class PoeTradeApiPricer {
 			allPrices,
 			this.title,
 			items[0]?.displayLines[1],
-		].filter(v => v);
+		].filter(v => v).join('\n');
 	}
 }
 
@@ -193,13 +195,10 @@ let pricers = [
 	new PoeTradeApiExactPricer(),
 	new PoeTradeApiWaystonePricer(),
 	// new PoeTradeApiRarePricer(),
+	// new PoeTradeApiRecombinatorPricer(),
 ];
 
-let getPrice = async text =>
-	(await Promise.allSettled(pricers.map(pricer => pricer.getPrice(text.trim()))))
-		.filter(p => p.status === 'fulfilled')
-		.map(p => p.value)
-		.map(join('----'))
-		.flat(2);
+// returns promise<string>[]
+let getPrices = text => pricers.map(pricer => pricer.getPrice(text.trim()));
 
-module.exports = {getPrice};
+module.exports = {getPrices};

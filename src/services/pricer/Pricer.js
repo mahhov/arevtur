@@ -561,15 +561,19 @@ let pricers = [
 	new VialPricer(),
 ];
 
-let getPrice = async (text) => {
+// returns promise<string>
+let getPrice = async text => {
 	let textItem = new TextItem(text);
-	if (textItem.error)
-		return [textItem.error];
+	if (textItem.error) return textItem.error;
 	let prices = (await Promise.all(pricers.map(pricer => pricer.price(textItem)))).flat();
-	return prices.length ? [
+	if (!prices.length) return `no prices found for ${textItem.itemName2}`;
+	return [
 		textItem.itemName2,
 		...prices,
-	] : [`no prices found for ${textItem.itemName2}`];
+	].join('\n');
 };
 
-module.exports = {getPrice};
+// returns promise<string>[1]
+let getPrices = text => [getPrice(text)];
+
+module.exports = {getPrices};

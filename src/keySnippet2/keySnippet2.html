@@ -4,15 +4,23 @@
 
 	body {
 		border: 1px solid;
-		margin: 2px; /* so the border is visible */
-		padding: 8px;
+		margin: 2px;
 	}
 
-	#text-container {
+	#container {
 		display: block;
 		max-height: 100%;
 		overflow: auto;
 		font-size: 14px;
+	}
+
+	#container > x-formatted-text {
+		display: block;
+		padding: 8px;
+	}
+
+	#container > x-formatted-text:not(.hidden) {
+		border-bottom: 1px solid white;
 	}
 </style>
 
@@ -20,7 +28,7 @@
 	require('../arevtur/xElements/import');
 </script>
 
-<x-formatted-text id="text-container"></x-formatted-text>
+<div id="container"></div>
 
 <script type="module">
 	require('../services/logging');
@@ -31,6 +39,8 @@
 	const Pricer2 = require('../services/pricer/Pricer2');
 	const pobApi = require('../services/pobApi/pobApi');
 	const appData = require('../services/appData');
+	const {XElement} = require('xx-element');
+	const {sleep, updateElementChildren} = require('../util/util');
 
 	const $ = document.querySelector.bind(document);
 
@@ -38,26 +48,25 @@
 		keySender.strings([keySender.TYPE, '{ctrl}{shift}{enter}/' + name + '{enter}']);
 
 	let processClipboard = async itemText => {
-		// if (!itemText || !await windowCheck())
-		// 	return;
-		// console.debug('clipboard', itemText.slice(0, 100));
-		let getPrice = configForRenderer.config.version2 ? Pricer2.getPrice : Pricer.getPrice;
-		let pricerOutput = getPrice(itemText).catch(e => {
-			console.error('Pricer failed', e);
-			return [];
-		});
-		let pobOutput = pobApi.evalItem(itemText).catch(e => {
-			console.warn('Pricer pobOutput', e);
-			return {text: ''};
-		});
-		[pricerOutput, pobOutput] = await Promise.all([pricerOutput, pobOutput]);
-		console.debug('pricerOutput', pricerOutput, '\n', 'pobOutput', pobOutput);
+		console.log('processClipboard', itemText);
+		if (!itemText) return;
+		let P = configForRenderer.config.version2 ? Pricer2 : Pricer;
+		let promises = [...P.getPrices(itemText), pobApi.evalItem(itemText).then(output => output.text)];
 
-		$('#text-container').text = [
-			...pricerOutput,
-			pricerOutput.length && pobOutput.text ? '-'.repeat(30) : null,
-			pobOutput.text || null,
-		].filter(v => v).join('\n');
+		updateElementChildren($('#container'), promises,
+			() => document.createElement('x-formatted-text'),
+			async (el, i, promise) => {
+				el.text = 'pending';
+				el.classList.remove('hidden');
+				try {
+					el.text = (await promise);
+				} catch (e) {
+					el.classList.add('hidden');
+					console.error(e);
+				}
+			});
+
+		console.log('show');
 		ipcRenderer.invoke('key-snippet', 'show');
 	};
 
@@ -65,11 +74,11 @@
 		if (!configForRenderer.config.restrictToPoeWindow)
 			return true;
 		let title = (await frontWindowTitle.get()).out.toLowerCase().trim();
-		return ['path of exile', 'path of exile 2', 'arevtur'].includes(title);
+		return ['path of exile', 'path of exile 2'].includes(title);
 	};
 
-	let addPoeShortcutListener = (key, handler, ignoreWindow = false) =>
-		keyHook.addShortcut('{ctrl}{shift}', key, async () => {
+	let addPoeShortcutListener = (key, shift, handler, ignoreWindow = false) =>
+		keyHook.addShortcut(shift ? '{ctrl}{shift}' : '{ctrl}', key, async () => {
 			console.debug('Key received', key);
 			if (ignoreWindow || await windowCheck())
 				handler();
@@ -79,10 +88,16 @@
 
 	let init = () => {
 		// todo[low] key sending seems to freeze the machine on linux
-		addPoeShortcutListener('h', () => slashType('hideout'));
-		keyHook.addShortcut('{ctrl}', 'c', async () => {
-			await new Promise(r => setTimeout(r, 100));
-			processClipboard(electronClipboard.readText());
+		addPoeShortcutListener('h', true, () => slashType('hideout'));
+		addPoeShortcutListener('c', false, async () => {
+			let oldClipboard = electronClipboard.readText();
+			let i;
+			let clipboard;
+			for (i = 0; i < 20 && oldClipboard === (clipboard = electronClipboard.readText()); i++)
+				await sleep(10);
+			console.debug('slept for ', i * 10);
+			if (clipboard)
+				processClipboard(clipboard);
 		});
 
 		setupPobApi();
@@ -91,22 +106,10 @@
 
 	let setupPobApi = () => pobApi.setParams(configForRenderer.config.buildParams);
 
-	document.addEventListener('keydown', ({code}) => {
-		switch (code.toLowerCase()) {
-			case 'enter':
-			case 'escape':
-			case 'space':
-				ipcRenderer.invoke('key-snippet', 'close');
-				break;
-		}
-	});
-
-	window.addEventListener('blur', () => ipcRenderer.invoke('key-snippet', 'close'));
-	document.addEventListener('mousedown', () => ipcRenderer.invoke('key-snippet', 'prevent-close'));
+	document.addEventListener('mousedown', e =>
+		ipcRenderer.invoke('key-snippet', e.button ? 'close' : 'prevent-close'));
 
 	init();
 
-	// todo[blocking]
-	//   show text incrementally as ready
-	//   dev options
+	// todo[blocking] dev options
 </script>
