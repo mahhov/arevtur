@@ -7,12 +7,18 @@ let windowPromise = new ElectronWindow('keySnippet', path.resolve(__dirname, 'ke
 	thickFrame: false,
 	alwaysOnTop: true,
 	focusable: false,
+	webPreferences: {
+		nodeIntegration: true,
+		contextIsolation: false,
+		backgroundThrottling: false,
+	},
 });
 
 windowPromise.window.then(window => window.setAlwaysOnTop(true, 'screen-saver'));
 
 let hideInterval;
 ipcMain.handle('key-snippet', async (event, arg) => {
+	console.debug('keySnippet2 received ipc:', arg);
 	let window = await windowPromise.window;
 	switch (arg) {
 		case 'show':
@@ -25,14 +31,14 @@ ipcMain.handle('key-snippet', async (event, arg) => {
 			let x = Math.min(mouse.x + 5, bounds.x + bounds.width - width);
 			let y = Math.min(mouse.y + 5, bounds.y + bounds.height - height);
 			window.setBounds({x, y, width, height});
+			console.debug('keySnippet2 show', x, y, width, height);
 			clearInterval(hideInterval);
 			if (!window.webContents.isDevToolsOpened())
 				hideInterval = setTimeout(async () => window.hide(), 3000);
 			break;
 		case 'close':
 			clearInterval(hideInterval);
-			if (!window.webContents.isDevToolsOpened())
-				window.hide();
+			window.hide();
 			break;
 		case 'prevent-close':
 			clearInterval(hideInterval);

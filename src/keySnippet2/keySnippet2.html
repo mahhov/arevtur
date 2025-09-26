@@ -20,7 +20,7 @@
 	}
 
 	#container > x-formatted-text:not(.hidden) {
-		border-bottom: 1px solid white;
+		/*border-bottom: 1px solid white;*/
 	}
 </style>
 
@@ -47,8 +47,8 @@
 	let slashType = name =>
 		keySender.strings([keySender.TYPE, '{ctrl}{shift}{enter}/' + name + '{enter}']);
 
-	let processClipboard = async itemText => {
-		console.log('processClipboard', itemText);
+	let processClipboard = itemText => {
+		console.debug('processClipboard:', itemText);
 		if (!itemText) return;
 		let P = configForRenderer.config.version2 ? Pricer2 : Pricer;
 		let promises = [...P.getPrices(itemText), pobApi.evalItem(itemText).then(output => output.text)];
@@ -66,7 +66,7 @@
 				}
 			});
 
-		console.log('show');
+		console.debug('show');
 		ipcRenderer.invoke('key-snippet', 'show');
 	};
 
@@ -91,9 +91,9 @@
 		addPoeShortcutListener('h', true, () => slashType('hideout'));
 		addPoeShortcutListener('c', false, async () => {
 			let oldClipboard = electronClipboard.readText();
+			let clipboard = oldClipboard;
 			let i;
-			let clipboard;
-			for (i = 0; i < 20 && oldClipboard === (clipboard = electronClipboard.readText()); i++)
+			for (i = 0; i < 20 && oldClipboard === clipboard; i++, clipboard = electronClipboard.readText())
 				await sleep(10);
 			console.debug('slept for ', i * 10);
 			if (clipboard)
