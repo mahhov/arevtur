@@ -182,7 +182,7 @@ class UnifiedQueryParams {
 				let entries = propertyEntryDatas
 					.filter(data => data.filter === filter && data.shared === isShared)
 					.map(data =>
-						new Entry(data.propertyText, data.weight, false, data.locked, data.enabled));
+						new Entry(data.propertyText, data.weight, data.locked, data.enabled));
 				return [key, entries];
 			}));
 
