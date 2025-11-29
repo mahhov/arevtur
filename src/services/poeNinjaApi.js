@@ -4,8 +4,8 @@ const Cache = require('../util/Cache');
 
 class PoeNinjaApi {
 	constructor() {
-		const ITEM = `itemoverview`;
-		const CURRENCY = `currencyoverview`;
+		const ITEM = `item/overview`;
+		const CURRENCY = `currency/overview`;
 
 		this.endpointsByLeague = {
 			CURRENCY: PoeNinjaApi.genEndpointByLeague(CURRENCY, 'Currency'),
@@ -49,7 +49,7 @@ class PoeNinjaApi {
 	}
 
 	static genEndpointByLeague(prefix, type) {
-		const BASE = 'https://poe.ninja/api/data';
+		const BASE = 'https://poe.ninja/poe1/api/economy/stash/current';
 		return league => `${BASE}/${prefix}?${querystring.stringify({league, type})}`;
 	}
 
