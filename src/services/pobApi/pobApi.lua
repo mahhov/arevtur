@@ -6,21 +6,18 @@ package.path = package.path .. ';' .. './lua/?.lua' -- xml
 -- linux
 package.path = package.path .. ';../runtime/lua/?.lua' -- dkjson & xml
 
-local function respond(response, debug)
-    if not debug then
-        response = '<.' .. response .. '.>'
-    end
+local function debugRespond(response)
     io.write(response .. '\n')
     io.flush()
 end
 
-respond('script started', true)
+debugRespond('script started')
 
 require('HeadlessWrapper')
-respond('HeadlessWrapper loaded', true)
+debugRespond('HeadlessWrapper loaded')
 
 local dkjson = require 'dkjson'
-respond('dkjson loaded', true)
+debugRespond('dkjson loaded')
 
 -- infra
 
@@ -107,7 +104,7 @@ local function loadExtraMods(mods)
         return
     end
 
-    respond('loading extra mods: ' .. itemText, true)
+    debugRespond('loading extra mods: ' .. itemText)
     build.itemsTab:AddItem(item)
     extraSlot:SetSelItemId(item.id)
     build.buildFlag = true
@@ -118,7 +115,7 @@ local function typeToSlotName(type)
     -- PoE 1 swords, maces, and axes (but not maces) have these extra words that aren't in PoB types
     type = type:gsub("^Any ", "")
     type = type:gsub("^Base ", "")
-    respond(type, true)
+    debugRespond(type)
 
     -- if already have an item of the same type equipped, use its slot
     for _, slot in ipairs(build.itemsTab.orderedSlots) do
@@ -206,12 +203,23 @@ end
 
 -- core
 
-respond('ready', true)
+debugRespond('ready')
+
+local pendingCommand = ''
+local function returnRespond(response)
+    pendingCommand = ''
+    response = '<.' .. response .. '.>'
+    debugRespond(response)
+end
 
 while true do
     local input = io.read()
+    if pendingCommand ~= '' then
+        returnRespond(dkjson.encode({ error = 'No PoB response', details = pendingCommand }))
+    end
     local args = dkjson.decode(input)
-    respond('received command ' .. args.cmd, true)
+    pendingCommand = args.cmd
+    debugRespond('received command ' .. args.cmd)
 
     if args.cmd == 'exit' then
         os.exit()
@@ -226,14 +234,14 @@ while true do
         build.itemsTab.slotOrder[slot.slotName] = #build.itemsTab.orderedSlots
         table.insert(build.itemsTab.controls, slot)
         build.itemsTab.activeItemSet.extraSlot = { selItemId = 0 }
-        respond('build loaded')
+        returnRespond('build loaded')
 
     elseif args.cmd == 'version' then
-        respond(APP_NAME)
+        returnRespond(APP_NAME)
 
     elseif args.cmd == 'queryBuildStats' then
         loadExtraMods(args.extraMods)
-        respond(dkjson.encode(shallow(build.calcsTab.mainOutput)))
+        returnRespond(dkjson.encode(shallow(build.calcsTab.mainOutput)))
 
     elseif args.cmd == 'item' then
         -- given item text, see what swapping it in, replacing the currently equipped item of that
@@ -241,9 +249,9 @@ while true do
         loadExtraMods(args.extraMods)
         local eval, err = evalEquippingItem(args.text, args.copyRunes)
         if eval then
-            respond(dkjson.encode(eval))
+            returnRespond(dkjson.encode(eval))
         else
-            respond(dkjson.encode({ error = err, details = args.text }))
+            returnRespond(dkjson.encode({ error = err, details = args.text }))
         end
 
     elseif args.cmd == 'mod' then
@@ -256,12 +264,12 @@ while true do
             local itemText = equippedItem.raw .. '\n' .. args.mod
             local eval, err = evalEquippingItem(itemText, false)
             if eval then
-                respond(dkjson.encode(eval))
+                returnRespond(dkjson.encode(eval))
             else
-                respond(dkjson.encode({ error = err, details = itemText }))
+                returnRespond(dkjson.encode({ error = err, details = itemText }))
             end
         else
-            respond(dkjson.encode({ error = 'Could not find slot for type', details = args.type }))
+            returnRespond(dkjson.encode({ error = 'Could not find slot for type', details = args.type }))
         end
 
     elseif args.cmd == 'getModWeights' then
@@ -300,9 +308,9 @@ while true do
         if slot then
             tradeQueryGenerator:RequestQuery(slot, { slotTbl = {} },
                     tradeQuery.statSortSelectionList, function(context, query, errMsg)
-                        respond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg), true)
+                        debugRespond('RequestQuery: ' .. (errMsg == nil and 'no error' or errMsg))
                         local minValue = dkjson.decode(query).query.stats[1].value.min
-                        respond(dkjson.encode({ minValue, tradeQueryGenerator.modWeights }))
+                        returnRespond(dkjson.encode({ minValue, tradeQueryGenerator.modWeights }))
                     end)
 
             -- TradeQueryGeneratorClass:RequestQuery execute
@@ -322,7 +330,7 @@ while true do
                 statWeights = tradeQuery.statSortSelectionList,
                 jewelType = jewelTypes[args.type],
             }
-            respond('Slot ' .. slot.slotName .. ', Options ' .. dkjson.encode(options), true)
+            debugRespond('Slot ' .. slot.slotName .. ', Options ' .. dkjson.encode(options))
             tradeQueryGenerator:StartQuery(slot, options)
 
             if args.options.includeInfluence then
@@ -336,15 +344,15 @@ while true do
             -- todo[low] make sure these all work for characters with empty slots
 
         else
-            respond(dkjson.encode({ error = 'Could not find slot for type', details = args.type }))
+            returnRespond(dkjson.encode({ error = 'Could not find slot for type', details = args.type }))
         end
 
     elseif args.cmd == 'getCraftedMods' then
         local response = dkjson.encode(data.masterMods)
-        respond('craft mods length: ' .. #response, true)
-        respond(response)
+        debugRespond('craft mods length: ' .. #response)
+        returnRespond(response)
 
     else
-        respond('unrecognized command ' .. args.cmd)
+        returnRespond('unrecognized command ' .. args.cmd)
     end
 end
