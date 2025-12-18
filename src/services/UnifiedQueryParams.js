@@ -356,7 +356,7 @@ class UnifiedQueryParams {
 				filters: {
 					type_filters: pruneIfEmptyFilters({filters: typeFilters}),
 					trade_filters: pruneIfEmptyFilters({filters: tradeFilters}),
-					socket_filters: overridden.linked ? {
+					socket_filters: !version2 && overridden.linked ? {
 						filters: {
 							links: {min: 6},
 						},
