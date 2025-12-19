@@ -462,10 +462,10 @@ class UnifiedQueryParams {
 
 		unifiedQueryParams.andEntries = parsedProperties
 			.filter(parsedProperty => !parsedProperty.flipIncrease)
-			.map(parsedProperty => new UnifiedQueryParams.Entry(parsedProperty.propertyText, parsedProperty.weight));
+			.map(parsedProperty => new Entry(parsedProperty.propertyText, parsedProperty.weight));
 		unifiedQueryParams.andMaxEntries = parsedProperties
 			.filter(parsedProperty => parsedProperty.flipIncrease)
-			.map(parsedProperty => new UnifiedQueryParams.Entry(parsedProperty.propertyText, parsedProperty.weight));
+			.map(parsedProperty => new Entry(parsedProperty.propertyText, parsedProperty.weight));
 
 		return unifiedQueryParams;
 	}

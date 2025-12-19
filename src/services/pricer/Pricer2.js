@@ -146,6 +146,9 @@ class PoeTradeApiNormalBasePricer extends PoeTradeApiPricer {
 		let quality = lines.map(l => l.match(/Quality: \+(\d+)/)).find(v => v)?.[1];
 		if (quality > 20)
 			unifiedQueryParams.minQuality = quality;
+		let charmSlots = lines.map(l => l.match(/Has (\d+) Charm Slots \(implicit\)/)).find(v => v)?.[1];
+		if (charmSlots)
+			unifiedQueryParams.andEntries.push(new UnifiedQueryParams.Entry('Has # Charm Slot (implicit)', charmSlots));
 		unifiedQueryParams.uncorrupted = true;
 		return unifiedQueryParams;
 	}
