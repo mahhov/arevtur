@@ -320,8 +320,8 @@ customElements.define(name, class Inputs extends XElement {
 		if (!version2) {
 			let currencyPrices = await apiConstants.currencyPrices(league);
 			let manual6LinkOptions = [
-				['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft],
-				['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft],
+				['fuse6LinkBenchCraft', currencyPrices.fuse6LinkBenchCraft || Infinity],
+				['theBlackMorrigan6LinkBeastCraft', currencyPrices.theBlackMorrigan6LinkBeastCraft || Infinity],
 			];
 			manual6LinkCheapestOption = manual6LinkOptions[minIndex(manual6LinkOptions.map(v => v[1]))];
 		}
