@@ -25,7 +25,7 @@ customElements.define(name, class extends XElement {
 		this.$('#build-path').addEventListener('selected', () => this.saveConfig());
 		this.$('#reload').addEventListener('click', () => {
 			pobApi.restart();
-			ipcRenderer.send('window-request', {name: 'reset-pob'});
+			ipcRenderer.invoke('arevtur', 'restart-pob');
 		});
 		this.$('#reset').addEventListener('click', () => this.resetConfig());
 

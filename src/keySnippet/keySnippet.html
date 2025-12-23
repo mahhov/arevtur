@@ -102,6 +102,7 @@
 
 		setupPobApi();
 		configForRenderer.addListener('change', config => setupPobApi());
+		ipcRenderer.on('restart-pob', setupPobApi);
 	};
 
 	let setupPobApi = () => pobApi.setParams(configForRenderer.config.buildParams);
@@ -110,6 +111,4 @@
 		ipcRenderer.invoke('key-snippet', e.button ? 'close' : 'prevent-close'));
 
 	init();
-
-	// todo[blocking] dev options
 </script>
