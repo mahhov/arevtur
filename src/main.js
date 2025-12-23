@@ -9,7 +9,7 @@ const {iconPath} = require('./util/util');
 googleAnalyticsForMain.emitStartup();
 
 ipcMain.handle('open-dialog', async (event, arg) =>
-	dialog.showOpenDialog(await windowWrapper.window, arg));
+	dialog.showOpenDialog(arg));
 
 let windowWrappers = [
 	require('./updateCheck/updateCheck'),
