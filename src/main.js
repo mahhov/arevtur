@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const {app} = require('electron');
 const {TrayHelper} = require('js-desktop-base');
 const appData = require('./services/appData');
-const keySnippets = require('./keySnippets/keySnippets');
+const keySnippets = require('./devOptions/keySnippets');
 const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
 require('./services/logWatcher');
 const {iconPath} = require('./util/util');
