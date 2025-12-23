@@ -7,34 +7,13 @@
 		margin: 2px; /* so the border is visible */
 		padding: 8px;
 	}
-
-	#text-container {
-		display: block;
-		max-height: 100%;
-		overflow: auto;
-	}
-
-	#table-container {
-		display: flex;
-	}
-
-	#table-container .column {
-		display: flex;
-		flex-direction: column;
-	}
-
-	#table-container .column:not(:first-child) {
-		margin-left: 20px;
-	}
 </style>
 
 <script>
 	require('../arevtur/xElements/import');
 </script>
 
-<x-formatted-text id="text-container"></x-formatted-text>
-<div id="table-container"></div>
-<div id="dev-options-container">
+<div>
 	This is for developers.
 	<div>
 		<label><input id="restrict-window" type="checkbox">Restrict to the PoE Window</label>

@@ -31,13 +31,6 @@ class ViewHandle extends ViewHandleBase {
 			case 'close':
 				this.hide();
 				break;
-			case 'prevent-close':
-				clearInterval(this.timedHide);
-				break;
-			case 'reset-pob':
-				// todo[low] merge this file with keySnippet
-				pobApi.restart();
-				break;
 			case 'size':
 				this.resize(600, message.height);
 				break;
@@ -46,30 +39,13 @@ class ViewHandle extends ViewHandleBase {
 		}
 	}
 
-	async moveToMouse() {
+	async showDevOptions() {
+		await this.show();
+		let numLines = 5;
+		await this.resize(300, Math.ceil(22.17 + 18.27 * numLines));
 		let mouse = await ScreenMouse.getMouse();
 		await this.move(mouse.x, mouse.y);
-	}
-
-	async showCommand(commandName, commandData, duration, widthPx, heightLines) {
-		heightLines = Math.min(heightLines, 40);
-		this.send({name: commandName, ...commandData});
-		await this.show(duration);
-		await this.resize(widthPx, Math.ceil(22.17 + 18.27 * heightLines));
-		await this.moveToMouse();
 		await this.validateOnScreen();
-	}
-
-	async showText(text, duration) {
-		this.showCommand('setText', {text}, duration, 600, text.split('\n').length);
-	}
-
-	async showTable(rows, duration) {
-		this.showCommand('setTable', {rows}, duration, 600, rows.length);
-	}
-
-	async showDevOptions() {
-		this.showCommand('showDevOptions', {}, undefined, 300, 5);
 	}
 }
 

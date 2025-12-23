@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const {app} = require('electron');
 const {TrayHelper} = require('js-desktop-base');
 const appData = require('./services/appData');
-const keySnippet = require('./keySnippets/keySnippets');
+const keySnippets = require('./keySnippets/keySnippets');
 const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
 require('./services/logWatcher');
 const {iconPath} = require('./util/util');
@@ -16,7 +16,7 @@ let windows = [
 ];
 
 TrayHelper.createExitTray(iconPath, 'Arevtur', [
-	...keySnippet.trayOptions,
+	...keySnippets.trayOptions,
 	...windows.flatMap(w => w.trayOptions),
 	{type: 'separator'},
 	{label: `Dev console`, click: () => windows.forEach(w => w.showDevTools())},
