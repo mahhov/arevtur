@@ -3,13 +3,25 @@ const {app, ipcMain} = require('electron');
 const ElectronWindow = require('../services/ElectronWindow');
 const Updater = require('./Updater');
 
-let window = new ElectronWindow(`Check for updates`, path.resolve(__dirname, 'updateCheck.html'), 400, 400, false);
+let windowWrapper = new ElectronWindow(`Check for updates`, path.resolve(__dirname, 'updateCheck.html'), 400, 400);
 
 let updater = new Updater();
-updater.updateReady.then(() => window.showView());
+updater.updateReady.then(() => windowWrapper.showView());
 
-ipcMain.handle('request-current-version', () => app.getVersion());
-ipcMain.handle('request-check-updates', () => updater.checkForUpdate());
-ipcMain.handle('request-update', () => updater.updateAndRestart());
+ipcMain.handle('update-check', (event, arg) => {
+	switch (arg) {
+		case 'request-current-version':
+			return app.getVersion()
+			break;
+		case 'request-check-updates':
+			return updater.checkForUpdate()
+			break;
+		case 'request-update':
+			updater.updateAndRestart()
+			break;
+		default:
+			console.error('Unknown window message:', arg);
+	}
+})
 
-module.exports = window;
+module.exports = windowWrapper;

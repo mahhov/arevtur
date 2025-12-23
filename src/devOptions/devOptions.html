@@ -1,0 +1,62 @@
+<style>
+	@import '../themeStyle.css';
+	@import '../sharedStyle.css';
+
+	body {
+		border: 1px solid;
+		margin: 2px; /* so the border is visible */
+		padding: 8px;
+	}
+</style>
+
+<script>
+	require('../arevtur/xElements/import');
+</script>
+
+<div>
+	This is for developers.
+	<div>
+		<label><input id="restrict-window" type="checkbox">Restrict to the PoE Window</label>
+	</div>
+	<div>
+		<button id="open-config">Open config dir</button>
+	</div>
+	<div>
+		<label><input id="chat-notifications" type="checkbox">Chat Notifications</label>
+	</div>
+</div>
+
+<script>
+	const {ipcRenderer} = require('electron');
+	const configForRenderer = require('../services/config/configForRenderer');
+	const appData = require('../services/appData');
+	const {openPath} = require('../util/util');
+
+	const $ = document.querySelector.bind(document);
+
+	document.addEventListener('keydown', ({code}) => {
+		switch (code.toLowerCase()) {
+			case 'enter':
+			case 'escape':
+			case 'space':
+				ipcRenderer.invoke('dev-options', 'close');
+				break;
+		}
+	});
+
+	window.addEventListener('blur', () => ipcRenderer.invoke('dev-options', 'close'));
+
+	$('#restrict-window').addEventListener('change', () =>
+		configForRenderer.config = {restrictToPoeWindow: $('#restrict-window').checked});
+
+	$('#open-config').addEventListener('click', () => openPath(appData.basePath));
+
+	$('#chat-notifications').addEventListener('change', () =>
+		configForRenderer.config = {chatNotifications: $('#chat-notifications').checked});
+
+	configForRenderer.addListener('change', config => {
+		$('#restrict-window').checked = configForRenderer.config.restrictToPoeWindow;
+		$('#chat-notifications').checked = configForRenderer.config.chatNotifications;
+		document.documentElement.classList.toggle('dark', config.darkTheme);
+	});
+</script>

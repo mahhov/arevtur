@@ -41,7 +41,9 @@ class ElectronWindow {
 	}
 
 	get trayOptions() {
-		return [{label: `${this.name}`, click: () => this.showView()}];
+		return this.name ?
+			[{label: `${this.name}`, click: () => this.showView()}] :
+			[];
 	}
 
 	async showView() {

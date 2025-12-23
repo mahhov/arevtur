@@ -116,7 +116,7 @@
 
 	const $ = document.querySelector.bind(document);
 
-	ipcRenderer.invoke('request-current-version').then(version =>
+	ipcRenderer.invoke('update-check', 'request-current-version').then(version =>
 		$('#current').textContent = version);
 
 	let setResultProgress = progress => {
@@ -127,7 +127,7 @@
 
 	let checkForUpdate = () => {
 		setResultProgress('checking');
-		ipcRenderer.invoke('request-check-updates').then(onUpdateResponse);
+		ipcRenderer.invoke('update-check', 'request-check-updates').then(onUpdateResponse);
 	};
 
 	let onUpdateResponse = update => {
@@ -143,7 +143,7 @@
 	};
 
 	$('#check-button').addEventListener('click', checkForUpdate);
-	$('#update-button').addEventListener('click', () => ipcRenderer.invoke('request-update'));
+	$('#update-button').addEventListener('click', () => ipcRenderer.invoke('update-check', 'request-update'));
 
 	if (appData.isDev)
 		onUpdateResponse(require('./mockUpdate'));

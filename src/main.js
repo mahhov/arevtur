@@ -1,28 +1,30 @@
 const fs = require('fs').promises;
-const {app} = require('electron');
+const {app, ipcMain, dialog} = require('electron');
 const {TrayHelper} = require('js-desktop-base');
 const appData = require('./services/appData');
-const keySnippets = require('./devOptions/keySnippets');
 const googleAnalyticsForMain = require('./services/googleAnalytics/googleAnalyticsForMain');
 require('./services/logWatcher');
 const {iconPath} = require('./util/util');
 
 googleAnalyticsForMain.emitStartup();
 
-let windows = [
+ipcMain.handle('open-dialog', async (event, arg) =>
+	dialog.showOpenDialog(await windowWrapper.window, arg));
+
+let windowWrappers = [
 	require('./updateCheck/updateCheck'),
 	require('./arevtur/arevtur'),
-	require('./keySnippet2/keySnippet2'),
-];
+	require('./keySnippet/keySnippet'),
+	require('./devOptions/devOptions'),
+].filter(v => v);
 
 TrayHelper.createExitTray(iconPath, 'Arevtur', [
-	...keySnippets.trayOptions,
-	...windows.flatMap(w => w.trayOptions),
+	...windowWrappers.flatMap(w => w.trayOptions),
 	{type: 'separator'},
-	{label: `Dev console`, click: () => windows.forEach(w => w.showDevTools())},
+	{label: `Dev console`, click: () => windowWrappers.forEach(w => w.showDevTools())},
 	appData.isDev && {
 		label: `Clear all data and exit`, click: async () => {
-			await Promise.all(windows.map(async w =>
+			await Promise.all(windowWrappers.map(async w =>
 				(await w.window).webContents.session.clearStorageData()));
 			await fs.unlink(appData.configPath);
 			app.exit();

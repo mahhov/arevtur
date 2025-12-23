@@ -2,7 +2,7 @@ const {ipcMain, screen} = require('electron');
 const path = require('path');
 const ElectronWindow = require('../services/ElectronWindow');
 
-let windowPromise = new ElectronWindow('keySnippet', path.resolve(__dirname, 'keySnippet2.html'), 400, 400, false, {
+let windowWrapper = new ElectronWindow('', path.resolve(__dirname, 'keySnippet.html'), 400, 400, false, {
 	frame: false,
 	thickFrame: false,
 	alwaysOnTop: true,
@@ -14,12 +14,12 @@ let windowPromise = new ElectronWindow('keySnippet', path.resolve(__dirname, 'ke
 	},
 });
 
-windowPromise.window.then(window => window.setAlwaysOnTop(true, 'screen-saver'));
+windowWrapper.window.then(window => window.setAlwaysOnTop(true, 'screen-saver'));
 
 let hideInterval;
 ipcMain.handle('key-snippet', async (event, arg) => {
-	console.debug('keySnippet2 received ipc:', arg);
-	let window = await windowPromise.window;
+	console.debug('keySnippet received ipc:', arg);
+	let window = await windowWrapper.window;
 	switch (arg) {
 		case 'show':
 			window.show();
@@ -31,7 +31,7 @@ ipcMain.handle('key-snippet', async (event, arg) => {
 			let x = Math.min(mouse.x + 5, bounds.x + bounds.width - width);
 			let y = Math.min(mouse.y + 5, bounds.y + bounds.height - height);
 			window.setBounds({x, y, width, height});
-			console.debug('keySnippet2 show', x, y, width, height);
+			console.debug('keySnippet show', x, y, width, height);
 			clearInterval(hideInterval);
 			if (!window.webContents.isDevToolsOpened())
 				hideInterval = setTimeout(async () => window.hide(), 3000);
@@ -48,4 +48,4 @@ ipcMain.handle('key-snippet', async (event, arg) => {
 	}
 });
 
-module.exports = windowPromise;
+module.exports = windowWrapper;
