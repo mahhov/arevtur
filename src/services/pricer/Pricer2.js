@@ -1,6 +1,6 @@
 const {httpRequest: {get}} = require('js-desktop-base');
 const configData = require('../config/configData');
-const {unique, join, round, unitText, escapeRegex} = require('../../util/util');
+const {unique, round, unitText} = require('../../util/util');
 const UnifiedQueryParams = require('../UnifiedQueryParams');
 const TradeQuery = require('../tradeQuery/TradeQuery');
 const apiConstants = require('../apiConstants');
@@ -113,7 +113,6 @@ class PoeTradeApiExactPricer extends PoeTradeApiPricer {
 		let supportedItemClasses = [
 			'Life Flasks',
 			'Mana Flasks',
-			'Tablet',
 			'Jewels',
 			'Relics',
 		];
@@ -124,6 +123,26 @@ class PoeTradeApiExactPricer extends PoeTradeApiPricer {
 		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
 		unifiedQueryParams.currencyType = 'exalted_divine';
 		unifiedQueryParams.offline = 'securable';
+		return unifiedQueryParams;
+	}
+}
+
+class PoeTradeApiTabletPricer extends PoeTradeApiPricer {
+	get title() {
+		return 'Tablet pricer';
+	}
+
+	async createUnifiedQueryParams(lines) {
+		if (lines[0] !== 'Item Class: Tablet')
+			return;
+
+		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
+		unifiedQueryParams.currencyType = 'exalted_divine';
+		unifiedQueryParams.offline = 'securable';
+		let type = lines.map(l => l.match(/Adds (.+) to a Map \(implicit\)/)).find(v => v)?.[1]
+		let uses = lines.map(l => l.match(/(\d+) uses remaining \(implicit\)/)).find(v => v)?.[1]
+		unifiedQueryParams.andEntries.push(new UnifiedQueryParams.Entry(`Adds ${type} to a Map \n# use remaining (implicit)`, uses))
+		console.log(unifiedQueryParams.andEntries)
 		return unifiedQueryParams;
 	}
 }
@@ -196,6 +215,7 @@ let pricers = [
 	...Poe2ScoutPricer.endpointTypes.map(endpointType => new Poe2ScoutPricer(endpointType)),
 	new PoeTradeApiNormalBasePricer(),
 	new PoeTradeApiExactPricer(),
+	new PoeTradeApiTabletPricer(),
 	new PoeTradeApiWaystonePricer(),
 	// new PoeTradeApiRarePricer(),
 	// new PoeTradeApiRecombinatorPricer(),
