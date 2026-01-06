@@ -6,7 +6,7 @@ let windowWrapper = new ElectronWindow('', path.resolve(__dirname, 'keySnippet.h
 	frame: false,
 	thickFrame: false,
 	alwaysOnTop: true,
-	focusable: false,
+	skipTaskbar: true,
 	webPreferences: {
 		nodeIntegration: true,
 		contextIsolation: false,
