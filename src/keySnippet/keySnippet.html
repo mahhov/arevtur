@@ -3,8 +3,12 @@
 	@import '../sharedStyle.css';
 
 	body {
-		border: 1px solid;
+		border: 1px solid var(--interactable-primary);
 		margin: 2px;
+	}
+
+	body.locked {
+		border-color: var(--interactable-focus-border);
 	}
 
 	#container {
@@ -17,10 +21,6 @@
 	#container > x-formatted-text {
 		display: block;
 		padding: 8px;
-	}
-
-	#container > x-formatted-text:not(.hidden) {
-		/*border-bottom: 1px solid white;*/
 	}
 </style>
 
@@ -62,11 +62,12 @@
 					el.text = (await promise);
 				} catch (e) {
 					el.classList.add('hidden');
-					console.error(e);
+					console.debug(e);
 				}
 			});
 
 		console.debug('show');
+		$('body').classList.remove('locked');
 		ipcRenderer.invoke('key-snippet', 'show');
 	};
 
@@ -107,8 +108,10 @@
 
 	let setupPobApi = () => pobApi.setParams(configForRenderer.config.buildParams);
 
-	document.addEventListener('mousedown', e =>
-		ipcRenderer.invoke('key-snippet', e.button ? 'close' : 'prevent-close'));
+	document.addEventListener('mousedown', e => {
+		$('body').classList.add('locked');
+		ipcRenderer.invoke('key-snippet', e.button ? 'close' : 'prevent-close')
+	});
 
 	init();
 </script>
