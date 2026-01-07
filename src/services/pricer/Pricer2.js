@@ -157,7 +157,7 @@ class PoeTradeApiNormalBasePricer extends PoeTradeApiPricer {
 			return null;
 
 		let unifiedQueryParams = new UnifiedQueryParams();
-		unifiedQueryParams.name = lines[2].replace(/^Exceptional /, '');
+		unifiedQueryParams.name = lines[2].replace(/^Exceptional |^Superior /, '');
 		unifiedQueryParams.currencyType = 'exalted_divine';
 		unifiedQueryParams.offline = 'securable';
 		unifiedQueryParams.minItemLevel = lines.map(l => l.match(/Item Level: (\d+)/)).find(v => v)?.[1];
