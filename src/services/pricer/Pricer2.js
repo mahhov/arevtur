@@ -139,10 +139,10 @@ class PoeTradeApiTabletPricer extends PoeTradeApiPricer {
 		let unifiedQueryParams = await UnifiedQueryParams.fromItemText(lines);
 		unifiedQueryParams.currencyType = 'exalted_divine';
 		unifiedQueryParams.offline = 'securable';
-		let type = lines.map(l => l.match(/Adds (.+) to a Map \(implicit\)/)).find(v => v)?.[1]
-		let uses = lines.map(l => l.match(/(\d+) uses remaining \(implicit\)/)).find(v => v)?.[1]
-		unifiedQueryParams.andEntries.push(new UnifiedQueryParams.Entry(`Adds ${type} to a Map \n# use remaining (implicit)`, uses))
-		console.log(unifiedQueryParams.andEntries)
+		let type = lines.map(l => l.match(/(Adds .+ to a Map|Empowers the Map Boss of a Map) \(implicit\)/)).find(v => v)?.[1];
+		let uses = lines.map(l => l.match(/(\d+) uses remaining \(implicit\)/)).find(v => v)?.[1];
+		unifiedQueryParams.andEntries.push(new UnifiedQueryParams.Entry(`${type} \n# use remaining (implicit)`, uses));
+		console.log(unifiedQueryParams.andEntries);
 		return unifiedQueryParams;
 	}
 }
