@@ -56,6 +56,7 @@ class UnifiedQueryParams {
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
 	minItemLevel = 0;
+	maxItemLevel = 0;
 	affixProperties = {};   // {prefix, suffix: 0} // todo[high] allow disabling affix properties
 	linked = false;
 	uncorrupted = false;
@@ -304,8 +305,8 @@ class UnifiedQueryParams {
 			typeFilters.category = {option: typeId};
 		if (overridden.minQuality)
 			typeFilters.quality = {min: overridden.minQuality};
-		if (overridden.minItemLevel)
-			typeFilters.ilvl = {min: overridden.minItemLevel};
+		if (overridden.minItemLevel || overridden.maxItemLevel)
+			typeFilters.ilvl = {min: overridden.minItemLevel || undefined, max: overridden.maxItemLevel || undefined};
 		if (overridden.rarity)
 			typeFilters.rarity = {option: overridden.rarity};
 

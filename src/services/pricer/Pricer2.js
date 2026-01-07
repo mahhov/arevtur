@@ -195,6 +195,26 @@ class PoeTradeApiWaystonePricer extends PoeTradeApiPricer {
 	}
 }
 
+class PoeTradeApiAscendencyPricer extends PoeTradeApiPricer {
+	get title() {
+		return 'Ascendency pricer';
+	}
+
+	createUnifiedQueryParams(lines) {
+		if (lines[0] !== 'Item Class: Inscribed Ultimatum' && lines[0] !== 'Item Class: Trial Coins')
+			return null;
+
+		let unifiedQueryParams = new UnifiedQueryParams();
+		unifiedQueryParams.name = lines[2];
+		unifiedQueryParams.currencyType = 'exalted_divine';
+		unifiedQueryParams.offline = 'securable';
+		let itemLevel = lines.map(l => l.match(/Item Level: (\d+)/)).find(v => v)?.[1];
+		unifiedQueryParams.minItemLevel = itemLevel;
+		unifiedQueryParams.maxItemLevel = itemLevel;
+		return unifiedQueryParams;
+	}
+}
+
 class PoeTradeApiRarePricer extends PoeTradeApiPricer {
 	get title() {
 		return 'Rare pricer';
@@ -217,6 +237,7 @@ let pricers = [
 	new PoeTradeApiExactPricer(),
 	new PoeTradeApiTabletPricer(),
 	new PoeTradeApiWaystonePricer(),
+	new PoeTradeApiAscendencyPricer(),
 	// new PoeTradeApiRarePricer(),
 	// new PoeTradeApiRecombinatorPricer(),
 ];
