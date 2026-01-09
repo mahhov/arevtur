@@ -102,7 +102,7 @@ class ItemData {
 			.map(nameValue => nameValue.join(' '));
 
 		if (!this.text && this.version2)
-			this.text = this.reconstructText(true, true);
+			this.text = this.reconstructText(true);
 
 		// weighted value
 		this.weightedValueDetails = {
@@ -118,7 +118,7 @@ class ItemData {
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false, false), true) : this.craftValue();
+		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false), true) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
@@ -186,13 +186,13 @@ class ItemData {
 		return Buffer.from(string64 || '', 'base64').toString();
 	};
 
-	reconstructText(includeRune, includeAnoint) {
+	reconstructText(includeRunesAndAnoint) {
 		return [
 			'Item Class',
 			this.subtype,
 			'Sockets: ' + 'S '.repeat(this.sockets[0].length),
-			...includeRune ? this.runeMods : [],
-			...includeAnoint ?
+			...includeRunesAndAnoint ? this.runeMods : [],
+			...includeRunesAndAnoint || this.corrupted ?
 				this.enchantMods :
 				this.enchantMods.filter(mod => !mod.startsWith('Allocates ')),
 			...this.implicitMods,
@@ -274,7 +274,7 @@ class ItemData {
 
 		// todo[high] consider cost of crafts
 
-		// todo[blocking] apply same anointment as equipped
+		// todo[low] apply same anointment as equipped
 
 		let craftableMods = (await pobApi.getCraftedMods())
 			// check if item has open prefix/suffix

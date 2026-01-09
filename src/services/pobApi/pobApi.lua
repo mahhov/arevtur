@@ -148,7 +148,7 @@ local function typeToSlotName(type)
     end
 end
 
-local function evalEquippingItem(itemText, copyRunes)
+local function evalEquippingItem(itemText, copyRunesAndAnoint)
     local item = new('Item', emplaceNewLines(itemText))
     if not item.base then
         return nil, 'Item missing base type'
@@ -161,7 +161,7 @@ local function evalEquippingItem(itemText, copyRunes)
     local calcFunc, calcBase = build.calcsTab:GetMiscCalculator()
     for slotName, slot in pairs(build.itemsTab.slots) do
         if build.itemsTab:IsItemValidForSlot(item, slotName) and not slot.inactive and (not slot.weaponSet or slot.weaponSet == (build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) and slot.shown() then
-            if copyRunes then
+            if copyRunesAndAnoint then
                 local equippedItem = build.itemsTab.items[slot.selItemId] or nil
                 if equippedItem then
                     -- -1 for corruption, -1 for exceptional
@@ -173,6 +173,15 @@ local function evalEquippingItem(itemText, copyRunes)
                     for i = equippedItem.itemSocketCount, item.itemSocketCount do
                         equippedItem.runes[i] = equippedItem.runes[1]
                     end
+
+                    if not item.corrupted then
+                        for _, mod in ipairs(equippedItem.enchantModLines) do
+                            if (#mod.modList > 0 and mod.modList[1].name == 'GrantedPassive') then
+                                table.insert(item.enchantModLines, mod)
+                            end
+                        end
+                    end
+
                     item:UpdateRunes()
                     item:BuildAndParseRaw()
                 end
@@ -247,7 +256,7 @@ while true do
         -- given item text, see what swapping it in, replacing the currently equipped item of that
         -- type would do for the build
         loadExtraMods(args.extraMods)
-        local eval, err = evalEquippingItem(args.text, args.copyRunes)
+        local eval, err = evalEquippingItem(args.text, args.copyRunesAndAnoint)
         if eval then
             returnRespond(dkjson.encode(eval))
         else
