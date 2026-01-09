@@ -28,6 +28,7 @@ class Poe2ScoutPricer {
 		'currency/uncutgems',
 		'currency/lineagesupportgems',
 		'currency/delirium',
+		'currency/idol',
 		'unique/accessory',
 		'unique/armour',
 		'unique/flask',
@@ -56,7 +57,7 @@ class Poe2ScoutPricer {
 	async getPrice(text) {
 		let textName = text.split(/\r?\n/)[2];
 		if (!textName) return Promise.reject();
-		let item = (await this.#data).items.find(item => textName === item.text || textName === item.name);
+		let item = (await this.#data).items.find(item => item.text === textName || item.name === textName);
 		if (!item) return Promise.reject();
 		let price = item.currentPrice;
 		return [
