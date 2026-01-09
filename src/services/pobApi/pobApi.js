@@ -246,6 +246,8 @@ class PobApi extends Emitter {
 				'1000000000000% increased maximum total life recovery per second from leech',
 				'1000000000000% increased maximum recovery per mana leech',
 				'1000000000000% increased maximum total mana recovery per second from leech',
+				'1000000000000% increased maximum recovery per energy shield leech',
+				'1000000000000% increased maximum total energy shield recovery per second from leech',
 			].join('\n') : '',
 		].filter(v => v).join(' \\n ');
 	}
