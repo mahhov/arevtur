@@ -70,6 +70,7 @@ class ItemData {
 
 		// affixes
 		// todo[high] need to consider fractured
+		// todo[blocking] need to consider desecrated
 		let extendedExplicitMods = tradeApiItemData.item.extended.mods?.explicit || [];
 		this.affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
 			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
@@ -268,7 +269,7 @@ class ItemData {
 
 		// todo[high] consider cost of crafts
 
-		// todo[high] support best annointment and its price
+		// todo[blocking] apply same anointment as equipped
 
 		let craftableMods = (await pobApi.getCraftedMods())
 			// check if item has open prefix/suffix

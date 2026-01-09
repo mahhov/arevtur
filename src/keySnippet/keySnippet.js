@@ -23,7 +23,7 @@ ipcMain.handle('key-snippet', async (event, arg) => {
 	switch (arg) {
 		case 'show':
 			window.show();
-			// todo[blocking] size to fit contents
+			// todo[high] size to fit contents
 			let width = 400;
 			let height = 400;
 			let mouse = screen.getCursorScreenPoint();
