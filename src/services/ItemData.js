@@ -32,6 +32,8 @@ class ItemData {
 		this.requirements = tradeApiItemData.item.requirements?.map(requirement =>
 			[requirementNameMapping[requirement.name] || requirement.name, requirement.values[0][0]]) || [];
 		this.rarity = tradeApiItemData.item.rarity;
+		this.fractured = tradeApiItemData.item.fractured;
+		this.desecrated = tradeApiItemData.item.desecrated;
 		this.corrupted = tradeApiItemData.item.corrupted;
 		this.mirrored = tradeApiItemData.item.duplicated;
 		this.split = tradeApiItemData.item.split;
@@ -69,11 +71,9 @@ class ItemData {
 			}, []);
 
 		// affixes
-		// todo[high] need to consider fractured
-		// todo[blocking] need to consider desecrated
-		let extendedExplicitMods = tradeApiItemData.item.extended.mods?.explicit || [];
+		let extendedMods = tradeApiItemData.item.extended.mods ? Object.values(tradeApiItemData.item.extended.mods).flat() : [];
 		this.affixes = Object.fromEntries([['prefix', 'P'], ['suffix', 'S']].map(([prop, tier]) =>
-			[prop, extendedExplicitMods.filter(mod => mod.tier[0] === tier).length]));
+			[prop, extendedMods.filter(mod => mod.tier[0] === tier).length]));
 
 		// quality
 		let qualityProperty = tradeApiItemData.item.properties
@@ -200,8 +200,11 @@ class ItemData {
 			...this.explicitMods,
 			...this.desecratedMods,
 			...this.craftedMods,
+			this.fractured ? 'Fractured' : '',
+			this.desecrated ? 'Desecrated' : '',
 			this.corrupted ? 'Corrupted' : '',
 			this.mirrored ? 'Mirrored' : '',
+			this.split ? 'Split' : '',
 		].join('\n');
 	}
 
@@ -219,24 +222,26 @@ class ItemData {
 			[
 				`${this.subtype} ${this.itemLevel}`,
 				'Requires: ' + this.requirements.map(([name, value]) => `${name} ${value}`).join(', '),
-				this.corrupted ? '@bold,red corrupted' : '',
-				this.mirrored ? '@bold,red mirrored' : '',
-				this.split ? '@bold,red split' : '',
-				...this.influences.map(t => `@light-green ` + t),
+				this.fractured ? '@bold,orange Fractured' : '',
+				this.desecrated ? '@bold,light-green Desecrated' : '',
+				this.corrupted ? '@bold,red Corrupted' : '',
+				this.mirrored ? '@bold,red Mirrored' : '',
+				this.split ? '@bold,red Split' : '',
+				...this.influences.map(t => `@light-green ${t}`),
 				'Sockets: ' + this.sockets.map(chain => chain.join('')).join(),
 				`Prefixes: ${this.affixes.prefix}, Suffixes: ${this.affixes.suffix}`,
 				this.weightedValueDetails.affixes ? '@bold Affix value: ' + this.weightedValueDetails.affixes : '',
 				this.quality,
-				...this.defenseProperties.map(t => `@orange ` + t),
+				...this.defenseProperties.map(t => `@orange ${t} (defense)`),
 				this.weightedValueDetails.defenses ? '@bold,orange Defense value: ' + this.weightedValueDetails.defenses : '',
-				...this.enchantMods.map(t => `@light-green ` + t),
-				...this.runeMods.map(t => `@blue ` + t),
-				...this.implicitMods.map(t => `@green ` + t),
-				...this.fracturedMods.map(t => `@orange ` + t),
+				...this.enchantMods.map(t => `@light-green ${t} (enchant)`),
+				...this.runeMods.map(t => `@blue ${t} (rune)`),
+				...this.implicitMods.map(t => `@green ${t} (implicit)`),
+				...this.fracturedMods.map(t => `@orange ${t} (fractured)`),
 				...this.explicitMods,
-				...this.desecratedMods.map(t => `@light-green ` + t),
-				...this.craftedMods.map(t => `@blue ` + t),
-				...this.pseudoMods.map(t => `@pink ` + t),
+				...this.desecratedMods.map(t => `@light-green ${t} (desecrated)`),
+				...this.craftedMods.map(t => `@blue ${t} (crafted)`),
+				...this.pseudoMods.map(t => `@pink ${t} (pseudo)`),
 				this.weightedValueDetails.mods ? '@bold,pink Mod value: ' + this.weightedValueDetails.mods : '',
 			].filter(v => v).join('\n'),
 			[
