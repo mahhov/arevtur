@@ -243,6 +243,7 @@ class ApiConstants {
 				['increased Gold found in your Maps', 'increased Gold found in your Maps (Gold Piles)'],
 				[/\d+ additional Rooms are/, 'An additional Room is'],
 				['in Map', 'in your Maps'],
+				[/Map has (\d+%) increased chance to contain a Summoning Circle/, 'Area has $1 increased chance to contain a Summoning Circle'],
 				[/Map has (\d+%)/, '$1'],
 				['Expedition Artifacts', 'Artifacts'],
 			].forEach(([from, to]) => propertyCopyText = propertyCopyText.replace(from, to));
