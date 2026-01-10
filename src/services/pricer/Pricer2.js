@@ -175,6 +175,19 @@ class PoeTradeApiNormalBasePricer extends PoeTradeApiPricer {
 	}
 }
 
+class PoeTradeApiNormalBaseMixedCurrencyPricer extends PoeTradeApiNormalBasePricer {
+	get title() {
+		return 'Normal base mixed currency pricer';
+	}
+
+	createUnifiedQueryParams(lines) {
+		let unifiedQueryParams = super.createUnifiedQueryParams(lines);
+		if (unifiedQueryParams)
+			unifiedQueryParams.currencyType = '';
+		return unifiedQueryParams;
+	}
+}
+
 class PoeTradeApiWaystonePricer extends PoeTradeApiPricer {
 	get title() {
 		return 'Waystone pricer';
@@ -236,6 +249,7 @@ class PoeTradeApiRarePricer extends PoeTradeApiPricer {
 let pricers = [
 	...Poe2ScoutPricer.endpointTypes.map(endpointType => new Poe2ScoutPricer(endpointType)),
 	new PoeTradeApiNormalBasePricer(),
+	new PoeTradeApiNormalBaseMixedCurrencyPricer(),
 	new PoeTradeApiExactPricer(),
 	new PoeTradeApiTabletPricer(),
 	new PoeTradeApiWaystonePricer(),
