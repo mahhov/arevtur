@@ -1,6 +1,6 @@
 {
   "name": "arevtur",
-  "version": "9.0.3",
+  "version": "9.1.0",
   "main": "src/main.js",
   "scripts": {
     "start": "electron --trace-warnings .",
