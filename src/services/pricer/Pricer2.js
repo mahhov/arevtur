@@ -28,6 +28,7 @@ class Poe2ScoutPricer {
 		'currency/uncutgems',
 		'currency/lineagesupportgems',
 		'currency/delirium',
+		'currency/incursion',
 		'currency/idol',
 		'unique/accessory',
 		'unique/armour',
