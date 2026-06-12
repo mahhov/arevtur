@@ -7,7 +7,6 @@ const TradeQuery = require('../../../services/tradeQuery/TradeQuery');
 const UnifiedQueryParams = require('../../../services/UnifiedQueryParams');
 const pobApi = require('../../../services/pobApi/pobApi');
 const {minIndex, unique, escapeRegex} = require('../../../util/util');
-const ItemData = require('../../../services/ItemData');
 const appData = require('../../../services/appData');
 const BugReport = require('../../../services/BugReport');
 const TradeQueryQueue = require('../../../services/tradeQuery/TradeQueryQueue');

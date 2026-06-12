@@ -4,7 +4,7 @@ const configData = require('./config/configData');
 const {unique, escapeRegex} = require('../util/util');
 const nodeFetch = require('node-fetch');
 
-let localStorage;
+let localStorage = globalThis.localStorage;
 if (typeof localStorage === 'undefined') {
 	let data = {};
 	localStorage = {
