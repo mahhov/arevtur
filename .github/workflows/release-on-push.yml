@@ -54,7 +54,7 @@ jobs:
           body: |
             Automated build for version ${{ steps.package_version.outputs.prop_version }}
             Generated from commit ${{ github.sha }}
-        files: |
+          files: |
             dist/arevtur-*.exe
             dist/arevtur-*.exe.blockmap
             dist/latest.yml
