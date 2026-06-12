@@ -1,0 +1,56 @@
+name: Build and Draft Release on Git Push
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  build_electron:
+    name: Compile and Draft Release
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            args: --win
+          - os: ubuntu-latest
+            args: --linux
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile Electron Binaries
+        run: npx electron-builder ${{ matrix.args }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          prerelease: false
+          name: "Arevtur Build #${{ github.run_number }}"
+          tag_name: "b${{ github.run_number }}"
+          body: |
+            Automated build generated from commit: ${{ github.sha }}
+          files: |
+          dist/arevtur-*.exe
+          dist/arevtur-*.AppImage
+          dist/arevtur-*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
