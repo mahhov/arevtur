@@ -49,8 +49,8 @@ jobs:
           body: |
             Automated build generated from commit: ${{ github.sha }}
           files: |
-          dist/arevtur-*.exe
-          dist/arevtur-*.AppImage
-          dist/arevtur-*.zip
+            dist/arevtur-*.exe
+            dist/arevtur-*.AppImage
+            dist/arevtur-*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
