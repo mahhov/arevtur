@@ -5,10 +5,10 @@
   "scripts": {
     "start": "electron --trace-warnings .",
     "build": "build",
-    "ship": ". ./git_token && git push && git push --tags && rm -rf dist && build -lwp always",
-    "windowShip": "gitpersonal && git push && git push --tags && rm -rf dist && electron-builder -wp always",
+    "ship": ". ./git_token && git push --follow-tags && rm -rf dist && build -lwp always",
+    "windowShip": "gitpersonal && git push --follow-tags && rm -rf dist && electron-builder -wp always",
     "postversionOld": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && npm run windowShip",
-    "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && gitpersonal && git push && git push --tags"
+    "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && gitpersonal && git push --follow-tags"
   },
   "author": "mahhov1",
   "license": "ISC",
