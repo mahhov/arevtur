@@ -38,8 +38,7 @@ let getEndpoint = async endpointType => {
 	return `https://api.poe2scout.com/poe2/Leagues/${leagueNickname}/${endpointType[0]}/ByCategory?Category=${endpointType[1]}&PerPage=250`;
 };
 
-let getData = async endpointType => {
-	return cache.get(getEndpoint(endpointType));
-};
+let getData = async endpointType =>
+	cache.get(await getEndpoint(endpointType));
 
 module.exports = {endpointTypes, getEndpoint, getData};
