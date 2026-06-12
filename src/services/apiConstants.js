@@ -1,4 +1,5 @@
-const {httpRequest, XPromise} = require('js-desktop-base');
+const {XPromise} = require('js-desktop-base');
+const httpRequest = require('../util/browserHttpRequest');
 const poeNinjaApi = require('./poeNinjaApi');
 const configData = require('./config/configData');
 const {unique, escapeRegex} = require('../util/util');
@@ -36,6 +37,7 @@ class ApiConstants {
 			this.cache = JSON.parse(localStorage.getItem('api-constants-cache'));
 			Object.values(this.cache).forEach(cached => cached.promise = null);
 		} catch (e) {
+			console.warn('failed to read apiConstants cache', e);
 		}
 		this.cache ||= {};
 	}
@@ -283,6 +285,7 @@ class ApiConstants {
 				ApiConstants.initNinjaCurrencies(version2, league));
 		} catch (e) {
 			// todo[medium] show red/orange status indicator
+			console.warn('failed to load apiConstants currents', e);
 			return version2 ? {exalted: 1} : {chaos: 1};
 		}
 	}
@@ -393,12 +396,13 @@ class ApiConstants {
 	// utility
 
 	static get api() {
-		return 'https://pathofexile.com';
+		return 'https://www.pathofexile.com';
 	}
 
 	static createRequestHeader(sessionId = undefined) {
 		return {
 			// Without a non-empty user-agent header, PoE will return 403.
+			// This will be ignored anyway because now we're using browser's fetch() api which overrides user-agent
 			'User-Agent': `arevtur2`,
 			Cookie: sessionId ? `POESESSID=${sessionId}` : '',
 			'content-type': 'application/json',
