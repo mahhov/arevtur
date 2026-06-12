@@ -31,6 +31,11 @@ jobs:
           node-version: 24
           cache: 'npm'
 
+      - name: Read version from package.json
+        id: package_version
+        shell: bash
+        run: echo "prop_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Install dependencies
         run: npm ci
 
@@ -44,13 +49,15 @@ jobs:
         with:
           draft: true
           prerelease: false
-          name: "Arevtur Build #${{ github.run_number }}"
-          tag_name: "b${{ github.run_number }}"
+          name: "v${{ steps.package_version.outputs.prop_version }}"
+          tag_name: "v${{ steps.package_version.outputs.prop_version }}"
           body: |
-            Automated build generated from commit: ${{ github.sha }}
-          files: |
+            Automated build for version ${{ steps.package_version.outputs.prop_version }}
+            Generated from commit ${{ github.sha }}
+        files: |
             dist/arevtur-*.exe
+            dist/arevtur-*.exe.blockmap
+            dist/latest.yml
             dist/arevtur-*.AppImage
-            dist/arevtur-*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

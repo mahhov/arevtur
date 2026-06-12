@@ -7,7 +7,8 @@
     "build": "build",
     "ship": ". ./git_token && git push && git push --tags && rm -rf dist && build -lwp always",
     "windowShip": "gitpersonal && git push && git push --tags && rm -rf dist && electron-builder -wp always",
-    "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && npm run windowShip"
+    "postversionOld": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && npm run windowShip",
+    "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && gitpersonal && git push && git push --tags"
   },
   "author": "mahhov1",
   "license": "ISC",
