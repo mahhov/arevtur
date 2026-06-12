@@ -5,6 +5,13 @@ const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
 const apiConstants = require('../apiConstants');
 const querystring = require('querystring');
 
+let debugUtils;
+if (process.env.AREVTUR_BUILD !== 'release') {
+	try { debugUtils = require('../../debug/debugUtils'); } catch (e) { debugUtils = null; }
+} else {
+	debugUtils = null;
+}
+
 class TradeQueryItemGetter {
 	#active = false;
 	#cached = {};
@@ -82,13 +89,19 @@ class TradeQueryItemGetter {
 			`${apiConstants.api}/api/trade/fetch/${itemIds}`;
 		let params = {
 			query: queueObj.searchId,
-			'pseudos[]': [
+		};
+		if (!queueObj.version2)
+			params['pseudos[]'] = [
 				apiConstants.shortProperties.totalEleRes,
 				apiConstants.shortProperties.flatLife,
-			],
-		};
+			];
+		if (queueObj.version2)
+			params.realm = 'poe2';
 		endpoint += `?${querystring.stringify(params)}`;
-		let headers = apiConstants.createRequestHeader(queueObj.sessionId);
+
+		let headers = debugUtils?.getDebugHeaders(queueObj.sessionId) ||
+			apiConstants.createRequestHeader(queueObj.sessionId);
+
 		let options = {method: 'get', headers};
 		return nodeFetch(endpoint, options);
 	}

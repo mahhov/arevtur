@@ -6,6 +6,8 @@ const Emitter = require('../../util/Emitter');
 const {round, deepEquality} = require('../../util/util');
 const pobConsts = require('./pobConsts');
 
+const {transformGloveText} = require('./stonefistMapping');
+
 class Script extends CustomOsScript {
 	constructor(pobPath) {
 		super(pobPath);
@@ -75,6 +77,8 @@ class PobApi extends Emitter {
 		this.extraMods = {};
 		this.cache = {};
 		this.script = null;
+		this.ascendancy = '';
+		this.hasWayOfTheStonefist = false;
 	}
 
 	setParams({
@@ -115,6 +119,7 @@ class PobApi extends Emitter {
 				cmd: 'build',
 				path: this.buildPath,
 			});
+			this.queryAscendancy();
 		}
 		this.emit('change');
 	}
@@ -146,6 +151,17 @@ class PobApi extends Emitter {
 			}[v] || null));
 	}
 
+	queryAscendancy() {
+		return this.send({cmd: 'ascendancy'})
+			.then(JSON.parse)
+			.then(obj => {
+				this.ascendancy = obj?.ascendancy || '';
+				this.hasWayOfTheStonefist = (obj?.allocatedAscendancyNodes || []).includes('Way of the Stonefist');
+				return obj;
+			})
+			.catch(() => ({class: '', ascendancy: ''}));
+	}
+
 	queryBuildStats() {
 		return this.send({
 			cmd: 'queryBuildStats',
@@ -156,9 +172,17 @@ class PobApi extends Emitter {
 			.catch(() => ({}));
 	}
 
-	evalItem(item, copyRunesAndAnoint = false) {
+	evalItem(item, copyRunesAndAnoint = false, type = null) {
 		if (!PobApi.isItemEquippable(item))
 			return Promise.reject('item is unequippable');
+		let isGloves = type === 'Gloves' || /^Item Class: Gloves$/m.test(item);
+		let originalItem = null;
+		let transformedItem = null;
+		if (this.hasWayOfTheStonefist && isGloves) {
+			originalItem = item;
+			item = transformGloveText(item);
+			transformedItem = item;
+		}
 		return this.send({
 			cmd: 'item',
 			text: item.replace(/[\n\r]+/g, ' \\n '),
@@ -166,16 +190,16 @@ class PobApi extends Emitter {
 			extraMods: this.extraModStrings,
 		})
 			.then(JSON.parse)
-			.then(obj => this.parseItemTooltip(obj));
+			.then(obj => this.parseItemTooltip(obj, originalItem, transformedItem));
 	}
 
-	evalItemWithCraft(item, craftedMods) {
+	evalItemWithCraft(item, craftedMods, type = null) {
 		item = [
 			...item.split('\n').filter(line => !line.includes('(crafted)')),
 			'',
 			...craftedMods,
 		].join('\n');
-		return this.evalItem(item);
+		return this.evalItem(item, false, type);
 	}
 
 	// todo[low] rename evalItemMod
@@ -252,10 +276,10 @@ class PobApi extends Emitter {
 		].filter(v => v).join(' \\n ');
 	}
 
-	async parseItemTooltip(obj) {
+	async parseItemTooltip(obj, originalItem = null, transformedItem = null) {
 		if (obj.error) {
 			console.warn(obj);
-			return {value: 0, text: obj.error};
+			return {value: 0, text: obj.error, textRight: ''};
 		}
 
 		let valueTextTuples = obj.comparisons
@@ -288,6 +312,20 @@ class PobApi extends Emitter {
 		let value = valueTextTuples.length ? round(valueTextTuples[0].value, 3) : 0;
 		let title = `${obj.name} @bold,pink ${value}`;
 
+		let textRight = '';
+		if (originalItem && transformedItem) {
+			let getModLines = text => text.split('\n')
+				.filter(line => line.trim() && !line.startsWith('Item Class') && !line.startsWith('Sockets:'))
+				.slice(1);
+			textRight = [
+				`@bold,pink Original Mods`,
+				...getModLines(originalItem),
+				'',
+				`@bold,green Stonefist Transformed`,
+				...getModLines(transformedItem),
+			].join('\n');
+		}
+
 		return {
 			value,
 			text: [
@@ -295,6 +333,8 @@ class PobApi extends Emitter {
 				...valueTextTuples.map(valueTextTuple => valueTextTuple.text),
 				obj.text,
 			].join(`\n${'-'.repeat(30)}\n`),
+			textRight,
+			transformedItem,
 		};
 	}
 

@@ -1,6 +1,7 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
 const ItemsData = require('../../../services/ItemsData');
+const apiConstants = require('../../../services/apiConstants');
 const Searcher = require('../../../util/Searcher');
 const Debouncer = require('../../../util/Debouncer');
 const {updateElementChildren} = require('../../../util/util');
@@ -59,6 +60,12 @@ customElements.define(name, class extends XElement {
 		});
 		this.$('#search-input').value = localStorage.getItem('results-search') || '';
 
+		this.$('#status-filter').addEventListener('change', () => {
+			localStorage.setItem('results-status-filter', this.$('#status-filter').value);
+			this.renderItemsData(false, true);
+		});
+		this.$('#status-filter').value = localStorage.getItem('results-status-filter') || 'all';
+
 		this.$('#results-chart').addEventListener('select', async e => {
 			let item = this.itemsData.itemByRange(e.detail.y, e.detail.x, e.detail.height, e.detail.width);
 			if (item) {
@@ -78,6 +85,11 @@ customElements.define(name, class extends XElement {
 		this.expectedCount = 0;
 		this.updateResultsCount();
 
+		const configData = require('../../../services/config/configData');
+		apiConstants.currencyPrices(configData.config.league).then(() => {
+			this.$('#currency-warning').textContent = apiConstants.currencyWarning || '';
+		}).catch(() => {});
+
 		// testData(this);
 	}
 
@@ -95,6 +107,8 @@ customElements.define(name, class extends XElement {
 		this.$('#results-progress-bar').value = ratio;
 		this.expectedCount = expectedCount;
 		this.updateResultsCount();
+		this.$('#currency-warning').textContent =
+			this.itemsData.shownItems.length ? '' : (apiConstants.currencyWarning || '');
 	}
 
 	updateResultsCount() {
@@ -115,9 +129,12 @@ customElements.define(name, class extends XElement {
 
 	renderItemsDataList() {
 		this.updateResultsCount();
+		this.$('#currency-warning').textContent =
+			this.itemsData.shownItems.length ? '' : (apiConstants.currencyWarning || '');
 
 		let searcher = new Searcher(this.$('#search-input').value);
 		let shownItemsData = this.itemsData.shownItems
+			.filter(item => this.statusFilter(item))
 			.filter(item => searcher.testMulti(item.displayLines))
 			.filter((_, i) => i < 100);
 
@@ -169,6 +186,7 @@ customElements.define(name, class extends XElement {
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
+					.filter(item => this.statusFilter(item))
 					.filter(item => item.onlineStatus === 'instant buyout')),
 			}, {
 				// small blue squares for online & afk items
@@ -176,6 +194,7 @@ customElements.define(name, class extends XElement {
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
+					.filter(item => this.statusFilter(item))
 					.filter(item => item.onlineStatus !== 'instant buyout' && item.onlineStatus !== 'offline')),
 			}, {
 				// small orange squares for offline items
@@ -183,6 +202,7 @@ customElements.define(name, class extends XElement {
 				fill: true,
 				size: 4,
 				points: this.itemsData.itemsToPoints(this.itemsData.shownItems
+					.filter(item => this.statusFilter(item))
 					.filter(item => item.onlineStatus === 'offline')),
 			}, {
 				// big blue squares for hovered item
@@ -202,6 +222,15 @@ customElements.define(name, class extends XElement {
 			};
 		if (resetChartRange)
 			this.$('#results-chart').resetRange();
+	}
+
+	statusFilter(item) {
+		let filter = this.$('#status-filter').value;
+		if (filter === 'all') return true;
+		if (filter === 'no-offline') return item.onlineStatus !== 'offline';
+		if (filter === 'no-afk') return item.onlineStatus === 'instant buyout' || item.onlineStatus === 'online';
+		if (filter === 'buyout-only') return item.onlineStatus === 'instant buyout';
+		return true;
 	}
 });
 

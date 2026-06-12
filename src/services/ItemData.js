@@ -4,12 +4,20 @@ const {maxIndex, round, unitText} = require('../util/util');
 const pobConsts = require('./pobApi/pobConsts');
 const configData = require('./config/configData');
 
+let debugUtils;
+if (process.env.AREVTUR_BUILD !== 'release') {
+	try { debugUtils = require('../debug/debugUtils'); } catch (e) { debugUtils = null; }
+} else {
+	debugUtils = null;
+}
+
 class ItemData {
-	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, queryNotes, tradeApiItemData) {
+	constructor(version2, league, affixValueShift, queryDefenseProperties, priceShifts, queryId, queryNotes, tradeApiItemData, queryStats) {
 		this.version2 = version2;
 		this.league = league;
 		this.affixValueShift = affixValueShift;
 		this.queryDefenseProperties = queryDefenseProperties;
+		this.queryStats = queryStats || [];
 		this.priceShifts = priceShifts;
 		this.queryId = queryId;
 		this.queryNotes = queryNotes;
@@ -53,11 +61,12 @@ class ItemData {
 		this.whisperText = tradeApiItemData.listing.whisper;
 		this.instantBuyoutFee = tradeApiItemData.listing.fee || 0;
 		this.travelHideoutToken = tradeApiItemData.listing.hideout_token;
-		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online, this.travelHideoutToken);
+		this.onlineStatus = ItemData.onlineStatus(tradeApiItemData.listing.account.online, debugUtils ? this.travelHideoutToken : null, this.queryNotes);
 		this.date = tradeApiItemData.listing.indexed;
 		this.note = tradeApiItemData.item.note;
 		this.text = ItemData.decode64(tradeApiItemData.item.extended.text);
-		this.type = ItemData.typeFromItemText(this.text); // e.g. 'Amulet'
+		this.type = ItemData.typeFromItemText(this.text)
+			|| tradeApiItemData.item.properties?.find(p => p.type === 109)?.name; // e.g. 'Gloves'
 		this.debug = tradeApiItemData;
 
 		// sockets
@@ -113,16 +122,18 @@ class ItemData {
 		this.weightedValue = Object.values(this.weightedValueDetails).reduce((sum, v) => sum + v);
 
 		// build value
-		this.buildValuePromise = pobApi.evalItem(this.text);
+		this.buildValuePromise = pobApi.evalItem(this.text, false, this.type);
 		this.buildValuePromise
 			.then(resolved => this.buildValuePromise.resolved = resolved)
 			.catch(() => 0);
 
-		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false), true) : this.craftValue();
+		this.craftValuePromise = this.version2 ? pobApi.evalItem(this.reconstructText(false), true, this.type) : this.craftValue();
 		this.craftValuePromise
 			.then(resolved => this.craftValuePromise.resolved = resolved)
 			.catch(() => 0);
 
+		this.listingCurrency = tradeApiItemData.listing.price.currency;
+		this.listingAmount = tradeApiItemData.listing.price.amount;
 		this.pricePromise = ItemData.price(
 			this.league,
 			tradeApiItemData.listing.price.currency,
@@ -172,8 +183,8 @@ class ItemData {
 		return {price, priceSummary, priceBreakdown};
 	}
 
-	static onlineStatus(onlineObj, travelHideoutToken) {
-		if (travelHideoutToken)
+	static onlineStatus(onlineObj, travelHideoutToken, queryNotes) {
+		if (travelHideoutToken || queryNotes?.some(note => note === 'online: securable'))
 			return 'instant buyout';
 		if (!onlineObj)
 			return 'offline';
@@ -323,7 +334,7 @@ class ItemData {
 			let evalStats = craftableMod.stats;
 			if (craftableMod.modTags.includes('unveiled_mod'))
 				evalStats[0] += ` (veiled)`;
-			return pobApi.evalItemWithCraft(this.text, evalStats);
+			return pobApi.evalItemWithCraft(this.text, evalStats, this.type);
 		}));
 		let bestI = maxIndex(craftableModEvals.map(craftableModEval => craftableModEval.value));
 		let bestCraftableMod = craftableModEvals[bestI];

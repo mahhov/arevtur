@@ -136,8 +136,13 @@
 			return;
 		$('#update-version').textContent = update.version;
 		$('#update-date').textContent = new Date(update.releaseDate).toLocaleString();
+		let notes = update.releaseNotes;
+		if (typeof notes === 'string')
+			notes = [{version: update.version, note: notes}];
+		if (!Array.isArray(notes) || !notes.length)
+			notes = [{version: update.version, note: 'No release notes available.'}];
 		updateElementChildren($('#update-description'),
-			update.releaseNotes.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, ''), '\n']),
+			notes.flatMap(rn => [rn.version, rn.note.replace(/<[^>]*>/g, ''), '\n']),
 			() => document.createElement('div'),
 			(div, i, text) => div.textContent = text);
 	};

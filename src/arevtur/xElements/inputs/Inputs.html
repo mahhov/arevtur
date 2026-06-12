@@ -16,6 +16,30 @@
 		-webkit-text-security: disc;
 	}
 
+	#debug-session-input:not(:focus) {
+		-webkit-text-security: disc;
+	}
+
+	#debug-session-input.expired {
+		background: #4a1111;
+		border-color: #ff4444;
+	}
+
+	.empty-auth {
+		background: #4a1111 !important;
+		border-color: #ff4444 !important;
+	}
+
+	#debug-session-warning {
+		display: none;
+		color: #ff4444;
+		font-size: 12px;
+	}
+
+	#debug-session-input.expired ~ #debug-session-warning {
+		display: inline;
+	}
+
 	.loaded-status {
 		padding: 0 5px;
 	}
@@ -57,8 +81,11 @@
 <div>
 	<x-autocomplete-input id="version-input" placeholder="PoE 1" size="2"></x-autocomplete-input>
 	<x-autocomplete-input id="league-input" placeholder="league" size="8"></x-autocomplete-input>
-	<input id="session-id-input" required pattern=".{32}" placeholder="session id"
+	<input id="session-id-input" pattern=".{32}" placeholder="session id"
 		   title="32 char long ID from pathofexile.com/trade > F12 > Application > Cookies > POESESSID">
+	<input id="debug-session-input" placeholder="debug session"
+		   title="Debug session input for advanced header override">
+	<span id="debug-session-warning">⚠️ session may be expired, refresh</span>
 </div>
 
 <span class="right">

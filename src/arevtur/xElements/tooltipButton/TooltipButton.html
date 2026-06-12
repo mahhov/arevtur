@@ -14,25 +14,43 @@
 		display: none;
 	}
 
-	#tooltip {
-		position: absolute;
+	#tooltip-wrapper {
+		position: fixed;
 		background: var(--back);
 		border: 2px solid var(--interactable-focus-border);
-		display: block;
+		display: flex;
 		z-index: 1;
 		font-size: 14px;
 		padding: 5px;
-		left: 0;
-		right: 0;
 		min-width: 300px;
+		width: max-content;
+		overflow-y: auto;
 	}
 
-	.container:not(:hover) #tooltip, #tooltip:not([text]), #tooltip[text=''] {
+	#tooltip {
+		flex: 1;
+	}
+
+	#tooltip-right {
+		flex: 1;
+		border-left: 2px solid var(--interactable-focus-border);
+		padding-left: 5px;
+		margin-left: 5px;
+	}
+
+	.container:not(:hover) #tooltip-wrapper, #tooltip-wrapper:not([data-visible]) {
+		display: none;
+	}
+
+	#tooltip-right:not([text]), #tooltip-right[text=''] {
 		display: none;
 	}
 </style>
 
 <div class="container">
 	<button id="button"></button>
-	<x-formatted-text id="tooltip"></x-formatted-text>
+	<div id="tooltip-wrapper">
+		<x-formatted-text id="tooltip"></x-formatted-text>
+		<x-formatted-text id="tooltip-right"></x-formatted-text>
+	</div>
 </div>

@@ -6,6 +6,13 @@ const ItemData = require('../ItemData');
 const TradeQuerySearcher = require('./TradeQuerySearcher');
 const TradeQueryItemGetter = require('./TradeQueryItemGetter');
 
+let debugUtils;
+if (process.env.AREVTUR_BUILD !== 'release') {
+	try { debugUtils = require('../../debug/debugUtils'); } catch (e) { debugUtils = null; }
+} else {
+	debugUtils = null;
+}
+
 class TradeQuery {
 	constructor(unifiedQueryParams, version2, league, sessionId, affixValueShift = 0, priceShifts = {}) {
 		this.unifiedQueryParams = unifiedQueryParams;
@@ -147,7 +154,7 @@ class TradeQuery {
 					return null;
 				}
 				let item = new ItemData(this.version2, this.league, this.affixValueShift,
-					this.unifiedQueryParams.defenseProperties, this.priceShifts, searcherData.id, queryNotes, itemGetterData);
+					this.unifiedQueryParams.defenseProperties, this.priceShifts, searcherData.id, queryNotes, itemGetterData, apiQuery.query.stats);
 				// todo[high] let users wait on pricePromise and rm this await
 				await item.pricePromise;
 				this.itemStream.write([item]);
@@ -199,13 +206,9 @@ class TradeQuery {
 	}
 
 	static directWhisper(version2, sessionId, token) {
-		let endpoint = version2 ?
-			`${apiConstants.api}/api/trade2/whisper` :
-			`${apiConstants.api}/api/trade/whisper`;
-		let headers = apiConstants.createRequestHeader(sessionId);
-		return httpRequest.post(endpoint, {token}, headers)
-			.then(() => true)
-			.catch(e => console.error('Failed to direct whisper:', e));
+		if (!debugUtils)
+			return Promise.resolve(false);
+		return debugUtils.sendDebugRequest(version2, sessionId, token);
 	}
 }
 

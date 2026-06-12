@@ -13,6 +13,16 @@ const defenseBuildValueTuples = [
 	['blockBuildValue', '#block-build-value', 'block', '# chance to Block', 1],
 ];
 
+const minDefensePropertyTuples = [
+	['minArmour', '#min-armour-input'],
+	['minEvasion', '#min-evasion-input'],
+	['minEnergyShield', '#min-energy-shield-input'],
+];
+
+const minRequirementPropertyTuples = [
+	['minLevelRequirement', '#min-level-requirement-input'],
+];
+
 const maxRequirementPropertyTuples = [
 	['maxLevelRequirement', '#max-level-requirement-input'],
 	['maxStrengthRequirement', '#max-strength-requirement-input'],
@@ -48,6 +58,8 @@ const queryPropertyFilters = [
 module.exports = {
 	defensePropertyTuples,
 	defenseBuildValueTuples,
+	minDefensePropertyTuples,
+	minRequirementPropertyTuples,
 	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,

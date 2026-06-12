@@ -5,6 +5,8 @@ const UnifiedQueryParams = require('../../../services/UnifiedQueryParams');
 const {
 	defensePropertyTuples,
 	defenseBuildValueTuples,
+	minDefensePropertyTuples,
+	minRequirementPropertyTuples,
 	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
@@ -34,10 +36,14 @@ customElements.define(name, class extends XElement {
 			evasionBuildValueTooltip: {},
 			energyShieldBuildValueTooltip: {},
 			blockBuildValueTooltip: {},
+			minLevelRequirement: {},
 			maxLevelRequirement: {},
 			maxStrengthRequirement: {},
 			maxDexterityRequirement: {},
 			maxIntelligenceRequirement: {},
+			minArmour: {},
+			minEvasion: {},
+			minEnergyShield: {},
 			prefix: {},
 			suffix: {},
 			linked: {boolean: true},
@@ -83,7 +89,7 @@ customElements.define(name, class extends XElement {
 			}
 		});
 
-		[...defensePropertyTuples, ...maxRequirementPropertyTuples, ...affixPropertyTuples]
+		[...defensePropertyTuples, ...minDefensePropertyTuples, ...minRequirementPropertyTuples, ...maxRequirementPropertyTuples, ...affixPropertyTuples]
 			.forEach(([property, query]) => {
 				this.$(query).addEventListener('change', () => {
 					this[property] = this.$(query).value;
@@ -201,6 +207,10 @@ customElements.define(name, class extends XElement {
 
 	set block(value) {
 		this.$('#block-input').value = value;
+	}
+
+	set minLevelRequirement(value) {
+		this.$('#min-level-requirement-input').value = value;
 	}
 
 	set maxLevelRequirement(value) {

@@ -37,6 +37,7 @@
 	.scroll {
 		flex: 1;
 		overflow: auto;
+		position: relative;
 
 		display: grid;
 		grid-template-columns: repeat(auto-fit, 350px);
@@ -63,6 +64,20 @@
 	x-item-listing.search-hidden {
 		display: none;
 	}
+
+	#currency-warning {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 1.5em;
+		text-align: center;
+		color: #ff6666;
+		opacity: 0.8;
+		pointer-events: none;
+		padding: 20px;
+		max-width: 80%;
+	}
 </style>
 
 <div>
@@ -76,12 +91,19 @@
 		<x-numeric-input id="gold-per-price-input" min="0"
 		                 title="How much gold you're willing to pay per chaos/exalt.&#10;If 0, ignores gold fee of instant buyouts.&#10;Otherwise, sorts items with lower gold fees higher."></x-numeric-input>
 		<!-- todo[medium] allow searching tags e.g. crafted-->
+		<select id="status-filter" title="Filter by seller status">
+			<option value="all">All</option>
+			<option value="no-offline">Buyout + Online + AFK</option>
+			<option value="no-afk">Buyout + Online</option>
+			<option value="buyout-only">Buyout Only</option>
+		</select>
 		<input id="search-input" placeholder="search (e.g. energyshield, !evasion, !armour)" title="ctrl+f"">
 	</div>
 	<progress id="results-progress-bar" max="1" value="1"></progress>
 </div>
 
 <div class="scroll">
+	<div id="currency-warning"></div>
 	<div id="results-list"></div>
 	<!-- position after results list so that the ItemListing .pane doesn't bleed through -->
 	<x-chart id="results-chart" axis-label-x="Chaos/Exalt" axis-label-y="Value" width="350" height="350"></x-chart>

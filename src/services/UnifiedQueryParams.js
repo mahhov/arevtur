@@ -2,6 +2,8 @@ const apiConstants = require('./apiConstants');
 const {deepCopy, updateElementChildren} = require('../util/util');
 const {
 	defensePropertyTuples,
+	minDefensePropertyTuples,
+	minRequirementPropertyTuples,
 	maxRequirementPropertyTuples,
 	affixPropertyTuples,
 	influenceProperties,
@@ -10,6 +12,12 @@ const {
 
 let pruneIfEmptyFilters = obj =>
 	Object.values(obj.filters).filter(v => v !== undefined).length ? obj : undefined;
+
+const minDefenseToDefenseKey = {
+	minArmour: 'armour',
+	minEvasion: 'evasion',
+	minEnergyShield: 'energyShield',
+};
 
 class Entry {
 	constructor(propertyText, weight, locked = false, enabled = true) {
@@ -54,6 +62,7 @@ class UnifiedQueryParams {
 	offline = 'online';
 	minQuality = 0;
 	defenseProperties = {}; // {armour, evasion, energyShield, block: {weight: 0, min: 0}}
+	minRequirementProperties = {}; // {min*Requirement: 0}
 	maxRequirementProperties = {}; // {max*Requirement: -1}
 	minItemLevel = 0;
 	maxItemLevel = 0;
@@ -83,6 +92,8 @@ class UnifiedQueryParams {
 	constructor() {
 		defensePropertyTuples.forEach(([property]) =>
 			this.defenseProperties[property] = {weight: 0, min: 0});
+		minRequirementPropertyTuples.forEach(([property]) =>
+			this.minRequirementProperties[property] = 0);
 		maxRequirementPropertyTuples.forEach(([property]) =>
 			this.maxRequirementProperties[property] = 0);
 		affixPropertyTuples.forEach(([property]) =>
@@ -123,6 +134,10 @@ class UnifiedQueryParams {
 		inputElement.price = this.maxPrice;
 		defensePropertyTuples.forEach(([property]) =>
 			inputElement[property] = this.defenseProperties[property].weight);
+		minDefensePropertyTuples.forEach(([property]) =>
+			inputElement[property] = this.defenseProperties[minDefenseToDefenseKey[property]].min);
+		minRequirementPropertyTuples.forEach(([property]) =>
+			inputElement[property] = this.minRequirementProperties[property]);
 		maxRequirementPropertyTuples.forEach(([property]) =>
 			inputElement[property] = this.maxRequirementProperties[property]);
 		affixPropertyTuples.forEach(([property]) =>
@@ -156,8 +171,18 @@ class UnifiedQueryParams {
 				weight: Number(inputElement[property]),
 				min: 0,
 			}]));
+		minDefensePropertyTuples.forEach(([property]) => {
+			let key = minDefenseToDefenseKey[property];
+			defenseProperties[key].min = inputElement[property] ? Number(inputElement[property]) : 0;
+		});
 
 		let maxRequirementProperties = Object.fromEntries(maxRequirementPropertyTuples
+			.map(([property]) => [
+				property,
+				inputElement[property] ? Number(inputElement[property]) : 0,
+			]));
+
+		let minRequirementProperties = Object.fromEntries(minRequirementPropertyTuples
 			.map(([property]) => [
 				property,
 				inputElement[property] ? Number(inputElement[property]) : 0,
@@ -194,6 +219,7 @@ class UnifiedQueryParams {
 		unifiedQueryParams.maxPrice = Number(inputElement.price);
 		unifiedQueryParams.defenseProperties = defenseProperties;
 		unifiedQueryParams.maxRequirementProperties = maxRequirementProperties;
+		unifiedQueryParams.minRequirementProperties = minRequirementProperties;
 		unifiedQueryParams.affixProperties = affixProperties;
 		unifiedQueryParams.linked = inputElement.linked;
 		unifiedQueryParams.uncorrupted = inputElement.uncorrupted;
@@ -212,6 +238,12 @@ class UnifiedQueryParams {
 			'online', // in person trade
 			'any', // offline
 		];
+
+		let statusFilter = (typeof localStorage !== 'undefined') ? localStorage.getItem('results-status-filter') : null;
+		if (statusFilter === 'no-offline' || statusFilter === 'no-afk')
+			offlineOptions = ['securable', 'online'];
+		else if (statusFilter === 'buyout-only')
+			offlineOptions = ['securable'];
 
 		let priceOptions = [];
 		let maxPrice = this.maxPrice;
@@ -376,8 +408,11 @@ class UnifiedQueryParams {
 					}),
 					req_filters: pruneIfEmptyFilters({
 						filters: {
-							lvl: overridden.maxRequirementProperties.maxLevelRequirement > 0 ?
-								{max: overridden.maxRequirementProperties.maxLevelRequirement} : undefined,
+							lvl: (overridden.minRequirementProperties.minLevelRequirement > 0 || overridden.maxRequirementProperties.maxLevelRequirement > 0) ?
+								{
+									min: overridden.minRequirementProperties.minLevelRequirement > 0 ? overridden.minRequirementProperties.minLevelRequirement : undefined,
+									max: overridden.maxRequirementProperties.maxLevelRequirement > 0 ? overridden.maxRequirementProperties.maxLevelRequirement : undefined,
+								} : undefined,
 							str: overridden.maxRequirementProperties.maxStrengthRequirement > 0 ?
 								{max: overridden.maxRequirementProperties.maxStrengthRequirement} : undefined,
 							dex: overridden.maxRequirementProperties.maxDexterityRequirement > 0 ?
@@ -409,8 +444,21 @@ class UnifiedQueryParams {
 			// currencyType
 			// offline
 			// minQuality
-			// defenseProperties
-			// maxRequirementProperties
+			defenseProperties: {
+				armour: {weight: 0, min: filters?.equipment_filters?.filters?.ar?.min || 0},
+				evasion: {weight: 0, min: filters?.equipment_filters?.filters?.ev?.min || 0},
+				energyShield: {weight: 0, min: filters?.equipment_filters?.filters?.es?.min || 0},
+				block: {weight: 0, min: filters?.equipment_filters?.filters?.block?.min || 0},
+			},
+			minRequirementProperties: {
+				minLevelRequirement: filters?.req_filters?.filters?.lvl?.min || 0,
+			},
+			maxRequirementProperties: {
+				maxLevelRequirement: filters?.req_filters?.filters?.lvl?.max || 0,
+				maxStrengthRequirement: filters?.req_filters?.filters?.str?.max || 0,
+				maxDexterityRequirement: filters?.req_filters?.filters?.dex?.max || 0,
+				maxIntelligenceRequirement: filters?.req_filters?.filters?.int?.max || 0,
+			},
 			// affixProperties
 			linked: filters?.socket_filters?.filters?.links?.min === 6 || false,
 			uncorrupted: filters?.misc_filters?.filters?.corrupted?.option === false || false,

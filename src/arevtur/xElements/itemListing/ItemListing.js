@@ -1,8 +1,17 @@
 const {XElement, importUtil} = require('xx-element');
 const {template, name} = importUtil(__filename);
+const {shell} = require('electron');
 const TradeQuery = require('../../../services/tradeQuery/TradeQuery');
 const configData = require('../../../services/config/configData');
 const {round} = require('../../../util/util');
+const {buildItemTradeUrl} = require('../../../services/tradeQuery/itemTradeUrl');
+
+let debugUtils;
+if (process.env.AREVTUR_BUILD !== 'release') {
+	try { debugUtils = require('../../../debug/debugUtils'); } catch (e) { debugUtils = null; }
+} else {
+	debugUtils = null;
+}
 
 customElements.define(name, class extends XElement {
 	static get attributeTypes() {
@@ -14,17 +23,28 @@ customElements.define(name, class extends XElement {
 	}
 
 	connectedCallback() {
-		this.$('#direct-whisper').addEventListener('click', e =>
-			this.onDirectWhisperClick(e, this.$('#direct-whisper'), () => this.itemData_.directWhisperToken));
+		if (debugUtils) {
+			this.$('#direct-whisper').addEventListener('click', e =>
+				this.onDirectWhisperClick(e, this.$('#direct-whisper'), () => this.itemData_.directWhisperToken));
+			this.$('#travel-hideout').addEventListener('click', e =>
+				this.onDirectWhisperClick(e, this.$('#travel-hideout'), () => this.itemData_.travelHideoutToken));
+		} else {
+			this.$('#direct-whisper').style.display = 'none';
+			this.$('#travel-hideout').textContent = 'Open Trade';
+			this.$('#travel-hideout').addEventListener('click', e => {
+				e.stopPropagation();
+				let url = buildItemTradeUrl(configData.config.version2, configData.config.league, this.itemData_);
+				shell.openExternal(url);
+			});
+		}
 		this.$('#copy-whisper').addEventListener('click', e => {
 			e.stopPropagation();
 			navigator.clipboard.writeText(this.itemData_.whisperText);
 		});
-		this.$('#travel-hideout').addEventListener('click', e =>
-			this.onDirectWhisperClick(e, this.$('#travel-hideout'), () => this.itemData_.travelHideoutToken));
 		this.$('#copy-item-button').addEventListener('click', e => {
 			e.stopPropagation();
-			navigator.clipboard.writeText(this.itemData_.text);
+			let transformed = this.itemData_.buildValuePromise?.resolved?.transformedItem;
+			navigator.clipboard.writeText(transformed || this.itemData_.text);
 		});
 		this.$('#refresh-button').addEventListener('click', e => {
 			e.stopPropagation();
@@ -58,14 +78,16 @@ customElements.define(name, class extends XElement {
 			expandedValues.map(([name, value]) => `${round(value, 1)} ${name}`).join(' + ') : '';
 		this.$('#build-value').text = `Build: ${(await itemData.buildValuePromise).value}`;
 		this.$('#build-value').tooltip = (await itemData.buildValuePromise).text;
+		this.$('#build-value').tooltipRight = (await itemData.buildValuePromise).textRight || '';
 		this.$('#craft-value').text = `Craft: ${(await itemData.craftValuePromise).value}`;
 		this.$('#craft-value').tooltip = (await itemData.craftValuePromise).text;
+		this.$('#craft-value').tooltipRight = (await itemData.craftValuePromise).textRight || '';
 		this.$('#price').text = (await itemData.pricePromise).priceSummary;
 		this.$('#price').tooltip = (await itemData.pricePromise).priceBreakdown;
 
-		this.$('#direct-whisper').classList.toggle('hidden', !itemData.directWhisperToken);
+		this.$('#direct-whisper').classList.toggle('hidden', !debugUtils || !itemData.directWhisperToken);
 		this.$('#copy-whisper').classList.toggle('hidden', !itemData.whisperText);
-		this.$('#travel-hideout').classList.toggle('hidden', !itemData.travelHideoutToken);
+		this.$('#travel-hideout').classList.toggle('hidden', debugUtils && !itemData.travelHideoutToken);
 
 		this.$('#debug').text = itemData.queryNotes[0];
 		this.$('#debug').tooltip = itemData.queryNotes.join('\n');
@@ -105,7 +127,21 @@ customElements.define(name, class extends XElement {
 		let success = await TradeQuery.directWhisper(configData.config.version2, configData.config.sessionId, token);
 		this.setButtonColor(buttonEl, success ? 'busy' : 'invalid');
 		this.setButtonColor(this.$('#refresh-button'), success ? '' : 'valid');
+		if (!success)
+			this.showWhisperError(buttonEl);
 		return success;
+	}
+
+	showWhisperError(buttonEl) {
+		document.querySelector('x-inputs')?.shadowRoot?.querySelector('#debug-session-input')?.classList.add('expired');
+		let tooltip = document.createElement('div');
+		tooltip.textContent = '⚠️ Error — debug session may be expired';
+		tooltip.style.cssText = 'position:fixed;background:#4a1111;color:#ff4444;padding:4px 8px;border-radius:4px;font-size:12px;z-index:9999;pointer-events:none;';
+		let rect = buttonEl.getBoundingClientRect();
+		tooltip.style.left = rect.left + 'px';
+		tooltip.style.top = (rect.top - 25) + 'px';
+		document.body.appendChild(tooltip);
+		setTimeout(() => tooltip.remove(), 3000);
 	}
 
 	async refresh() {

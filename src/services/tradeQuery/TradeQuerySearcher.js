@@ -3,6 +3,13 @@ const {XPromise} = require('js-desktop-base');
 const TradeQueryRateLimiter = require('./TradeQueryRateLimiter');
 const apiConstants = require('../apiConstants');
 
+let debugUtils;
+if (process.env.AREVTUR_BUILD !== 'release') {
+	try { debugUtils = require('../../debug/debugUtils'); } catch (e) { debugUtils = null; }
+} else {
+	debugUtils = null;
+}
+
 class TradeQueryItemSearcher {
 	#active = false;
 	#queued = [];
@@ -45,7 +52,8 @@ class TradeQueryItemSearcher {
 		let endpoint = queueObj.version2 ?
 			`${apiConstants.api}/api/trade2/search/poe2/${queueObj.league}` :
 			`${apiConstants.api}/api/trade/search/${queueObj.league}`;
-		let headers = apiConstants.createRequestHeader(queueObj.sessionId);
+		let headers = debugUtils?.getDebugHeaders(queueObj.sessionId, 'application/json') ||
+			apiConstants.createRequestHeader(queueObj.sessionId);
 		let body = JSON.stringify(queueObj.apiQuery);
 		let options = {method: 'post', body, headers};
 		return nodeFetch(endpoint, options);

@@ -361,6 +361,17 @@ while true do
         debugRespond('craft mods length: ' .. #response)
         returnRespond(response)
 
+    elseif args.cmd == 'ascendancy' then
+        local className = build.spec.curClassName or ''
+        local ascendClassName = build.spec.curAscendClassName or ''
+        local allocatedNotables = {}
+        for nodeId, node in pairs(build.spec.allocNodes) do
+            if node.ascendancyName then
+                table.insert(allocatedNotables, node.dn or node.name or '')
+            end
+        end
+        returnRespond(dkjson.encode({ class = className, ascendancy = ascendClassName, allocatedAscendancyNodes = allocatedNotables }))
+
     else
         returnRespond('unrecognized command ' .. args.cmd)
     end

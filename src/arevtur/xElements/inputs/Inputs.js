@@ -13,6 +13,13 @@ const BugReport = require('../../../services/BugReport');
 const TradeQueryQueue = require('../../../services/tradeQuery/TradeQueryQueue');
 const googleAnalyticsForRenderer = require('../../../services/googleAnalytics/googleAnalyticsForRenderer');
 
+let debugUtils;
+if (process.env.AREVTUR_BUILD !== 'release') {
+	try { debugUtils = require('../../../debug/debugUtils'); } catch (e) { debugUtils = null; }
+} else {
+	debugUtils = null;
+}
+
 let timestamp = () => {
 	let date = new Date();
 	return date.toLocaleDateString();
@@ -39,6 +46,24 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#version-input').addEventListener('change', () => this.store());
 		this.$('#league-input').addEventListener('change', () => this.store());
 		this.$('#session-id-input').addEventListener('change', () => this.store());
+		this.$('#debug-session-input').addEventListener('change', () => {
+			if (!debugUtils) return;
+			if (!this.$('#debug-session-input').value) {
+				localStorage.removeItem('debug-headers');
+				localStorage.removeItem('debug-value');
+				return;
+			}
+			let parsed = debugUtils.parseInput(this.$('#debug-session-input').value);
+			if (parsed) {
+				localStorage.setItem('debug-headers', JSON.stringify(parsed));
+				localStorage.setItem('debug-value', this.$('#debug-session-input').value);
+				this.$('#debug-session-input').classList.remove('expired');
+			}
+		});
+		if (!debugUtils) {
+			this.$('#debug-session-input').style.display = 'none';
+			this.$('#debug-session-warning').style.display = 'none';
+		}
 
 		this.$('#bug-report-button').addEventListener('click', async () =>
 			(await BugReport.fromCurrentState()).toDownload());
@@ -126,10 +151,17 @@ customElements.define(name, class Inputs extends XElement {
 		});
 
 		this.tradeQueryQueue = new TradeQueryQueue();
-		this.tradeQueryQueue.addListener('items', items =>
-			this.emit('add-items', {clear: false, items}));
-		this.tradeQueryQueue.addListener('progress', arg =>
-			this.emit('progress', arg));
+		this.seenHideoutToken = false;
+		this.tradeQueryQueue.addListener('items', items => {
+			this.emit('add-items', {clear: false, items});
+			if (debugUtils && items.some(item => item.travelHideoutToken))
+				this.seenHideoutToken = true;
+		});
+		this.tradeQueryQueue.addListener('progress', arg => {
+			this.emit('progress', arg);
+			if (debugUtils && arg.ratio >= 1 && !this.seenHideoutToken)
+				this.$('#debug-session-input').classList.add('expired');
+		});
 		this.tradeQueryQueue.addListener('error', error => {
 			console.error('TradeQuery error', error);
 			if (error?.message?.includes('Logging in')) {
@@ -189,6 +221,7 @@ customElements.define(name, class Inputs extends XElement {
 		this.$('#version-input').value = this.$('#version-input').autocompletes[Number(config.version2)];
 		this.$('#league-input').value = config.league;
 		this.$('#session-id-input').value = config.sessionId;
+		this.$('#debug-session-input').value = debugUtils ? (localStorage.getItem('debug-value') || '') : '';
 
 		this.$('#league-input').autocompletes = await apiConstants.leagues;
 
@@ -291,6 +324,16 @@ customElements.define(name, class Inputs extends XElement {
 	}
 
 	async onSubmit(all) {
+		this.seenHideoutToken = false;
+		this.$('#debug-session-input').classList.remove('expired');
+		this.$('#session-id-input').classList.remove('empty-auth');
+		this.$('#debug-session-input').classList.remove('empty-auth');
+		if (!this.$('#session-id-input').value && !(debugUtils && this.$('#debug-session-input').value)) {
+			this.$('#session-id-input').classList.add('empty-auth');
+			if (debugUtils)
+				this.$('#debug-session-input').classList.add('empty-auth');
+			return;
+		}
 		if (all) {
 			googleAnalyticsForRenderer.emit('SearchAll');
 			for (let i in this.inputSets)

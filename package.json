@@ -1,10 +1,13 @@
 {
   "name": "arevtur",
-  "version": "9.1.0",
+  "version": "9.4.0",
   "main": "src/main.js",
   "scripts": {
     "start": "electron --trace-warnings .",
-    "build": "build",
+    "start_release": "set AREVTUR_BUILD=release&& electron --trace-warnings .",
+    "test": "node --test test/*.test.js",
+    "build": "npx rimraf dist && build",
+    "build2": "npx rimraf dist && electron-builder -w",
     "ship": ". ./git_token && git push && git push --tags && rm -rf dist && build -lwp always",
     "windowShip": "gitpersonal && git push && git push --tags && rm -rf dist && electron-builder -wp always",
     "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && npm run windowShip"
@@ -33,6 +36,11 @@
   "homepage": "https://github.com/mahhov/arevtur#readme",
   "description": "Trading tool for Path of Exile",
   "build": {
+    "publish": {
+      "provider": "github",
+      "owner": "mdnpascual",
+      "repo": "arevtur"
+    },
     "asar": false,
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "files": [

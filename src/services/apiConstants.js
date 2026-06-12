@@ -278,10 +278,14 @@ class ApiConstants {
 
 	static async initCurrencies(version2, league) {
 		try {
-			return await (version2 ?
+			let result = await (version2 ?
 				ApiConstants.initScoutCurrencies(version2, league) :
 				ApiConstants.initNinjaCurrencies(version2, league));
+			instance.currencyWarning = '';
+			return result;
 		} catch (e) {
+			let source = version2 ? 'poe2scout.com' : 'poe.ninja';
+			instance.currencyWarning = `Currency endpoint broken (${source}). Only exalted-priced items will be shown. Nag MDuh to check why it's broken.`;
 			// todo[medium] show red/orange status indicator
 			return version2 ? {exalted: 1} : {chaos: 1};
 		}
@@ -346,17 +350,20 @@ class ApiConstants {
 	}
 
 	static async initScoutCurrencies(version2, league) {
+		let realm = version2 ? 'poe2' : 'poe1';
+		let scoutUrl = `https://poe2scout.com/api/${realm}/Leagues/${encodeURIComponent(league)}/Currencies/ByCategory?Category=Currency&ReferenceCurrency=exalted&Page=1&PerPage=50`;
+
 		let staticData = ApiConstants.get('static', version2);
-		let currencyPrices = httpRequest.get('https://poe2scout.com/api/items/currency/currency', {league, perPage: 100});
+		let currencyPrices = httpRequest.get(scoutUrl, {}, {accept: 'application/json'});
 		staticData = JSON.parse((await staticData).string);
 		currencyPrices = JSON.parse((await currencyPrices).string);
 
 		let tuples = staticData.result
 			.find(({id}) => id === 'Currency').entries
 			.map(({id}) => {
-				let price = currencyPrices.items
-					.find(line => line.apiId === id)
-					?.currentPrice;
+				let price = currencyPrices.Items
+					?.find(line => line.ApiId === id)
+					?.CurrentPrice;
 				return [id, Number(price)];
 			})
 			.filter(v => v);
@@ -393,7 +400,7 @@ class ApiConstants {
 	// utility
 
 	static get api() {
-		return 'https://pathofexile.com';
+		return 'https://www.pathofexile.com';
 	}
 
 	static createRequestHeader(sessionId = undefined) {
@@ -434,4 +441,5 @@ class ApiConstants {
 	}
 }
 
-module.exports = new ApiConstants();
+let instance = new ApiConstants();
+module.exports = instance;
