@@ -1,10 +1,9 @@
-const {httpRequest: {get}} = require('js-desktop-base');
 const configData = require('../config/configData');
 const {unique, round, unitText} = require('../../util/util');
 const UnifiedQueryParams = require('../UnifiedQueryParams');
 const TradeQuery = require('../tradeQuery/TradeQuery');
 const apiConstants = require('../apiConstants');
-const Cache = require('../../util/Cache');
+const Poe2ScoutData = require('./Poe2ScoutData');
 
 let priceText = async price => {
 	let league = configData.config.league;
@@ -13,35 +12,6 @@ let priceText = async price => {
 };
 
 class Poe2ScoutPricer {
-	static endpointTypes = [
-		'currency/currency',
-		'currency/fragments',
-		'currency/runes',
-		'currency/talismans',
-		'currency/essences',
-		'currency/ultimatum',
-		'currency/expedition',
-		'currency/ritual',
-		'currency/vaultkeys',
-		'currency/breach',
-		'currency/abyss',
-		'currency/uncutgems',
-		'currency/lineagesupportgems',
-		'currency/delirium',
-		'currency/incursion',
-		'currency/idol',
-		'unique/accessory',
-		'unique/armour',
-		'unique/flask',
-		'unique/jewel',
-		'unique/map',
-		'unique/weapon',
-		'unique/sanctum',
-	];
-
-	static #cache = new Cache(12 * 60 * 1000, endpoint =>
-		get(endpoint).then(({string}) => JSON.parse(string)));
-
 	#endpointType;
 
 	constructor(endpointType) {
@@ -49,18 +19,16 @@ class Poe2ScoutPricer {
 	}
 
 	get #data() {
-		let league = configData.config.league;
-		let endpoint = `https://poe2scout.com/api/items/${this.#endpointType}?page=1&perPage=250&league=${league}`;
-		return Poe2ScoutPricer.#cache.get(endpoint);
+		return Poe2ScoutData.getData(this.#endpointType);
 	}
 
 	// returns promise<string>
 	async getPrice(text) {
 		let textName = text.split(/\r?\n/)[2];
 		if (!textName) return Promise.reject();
-		let item = (await this.#data).items.find(item => item.text === textName || item.name === textName);
+		let item = (await this.#data).Items.find(item => item.Text === textName || item.ItemMetadata.name === textName);
 		if (!item) return Promise.reject();
-		let price = item.currentPrice;
+		let price = item.CurrentPrice;
 		return [
 			textName,
 			this.#endpointType,
@@ -247,7 +215,7 @@ class PoeTradeApiRarePricer extends PoeTradeApiPricer {
 }
 
 let pricers = [
-	...Poe2ScoutPricer.endpointTypes.map(endpointType => new Poe2ScoutPricer(endpointType)),
+	...Poe2ScoutData.endpointTypes.map(endpointType => new Poe2ScoutPricer(endpointType)),
 	new PoeTradeApiNormalBasePricer(),
 	new PoeTradeApiNormalBaseMixedCurrencyPricer(),
 	new PoeTradeApiExactPricer(),
@@ -261,4 +229,4 @@ let pricers = [
 // returns promise<string>[]
 let getPrices = text => pricers.map(pricer => pricer.getPrice(text.trim()));
 
-module.exports = {getPrices};
+module.exports = {Poe2ScoutPricer, getPrices};

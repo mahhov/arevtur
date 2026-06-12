@@ -3,7 +3,7 @@ const httpRequest = require('../util/browserHttpRequest');
 const poeNinjaApi = require('./poeNinjaApi');
 const configData = require('./config/configData');
 const {unique, escapeRegex} = require('../util/util');
-const nodeFetch = require('node-fetch');
+const Poe2ScoutData = require('./pricer/Poe2ScoutData');
 
 let localStorage = globalThis.localStorage;
 if (typeof localStorage === 'undefined') {
@@ -317,49 +317,19 @@ class ApiConstants {
 		/* {alt: .125, ...} */
 	}
 
-	static async initOrbCurrencies(version2, league) {
-		let staticData = ApiConstants.get('static', version2);
-		let currencyPrices = nodeFetch(
-			`https://orbwatch.trade/api/preload?realm=${league}`,
-			{
-				headers: {
-					referer: 'https://orbwatch.trade/',
-					'x-csrf-token': 'x',
-					cookie: 'csrf_token=x',
-				},
-			},
-		);
-		staticData = JSON.parse((await staticData).string);
-		currencyPrices = await (await currencyPrices).json();
-
-		let tuples = staticData.result
-			.find(({id}) => id === 'Currency').entries
-			.map(({id}) => {
-				let price = currencyPrices.prices.currency
-					.find(line => line.item_id === id && line.price_type === 'buy')
-					?.item_price;
-				return [id, Number(price)];
-			})
-			.filter(v => v);
-
-		let currencies = Object.fromEntries(tuples);
-		currencies.exalted = 1;
-		return currencies;
-		/* {alt: .125, ...} */
-	}
-
 	static async initScoutCurrencies(version2, league) {
 		let staticData = ApiConstants.get('static', version2);
-		let currencyPrices = httpRequest.get('https://poe2scout.com/api/items/currency/currency', {league, perPage: 100});
+		let currencyEndpoint = await Poe2ScoutData.getEndpoint(Poe2ScoutData.endpointTypes[0]);
+		let currencyPrices = httpRequest.get(currencyEndpoint);
 		staticData = JSON.parse((await staticData).string);
 		currencyPrices = JSON.parse((await currencyPrices).string);
 
 		let tuples = staticData.result
 			.find(({id}) => id === 'Currency').entries
 			.map(({id}) => {
-				let price = currencyPrices.items
-					.find(line => line.apiId === id)
-					?.currentPrice;
+				let price = currencyPrices.Items
+					.find(line => line.ApiId === id)
+					?.CurrentPrice;
 				return [id, Number(price)];
 			})
 			.filter(v => v);
