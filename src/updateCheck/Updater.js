@@ -10,7 +10,7 @@ if (process.env.AREVTUR_BUILD !== 'release') {
 
 const feedConfig = debugUtils?.updateFeedConfig || {
 	provider: 'github',
-	owner: 'mahhov',
+	owner: 'mdnpascual',
 	repo: 'arevtur',
 };
 
@@ -25,7 +25,7 @@ class Updater {
 			if (!result.releaseNotes) {
 				try {
 					let fetch = require('node-fetch');
-					let releaseApiUrl = debugUtils?.releaseApiUrl || 'https://api.github.com/repos/mahhov/arevtur/releases/latest';
+					let releaseApiUrl = debugUtils?.releaseApiUrl || 'https://api.github.com/repos/mdnpascual/arevtur/releases/latest';
 					let headers = debugUtils?.releaseApiToken ? {'Authorization': `Bearer ${debugUtils.releaseApiToken}`} : {};
 					let res = await fetch(releaseApiUrl, {headers});
 					let json = await res.json();

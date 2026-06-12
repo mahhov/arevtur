@@ -8,11 +8,10 @@
     "test": "node --test test/*.test.js",
     "build": "npx rimraf dist && build",
     "build2": "npx rimraf dist && electron-builder -w",
-    "ship": ". ./git_token && git push && git push --tags && rm -rf dist && build -lwp always",
-    "windowShip": "gitpersonal && git push && git push --tags && rm -rf dist && electron-builder -wp always",
+    "windowShip": "git push && git push --tags && npx rimraf dist && electron-builder -wp always",
     "postversion": "git add package.json package-lock.json && git commit -m %npm_package_version% && git tag v%npm_package_version% && npm run windowShip"
   },
-  "author": "mahhov1",
+  "author": "mdnpascual",
   "license": "ISC",
   "dependencies": {
     "bs-better-stream": "^1.9.5",
@@ -28,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mahhov/arevtur.git"
+    "url": "git+https://github.com/mdnpascual/arevtur-private.git"
   },
   "bugs": {
-    "url": "https://github.com/mahhov/arevtur/issues"
+    "url": "https://github.com/mdnpascual/arevtur-private/issues"
   },
-  "homepage": "https://github.com/mahhov/arevtur#readme",
+  "homepage": "https://github.com/mdnpascual/arevtur-private#readme",
   "description": "Trading tool for Path of Exile",
   "build": {
     "publish": {
@@ -47,6 +46,7 @@
       "resources",
       "src"
     ],
-    "icon": "./resources/icon.png"
+    "icon": "./resources/icon.png",
+    "electronVersion": "33.3.2"
   }
 }
