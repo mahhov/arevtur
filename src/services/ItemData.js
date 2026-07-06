@@ -42,7 +42,7 @@ class ItemData {
 		this.enchantMods = tradeApiItemData.item.enchantMods || [];
 		this.implicitMods = tradeApiItemData.item.implicitMods || [];
 		this.fracturedMods = tradeApiItemData.item.fracturedMods || [];
-		this.explicitMods = tradeApiItemData.item.explicitMods || [];
+		this.explicitMods = tradeApiItemData.item.explicitMods?.map(m => m.description || '') || [];
 		this.desecratedMods = tradeApiItemData.item.desecratedMods || [];
 		this.craftedMods = tradeApiItemData.item.craftedMods || [];
 		this.pseudoMods = tradeApiItemData.item.pseudoMods || [];
